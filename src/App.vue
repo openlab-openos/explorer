@@ -75,10 +75,25 @@ document.querySelector("body").classList.add("app-init");
     <app-header v-if="!appOption.appHeaderHide" />
     <app-top-nav v-if="appOption.appTopNav" />
     <app-sidebar v-if="!appOption.appSidebarHide" />
-    <div class="app-content" v-bind:class="appOption.appContentClass">
+    <div class="appContent" v-bind:class="appOption.appContentClass">
       <router-view></router-view>
     </div>
     <app-footer v-if="appOption.appFooter" />
     <app-theme-panel />
   </div>
 </template>
+
+<style>
+.appContent{
+  padding: 2rem 2rem;
+  margin-left: 12%;
+}
+
+@media (min-width: 2000px) {
+  .appContent{
+    padding: 2rem 2rem;
+    margin-left: 16.875rem;
+  }
+}
+
+</style>

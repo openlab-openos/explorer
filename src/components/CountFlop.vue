@@ -4,17 +4,11 @@
       <div class="icon" v-if="isNaN(Number(item))">{{ item }}</div>
 
       <div v-else class="digital_wrap">
-        <div
-          :style="{
-            transition: 'transform 2s',
-            transform: `translateY(-${item * 10}%)`,
-          }"
-        >
-          <div
-            v-for="(items, index) in currentValRef.split('')"
-            :key="index"
-            class="digital"
-          >
+        <div :style="{
+          transition: 'transform 2s',
+          transform: `translateY(-${item * 10}%)`,
+        }">
+          <div v-for="(items, index) in currentValRef.split('')" :key="index" class="digital">
             {{ items }}
           </div>
         </div>
@@ -54,19 +48,23 @@ const currentValRef = ref(props.initialValue);
   justify-content: space-between;
   width: 100%;
   align-items: center;
-  font-size: 1rem;
+  font-size:0.9rem;
 }
+
 .icon {
   color: #fff;
   height: 30px;
   flex-direction: column;
   display: flex;
   justify-content: flex-end;
+  padding-bottom: 5px;
 }
+
 .digital_wrap {
   height: 30px;
   overflow: hidden;
 }
+
 .digital {
   width: 100%;
   color: #fff;

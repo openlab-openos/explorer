@@ -4,44 +4,38 @@
     <card class="mb-3" style="height: 160px">
       <card-body>
         <div class="d-flex fw-bold small mb-3">
-          <span class="flex-grow-1">24H Transfer</span>
-          <card-expand-toggler />
+          <span class="flex-grow-1">24H Transfer Amount</span>
         </div>
         <div class="row align-items-center mb-2" style="height: 30px">
-          <div
-            style="
-              width: 40%;
+          <div style="
+              width: 45%;
               display: flex;
               justify-content: space-between;
               height: 30px;
               line-height: 30px;
-            "
-          >
+            ">
             <h5 style="display: flex; height: 30px">
               <numberAnimar :count="JSON.parse(data.amount)" />
-              <div style="white-space: nowrap; line-height: 30px; height: 30px">
+              <div style="white-space: nowrap; line-height: 30px; height: 30px; font-size:0.9rem;">
                 &nbsp;BTG
               </div>
             </h5>
           </div>
-          <div style="width: 20%">
-            <div style="color: #339a81; font-size: 20px; margin-right: 10%">
+          <div style="width: 20%;text-align: center;">
+            <div style="color: #339a81; font-size: 20px;">
               <i class="fas fa-lg fa-fw me-2 fa-exchange-alt"></i>
             </div>
           </div>
-          <div style="width: 40%">
-            <h5
-              style="display: flex; line-height: 30px; width: 30%; height: 30px"
-            >
+          <div style="width: 35%;height: 30px;display: flex;justify-content: end;">
+            <h5 style="line-height: 30px; font-size:0.9rem;">
               $
+            </h5>
+            <h5 style="display: flex; height: 30px;">
               <numberAnimar :count="data.amount * appStore.rate" />
             </h5>
           </div>
         </div>
-        <div
-          class="small text-inverse text-opacity-50 text-truncate"
-          v-if="type"
-        >
+        <div class="small text-inverse text-opacity-50 text-truncate" v-if="type">
           <template v-for="statInfo in info">
             <div><i v-bind:class="statInfo.icon"></i> {{ statInfo.text }}</div>
           </template>
@@ -58,7 +52,7 @@ import apexchart from "@/components/plugins/Apexcharts.vue";
 import { order } from "../../request/order";
 import { ustdData } from "../../request/ustd";
 import { useAppStore } from "../../stores/index";
-import { ref, watch } from "vue";
+import { onMounted, ref, watchEffect } from "vue";
 
 const appStore = useAppStore();
 
@@ -77,18 +71,19 @@ const supplyRequest = async () => {
   if (appStore.Transaction.length == 0) {
     await order("new_transactions")
       .then((res) => {
+        console.log(res);
         for (let i in res) {
           transferData.value.push(res[i]);
         }
-        rendered();
       })
       .catch((err) => {
         console.log(err);
       });
   } else {
     transferData.value = appStore.Transaction;
-    rendered();
+
   }
+  rendered();
 };
 
 
@@ -129,11 +124,11 @@ const rendered = () => {
   }
   info.value = [
     {
-      icon: "fa fa-chevron-up fa-fw me-1",
+      icon: "fas fa-lg fa-fw me-2 fa-euro-sign",
       text: timeout() + " " + "Transactions 24 hours" + " ",
     },
     {
-      icon: "far fa-hdd fa-fw me-1",
+      icon: "fas fa-lg fa-fw me-2 fa-won-sign",
       text:
         toFexedStake(priceTrans.value / transactionData.value.length) +
         " " +
@@ -142,7 +137,7 @@ const rendered = () => {
         "Per Transaction",
     },
     {
-      icon: "far fa-hand-point-up fa-fw me-1",
+      icon: "fas fa-lg fa-fw me-2 fa-yen-sign",
       text:
         (
           toFexedStake(priceTrans.value / transactionData.value.length) *
@@ -155,5 +150,10 @@ const rendered = () => {
   type.value = true;
 };
 
-supplyRequest();
+onMounted(() => {
+  watchEffect(() => {
+    supplyRequest();
+  })
+});
+
 </script>

@@ -72,12 +72,12 @@ onMounted(() => {
 });
 
 const isActive = computed(() => (url) => {
-  if(url == '/'){
+  if (url == '/') {
     return route.path == '/';
   } else {
-    return route.path == '/'+ url;
+    return route.path == '/' + url;
   }
-  
+
 }); 
 </script>
 <template>
@@ -91,7 +91,9 @@ const isActive = computed(() => (url) => {
             <!-- <sidebar-nav v-if="!menu.type" v-bind:menu="menu"></sidebar-nav> -->
 
             <div v-if="!menu.type" class="menu-item" :class="{ active: isActive(menu.url) }">
-              <router-link :to="menu.url" class="menu-link">
+              <router-link :to="{
+                name: menu.url == '/' ? 'dashboard' : menu.url
+              }" class="menu-link">
                 <span class="menu-icon">
                   <i class="menu-icon" v-bind:class="menu.icon"></i>
                 </span>

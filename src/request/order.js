@@ -1,17 +1,17 @@
+import axios from "axios";
+
 export function order(url) {
-    let asioxUrl = "http://198.177.124.16:9527/" + url;
     return new Promise((resolve, reject) => {
-        fetch(asioxUrl, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
+        axios
+            // .get(url, {
+                .get('dataapi/' + url, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
             .then((response) => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
+                let axiosdata = response.data;
+                return axiosdata;
             })
             .then((jsonResponse) => {
                 resolve(jsonResponse);
@@ -20,5 +20,5 @@ export function order(url) {
                 reject(error);
                 console.error("Error fetching data:", error);
             });
-    });
+    })
 }

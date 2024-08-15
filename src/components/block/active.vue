@@ -5,7 +5,6 @@
       <card-body>
         <div class="d-flex fw-bold small mb-3">
           <span class="flex-grow-1">Active Stake (BTG)</span>
-          <card-expand-toggler />
         </div>
         <div class="row align-items-center mb-2" style="height: 30px">
           <div style="
@@ -14,8 +13,8 @@
               justify-content: space-between;
               height: 30px;
             ">
-            <h5 style="display: flex; height: 30px">
-              {{ data }} M/{{ stubly }} M
+            <h5 style="display: flex; height: 30px; font-size:0.9rem;">
+              {{ data }}M / {{ stubly }}M
               <!-- {{ data.blockHeight }} -->
             </h5>
           </div>
@@ -43,7 +42,7 @@ import { chainRequest } from "../../request/chain";
 import { useAppVariableStore } from "@/stores/app-variable";
 import { ustdData } from "../../request/ustd";
 import { useAppStore } from "../../stores/index";
-import { ref } from "vue";
+import { onMounted, ref, watchEffect } from "vue";
 import { constants } from "buffer";
 const appStore = useAppStore();
 
@@ -51,7 +50,6 @@ const appVariable = useAppVariableStore();
 
 const stubly = ref(1);
 const data = ref(1);
-console.log(stubly);
 const epoch = ref(1);
 const info = ref();
 
@@ -71,6 +69,8 @@ const datavalue = async () => {
       stubly.value = (
         JSON.parse(JSON.stringify(res.result.value.total).slice(0, 9)) / 1000000
       ).toFixed(1);
+    }).then(res => {
+
     })
     await chainRequest({
       jsonrpc: "2.0",
@@ -79,7 +79,6 @@ const datavalue = async () => {
       params: [],
     })
       .then((res) => {
-        console.log(res, "supplydata");
         let btg = res.result;
         let btgcont = 0;
         let btgcount = 0;
@@ -110,7 +109,6 @@ const chainData = async () => {
     method: "getEpochInfo",
   }).then((res) => {
     epoch.value = res.result.epoch;
-    console.log(epoch.value);
   });
 };
 
@@ -119,6 +117,33 @@ chainData();
 const randomNo = () => {
   return Math.floor(Math.random() * 60) + 30;
 };
+
+onMounted(() => {
+  watchEffect(() => {
+    info.value = [
+      {
+        icon: "fa fa-chevron-up fa-fw me-1",
+        text:
+          "Average per node" +
+          " " +
+          (stubly.value / epoch.value).toFixed(2) +
+          "M",
+      },
+      {
+        icon: "far fa-hdd fa-fw me-1",
+        text: "TVL" + " " + "$" + (JSON.parse(data.value) * appStore.rate).toFixed(2) + "M",
+      },
+      {
+        icon: "far fa-hand-point-up fa-fw me-1",
+        text:
+          "Pledge rate" +
+          " " +
+          ((appStore.btgcount / (appStore.stuBlys - 74)) * 100).toFixed(2) +
+          "%",
+      },
+    ];
+  })
+})
 
 const chart = ref({
   height: 45,
@@ -130,34 +155,11 @@ const chart = ref({
       "rgba(" + appVariable.color.themeRgb + ", .5)",
     ],
     stroke: { show: false },
+    tooltip: {
+      enabled: false
+    },
   },
   series: [randomNo(), randomNo(), randomNo()],
 });
 
-console.log(epoch.value);
-
-setTimeout(() => {
-  info.value = [
-    {
-      icon: "fa fa-chevron-up fa-fw me-1",
-      text:
-        "Average per node" +
-        " " +
-        (stubly.value / epoch.value).toFixed(2) +
-        "M",
-    },
-    {
-      icon: "far fa-hdd fa-fw me-1",
-      text: "TVL" + " " + "$" + (JSON.parse(data.value) * appStore.rate).toFixed(2 )+ "M",
-    },
-    {
-      icon: "far fa-hand-point-up fa-fw me-1",
-      text:
-        "Pledge rate" +
-        " " +
-        ((appStore.btgcount / (appStore.stuBlys - 74)) * 100).toFixed(2) +
-        "%",
-    },
-  ];
-}, 1000);
 </script>

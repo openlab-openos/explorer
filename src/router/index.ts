@@ -17,12 +17,12 @@ const router = createRouter({
       component: Dashboard,
     },
     {
-      path: "/validators",
+      path: "/validators/:url?",
       name: "validators",
       component: Validators,
     },
     {
-      path: "/blocks",
+      path: "/blocks/:url?",
       name: "blocks",
       component: Blocks,
     },
@@ -43,7 +43,7 @@ const router = createRouter({
     },
     {
       path: "/transactions",
-      name: "transaction",
+      name: "transactions",
       component: Transition,
     },
     {

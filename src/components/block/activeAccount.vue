@@ -5,7 +5,6 @@
       <card-body>
         <div class="d-flex fw-bold small mb-3">
           <span class="flex-grow-1">24H Active Account</span>
-          <card-expand-toggler />
         </div>
         <div class="row align-items-center mb-2" style="height: 30px">
           <div style="
@@ -22,9 +21,8 @@
 
           <div style="width: 40%; height: 30px">
             <div>
-              <div ref="echartsContainers" style="width:100%; height: 40px;"></div>
-
-              <!-- <apexchart :height="chart.height" :options="chart.options" :series="chart.series"></apexchart> -->
+              <div ref="echartsContainers" style="width:100%; height: 30px;display:flex ;justify-content: center;">
+              </div>
             </div>
           </div>
         </div>
@@ -43,9 +41,10 @@
 import numberAnimar from "../../components/CountFlop.vue";
 import apexchart from "@/components/plugins/Apexcharts.vue";
 import { order } from "../../request/order";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watchEffect } from "vue";
 import { useAppStore } from "@/stores/index";
 import * as echarts from 'echarts';
+
 
 
 const appStore = useAppStore();
@@ -58,10 +57,13 @@ const echartsContainers = ref(null);
 
 const initECharts = () => {
   const myChart = echarts.init(echartsContainers.value);
-
   const option = {
     // ECharts 配置项
-    tooltip: {},
+    tooltip: {
+      formatter: function (params) {
+
+      }
+    },
     xAxis: {
       type: 'category'
     },
@@ -111,7 +113,7 @@ onMounted(() => {
 
 const orderrequest = async (url) => {
   await order(url).then((res) => {
-    console.log(res);
+
     data.value = res;
   });
 };
@@ -122,28 +124,48 @@ const chart = ref();
 
 const info = ref([]);
 
-setTimeout(() => {
+const infoDatalength = ref(0);
+const countName = ref();
+const counPct = ref();
+
+onMounted(() => {
+  renders()
+  watchEffect(() => {
+    infoDatalength.value = appStore.Validators.length;
+    countName.value = appStore.country.timezone;
+    counPct.value = appStore.country.pct;
+    renders()
+  })
+})
+
+
+console.log(appStore.Validators);
+
+
+
+const renders = () => {
   info.value = [
     {
-      icon: "fa fa-chevron-up fa-fw me-1",
+      icon: "fas fa-lg fa-fw me-2 fa-chart-pie",
       text: "9.4% more than last week",
     },
     {
-      icon: "far fa-hdd fa-fw me-1",
-      text: appStore.Validators.length + " " + "Validators",
+      icon: "fas fa-lg fa-fw me-2 fa-adjust",
+      text: infoDatalength.value + " " + "Validators",
     },
     {
-      icon: "far fa-hand-point-up fa-fw me-1",
+      icon: "fab fa-lg fa-fw me-2 fa-chrome",
       text:
-        appStore.country.country_name +
-        " " +
-        "node account for" +
-        " " +
-        appStore.country.pct +
-        "%",
+        countName.value ? countName.value +
+          " " +
+          "node  for" +
+          " " +
+          counPct.value +
+          "%" : 'Loading……'
     },
   ];
-}, 2000);
+}
+
 
 
 </script>

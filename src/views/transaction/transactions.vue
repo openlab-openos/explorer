@@ -7,33 +7,34 @@
           <card-expand-toggler />
         </div>
         <div class="table-responsive">
-          <table
-            class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small"
-          >
+          <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
             <tbody>
               <tr>
-                <th style="width: 20%; text-align: left">SOURCE</th>
-                <th style="width: 20%; text-align: left">DESTINATION</th>
-                <th style="width: 10%; text-align: left">BTG</th>
-                <th style="width: 15%; text-align: left">TYPE</th>
-                <th style="width: 15%; text-align: left">SOLT</th>
-                <th style="width: 20%; text-align: left">TIME</th>
+                <th style=" text-align: left">SIGNATURE</th>
+                <th style=" text-align: left">SOURCE</th>
+                <th style=" text-align: left">DESTINATION</th>
+                <th style=" text-align: left">BTG</th>
+                <th style=" text-align: left">TYPE</th>
+                <th style=" text-align: left">SLOT</th>
+                <th style=" text-align: left">TIME</th>
               </tr>
-              <tr
-                v-for="(product, index) in orderData"
-                :key="index"
-                style="height: 35px"
-              >
-                <td
-                  style="width: 20%; text-align: left; cursor: pointer"
-                  class="text-theme"
-                  @click="
-                    pubbleys(
-                      product.result.transaction.message.instructions[0].parsed
-                        .info.source
-                    )
-                  "
-                >
+              <tr v-for="(product, index) in orderData" :key="index" style="height: 35px">
+                <td style=" text-align: left; cursor: pointer" class="text-theme" @click="
+                  pubbtx(
+                    product.result.transaction.signatures[0]
+                  )
+                  ">
+                  {{
+                      product.result.transaction.signatures[0]
+                    
+                  }}
+                </td>
+                <td style=" text-align: left; cursor: pointer" class="text-theme" @click="
+                  pubbleys(
+                    product.result.transaction.message.instructions[0].parsed
+                      .info.source
+                  )
+                  ">
                   {{
                     stringcate(
                       product.result.transaction.message.instructions[0].parsed
@@ -41,16 +42,12 @@
                     )
                   }}
                 </td>
-                <td
-                  style="width: 20%; text-align: left; cursor: pointer"
-                  class="text-theme"
-                  @click="
-                    pubbleys(
-                      product.result.transaction.message.instructions[0].parsed
-                        .info.destination
-                    )
-                  "
-                >
+                <td style=" text-align: left; cursor: pointer" class="text-theme" @click="
+                  pubbleys(
+                    product.result.transaction.message.instructions[0].parsed
+                      .info.destination
+                  )
+                  ">
                   {{
                     stringcate(
                       product.result.transaction.message.instructions[0].parsed
@@ -58,7 +55,7 @@
                     )
                   }}
                 </td>
-                <td style="width: 10%; text-align: left">
+                <td style=" text-align: left">
                   {{
                     toFexedStake(
                       product.result.transaction.message.instructions[0].parsed
@@ -66,10 +63,8 @@
                     )
                   }}
                 </td>
-                <td style="width: 15%; text-align: left">
-                  <button
-                    type="button"
-                    style="
+                <td style=" text-align: left">
+                  <button type="button" style="
                       width: 80px;
                       height: 20px;
                       padding: 0;
@@ -79,8 +74,9 @@
                       border-radius: 2px;
                       line-height: 18px;
                       text-align: center;
-                    "
-                  >
+                      cursor: auto;
+
+                    ">
                     {{
                       textValue(
                         product.result.transaction.message.instructions[0]
@@ -89,20 +85,13 @@
                     }}
                   </button>
                 </td>
-                <td
-                  class="text-theme"
-                  style="width: 15%; text-align: left; cursor: pointer"
-                  @click="soltResult(product.result.slot)"
-                >
-                  <count-up
-                    duration="3"
-                    :startVal="product.result.slot"
-                    :end-val="product.result.slot"
-                  ></count-up>
+                <td class="text-theme" style=" text-align: left; cursor: pointer"
+                  @click="soltResult(product.result.slot)">
+                  <count-up duration="3" :startVal="product.result.slot" :end-val="product.result.slot"></count-up>
                   <!-- {{ product.result.slot }} -->
                 </td>
 
-                <td style="width: 20%; text-align: left">
+                <td style=" text-align: left">
                   {{ timeFormatter(product.result.blockTime * 1000) }} &nbsp;
                 </td>
               </tr>
@@ -128,7 +117,7 @@ const appStore = useAppStore();
 const orderData = ref(appStore.Transaction);
 
 const stringcate = (str) => {
-  return str;
+  return str.slice(0, 6) + "..." + str.slice(-6);;
 };
 
 const timeFormatter = (time) => {
@@ -162,4 +151,12 @@ const pubbleys = (url) => {
     },
   });
 };
+const pubbtx = (item) => {
+  router.push({
+    name: "tx",
+    params: {
+      item: item,
+    },
+  });
+}
 </script>

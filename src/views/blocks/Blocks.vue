@@ -2,91 +2,73 @@
   <div class="blocks">
     <div class="blocks-left">
       <div>
-        <small>LIVE</small>
         <h4>Blocks</h4>
       </div>
       <div class="row">
-        <div
-          class="col-xl-3 col-lg-6"
-          v-for="(stat, index) in block"
-          :key="stat"
-        >
+        <div class="col-xl-3 col-lg-6" v-for="(stat, index) in block" :key="stat">
           <card class="mb-3">
             <card-body>
               <div class="d-flex fw-bold small mb-3">
                 <span class="flex-grow-1">{{ stat.name }} </span>
               </div>
               <h5 class="text-theme" style="display: flex">
-                <count-up
-                  :startVal="initial[index].value"
-                  :end-val="stat.value"
-                  duration="2"
-                  :decimalPlaces="stat.type ? 1 : 0"
-                ></count-up>
+                <count-up :startVal="initial[index].value" :end-val="stat.value" duration="2"
+                  :decimalPlaces="stat.type ? 1 : 0"></count-up>
                 <span v-show="stat.type">%</span>
               </h5>
             </card-body>
           </card>
         </div>
       </div>
-      <div class="row">
-        <table>
-          <thead>
-            <tr>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr style="border-bottom: 1px solid #161b19; line-height: 50px">
-              <td>Cluster time</td>
-              <td style="text-align: right">
-                Jul 3, 2024 at 06:05:56 Coordinates Time
-              </td>
-            </tr>
-            <tr style="border-bottom: 1px solid #161b19; line-height: 50px">
-              <td>Slot time (1min average)</td>
-              <td style="text-align: right">400ms</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #161b19; line-height: 50px">
-              <td>Slot time (1hr average)</td>
-              <td style="text-align: right">400ms</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #161b19; line-height: 50px">
-              <td>Epoch</td>
-              <td style="text-align: right" class="text-theme">
-                {{ epoch }}
-              </td>
-            </tr>
-            <tr style="border-bottom: 1px solid #161b19; line-height: 50px">
-              <td>Epoch progress</td>
-              <td style="text-align: right" class="text-theme">
-                {{ progress }}%
-              </td>
-            </tr>
-            <tr style="border-bottom: 1px solid #161b19; line-height: 50px">
-              <td>Epoch time remaining (approx.)</td>
-              <td style="text-align: right">
-                {{ time }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <!-- <div class="blocks-right">
-      <div v-for="stat in cards" :key="stat" style="margin: 10px 10%">
-        <card class="mb-3">
+      <div class="row" style="padding: 0px 10px">
+        <card class="md-3">
           <card-body>
-            <div class="cards">
-              <h5>
-                <span class="text-theme">{{ stat.number }}</span>
-              </h5>
-            </div>
+            <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Cluster time</td>
+                  <td style="text-align: right">
+                    {{ cluster }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>Slot time (1min average)</td>
+                  <td style="text-align: right">400ms</td>
+                </tr>
+                <tr>
+                  <td>Slot time (1hr average)</td>
+                  <td style="text-align: right">400ms</td>
+                </tr>
+                <tr>
+                  <td>Epoch</td>
+                  <td style="text-align: right; cursor: pointer" class="text-theme" @click="epochSkip(epoch)">
+                    {{ epoch }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>Epoch progress</td>
+                  <td style="text-align: right" class="text-theme">
+                    {{ progress }}%
+                  </td>
+                </tr>
+                <tr>
+                  <td>Epoch time remaining (approx.)</td>
+                  <td style="text-align: right">
+                    {{ time }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </card-body>
         </card>
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -153,6 +135,7 @@ export default {
         remainingSeconds: 0,
       },
       progress: "0%",
+      cluster: null
     };
   },
   async mounted() {
@@ -183,6 +166,8 @@ export default {
           this.time = this.getTime(
             result.result.slotsInEpoch - result.result.slotIndex
           );
+          let d = new Date();
+          this.cluster = moment(d).utc().format();
           this.progress = (
             (result.result.slotIndex / result.result.slotsInEpoch) *
             100
@@ -204,6 +189,14 @@ export default {
         JSON.parse(moment().format("x")) + timestamp * 400
       ).fromNow();
     },
+    epochSkip(num) {
+      this.$router.push({
+        name: "epoch",
+        params: {
+          num: num,
+        },
+      });
+    }
   },
 };
 </script>
@@ -213,6 +206,7 @@ export default {
   width: 100%;
   display: flex;
 }
+
 .blocks-left {
   width: 100%;
 }
@@ -220,12 +214,18 @@ export default {
 .blocks-right {
   width: 20%;
 }
+
 .cards {
   width: 100%;
   height: 100px;
   text-align: center;
 }
+
 .cards h5 {
   line-height: 100px;
+}
+
+table {
+  width: 100%;
 }
 </style>

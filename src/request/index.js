@@ -9,7 +9,6 @@ export default {
     });
   },
   post(url, params = {}) {
-    console.log(url,params);
     return axios({
       url: url,
       method: "post",

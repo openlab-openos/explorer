@@ -13,7 +13,7 @@ export const useAppSidebarMenuStore = defineStore({
       'type': false
     }, {
       'url': 'validators',
-      'icon': 'bi bi-bar-chart',
+      'icon': 'bi bi-columns-gap',
       'text': 'Validators',
       'type': false
 
@@ -25,7 +25,7 @@ export const useAppSidebarMenuStore = defineStore({
     },
     {
       'url': "transactions",
-      'icon': 'bi bi-bar-chart',
+      'icon': 'bi bi-layout-sidebar',
       'text': 'Transactions',
       'type': false
 

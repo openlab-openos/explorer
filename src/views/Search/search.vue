@@ -36,7 +36,6 @@ export default {
       try {
         const response = await chainRequest(object);
         // 解析和处理返回的数据
-        console.log(response.result);
         return response.result; // 现在这个函数会返回解析后的数据
       } catch (error) {
         console.error("Error fetching epoch info:", error);
@@ -60,7 +59,6 @@ export default {
           },
         ],
       });
-      console.log(this.card);
       if (this.card) {
         this.type = true
       } else {
@@ -173,39 +171,78 @@ export default {
       <h3>Account</h3>
       <div v-if="type">
 
-        <table v-if="this.card">
-          <th>
-          <td>Overview</td>
-          <td class=" text-end"></td>
-          </th>
-          <tbody v-for="(item, index) in this.card.value[0] == null ? 1 : this.card.value" :key="index">
-            <tr>
-              <td>Address</td>
-              <td class="text-end">{{ this.url }}</td>
-            </tr>
-            <tr>
-              <td>Balance(BTG)</td>
-              <td class="text-end"> {{ this.card.value[index] == null ? 'Account does not exist' :
-                come(toFexedStake(item.lamports)) }} </td>
-            </tr>
-            <tr>
-              <td>Allocated Data Size</td>
-              <td class="text-end"> {{ this.card.value[index] == null ? '1' : item.space }} byte(s)</td>
-            </tr>
-            <tr>
-              <td>Assigned Program Id</td>
-              <td class="text-end text-theme" style="cursor: pointer" @click="exexutable(item.owner)">
-                {{ item.executable ? 'Native Loader' : ' System Program' }}</td>
-            </tr>
-            <tr>
-              <td>Executable</td>
-              <td class="text-end"> {{ this.card.value[index] == null ? 'NO' : (item.executable ? 'YES' : 'NO') }}</td>
-            </tr>
-          </tbody>
-        </table>
+        <card class="md-3 ">
+          <card-body class="card-bodys">
+            <table v-if="this.card"
+              class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
+              <th>
+              <td>Overview</td>
+              <td class=" text-end"></td>
+              </th>
+              <tbody v-for="(item, index) in this.card.value[0] == null ? 1 : this.card.value" :key="index">
+                <tr>
+                  <td>Address</td>
+                  <td class="text-end">{{ this.url }}</td>
+                </tr>
+                <tr>
+                  <td>Balance(BTG)</td>
+                  <td class="text-end"> {{ this.card.value[index] == null ? 'Account does not exist' :
+                    come(toFexedStake(item.lamports)) }} </td>
+                </tr>
+                <tr>
+                  <td>Allocated Data Size</td>
+                  <td class="text-end"> {{ this.card.value[index] == null ? '0' : item.space }} byte(s)</td>
+                </tr>
+                <tr>
+                  <td>Assigned Program Id</td>
+                  <td class="text-end text-theme" style="cursor: pointer" @click="exexutable(item.owner)">
+                    {{ item.executable ? 'Native Loader' : ' System Program' }}</td>
+                </tr>
+                <tr>
+                  <td>Executable</td>
+                  <td class="text-end"> {{ this.card.value[index] == null ? 'NO' : (item.executable ? 'YES' : 'NO') }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </card-body>
+        </card>
       </div>
       <div v-if="!type">
-        Address "{{ url }}'" is not vaild
+        <card class="md-3">
+          <card-body class="card-bodys">
+            <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
+              <th>
+              <td>Overview</td>
+              <td class=" text-end"></td>
+              </th>
+              <tbody>
+                <tr>
+                  <td>Address</td>
+                  <td class="text-end">{{ this.url }}</td>
+                </tr>
+                <tr>
+                  <td>Balance(BTG)</td>
+                  <td class="text-end"> Address is not vaild </td>
+                </tr>
+                <tr>
+                  <td>Allocated Data Size</td>
+                  <td class="text-end"> 0 byte(s)</td>
+                </tr>
+                <tr>
+                  <td>Assigned Program Id</td>
+                  <td class="text-end text-theme" style="cursor: pointer">
+                    Native Loader</td>
+                </tr>
+                <tr>
+                  <td>Executable</td>
+                  <td class="text-end"> NO
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </card-body>
+        </card>
       </div>
       <div style="margin-top:50px" v-if="type">
         <ul class="nav nav-pills mb-3" id="pills-tab">
@@ -215,41 +252,45 @@ export default {
         </ul>
         <div class="tab-content" id="pills-tabContent">
           <div class="tab-pane fade show active" id="pills-home">
-            <table>
-              <tbody>
-                <tr>
-                  <th style="width: 70%;">
-                    TRANSACTION SIGNATURE
-                  </th>
-                  <th style="width: 10%;">
-                    BLOCK
-                  </th>
-                  <th style="width: 10%;">
-                    AGM
-                  </th>
-                  <th style="width: 10%;">
-                    RESULT
-                  </th>
-                </tr>
-                <tr v-for="(item, index) in historyData" :key="index">
-                  <td class="text-theme" style="width: 70%;cursor: pointer" @click="pubbtx(item.signature)">
-                    {{ item.signature }}
-                  </td>
-                  <td class="text-theme" style="width: 10%;cursor: pointer" @click="slot(item.slot)">
-                    {{ come(item.slot) }}
-                  </td>
-                  <td style="width: 10%;">
-                    {{ timeSome(item.blockTime) }}
-                  </td>
-                  <td style="width: 10%;">
-                    {{ item.err == null ? 'Success' : 'Failed' }}
-                  </td>
-                </tr>
-                <tr v-show="historyData < 0">
-                  1
-                </tr>
-              </tbody>
-            </table>
+            <card class="md-3">
+              <card-body class="card-bodys">
+                <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
+                  <tbody>
+                    <tr>
+                      <th style="width: 70%;">
+                        TRANSACTION SIGNATURE
+                      </th>
+                      <th style="width: 10%;">
+                        BLOCK
+                      </th>
+                      <th style="width: 10%;">
+                        AGM
+                      </th>
+                      <th style="width: 10%;">
+                        RESULT
+                      </th>
+                    </tr>
+                    <tr v-for="(item, index) in historyData" :key="index">
+                      <td class="text-theme" style="width: 70%;cursor: pointer" @click="pubbtx(item.signature)">
+                        {{ item.signature }}
+                      </td>
+                      <td class="text-theme" style="width: 10%;cursor: pointer" @click="slot(item.slot)">
+                        {{ come(item.slot) }}
+                      </td>
+                      <td style="width: 10%;">
+                        {{ timeSome(item.blockTime) }}
+                      </td>
+                      <td style="width: 10%;">
+                        {{ item.err == null ? 'Success' : 'Failed' }}
+                      </td>
+                    </tr>
+                    <tr v-show="historyData < 0">
+                      1
+                    </tr>
+                  </tbody>
+                </table>
+              </card-body>
+            </card>
           </div>
           <div class="tab-pane fade" id="pills-profile">
             <div v-if="this.token">
@@ -296,9 +337,5 @@ export default {
 <style scoped>
 table {
   width: 100%;
-}
-
-tr {
-  line-height: 50px;
 }
 </style>

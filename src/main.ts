@@ -55,7 +55,7 @@ app.use(PerfectScrollbar);
 
 app.config.globalProperties.emitter = emitter;
 app.use(vueMatomo, {
-    host: 'https://openverse.live',
+    host: 'https://stats.openverse.network',
     siteId: 7,
 })
 app.mount('#app');

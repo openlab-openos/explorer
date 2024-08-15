@@ -41,6 +41,7 @@ async function requestList(object) {
   try {
     const response = await chainRequest(object);
     // 解析和处理返回的数据
+
     return response.result; // 现在这个函数会返回解析后的数据
   } catch (error) {
     console.error("Error fetching epoch info:", error);
@@ -107,15 +108,15 @@ async function Account() {
   return list;
 }
 
-const filter = (condition, data) => {
-  return data.filter((item) => {
-    return Object.keys(condition).every((key) => {
-      return String(item[key])
-        .toLowerCase()
-        .includes(String(condition[key]).trim().toLowerCase());
-    });
-  });
-};
+// const filter = (condition, data) => {
+//   return data.filter((item) => {
+//     return Object.keys(condition).every((key) => {
+//       return String(item[key])
+//         .toLowerCase()
+//         .includes(String(condition[key]).trim().toLowerCase());
+//     });
+//   });
+// };
 
 async function searchMenu() {
   if (searchcontent.value == "") {
@@ -127,34 +128,52 @@ async function searchMenu() {
           item: searchcontent.value,
         },
       });
+      searchcontent.value = "";
     } else {
-      let data = await Account();
-      let end = filter(
-        {
-          pubkey: searchcontent.value,
-        },
-        data
-      );
-      if (end.length == 0) {
-      } else {
-        router
-          .push({
-            name: "阿ddress",
-            params: {
-              url: end[0].pubkey,
-            },
-          })
-          .then(() => {
-            searchcontent.value = "";
-          });
-      }
+      // let data = await Account();
+      // let end = filter(
+      //   {
+      //     pubkey: searchcontent.value,
+      //   },
+      //   data
+      // );
+      // if (end.length == 0) {
+      //   router
+      //     .push({
+      //       name: "address",
+      //       params: {
+      //         url: searchcontent.value,
+      //       },
+      //     })
+      //     .then(() => {
+      //       searchcontent.value = "";
+      //     });
+      // } else {
+      //   router
+      //     .push({
+      //       name: "address",
+      //       params: {
+      //         url: end[0].pubkey,
+      //       },
+      //     })
+      //     .then(() => {
+      //       searchcontent.value = "";
+      //     });
+      // }
+      router
+        .push({
+          name: "address",
+          params: {
+            url: searchcontent.value,
+          },
+        })
+        .then(() => {
+          searchcontent.value = "";
+        });
     }
   }
 }
 
-const openNewWindow = () => {
-  window.open("https://www.openverse.network")
-}
 </script>
 <template>
   <div id="header" class="app-header">
@@ -197,7 +216,7 @@ const openNewWindow = () => {
               justify-content: center;
               align-items: center;
             ">
-            <div class="menu-search-icon"><i class="bi bi-search"></i></div>
+
             <div class="menu-search-input" style="width: 80%">
               <input type="text" placeholder="Search Address Account Transaction" v-model="searchcontent"
                 @keyup.enter="searchMenu" style="
@@ -210,31 +229,24 @@ const openNewWindow = () => {
                   padding: 5px;
                 " />
             </div>
+            <div class="menu-search-icon" style="margin-left: 20px;" @click="searchMenu"><i class="bi bi-search"></i>
+            </div>
           </div>
         </div>
+
       </div>
-      <div class="menu-item dropdown dropdown-mobile-full" style="width: 20%">
-        <a href="#" data-bs-toggle="dropdown" data-bs-display="static" class="menu-link">
+      <div class="menu-item dropdown dropdown-mobile-full" style="width: 20%;justify-content: end;">
+        <a href="#" data-bs-toggle="dropdown" data-bs-display="static" class="menu-link scales" style="padding: 28px;">
           Openverse Mainnet
           <i class="bi bi-chevron-down" style="margin: 5px;"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-end me-lg-3 fs-11px mt-1">
-          <div class="dropdown-item d-flex align-items-center text-theme">Openverse Mainnet</div>
-          <div class="dropdown-item d-flex align-items-center">Openverse Devnet</div>
-          <div class="dropdown-item d-flex align-items-center">Openverse Testnet </div>
+          <div class="dropdown-item align-items-center text-theme" style="cursor: pointer;text-align: center;">Openverse Mainnet
+          </div>
+          <div style="text-align: center;padding: 6px 16px;">Openverse Devnet</div>
+          <div style="text-align: center;padding: 6px 16px;">Openverse Testnet </div>
         </div>
       </div>
-      <!-- <div class="menu-item dropdown dropdown-mobile-full phone-show">
-        <a href="#" @click="openNewWindow" class="menu-link" title="Openverse Network">
-          <div class="menu-img online">
-            <div
-              class="d-flex align-items-center justify-content-center w-100 h-100 bg-opacity-25 text-inverse text-opacity-50 rounded-circle overflow-hidden">
-              <i class="fas fa-lg fa-fw me-2 fa-home"></i>
-              <p>meta nate home</p>
-            </div>
-          </div>
-        </a>
-      </div> -->
     </div>
   </div>
 </template>
@@ -252,5 +264,19 @@ const openNewWindow = () => {
   background-color: rgb(254, 38, 38);
   border-radius: 4px;
   padding: 0px 4px;
+}
+
+.scales {
+  transform: scale(1);
+  text-align: center;
+  padding: 6px 26px;
+}
+
+@media (max-width: 768px) {
+  .scales {
+    transform: scale(0.6);
+    text-align: center;
+    padding: 0 !important;
+  }
 }
 </style>

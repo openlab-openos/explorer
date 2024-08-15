@@ -1,11 +1,10 @@
 <template>
-  <div class="col-lg-6 col-xl-3" v-if="data.blockHeight != undefined">
+  <div class="col-lg-6 col-xl-3">
     <!-- BEGIN card -->
     <card class="mb-3" style="height: 160px">
       <card-body>
         <div class="d-flex fw-bold small mb-3">
           <span class="flex-grow-1"> Block Height </span>
-          <card-expand-toggler />
         </div>
         <div class="row align-items-center mb-2" style="height: 30px">
           <div style="
@@ -14,7 +13,7 @@
               justify-content: space-between;
               height: 30px;
             ">
-            <h5 style="display: flex; height: 30px">
+            <h5 style="display: flex; height: 30px" v-if="data.blockHeight != null">
               <numberAnimar :count="JSON.parse(data.blockHeight)" />
               <!-- {{ data.blockHeight }} -->
             </h5>
@@ -22,7 +21,7 @@
 
           <div style="width: 40%; height: 30px">
             <div>
-              <div ref="echartsContainer" style="width:100%; height: 30px;"></div>
+              <div ref="echartsRef" style="width:100%; height: 30px;display:flex ;justify-content: center;"></div>
             </div>
           </div>
         </div>
@@ -37,7 +36,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { chainRequest } from "../../request/chain";
 import numberAnimar from "../../components/CountFlop.vue";
 import apexchart from "@/components/plugins/Apexcharts.vue";
@@ -45,123 +44,143 @@ import moment from "moment";
 import { ustdData } from "../../request/ustd";
 import { useAppStore } from "@/stores/index";
 import * as echarts from 'echarts';
+import { onMounted, ref } from 'vue'
 
 const appStore = useAppStore();
 
-export default {
-  components: {
-    numberAnimar,
-    apexchart,
-  },
-  data() {
-    return {
-      data: {},
-      chart: null,
-      info: null,
-      echartsRef: null
-    };
-  },
-  methods: {
-    async fetchData() {
-      let requestBody = {
-        jsonrpc: "2.0",
-        id: 1,
-        method: "getEpochInfo",
-        params: [], // 如果需要的话}
-      };
-      await chainRequest(requestBody).then((res) => {
-        this.data = res.result;
-      });
-    },
-    randomNo() {
-      return Math.floor(Math.random() * 60) + 30;
-    },
-    getTime(timestamp) {
-      return moment(
-        JSON.parse(moment().format("x")) + timestamp * 400
-      ).fromNow();
-    },
-    async ustd() {
-      ustdData().then((data) => {
-        appStore.setRate(data.data.rate);
-        appStore.getRateData(data.data);
-      });
-    },
-    initECharts() {
-      const chartContainer = this.$refs.echartsContainer;
-      const myChart = echarts.init(chartContainer);
+const data = ref({});
+const chart = ref(null);
+const info = ref(null);
+const timer = ref(null);
 
-      const option = {
-        // ECharts 配置项
-        tooltip: {},
-        xAxis: {
-          type: 'category'
-        },
-        yAxis: {
-          axisLine: {
-            show: false
-          },
-          splitLine: {
-            show: false
-          },
-          axisLabel: {
-            show: false
-          }
-        },
-        series: [{
-          type: 'bar',
-          data: [
-            this.randomNo(),
-            this.randomNo(),
-            this.randomNo(),
-            this.randomNo(),
-            this.randomNo(),
-            this.randomNo(),
-            this.randomNo(),
-            this.randomNo(),
-            this.randomNo(),
-            this.randomNo(),
-          ],
-          itemStyle: {
-            normal: {
-              color: '#008FFB',
-              barBorderRadius: 0, // 去除条形图的圆角  
-              borderColor: 'rgba(0,0,0,0)', // 去除条形图的边框  
-              borderWidth: 0 // 边框宽度，虽然上面设置了边框颜色为透明，但也可以显式设置宽度为0  
-            }
-          }
-        }]
-      };
-
-      myChart.setOption(option);
-    }
-  },
-  async mounted() {
-    await this.fetchData();
-    await this.ustd();
-    setInterval(async () => {
-      await this.fetchData();
-    }, 3000);
-    this.initECharts();
-
-    this.info = [
+const fetchData = async () => {
+  let requestBody = {
+    jsonrpc: "2.0",
+    id: 1,
+    method: "getEpochInfo",
+    params: [], // 如果需要的话}
+  };
+  await chainRequest(requestBody).then((res) => {
+    data.value = res.result;
+    info.value = [
       {
-        icon: "fa fa-chevron-up fa-fw me-1",
-        text: "Current Slot" + " " + this.data.slotIndex,
+        icon: "fab fa-lg fa-fw me-2 fa-stumbleupon-circle",
+        text: "Current Slot" + " " + formatNumber(data.value.slotIndex),
       },
       {
-        icon: "far fa-hand-point-up fa-fw me-1",
-        text: "Total Slot" + " " + this.data.slotsInEpoch,
+        icon: "fab fa-lg fa-fw me-2 fa-telegram-plane",
+        text: "Total Slot" + " " + data.value.slotsInEpoch,
       },
       {
-        icon: "far fa-hdd fa-fw me-1",
+        icon: "fab fa-lg fa-fw me-2 fa-spotify",
         text:
           "Epoch time remaining" +
           " " +
-          this.getTime(this.data.slotsInEpoch - this.data.slotIndex),
+          getTime(data.value.slotsInEpoch - data.value.slotIndex),
       },
     ];
-  },
+  });
+};
+
+const randomNo = () => {
+  return Math.floor(Math.random() * 60) + 30;
+};
+
+const getTime = (timestamp) => {
+  return moment(
+    JSON.parse(moment().format("x")) + timestamp * 400
+  ).fromNow();
+};
+
+const ustd = async () => {
+  ustdData().then((data) => {
+    appStore.setRate(data.data.rate);
+    appStore.getRateData(data.data);
+  });
+};
+
+fetchData();
+ustd();
+const echartsRef = ref(null);
+console.log(data.value);
+const initECharts = () => {
+  const myChart = echarts.init(echartsRef.value);
+
+  const option = {
+    // ECharts 配置项
+    tooltip: {
+      // trigger: 'axis',
+      formatter: function (params) {
+      }
+    },
+    xAxis: {
+      type: 'category'
+    },
+    yAxis: {
+      axisLine: {
+        show: false
+      },
+      splitLine: {
+        show: false
+      },
+      axisLabel: {
+        show: false
+      }
+    },
+    series: [{
+      type: 'bar',
+      data: [
+        randomNo(),
+        randomNo(),
+        randomNo(),
+        randomNo(),
+        randomNo(),
+        randomNo(),
+        randomNo(),
+        randomNo(),
+        randomNo(),
+        randomNo(),
+      ],
+      itemStyle: {
+        normal: {
+          color: '#008FFB',
+          barBorderRadius: 0, // 去除条形图的圆角  
+          borderColor: 'rgba(0,0,0,0)', // 去除条形图的边框  
+          borderWidth: 0 // 边框宽度，虽然上面设置了边框颜色为透明，但也可以显式设置宽度为0  
+        }
+      }
+    }]
+  };
+  myChart.setOption(option);
 
 };
+
+const formatNumber = (value) => {
+  const num = parseInt(value, 10);
+  return new Intl.NumberFormat('en-US').format(num);
+};
+
+function startTimer() {
+  timer.value = setInterval(() => {
+    fetchData();
+  }, 3000);
+}
+function stopTimer() {
+  if (timer.value) {
+    clearInterval(timer.value);
+    timer.value = null;
+  }
+}
+
+onMounted(() => {
+  startTimer()
+  initECharts();
+})
+
+defineExpose({
+  stopTimer
+})
+
+
+
 </script>

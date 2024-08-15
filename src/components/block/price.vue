@@ -5,7 +5,6 @@
       <card-body>
         <div class="d-flex fw-bold small mb-3">
           <span class="flex-grow-1">Staking APY</span>
-          <card-expand-toggler />
         </div>
         <div class="row align-items-center mb-2" style="height: 30px">
           <div style="
@@ -49,10 +48,6 @@ import { onMounted, ref } from "vue";
 const appStore = useAppStore();
 const data = ref();
 
-const randomNo = () => {
-  return Math.floor(Math.random() * 60) + 30;
-};
-
 const skate = ref();
 
 const info = ref([]);
@@ -79,12 +74,10 @@ const datavalue = async () => {
       .then((res) => {
         let btg = res.result;
         let btgcont = 0;
-        let btgcount = 0;
         if (btg) {
           for (let i in btg.current) {
             btgcont += JSON.parse(JSON.stringify(btg.current[i].activatedStake));
           }
-          btgcount = btgcont;
           let num = (btgcont / 1000000000).toFixed(0);
           btgcont = (num / 1000000).toFixed(1);
         }
@@ -101,7 +94,6 @@ const datavalue = async () => {
 }
 onMounted(() => {
   datavalue();
-
 })
 const skateRequest = async () => {
   await chainRequest({
@@ -110,6 +102,7 @@ const skateRequest = async () => {
     method: "getInflationRate",
   }).then((res) => {
     skate.value = res.result;
+    console.log(stubly.value, pubbley.value);
     data.value = (
       (JSON.parse(stubly.value) / JSON.parse(pubbley.value)) *
       skate.value.validator *
@@ -119,25 +112,31 @@ const skateRequest = async () => {
     let year = (stubly.value * skate.value.validator).toFixed(2);
     info.value = [
       {
-        icon: "far fa-hdd fa-fw me-1",
+        icon: "fab fa-lg fa-fw me-2 fa-speakap",
         text:
           "Daily output" +
           " " +
-          (year / 365).toFixed(2) * 1000000 +
+
+
+          formatNumber(((year / 365) * 1000000).toFixed(0)) +
           " " +
           "BTG",
       },
       {
-        icon: "far fa-hand-point-up fa-fw me-1",
+        icon: "fab fa-lg fa-fw me-2 fa-skype",
         text: "Monthly output" + " " + (year / 12).toFixed(2) * 1000 + "K",
       },
       {
-        icon: "fa fa-chevron-up fa-fw me-1",
+        icon: "fab fa-lg fa-fw me-2 fa-sellsy",
         text: "Annual output" + " " + year + "M",
       },
     ];
   });
 };
 
+const formatNumber = (value) => {
+  const num = parseInt(value, 10);
+  return new Intl.NumberFormat('en-US').format(num);
+};
 
 </script>

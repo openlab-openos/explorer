@@ -5,7 +5,6 @@
       <card-body>
         <div class="d-flex fw-bold small mb-3">
           <span class="flex-grow-1">Exchange Rate</span>
-          <card-expand-toggler />
         </div>
         <div class="row align-items-center mb-2" style="height: 30px">
           <div style="
@@ -21,7 +20,7 @@
 
           <div style="width: 40%; height: 30px">
             <div>
-              <div ref="echartsChar" style="width:100%; height: 40px;"></div>
+              <div ref="echartsChar" style="width:100%; height: 40px;display:flex ;justify-content: center;"></div>
 
               <!-- <apexchart :height="chart.height" :options="chart.options" :series="chart.series"></apexchart> -->
             </div>
@@ -60,7 +59,10 @@ const initECharts = () => {
 
   const option = {
     // ECharts 配置项
-    tooltip: {},
+    tooltip: {
+      formatter: function (params) {
+      }
+    },
     xAxis: {
       type: 'category'
     },
@@ -74,20 +76,13 @@ const initECharts = () => {
       axisLabel: {
         show: false
       },
-      max: 10,
-      min:0
+      max: 5,
+      min: 0
     },
     series: [{
       type: 'line',
       data: [
-        randomNo(),
-        randomNo(),
-        randomNo(),
-        randomNo(),
-        randomNo(),
-        randomNo(),
-        randomNo(),
-        randomNo(),
+        1.4, 2.2, 1.7, 2.4, 1.8, 1.3, 2.5,
       ],
       itemStyle: {
         normal: {
@@ -130,51 +125,20 @@ const infoRender = () => {
       : appStore.datarate.updated_at;
   info.value = [
     {
-      icon: "fa fa-chevron-up fa-fw me-1",
+      icon: "fas fa-lg fa-fw me-2 fa-hourglass",
       text: "Updated at" + " " + time,
     },
     {
-      icon: "far fa-hdd fa-fw me-1",
+      icon: "fab fa-lg fa-fw me-2 fa-flickr",
       text: "Reason Words" + " " + appStore.datarate.reason_words,
     },
-    { icon: "far fa-hand-point-up fa-fw me-1", text: "5 USD When Listing" },
+    { icon: "fas fa-lg fa-fw me-2 fa-money-bill-alt", text: "5 USD When Listing" },
   ];
 }
 
 const randomNo = () => {
   return Math.floor(Math.random() * 2) + 3;
 };
-
-// const chart = ref({
-//   height: 30,
-//   options: {
-//     chart: { type: "area", sparkline: { enabled: true } },
-//     stroke: { curve: "straight", width: 2 },
-//   },
-//   yaxis: {
-//     min: 0,
-//   },
-//   series: [
-//     {
-//       name: "Visitors",
-//       data: [
-//         randomNo(),
-//         randomNo(),
-//         randomNo(),
-//         randomNo(),
-//         randomNo(),
-//         randomNo(),
-//         randomNo(),
-//         randomNo(),
-//         randomNo(),
-//         randomNo(),
-//         randomNo(),
-//         randomNo(),
-//         randomNo(),
-//       ],
-//     },
-//   ],
-// });
 
 
 </script>

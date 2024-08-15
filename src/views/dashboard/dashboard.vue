@@ -1,6 +1,6 @@
 <script setup>
 import { useAppVariableStore } from "@/stores/app-variable";
-import { onMounted, ref, watch } from "vue";
+import { onBeforeUnmount, onMounted, onUnmounted, ref, watch } from "vue";
 import apexchart from "@/components/plugins/Apexcharts.vue";
 import jsVectorMap from "jsvectormap";
 import "jsvectormap/dist/maps/world.js";
@@ -42,10 +42,15 @@ const ActivityLogData = ref([]);
 const orderData = ref([]);
 const server = ref([]);
 const mapContainer = ref();
+const pageType = ref(true);
 
 const map = ref(null);
+const activeVueref = ref(null)
+const networkref = ref(null)
+
 
 const router = useRouter();
+
 
 const timeFormatter = (time) => {
   return moment(time).fromNow();
@@ -60,14 +65,6 @@ const pubbleys = (url) => {
   });
 };
 
-const soltResult = (solt) => {
-  router.push({
-    name: "block",
-    params: {
-      url: solt,
-    },
-  });
-};
 
 ustdData().then((data) => {
   appStore.setRate(data.data.rate);
@@ -91,6 +88,9 @@ const orderrequest = () => {
 orderrequest();
 
 const unnumTranstions = ref([]);
+const timeName = ref([]);
+const cote = ref([]);
+const trueTramsatiom = ref([]);
 
 const performanceSamples = async () => {
   let requestBody = {
@@ -101,12 +101,20 @@ const performanceSamples = async () => {
   };
   await chainRequest(requestBody)
     .then((response) => {
+      let res = response.result;
       for (let i in response.result) {
+        timeName.value.unshift((JSON.parse(i) + 1) == 1 ? "a" + "minutes ago " : (JSON.parse(i) + 1) + "minutes ago ")
+        cote.value.push(
+          JSON.parse(response.result[i].numTransactions)
+        );
+        trueTramsatiom.value.push(
+          JSON.parse(response.result[i].numNonVoteTransactions)
+        )
         unnumTranstions.value.push(
           JSON.parse(response.result[i].numTransactions) +
           JSON.parse(response.result[i].numNonVoteTransactions)
         );
-      }
+      };
     })
     .catch((error) => {
       console.error("Error fetching epoch info:", error);
@@ -236,7 +244,7 @@ const getServerData = () => {
     },
     xaxis: {
       axisBorder: {
-        show: true,
+        show: false,
         color: "rgba(" + appVariable.color.bodyColorRgb + ", .25)",
         height: 1,
         width: "100%",
@@ -244,7 +252,7 @@ const getServerData = () => {
         offsetY: -1,
       },
       axisTicks: {
-        show: true,
+        show: false,
         borderType: "solid",
         color: "rgba(" + appVariable.color.bodyColorRgb + ", .25)",
         height: 6,
@@ -271,16 +279,16 @@ const getServerData = () => {
           cssClass: "apexcharts-xaxis-label",
         },
       },
-      min: 1300,
+      min: 1500,
     },
   };
   return {
     chart: {
       series: [
         {
-          name: "TPS history",
+          name: "TPM history",
           data: unnumTranstions.value,
-        },
+        }
       ],
       options: {
         colors: [appVariable.color.theme],
@@ -290,13 +298,16 @@ const getServerData = () => {
         },
         fill: { opacity: 0.65 },
         tooltip: {
-          y: {
-            formatter: function (val) {
-              return val;
-            },
+          custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+
+            return `<div class="custom-tooltip" style="padding:5px">  
+              <div>vote: ${cote.value[dataPointIndex]}</div> 
+              <div>true ${trueTramsatiom.value[dataPointIndex]}</div> 
+              <div>${timeName.value[dataPointIndex]} </div> 
+            </div>`;
           },
         },
-        chart: { height: "100%", type: "bar", toolbar: { show: false } },
+        chart: { height: "100%", type: "bar", toolbar: { show: false }, labels: timeName.value },
         plotOptions: {
           bar: {
             horizontal: false,
@@ -336,6 +347,7 @@ const getServerData = () => {
             click: false,
           },
         ],
+
         chart: {
           height: 50,
           options: {
@@ -350,6 +362,14 @@ const getServerData = () => {
               dashArray: 0,
             },
             plotOptions: { pie: { donut: { background: "transparent" } } },
+            tooltip: {
+              custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+                return `<div class="custom-tooltip" style="padding:5px">  
+                <span> ${['SlotIndex', 'SlotsInEpoch'][seriesIndex]} : </span> 
+                <span>${series[seriesIndex] * 100} % </span> 
+              </div>`;
+              },
+            },
           },
           series: [
             JSON.parse((slot.value / inepoch.value).toFixed(2)),
@@ -396,8 +416,20 @@ const getServerData = () => {
               dashArray: 0,
             },
             plotOptions: { pie: { donut: { background: "transparent" } } },
+            tooltip: {
+              custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+                return `<div class="custom-tooltip" style="padding:5px">  
+                <span> ${['BTG Supply', 'Active Stake'][seriesIndex]} : </span> 
+                <span>${series[seriesIndex] * 100} % </span> 
+              </div>`;
+              },
+            },
           },
-          series: [JSON.parse(pubbley.value), JSON.parse(stubly.value)],
+          series: [
+            // JSON.parse(pubbley.value), JSON.parse(stubly.value)
+            JSON.parse((pubbley.value / stubly.value).toFixed(2)),
+            JSON.parse((1 - pubbley.value / stubly.value).toFixed(2))
+          ],
         },
       },
     ],
@@ -433,12 +465,13 @@ const getTrafficData = (data) => {
   let coun = [];
   let countryArray = [];
   let chartArray = [];
+  let chartName = []
   if (data) {
     let arrayData = uniqueArrayByProperty(data, "try");
     let country = uniqueArrayByProperty(data, "code");
 
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 5; i++) {
       coun.push({
         name: arrayData[i].value,
         visits: arrayData[i].count,
@@ -477,6 +510,10 @@ const getTrafficData = (data) => {
   appStore.getCountryData(chainArray[0]);
   series.value = chartArray.map(parseFloat);
   let array = series.value;
+  for (let i in chainArray) {
+    chartName.push(chainArray[i].timezone)
+  }
+  console.log(chainArray);
   return {
     coun,
     chainArray,
@@ -500,6 +537,17 @@ const getTrafficData = (data) => {
           dashArray: 0,
         },
         plotOptions: { pie: { donut: { background: "transparent" } } },
+        tooltip: {
+          custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+            console.log(series, seriesIndex);
+            console.log(series[seriesIndex]);
+            console.log(series);
+            return `<div class="custom-tooltip" style="padding:5px">  
+              <span>${chartName[seriesIndex]}: </span> 
+              <span>${series[seriesIndex]} %</span> 
+            </div>`;
+          },
+        },
       },
       series: array,
     },
@@ -665,12 +713,6 @@ const renderMap = async () => {
           localStorage.getItem(ActivityLogData.value[i].ip)
         ).country_name,
       });
-      // map.value.addMarkers([
-      //   JSON.parse(localStorage.getItem(ActivityLogData.value[i].ip))
-      //     .latitude,
-      //   JSON.parse(localStorage.getItem(ActivityLogData.value[i].ip))
-      //     .longitude,
-      // ]);
     } else {
       let loc_lat = await getIPLocation(ActivityLogData.value[i].ip);
       markers_data.push({
@@ -704,7 +746,7 @@ const renderMap = async () => {
 
       // 现在进行数值加法  
       lat += 1;;
-      lng += markers_data[i].count * 3; // 这可能是一个合理的经度偏移量  
+      lng += markers_data[i].count * 2; // 这可能是一个合理的经度偏移量  
 
       // 更新coords数组  
       markers_data[i].coords[0] = lat;
@@ -715,12 +757,14 @@ const renderMap = async () => {
     let currentLat = Number(markers_data[i].coords[0]);
     for (let j = 0; j < markers_data.length; j++) {
       if (j < markers_data.length) {
-        let compareLat = Number(markers_data[j].coords[0]); // 比较项的纬度  
+        if (i != j) {
+          let compareLat = Number(markers_data[j].coords[0]); // 比较项的纬度  
 
-        if (Math.abs(currentLat - compareLat) < 1) {
+          if (Math.abs(currentLat - compareLat) < 1) {
 
-          markers_data[j].coords[0] += 2;
-          markers_data[j].coords[1] += 2;
+            markers_data[j].coords[0] -= 1;
+            markers_data[j].coords[1] += 1;
+          }
         }
       }
     }
@@ -772,6 +816,7 @@ onMounted(() => {
   mapCreate();
 });
 
+
 const epochSkip = (num) => {
   router.push({
     name: "epoch",
@@ -780,14 +825,31 @@ const epochSkip = (num) => {
     },
   });
 };
+
+const pubbtx = (item) => {
+  router.push({
+    name: "tx",
+    params: {
+      item: item,
+    },
+  });
+}
+
+
+onBeforeUnmount(() => {
+  if (activeVueref.value) {
+    activeVueref.value.stopTimer()
+    networkref.value.stopTimer()
+  }
+})
 </script>
 
 
 
 <template>
   <div class="row">
-    <blockHeightVue />
-    <netWorkVue />
+    <blockHeightVue ref="activeVueref" />
+    <netWorkVue ref="networkref" />
     <activeAccountVue />
     <transferVue />
     <supplyVue />
@@ -804,7 +866,7 @@ const epochSkip = (num) => {
       <card class="mb-3">
         <card-body>
           <div class="d-flex fw-bold small mb-3">
-            <span class="flex-grow-1"> TPS history </span>
+            <span class="flex-grow-1"> TPM history </span>
             <card-expand-toggler />
           </div>
           <div class="ratio ratio-21x9 mb-3" v-if="server.chart">
@@ -841,7 +903,7 @@ const epochSkip = (num) => {
                   </div>
                   <div class="d-flex align-items-center small" v-for="(info, index) in stat.info" :key="index">
                     <i class="bi bi-circle-fill fs-6px me-2" v-bind:class="info.class"></i>
-                    <div class="flex-1">
+                    <div class="flex-1" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
                       {{ info.title }}
                     </div>
                     <div :style="info.style" @click="info.click ? epochSkip(info.value) : ''" class="text-theme">
@@ -856,7 +918,6 @@ const epochSkip = (num) => {
       </card>
     </div>
     <!-- END server-stats -->
-    {{ traffic.lenght }}
 
     <!-- BEGIN traffic-analytics -->
     <div class="col-xl-6">
@@ -894,7 +955,7 @@ const epochSkip = (num) => {
                 </tbody>
               </table>
             </div>
-            <div class="col-lg-6" v-if="traffic.lenght != 0">
+            <div class="col-lg-6" v-if="traffic.lenght != 0" style="margin-top: 6px">
               <card>
                 <card-body class="py-2">
                   <div class="d-flex align-items-center">
@@ -933,23 +994,34 @@ const epochSkip = (num) => {
     <!-- BEGIN top-products -->
     <div class="col-xl-6">
       <card class="mb-3">
-        <card-body style="height: 675px; overflow: hidden">
+        <card-body>
           <div class="d-flex fw-bold small mb-3">
-            <span class="flex-grow-1">New Transaction</span>
+            <span class="flex-grow-1">New Transactions</span>
             <card-expand-toggler />
           </div>
           <div class="table-responsive">
             <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
               <tbody>
                 <tr>
+                  <th style="width: 20%; text-align: left">SIGNATURE</th>
                   <th style="width: 20%; text-align: left">SOURCE</th>
                   <th style="width: 20%; text-align: left">DESTINATION</th>
                   <th style="width: 10%; text-align: left">BTG</th>
-                  <th style="width: 15%; text-align: left">TYPE</th>
-                  <th style="width: 15%; text-align: left">SOLT</th>
+                  <th style="width: 10%; text-align: left">TYPE</th>
                   <th style="width: 20%; text-align: left">TIME</th>
                 </tr>
                 <tr v-for="(product, index) in orderData" :key="index" style="height: 35px">
+                  <td style="width: 20%; text-align: left; cursor: pointer" class="text-theme" @click="
+                    pubbtx(
+                      product.result.transaction.signatures[0]
+                    )
+                    ">
+                    {{
+                      stringcate(
+                        product.result.transaction.signatures[0]
+                      )
+                    }}
+                  </td>
                   <td style="width: 20%; text-align: left; cursor: pointer" class="text-theme" @click="
                     pubbleys(
                       product.result.transaction.message.instructions[0]
@@ -995,6 +1067,7 @@ const epochSkip = (num) => {
                         border-radius: 2px;
                         line-height: 18px;
                         text-align: center;
+                        cursor: auto;
                       ">
                       {{
                         textValue(
@@ -1004,13 +1077,7 @@ const epochSkip = (num) => {
                       }}
                     </button>
                   </td>
-                  <td class="text-theme" style="width: 15%; text-align: left; cursor: pointer"
-                    @click="soltResult(product.result.slot)">
-                    <count-up duration="3" :startVal="product.result.slot" :end-val="product.result.slot"></count-up>
-                    <!-- {{ product.result.slot }} -->
-                  </td>
-
-                  <td style="width: 20%; text-align: left">
+                  <td style="width: 20%; text-align: left;white-space: nowrap;">
                     {{ timeFormatter(product.result.blockTime * 1000) }} &nbsp;
                   </td>
                 </tr>
@@ -1027,7 +1094,7 @@ const epochSkip = (num) => {
       <card class="mb-3">
         <card-body>
           <div class="d-flex fw-bold small mb-3">
-            <span class="flex-grow-1">Validators</span>
+            <span class="flex-grow-1">All Validators</span>
             <card-expand-toggler />
           </div>
           <div class="table-responsive">
