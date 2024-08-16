@@ -12,8 +12,9 @@
               display: flex;
               justify-content: space-between;
               height: 30px;
+             
             ">
-            <h5 style="display: flex; height: 30px">{{ data }}%</h5>
+            <h5 style="display: flex; height: 30px; font-size: 0.9rem;line-height: 30px;">{{ data }}%</h5>
           </div>
 
           <div style="

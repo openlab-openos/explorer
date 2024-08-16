@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getCurrentInstance, onMounted } from "vue";
+import { getCurrentInstance, onMounted, watchEffect, ref } from "vue";
 import { RouterLink, RouterView } from "vue-router";
 import { useAppOptionStore } from "@/stores/app-option";
 import { ProgressFinisher, useProgress } from "@marcoschulte/vue3-progress";
@@ -19,17 +19,8 @@ const appStore = useAppStore();
 
 const progresses = [] as ProgressFinisher[];
 
-const ustd = async () => {
-  try {
-    const data = await ustdData();
-    appStore.setRate(data.data.rate);
-    appStore.getRateData(data.data);
-  } catch (err) {
-    console.log(err);
-  }
-};
+const mediaMarginLeft = ref();
 
-ustd();
 
 router.beforeEach(async (to, from) => {
   progresses.push(useProgress().start());
@@ -50,32 +41,53 @@ router.afterEach(async (to, from) => {
 });
 
 document.querySelector("body").classList.add("app-init");
+
+const mediaQueryString = "(min-width: 2000px)";
+
+const mediaQueryList = window.matchMedia(mediaQueryString);
+
+if (!mediaQueryList.matches) {
+  mediaMarginLeft.value = '12%'
+} else {
+  mediaMarginLeft.value = '16.875rem'
+}
+
+
+watchEffect(() => {
+  console.log(appOption.appSidebarCollapsed);
+  if (appOption.appSidebarCollapsed) {
+    mediaMarginLeft.value = ''
+  } else {
+    if (!mediaQueryList.matches) {
+      mediaMarginLeft.value = '12%'
+    } else {
+      mediaMarginLeft.value = '16.875rem'
+    }
+  }
+})
 </script>
 
 <template>
-  <div
-    class="app"
-    v-bind:class="{
-      'app-header-menu-search-toggled': appOption.appHeaderSearchToggled,
-      'app-sidebar-toggled':
-        appOption.appSidebarToggled && !appOption.appSidebarCollapsed,
-      'app-sidebar-collapsed': appOption.appSidebarCollapsed,
-      'app-sidebar-mobile-toggled': appOption.appSidebarMobileToggled,
-      'app-sidebar-mobile-closed': appOption.appSidebarMobileClosed,
-      'app-content-full-height': appOption.appContentFullHeight,
-      'app-content-full-width': appOption.appSidebarHide,
-      'app-without-sidebar': appOption.appSidebarHide,
-      'app-without-header': appOption.appHeaderHide,
-      'app-boxed-layout': appOption.appBoxedLayout,
-      'app-with-top-nav': appOption.appTopNav,
-      'app-footer-fixed': appOption.appFooterFixed,
-    }"
-  >
+  <div class="app" v-bind:class="{
+    'app-header-menu-search-toggled': appOption.appHeaderSearchToggled,
+    'app-sidebar-toggled':
+      appOption.appSidebarToggled && !appOption.appSidebarCollapsed,
+    'app-sidebar-collapsed': appOption.appSidebarCollapsed,
+    'app-sidebar-mobile-toggled': appOption.appSidebarMobileToggled,
+    'app-sidebar-mobile-closed': appOption.appSidebarMobileClosed,
+    'app-content-full-height': appOption.appContentFullHeight,
+    'app-content-full-width': appOption.appSidebarHide,
+    'app-without-sidebar': appOption.appSidebarHide,
+    'app-without-header': appOption.appHeaderHide,
+    'app-boxed-layout': appOption.appBoxedLayout,
+    'app-with-top-nav': appOption.appTopNav,
+    'app-footer-fixed': appOption.appFooterFixed,
+  }">
     <vue3-progress-bar />
     <app-header v-if="!appOption.appHeaderHide" />
     <app-top-nav v-if="appOption.appTopNav" />
     <app-sidebar v-if="!appOption.appSidebarHide" />
-    <div class="appContent" v-bind:class="appOption.appContentClass">
+    <div class="appContent" v-bind:class="appOption.appContentClass" :style="{ 'margin-left': mediaMarginLeft }">
       <router-view></router-view>
     </div>
     <app-footer v-if="appOption.appFooter" />
@@ -84,16 +96,8 @@ document.querySelector("body").classList.add("app-init");
 </template>
 
 <style>
-.appContent{
+.appContent {
   padding: 2rem 2rem;
-  margin-left: 12%;
+  transition: all 0.1s;
 }
-
-@media (min-width: 2000px) {
-  .appContent{
-    padding: 2rem 2rem;
-    margin-left: 16.875rem;
-  }
-}
-
 </style>

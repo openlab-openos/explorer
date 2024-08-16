@@ -241,7 +241,8 @@ async function searchMenu() {
           <i class="bi bi-chevron-down" style="margin: 5px;"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-end me-lg-3 fs-11px mt-1">
-          <div class="dropdown-item align-items-center text-theme" style="cursor: pointer;text-align: center;">Openverse Mainnet
+          <div class="dropdown-item align-items-center text-theme" style="cursor: pointer;text-align: center;">Openverse
+            Mainnet
           </div>
           <div style="text-align: center;padding: 6px 16px;">Openverse Devnet</div>
           <div style="text-align: center;padding: 6px 16px;">Openverse Testnet </div>

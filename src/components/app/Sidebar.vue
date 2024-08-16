@@ -84,13 +84,14 @@ const isActive = computed(() => (url) => {
   <div id="sidebar" class="app-sidebar">
     <perfect-scrollbar class="app-sidebar-content">
       <div class="menu">
-        <template v-for="menu in appSidebarMenu">
+        <template v-for="menu, index in appSidebarMenu" :key="index">
           <div class="menu-header" v-if="menu.is_header">{{ menu.text }}</div>
           <div class="menu-divider" v-else-if="menu.is_divider"></div>
           <template v-else>
             <!-- <sidebar-nav v-if="!menu.type" v-bind:menu="menu"></sidebar-nav> -->
 
-            <div v-if="!menu.type" class="menu-item" :class="{ active: isActive(menu.url) }">
+            <div v-if="!menu.type" class="menu-item" :class="{ active: isActive(menu.url) }"
+              :style="{ display: Number(index) ? 'block' : 'none' }">
               <router-link :to="{
                 name: menu.url == '/' ? 'dashboard' : menu.url
               }" class="menu-link">
@@ -101,7 +102,7 @@ const isActive = computed(() => (url) => {
               </router-link>
             </div>
             <div v-if="menu.type" class="menu-item">
-              <a :href="menu.url" class="menu-link" target="_blank">
+              <a :href="menu.url" class="menu-link arrs" target="_blank">
                 <span class="menu-icon">
                   <i class="menu-icon" v-bind:class="menu.icon"></i>
                 </span>

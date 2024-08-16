@@ -13,14 +13,15 @@
               justify-content: space-between;
               height: 30px;
             ">
-            <h5 style="display: flex; height: 30px">
+            <h5 style="display: flex; height: 30px; font-size: 0.9rem;line-height: 30px;">
               {{ rate }} USD/BTG
             </h5>
           </div>
 
           <div style="width: 40%; height: 30px">
             <div>
-              <div ref="echartsChar" style="width:100%; height: 40px;display:flex ;justify-content: center;"></div>
+              <div ref="echartsChar"
+                style="width:100%; height: 40px;display:flex ;justify-content: center;margin-top: -10px;"></div>
 
               <!-- <apexchart :height="chart.height" :options="chart.options" :series="chart.series"></apexchart> -->
             </div>

@@ -241,7 +241,7 @@ export default {
               </th>
               <tbody>
                 <tr>
-                  <td>Blockhashds</td>
+                  <td>Blockhash</td>
                   <td class="text-end"> {{ this.card.blockhash }} </td>
                 </tr>
                 <tr>
