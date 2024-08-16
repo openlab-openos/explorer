@@ -21,7 +21,7 @@
 
           <div style="width: 40%; height: 30px">
             <div>
-              <div ref="echartsContainers" style="width:100%; height: 30px;display:flex ;justify-content: center;">
+              <div ref="echartsContainers" style="width:100%; height: 40px;display:flex ;justify-content: center;margin-top: -10px;">
               </div>
             </div>
           </div>
@@ -61,7 +61,6 @@ const initECharts = () => {
     // ECharts 配置项
     tooltip: {
       formatter: function (params) {
-
       }
     },
     xAxis: {
@@ -76,26 +75,19 @@ const initECharts = () => {
       },
       axisLabel: {
         show: false
-      }
+      },
+      max: 5,
+      min: 0
     },
     series: [{
       type: 'bar',
       data: [
-        randomNo(),
-        randomNo(),
-        randomNo(),
-        randomNo(),
-        randomNo(),
-        randomNo(),
-        randomNo(),
-        randomNo(),
-        randomNo(),
-        randomNo(),
+        2.4, 1.2, 2.7, 3.4, 2.8, 2.3, 2.5,3.5,4.3
       ],
       itemStyle: {
         normal: {
-          color: '#008FFB',
           barBorderRadius: 0, // 去除条形图的圆角  
+          color: '#008FFB',
           borderColor: 'rgba(0,0,0,0)', // 去除条形图的边框  
           borderWidth: 0 // 边框宽度，虽然上面设置了边框颜色为透明，但也可以显式设置宽度为0  
         }

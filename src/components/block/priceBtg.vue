@@ -20,7 +20,8 @@
 
           <div style="width: 40%; height: 30px">
             <div>
-              <div ref="echartsChar" style="width:100%; height: 40px;display:flex ;justify-content: center;"></div>
+              <div ref="echartsChar"
+                style="width:100%; height: 40px;display:flex ;justify-content: center;margin-top: -10px;"></div>
 
               <!-- <apexchart :height="chart.height" :options="chart.options" :series="chart.series"></apexchart> -->
             </div>

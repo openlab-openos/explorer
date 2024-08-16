@@ -1,7 +1,7 @@
 <template>
   <div class="col-lg-6 col-xl-3">
     <!-- BEGIN card -->
-    <card class="mb-3" v-if="data != undefined" style="height: 160px">
+    <card class="mb-3" style="height: 160px">
       <card-body>
         <div class="d-flex fw-bold small mb-3">
           <span class="flex-grow-1">BTG Supply</span>
@@ -12,7 +12,7 @@
               display: flex;
               justify-content: space-between;
               height: 30px;
-            ">
+            " v-if="data != undefined">
 
             <h5 style="display: flex; height: 30px ;font-size:0.9rem;">
               <span class="supplyText">
@@ -35,7 +35,8 @@
             </div>
           </div>
 
-          <div style="width: 35%;line-height: 30px;display: flex;justify-content: end; font-size:0.9rem;">
+          <div style="width: 35%;line-height: 30px;display: flex;justify-content: end; font-size:0.9rem;"
+            v-if="data != undefined">
             <h5 style="line-height: 30px;">
               $
             </h5>

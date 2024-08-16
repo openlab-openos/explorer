@@ -745,7 +745,12 @@ const renderMap = async () => {
       let lng = Number(markers_data[i].coords[1]); // 转换或默认为0  
 
       // 现在进行数值加法  
-      lat += 1;;
+      
+      if(i % 2 == 0){
+        lat += 1;
+      } else {
+        lat -= 1;
+      }
       lng += markers_data[i].count * 2; // 这可能是一个合理的经度偏移量  
 
       // 更新coords数组  
@@ -864,7 +869,7 @@ onBeforeUnmount(() => {
     <!-- BEGIN server-stats -->
     <div class="col-xl-6">
       <card class="mb-3">
-        <card-body>
+        <card-body style="min-height: 400px;">
           <div class="d-flex fw-bold small mb-3">
             <span class="flex-grow-1"> TPM history </span>
             <card-expand-toggler />
@@ -922,7 +927,7 @@ onBeforeUnmount(() => {
     <!-- BEGIN traffic-analytics -->
     <div class="col-xl-6">
       <card class="mb-3">
-        <card-body>
+        <card-body style="min-height: 400px;">
           <div class="d-flex fw-bold small mb-3">
             <span class="flex-grow-1">NODE ANALYTICS</span>
             <card-expand-toggler />

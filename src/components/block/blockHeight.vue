@@ -21,7 +21,8 @@
 
           <div style="width: 40%; height: 30px">
             <div>
-              <div ref="echartsRef" style="width:100%; height: 30px;display:flex ;justify-content: center;"></div>
+              <div ref="echartsRef"
+                style="width:100%; height: 40px;display:flex ;justify-content: center;margin-top: -10px;"></div>
             </div>
           </div>
         </div>
@@ -124,26 +125,19 @@ const initECharts = () => {
       },
       axisLabel: {
         show: false
-      }
+      },
+      max: 5,
+      min: 0
     },
     series: [{
       type: 'bar',
       data: [
-        randomNo(),
-        randomNo(),
-        randomNo(),
-        randomNo(),
-        randomNo(),
-        randomNo(),
-        randomNo(),
-        randomNo(),
-        randomNo(),
-        randomNo(),
+        1.4, 2.2, 1.7, 2.4, 1.8, 1.3, 2.5,
       ],
       itemStyle: {
         normal: {
-          color: '#008FFB',
           barBorderRadius: 0, // 去除条形图的圆角  
+          color: '#008FFB',
           borderColor: 'rgba(0,0,0,0)', // 去除条形图的边框  
           borderWidth: 0 // 边框宽度，虽然上面设置了边框颜色为透明，但也可以显式设置宽度为0  
         }

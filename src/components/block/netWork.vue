@@ -1,5 +1,5 @@
 <template>
-  <div class="col-lg-6 col-xl-3" v-if="data.blockHeight != undefined">
+  <div class="col-lg-6 col-xl-3">
     <!-- BEGIN card -->
     <card class="mb-3" style="height: 160px">
       <card-body>
@@ -13,7 +13,7 @@
               justify-content: space-between;
               height: 30px;
             ">
-            <h5 style="display: flex; height: 30px">
+            <h5 style="display: flex; height: 30px" v-if="data.blockHeight != undefined">
               <numberAnimar :count="JSON.parse(data.transactionCount)" />
               <!-- {{ data.blockHeight }} -->
             </h5>
@@ -70,14 +70,14 @@ const fetchData = async () => {
 
 fetchData()
 
-const performanceSamples = async () => {
+const performanceSamples = () => {
   let requestBody = {
     jsonrpc: "2.0",
     id: 1,
     method: "getRecentPerformanceSamples",
     params: [24],
   };
-  await chainRequest(requestBody)
+  chainRequest(requestBody)
     .then((response) => {
       for (let i in response.result) {
         unnumTranstions.value.push(

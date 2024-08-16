@@ -53,57 +53,8 @@ const data = ref(1);
 const epoch = ref(1);
 const info = ref();
 
-setTimeout(() => {
-  data.value = appStore.pubbley;
-
-  stubly.value = appStore.stubly;
-}, 2000);
-
-const datavalue = async () => {
-  if (appStore.stubly == 0) {
-    await chainRequest({
-      jsonrpc: "2.0",
-      id: 1,
-      method: "getSupply",
-    }).then((res) => {
-      stubly.value = (
-        JSON.parse(JSON.stringify(res.result.value.total).slice(0, 9)) / 1000000
-      ).toFixed(1);
-    }).then(res => {
-
-    })
-    await chainRequest({
-      jsonrpc: "2.0",
-      id: 1,
-      method: "getVoteAccounts",
-      params: [],
-    })
-      .then((res) => {
-        let btg = res.result;
-        let btgcont = 0;
-        let btgcount = 0;
-        if (btg) {
-          for (let i in btg.current) {
-            btgcont += JSON.parse(JSON.stringify(btg.current[i].activatedStake));
-          }
-          btgcount = btgcont;
-          let num = (btgcont / 1000000000).toFixed(0);
-          btgcont = (num / 1000000).toFixed(1);
-        }
-        data.value = btgcont;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  } else {
-    stubly.value = appStore.stubly;
-    data.value = appStore.pubbley;
-  }
-}
-datavalue();
-
-const chainData = async () => {
-  await chainRequest({
+const chainData = () => {
+  chainRequest({
     jsonrpc: "2.0",
     id: 1,
     method: "getEpochInfo",
@@ -120,18 +71,21 @@ const randomNo = () => {
 
 onMounted(() => {
   watchEffect(() => {
+    data.value = appStore.pubbley;
+
+    stubly.value = appStore.stubly;
     info.value = [
       {
         icon: "fa fa-chevron-up fa-fw me-1",
         text:
           "Average per node" +
           " " +
-          (stubly.value / epoch.value).toFixed(2) +
+          (appStore.stubly / epoch.value).toFixed(2) +
           "M",
       },
       {
         icon: "far fa-hdd fa-fw me-1",
-        text: "TVL" + " " + "$" + (JSON.parse(data.value) * appStore.rate).toFixed(2) + "M",
+        text: "TVL" + " " + "$" + (JSON.parse(appStore.pubbley) * appStore.rate).toFixed(2) + "M",
       },
       {
         icon: "far fa-hand-point-up fa-fw me-1",

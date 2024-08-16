@@ -1,5 +1,5 @@
 <template>
-  <div class="col-lg-6 col-xl-3" v-if="data.amount != undefined">
+  <div class="col-lg-6 col-xl-3">
     <!-- BEGIN card -->
     <card class="mb-3" style="height: 160px">
       <card-body>
@@ -13,7 +13,7 @@
               justify-content: space-between;
               height: 30px;
               line-height: 30px;
-            ">
+            " v-if="data.amount != undefined">
             <h5 style="display: flex; height: 30px">
               <numberAnimar :count="JSON.parse(data.amount)" />
               <div style="white-space: nowrap; line-height: 30px; height: 30px; font-size:0.9rem;">
@@ -26,7 +26,7 @@
               <i class="fas fa-lg fa-fw me-2 fa-exchange-alt"></i>
             </div>
           </div>
-          <div style="width: 35%;height: 30px;display: flex;justify-content: end;">
+          <div style="width: 35%;height: 30px;display: flex;justify-content: end;" v-if="data.amount != undefined">
             <h5 style="line-height: 30px; font-size:0.9rem;">
               $
             </h5>
