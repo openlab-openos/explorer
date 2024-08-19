@@ -6,7 +6,7 @@ import vueMatomo from "vue-matomo";
 const { app, router, painia } = createApp();
 
 app.use(painia).use(router).use(vueMatomo, {
-    host: 'https://openverse.live',
+    host: 'https://stats.openverse.network',
     siteId: 7,
 }).mount("#app");
 

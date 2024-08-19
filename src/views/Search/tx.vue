@@ -164,7 +164,6 @@ export default {
         },
       ],
     });
-    console.log(this.card);
     this.historyData = await this.requestList({
       jsonrpc: "2.0",
       id: "",

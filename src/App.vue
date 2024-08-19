@@ -43,23 +43,48 @@ router.afterEach(async (to, from) => {
 document.querySelector("body").classList.add("app-init");
 
 const mediaQueryString = "(min-width: 2000px)";
+const medMAxstyle = "(max-width:700px)"
 
 const mediaQueryList = window.matchMedia(mediaQueryString);
+const mediaQueryStyle = window.matchMedia(medMAxstyle);
 
 if (!mediaQueryList.matches) {
-  mediaMarginLeft.value = '12%'
+  if (mediaQueryStyle.matches) {
+    mediaMarginLeft.value = '0%'
+  } else {
+    mediaMarginLeft.value = '12%'
+  }
 } else {
   mediaMarginLeft.value = '16.875rem'
 }
 
+window.onresize = () => {
+  //屏幕尺寸变化就重新赋值   
+  return (() => {
+    if (!mediaQueryList.matches) {
+      if (mediaQueryStyle.matches) {
+        mediaMarginLeft.value = '0%'
+      } else {
+        mediaMarginLeft.value = '12%'
+      }
+    } else {
+      mediaMarginLeft.value = '16.875rem'
+    }
+  })()
+}
+
+
 
 watchEffect(() => {
-  console.log(appOption.appSidebarCollapsed);
   if (appOption.appSidebarCollapsed) {
     mediaMarginLeft.value = ''
   } else {
     if (!mediaQueryList.matches) {
-      mediaMarginLeft.value = '12%'
+      if (mediaQueryStyle.matches) {
+        mediaMarginLeft.value = '0%'
+      } else {
+        mediaMarginLeft.value = '12%'
+      }
     } else {
       mediaMarginLeft.value = '16.875rem'
     }
