@@ -18,21 +18,21 @@ export default defineConfig({
   server: {
     host: "0.0.0.0",
     proxy: {
-      "/users_per_day": {///
-        target: "http://198.177.124.16:9527/users_per_day",
+      "/dataapi": {///
+        target: "http://198.177.124.16:9527/",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/users_per_day/, ""),
+        rewrite: (path) => path.replace(/^\/dataapi/, ""),
       },
-      "/new_transactions": {
-        target: "http://198.177.124.16:9527/new_transactions",
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/new_transactions/, ""),
-      },
-      "/amount_per_day": {
-        target: "http://198.177.124.16:9527/amount_per_day",
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/amount_per_day/, ""),
-      },
+      // "/new_transactions": {
+      //   target: "http://198.177.124.16:9527/new_transactions",
+      //   changeOrigin: true,
+      //   rewrite: (path) => path.replace(/^\/new_transactions/, ""),
+      // },
+      // "/amount_per_day": {
+      //   target: "http://198.177.124.16:9527/amount_per_day",
+      //   changeOrigin: true,
+      //   rewrite: (path) => path.replace(/^\/amount_per_day/, ""),
+      // },
     },
   },
 });

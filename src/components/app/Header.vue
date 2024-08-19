@@ -229,7 +229,8 @@ async function searchMenu() {
                   padding: 5px;
                 " />
             </div>
-            <div class="menu-search-icon" style="margin-left: 20px;" @click="searchMenu"><i class="bi bi-search"></i>
+            <div class="menu-search-icon" style="margin-left: 20px;cursor: pointer;" @click="searchMenu"><i
+                class="bi bi-search"></i>
             </div>
           </div>
         </div>

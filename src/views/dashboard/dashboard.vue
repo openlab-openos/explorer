@@ -745,8 +745,8 @@ const renderMap = async () => {
       let lng = Number(markers_data[i].coords[1]); // 转换或默认为0  
 
       // 现在进行数值加法  
-      
-      if(i % 2 == 0){
+
+      if (i % 2 == 0) {
         lat += 1;
       } else {
         lat -= 1;
