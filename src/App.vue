@@ -7,7 +7,7 @@ import AppSidebar from "@/components/app/Sidebar.vue";
 import AppHeader from "@/components/app/Header.vue";
 import AppTopNav from "@/components/app/TopNav.vue";
 import AppFooter from "@/components/app/Footer.vue";
-import AppThemePanel from "@/components/app/ThemePanel.vue";
+// import AppThemePanel from "@/components/app/ThemePanel.vue";
 import router from "./router";
 import { ustdData } from "../src/request/ustd";
 import { useAppStore } from "@/stores/index";
