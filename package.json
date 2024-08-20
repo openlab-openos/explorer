@@ -71,6 +71,7 @@
     "picmo": "^5.8.5",
     "pinia": "^2.1.7",
     "pinia-plugin-persist": "^1.0.0",
+    "terser": "^5.31.6",
     "vue": "^3.4.21",
     "vue-axios": "^3.5.2",
     "vue-countup-v3": "^1.4.2",
