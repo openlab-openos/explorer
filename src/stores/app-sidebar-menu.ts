@@ -35,7 +35,7 @@ export const useAppSidebarMenuStore = defineStore({
       'is_header': true
     }, {
       'url': 'https://www.openverse.network',
-      'icon': 'fas fa-lg fa-fw me-2 fa-home',
+      'icon': 'bi bi-grid',
       'text': 'Openverse.Network',
       'type': true
     }, {
