@@ -26,7 +26,9 @@
         </div>
         <div class="small text-inverse text-opacity-50 text-truncate">
           <template v-for="statInfo in info">
-            <div><i v-bind:class="statInfo.icon"></i> {{ statInfo.text }}</div>
+            <!-- <div><i v-bind:class="statInfo.icon"></i> {{ statInfo.text }}</div> -->
+            <div><font-awesome-icon :icon="statInfo.icon" /> {{ statInfo.text }}</div>
+
           </template>
         </div>
       </card-body>
@@ -90,14 +92,17 @@ const performanceSamples = () => {
       }
       info.value = [
         {
-          icon: "fas fa-lg fa-fw me-2 fa-stop-circle",
-          text: "True TPM" + " " + trueTramsatiom.value,
+          icon: ['fas', 'stop-circle'],
+          text: "True TPM " + trueTramsatiom.value,
         },
         {
-          icon: "far fa-lg fa-fw me-2 fa-registered",
-          text: "Vote TPM" + " " + unnumTranstions.value[23],
+          icon: ['far', 'registered'],
+          text: "Vote TPM " + unnumTranstions.value[23],
         },
-        { icon: "fab fa-lg fa-fw me-2 fa-mizuni", text: "Theoretical TPS 30W" },
+        {
+          icon: ['fab', 'mizuni'],
+          text: "Theoretical TPS 30W",
+        },
       ]
     })
     .catch((error) => {
