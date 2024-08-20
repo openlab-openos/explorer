@@ -39,12 +39,8 @@
 </template>
 
 <script setup>
-import numberAnimar from "../../components/CountFlop.vue";
-import apexchart from "@/components/plugins/Apexcharts.vue";
-import { order } from "../../request/order";
-import { ustdData } from "../../request/ustd";
 import { useAppStore } from "../../stores/index";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watchEffect } from "vue";
 import * as echarts from 'echarts';
 
 
@@ -101,22 +97,13 @@ const initECharts = () => {
 
 onMounted(() => {
   initECharts();
+  watchEffect(() => {
+    rate.value = appStore.rate;
+    infoRender()
+  })
 })
 
 
-if (appStore.rate == 0) {
-  ustdData().then((data) => {
-    appStore.setRate(data.data.rate);
-    appStore.getRateData(data.data);
-    rate.value = JSON.parse(data.data.rate);
-    infoRender()
-  });
-} else {
-  rate.value = appStore.rate;
-  setTimeout(() => {
-    infoRender()
-  }, 1000);
-};
 
 const infoRender = () => {
   let time = null;

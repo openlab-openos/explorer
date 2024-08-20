@@ -43,7 +43,6 @@ import { chainRequest } from "../../request/chain";
 import numberAnimar from "../../components/CountFlop.vue";
 import apexchart from "@/components/plugins/Apexcharts.vue";
 import moment from "moment";
-import { ustdData } from "../../request/ustd";
 import { useAppStore } from "@/stores/index";
 import * as echarts from 'echarts';
 import { onMounted, ref } from 'vue'
@@ -94,15 +93,7 @@ const getTime = (timestamp) => {
   ).fromNow();
 };
 
-const ustd = async () => {
-  ustdData().then((data) => {
-    appStore.setRate(data.data.rate);
-    appStore.getRateData(data.data);
-  });
-};
-
 fetchData();
-ustd();
 const echartsRef = ref(null);
 console.log(data.value);
 const initECharts = () => {

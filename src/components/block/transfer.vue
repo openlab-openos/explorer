@@ -50,7 +50,6 @@
 import numberAnimar from "../../components/CountFlop.vue";
 import apexchart from "@/components/plugins/Apexcharts.vue";
 import { order } from "../../request/order";
-import { ustdData } from "../../request/ustd";
 import { useAppStore } from "../../stores/index";
 import { onMounted, ref, watchEffect } from "vue";
 
