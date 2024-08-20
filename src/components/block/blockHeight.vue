@@ -63,6 +63,7 @@ const fetchData = async () => {
   };
   await chainRequest(requestBody).then((res) => {
     data.value = res.result;
+    appStore.getNetwork(res.result.transactionCount)
     info.value = [
       {
         icon: "fab fa-lg fa-fw me-2 fa-openid",
@@ -83,10 +84,6 @@ const fetchData = async () => {
   });
 };
 
-const randomNo = () => {
-  return Math.floor(Math.random() * 60) + 30;
-};
-
 const getTime = (timestamp) => {
   return moment(
     JSON.parse(moment().format("x")) + timestamp * 400
@@ -95,7 +92,6 @@ const getTime = (timestamp) => {
 
 fetchData();
 const echartsRef = ref(null);
-console.log(data.value);
 const initECharts = () => {
   const myChart = echarts.init(echartsRef.value);
 

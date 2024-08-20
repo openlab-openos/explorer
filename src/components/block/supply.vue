@@ -66,26 +66,21 @@
 
 <script setup>
 import numberAnimar from "../../components/CountFlop.vue";
-import { chainRequest } from "../../request/chain";
 import { useAppStore } from "../../stores/index";
-import { computed, ref, watch } from "vue";
+import { onMounted, ref, watchEffect } from "vue";
 
 const appStore = useAppStore();
 
 const data = ref();
 
-let request = {
-  jsonrpc: "2.0",
-  id: 1,
-  method: "getSupply",
-};
-
 const convert = ref(0);
 
 const info = ref([]);
-chainRequest(request)
-  .then((res) => {
-    data.value = JSON.stringify(res.result.value.total).slice(0, 9);
+
+
+onMounted(() => {
+  watchEffect(() => {
+    data.value = JSON.stringify(appStore.stuBlys).slice(0, 9);
     info.value = [
       {
         icon: "fas fa-lg fa-fw me-2 fa-dollar-sign",
@@ -106,9 +101,9 @@ chainRequest(request)
       },
     ];
   })
-  .catch((err) => {
-    console.log(err);
-  });
+})
+
+
 
 const formatNumber = (value) => {
   const num = parseInt(value, 10);

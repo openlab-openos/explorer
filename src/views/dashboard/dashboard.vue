@@ -103,9 +103,9 @@ const fetchOrderData = async () => {
 };
 
 
-onMounted(() => {
-  fetchOrderData();
-});
+// onMounted(() => {
+//   fetchOrderData();
+// });
 
 const unnumTranstions = ref([]);
 const timeName = ref([]);
@@ -167,9 +167,9 @@ const fetchData = async () => {
 
 onMounted(() => {
   fetchData();
-  setTimeout(() => {
-    fetchOrderData();
-  }, 1000); // 延迟1秒加载订单数据
+  // setTimeout(() => {
+  fetchOrderData();
+  // }, 1000); // 延迟1秒加载订单数据
 });
 
 const getTime = (timestamp) => {
@@ -533,7 +533,6 @@ const getTrafficData = (data) => {
   for (let i in chainArray) {
     chartName.push(chainArray[i].timezone)
   }
-  console.log(chainArray);
   return {
     coun,
     chainArray,

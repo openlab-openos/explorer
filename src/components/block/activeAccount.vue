@@ -21,7 +21,8 @@
 
           <div style="width: 40%; height: 30px">
             <div>
-              <div ref="echartsContainers" style="width:100%; height: 40px;display:flex ;justify-content: center;margin-top: -10px;">
+              <div ref="echartsContainers"
+                style="width:100%; height: 40px;display:flex ;justify-content: center;margin-top: -10px;">
               </div>
             </div>
           </div>
@@ -82,7 +83,7 @@ const initECharts = () => {
     series: [{
       type: 'bar',
       data: [
-        2.4, 1.2, 2.7, 3.4, 2.8, 2.3, 2.5,3.5,4.3
+        2.4, 1.2, 2.7, 3.4, 2.8, 2.3, 2.5, 3.5, 4.3
       ],
       itemStyle: {
         normal: {
@@ -130,8 +131,6 @@ onMounted(() => {
   })
 })
 
-
-console.log(appStore.Validators);
 
 
 

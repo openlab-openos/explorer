@@ -66,25 +66,6 @@ dataRequest();
 const transferData = ref([]);
 
 const transactionData = ref([]);
-const supplyRequest = async () => {
-  if (appStore.Transaction.length == 0) {
-    await order("new_transactions")
-      .then((res) => {
-        console.log(res);
-        for (let i in res) {
-          transferData.value.push(res[i]);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  } else {
-    transferData.value = appStore.Transaction;
-
-  }
-  rendered();
-};
-
 
 const transactions = ref(0);
 
@@ -111,13 +92,13 @@ const toFexedStake = (num) => {
 const info = ref();
 const type = ref(false);
 
-const rendered = () => {
+const rendered = (data) => {
   for (let i in transferData.value) {
     if (transferData.value[i].result.blockTime * 1000 > dataTime.value) {
-      transactionData.value.push(transferData.value[i]);
+      data.push(transferData.value[i]);
     }
     priceTrans.value +=
-      transactionData.value[
+      data[
         i
       ].result.transaction.message.instructions[0].parsed.info.lamports;
   }
@@ -129,7 +110,7 @@ const rendered = () => {
     {
       icon: "fas fa-lg fa-fw me-2 fa-won-sign",
       text:
-        toFexedStake(priceTrans.value / transactionData.value.length) +
+        toFexedStake(priceTrans.value / data.length) +
         " " +
         "BTG" +
         " " +
@@ -139,7 +120,7 @@ const rendered = () => {
       icon: "fas fa-lg fa-fw me-2 fa-yen-sign",
       text:
         (
-          toFexedStake(priceTrans.value / transactionData.value.length) *
+          toFexedStake(priceTrans.value / data.length) *
           appStore.rate
         ).toFixed(2) +
         " " +
@@ -151,8 +132,19 @@ const rendered = () => {
 
 onMounted(() => {
   watchEffect(() => {
-    supplyRequest();
+    for (let i in JSON.parse(appStore.Transaction)) {
+      transferData.value.push(
+        JSON.parse(appStore.Transaction)[i]
+      )
+    }
+    let data = JSON.parse(appStore.Transaction);
+
+
+    if (data.length != 0) {
+      rendered(data);
+    }
+
   })
-});
+})
 
 </script>

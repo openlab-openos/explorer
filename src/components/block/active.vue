@@ -40,7 +40,6 @@ import numberAnimar from "../../components/CountFlop.vue";
 import apexchart from "@/components/plugins/Apexcharts.vue";
 import { chainRequest } from "../../request/chain";
 import { useAppVariableStore } from "@/stores/app-variable";
-import { ustdData } from "../../request/ustd";
 import { useAppStore } from "../../stores/index";
 import { onMounted, ref, watchEffect } from "vue";
 import { constants } from "buffer";
@@ -53,17 +52,6 @@ const data = ref(1);
 const epoch = ref(1);
 const info = ref();
 
-const chainData = () => {
-  chainRequest({
-    jsonrpc: "2.0",
-    id: 1,
-    method: "getEpochInfo",
-  }).then((res) => {
-    epoch.value = res.result.epoch;
-  });
-};
-
-chainData();
 
 const randomNo = () => {
   return Math.floor(Math.random() * 60) + 30;
@@ -71,6 +59,7 @@ const randomNo = () => {
 
 onMounted(() => {
   watchEffect(() => {
+    epoch.value = appStore.network
     data.value = appStore.pubbley;
 
     stubly.value = appStore.stubly;

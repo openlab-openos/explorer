@@ -44,7 +44,7 @@
 <script setup>
 import { chainRequest } from "../../request/chain";
 import { useAppStore } from "../../stores/index";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watchEffect } from "vue";
 
 const appStore = useAppStore();
 const data = ref();
@@ -52,49 +52,54 @@ const data = ref();
 const skate = ref();
 
 const info = ref([]);
-const stubly = ref();
-const pubbley = ref();
+const stubly = ref(1);
+const pubbley = ref(1);
 
-const datavalue = async () => {
-  if (appStore.stubly == 0) {
-    await chainRequest({
-      jsonrpc: "2.0",
-      id: 1,
-      method: "getSupply",
-    }).then((res) => {
-      stubly.value = (
-        JSON.parse(JSON.stringify(res.result.value.total).slice(0, 9)) / 1000000
-      ).toFixed(1);
-    })
-    await chainRequest({
-      jsonrpc: "2.0",
-      id: 1,
-      method: "getVoteAccounts",
-      params: [],
-    })
-      .then((res) => {
-        let btg = res.result;
-        let btgcont = 0;
-        if (btg) {
-          for (let i in btg.current) {
-            btgcont += JSON.parse(JSON.stringify(btg.current[i].activatedStake));
-          }
-          let num = (btgcont / 1000000000).toFixed(0);
-          btgcont = (num / 1000000).toFixed(1);
-        }
-        pubbley.value = btgcont;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  } else {
+// const datavalue = async () => {
+//   if (appStore.stubly == 0) {
+//     await chainRequest({
+//       jsonrpc: "2.0",
+//       id: 1,
+//       method: "getSupply",
+//     }).then((res) => {
+//       stubly.value = (
+//         JSON.parse(JSON.stringify(res.result.value.total).slice(0, 9)) / 1000000
+//       ).toFixed(1);
+//     })
+//     await chainRequest({
+//       jsonrpc: "2.0",
+//       id: 1,
+//       method: "getVoteAccounts",
+//       params: [],
+//     })
+//       .then((res) => {
+//         let btg = res.result;
+//         let btgcont = 0;
+//         if (btg) {
+//           for (let i in btg.current) {
+//             btgcont += JSON.parse(JSON.stringify(btg.current[i].activatedStake));
+//           }
+//           let num = (btgcont / 1000000000).toFixed(0);
+//           btgcont = (num / 1000000).toFixed(1);
+//         }
+//         pubbley.value = btgcont;
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       });
+//   } else {
+//     stubly.value = appStore.stubly;
+//     pubbley.value = appStore.pubbley;
+//   }
+// }
+onMounted(() => {
+  // datavalue();
+  watchEffect(() => {
     stubly.value = appStore.stubly;
     pubbley.value = appStore.pubbley;
-  }
-  skateRequest()
-}
-onMounted(() => {
-  datavalue();
+    skateRequest()
+
+  })
 })
 const skateRequest = async () => {
   await chainRequest({
