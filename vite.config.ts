@@ -25,9 +25,7 @@ export default defineConfig({
     },
     // 配置代码拆分
     sourcemap: true,
-    // 配置代码拆分
     rollupOptions: {
-
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {

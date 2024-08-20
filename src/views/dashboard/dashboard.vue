@@ -1,6 +1,6 @@
 <script setup>
 import { useAppVariableStore } from "@/stores/app-variable";
-import { onBeforeUnmount, onMounted, onUnmounted, ref, watch } from "vue";
+import { onBeforeUnmount, onMounted, ref, watch, computed } from "vue";
 import apexchart from "@/components/plugins/Apexcharts.vue";
 import jsVectorMap from "jsvectormap";
 import "jsvectormap/dist/maps/world.js";
@@ -11,18 +11,16 @@ import { useRouter } from "vue-router";
 import { order } from "../../request/order";
 import moment from "moment";
 import { ustdData } from "../../request/ustd";
-import CountFlop from "../../components/CountFlop.vue";
-import numberAnimar from "../../components/CountFlop.vue";
-import blockHeightVue from "../../components/block/blockHeight.vue";
-import netWorkVue from "../../components/block/netWork.vue";
-import activeAccountVue from "../../components/block/activeAccount.vue";
-import transferVue from "../../components/block/transfer.vue";
-import supplyVue from "../../components/block/supply.vue";
-import activeVue from "../../components/block/active.vue";
-import priceVue from "../../components/block/price.vue";
-import priceBtgVue from "../../components/block/priceBtg.vue";
+import { defineAsyncComponent } from 'vue';
+// import blockHeightVue from "../../components/block/blockHeight.vue";
+// import netWorkVue from "../../components/block/netWork.vue";
+// import activeAccountVue from "../../components/block/activeAccount.vue";
+// import transferVue from "../../components/block/transfer.vue";
+// import supplyVue from "../../components/block/supply.vue";
+// import activeVue from "../../components/block/active.vue";
+// import priceVue from "../../components/block/price.vue";
+// import priceBtgVue from "../../components/block/priceBtg.vue";
 import { useAppStore } from "@/stores/index";
-
 const appStore = useAppStore();
 const appVariable = useAppVariableStore();
 
@@ -45,16 +43,39 @@ const mapContainer = ref();
 const pageType = ref(true);
 
 const map = ref(null);
-const activeVueref = ref(null)
-const networkref = ref(null)
-
+const activeVueref = ref(null);
+const networkref = ref(null);
 
 const router = useRouter();
-
 
 const timeFormatter = (time) => {
   return moment(time).fromNow();
 };
+
+const BlockHeightVue = defineAsyncComponent(() =>
+  import("../../components/block/blockHeight.vue")
+);
+const NetWorkVue = defineAsyncComponent(() =>
+  import("../../components/block/netWork.vue")
+);
+const ActiveAccountVue = defineAsyncComponent(() =>
+  import("../../components/block/activeAccount.vue")
+);
+const TransferVue = defineAsyncComponent(() =>
+  import("../../components/block/transfer.vue")
+);
+const SupplyVue = defineAsyncComponent(() =>
+  import("../../components/block/supply.vue")
+);
+const ActiveVue = defineAsyncComponent(() =>
+  import("../../components/block/active.vue")
+);
+const PriceVue = defineAsyncComponent(() =>
+  import("../../components/block/price.vue")
+);
+const PriceBtgVue = defineAsyncComponent(() =>
+  import("../../components/block/priceBtg.vue")
+);
 
 const pubbleys = (url) => {
   router.push({
@@ -71,27 +92,28 @@ ustdData().then((data) => {
   appStore.getRateData(data.data);
 });
 
-const orderrequest = () => {
-  order("new_transactions")
-    .then((res) => {
-      for (let i in res) {
-        orderData.value.push(res[i]);
-      }
-      appStore.setTransaction(JSON.stringify(orderData.value));
-      return res;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+const fetchOrderData = async () => {
+  try {
+    const res = await order("new_transactions");
+    orderData.value = res;
+    appStore.setTransaction(JSON.stringify(orderData.value));
+  } catch (err) {
+    console.error("Error fetching order data:", err);
+  }
 };
 
-orderrequest();
+
+onMounted(() => {
+  fetchOrderData();
+});
 
 const unnumTranstions = ref([]);
 const timeName = ref([]);
 const cote = ref([]);
 const trueTramsatiom = ref([]);
-
+const totalTransactions = computed(() => {
+  return orderData.value.reduce((total, order) => total + order.transactions, 0);
+});
 const performanceSamples = async () => {
   let requestBody = {
     jsonrpc: "2.0",
@@ -124,33 +146,31 @@ const performanceSamples = async () => {
 performanceSamples();
 
 const fetchData = async () => {
-  // 假设这是 Solana 的 JSON-RPC API URL
-  let requestBody = {
-    jsonrpc: "2.0",
-    id: 1,
-    method: "getEpochInfo",
-    params: [], // 如果需要的话
-  };
-  await chainRequest(requestBody)
-    .then((response) => {
-      // 解析和处理返回的数据
-      // this.result = response.result; // 假设 response 结构中有 'result' 字段
-      solttime.value = getTime(
-        response.result.slotsInEpoch - response.result.slotIndex
-      );
-      if (slot.value != 1) {
-      } else {
-        slot.value = response.result.slotIndex;
-        inepoch.value = response.result.slotsInEpoch;
-        epoch.value = response.result.epoch;
-      }
-    })
-    .catch((error) => {
-      console.error("Error fetching epoch info:", error);
-    });
+  try {
+    const requestBody = {
+      jsonrpc: "2.0",
+      id: 1,
+      method: "getEpochInfo",
+      params: [],
+    };
+    const response = await chainRequest(requestBody);
+    solttime.value = getTime(response.result.slotsInEpoch - response.result.slotIndex);
+    if (slot.value === 1) {
+      slot.value = response.result.slotIndex;
+      inepoch.value = response.result.slotsInEpoch;
+      epoch.value = response.result.epoch;
+    }
+  } catch (error) {
+    console.error("Error fetching epoch info:", error);
+  }
 };
 
-fetchData();
+onMounted(() => {
+  fetchData();
+  setTimeout(() => {
+    fetchOrderData();
+  }, 1000); // 延迟1秒加载订单数据
+});
 
 const getTime = (timestamp) => {
   return moment(JSON.parse(moment().format("x")) + timestamp * 400).fromNow();
@@ -867,7 +887,6 @@ onBeforeUnmount(() => {
     <priceVue />
     <priceBtgVue />
   </div>
-
   <div class="row">
     <!-- BEGIN stats -->
 
@@ -1020,7 +1039,8 @@ onBeforeUnmount(() => {
                   <th style="width: 10%; text-align: left">TYPE</th>
                   <th style="width: 20%; text-align: left">TIME</th>
                 </tr>
-                <tr v-for="(product, index) in orderData" :key="index" style="height: 35px">
+              
+                <tr  v-for="(product, index) in orderData" :key="index" style="height: 35px">
                   <td style="width: 20%; text-align: left; cursor: pointer" class="text-theme" @click="
                     pubbtx(
                       product.result.transaction.signatures[0]
@@ -1170,4 +1190,10 @@ onBeforeUnmount(() => {
 td {
   text-align: center;
 }
+
+/* .table-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+} */
 </style>
