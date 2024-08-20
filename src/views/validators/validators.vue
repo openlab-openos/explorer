@@ -1,11 +1,7 @@
 <template>
   <div>
     <div v-show="shoeType" class="row">
-      <div
-        class="col-xl-3 col-lg-6"
-        v-for="(item, index) in Vaildators"
-        :key="index"
-      >
+      <div class="col-xl-3 col-lg-6" v-for="(item, index) in Vaildators" :key="index">
         <!-- BEGIN card -->
         <card class="mb-3">
           <card-body>
@@ -30,9 +26,7 @@
               <card-expand-toggler />
             </div>
             <div class="table-responsive">
-              <table
-                class="table table-striped table-borderless mb-2px small text-nowrap"
-              >
+              <table class="table table-striped table-borderless mb-2px small text-nowrap">
                 <tbody>
                   <tr>
                     <th>NAME</th>
@@ -42,38 +36,22 @@
 
                     <th style="text-align: left">STATUS</th>
                   </tr>
-                  <tr
-                    v-if="ActivityLogData"
-                    v-for="(log, index) in ActivityLogData"
-                    :key="index"
-                  >
+                  <tr v-if="ActivityLogData" v-for="(log, index) in ActivityLogData" :key="index">
                     <td>
                       <span class="d-flex align-items-center">
-                        <img
-                          :src="log.icon"
-                          alt=""
-                          width="20"
-                          style="margin: 0px 5px"
-                        />
+                        <img :src="log.icon" alt="" width="20" style="margin: 0px 5px" />
                         {{ log.name }}
                       </span>
                     </td>
                     <td style="text-align: left">
-                      <span
-                        class="text-theme"
-                        style="cursor: pointer"
-                        @click="pubbleys(log.pubkey)"
-                      >
+                      <span class="text-theme" style="cursor: pointer" @click="pubbleys(log.pubkey)">
                         {{ log.pubkey }}
                         <!-- {{ log.pubkey }} -->
                       </span>
                     </td>
                     <td style="text-align: left; display: flex">
-                      <count-up
-                        :startVal="toFexedStake(log.activatedStake)"
-                        :end-val="toFexedStake(log.activatedStake)"
-                        duration="3"
-                      ></count-up>
+                      <count-up :startVal="toFexedStake(log.activatedStake)" :end-val="toFexedStake(log.activatedStake)"
+                        duration="3"></count-up>
                       &nbsp; BTG &nbsp; (
                       {{ countplount(log.activatedStake) }}
                       )
@@ -82,20 +60,13 @@
                       {{ log.ip }}
                     </td>
                     <td style="text-align: left">
-                      <span
-                        :style="{
-                          color: log.activatedStake !== '' ? 'green' : 'yellow',
-                        }"
-                        class="menu-icon"
-                      >
-                        <i
-                          class="fas fa-lg fa-fw me-2 fa-check-circle"
-                          v-if="log.activatedStake !== ''"
-                        ></i>
-                        <i
-                          class="fas fa-lg fa-fw me-2 fa-question-circle"
-                          v-if="log.activatedStake == ''"
-                        ></i>
+                      <span :style="{
+                        color: log.activatedStake !== '' ? 'green' : 'yellow',
+                      }" class="menu-icon">
+                        <font-awesome-icon icon="fas fa-lg fa-fw me-2 fa-check-circle"
+                          v-if="log.activatedStake !== ''" />
+                        <font-awesome-icon icon="fas fa-lg fa-fw me-2 fa-question-circle"
+                          v-if="log.activatedStake == ''" />
                         <!-- {{ log.pubkey }} -->
                       </span>
                     </td>

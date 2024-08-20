@@ -1039,8 +1039,8 @@ onBeforeUnmount(() => {
                   <th style="width: 10%; text-align: left">TYPE</th>
                   <th style="width: 20%; text-align: left">TIME</th>
                 </tr>
-              
-                <tr  v-for="(product, index) in orderData" :key="index" style="height: 35px">
+
+                <tr v-for="(product, index) in orderData" :key="index" style="height: 35px">
                   <td style="width: 20%; text-align: left; cursor: pointer" class="text-theme" @click="
                     pubbtx(
                       product.result.transaction.signatures[0]
@@ -1165,9 +1165,9 @@ onBeforeUnmount(() => {
                     <span :style="{
                       color: log.activatedStake !== '' ? 'green' : 'yellow',
                     }" class="menu-icon">
-                      <i class="fas fa-lg fa-fw me-2 fa-check-circle" v-if="log.activatedStake !== ''"></i>
-                      <i class="fas fa-lg fa-fw me-2 fa-question-circle" v-if="log.activatedStake == ''"></i>
-                      <!-- {{ log.pubkey }} -->
+                      <font-awesome-icon icon="fas fa-lg fa-fw me-2 fa-check-circle" v-if="log.activatedStake !== ''" />
+                      <font-awesome-icon icon="fas fa-lg fa-fw me-2 fa-question-circle"
+                        v-if="log.activatedStake == ''" />
                     </span>
                   </td>
                 </tr>

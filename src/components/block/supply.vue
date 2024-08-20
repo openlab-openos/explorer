@@ -31,7 +31,7 @@
           </div>
           <div style="width: 20%;text-align: center;">
             <div style="color: #339a81; font-size: 20px;">
-              <i class="fas fa-lg fa-fw me-2 fa-exchange-alt"></i>
+              <font-awesome-icon icon="fas fa-lg fa-fw me-2 fa-exchange-alt" />
             </div>
           </div>
 
