@@ -132,17 +132,20 @@ const rendered = (data) => {
 
 onMounted(() => {
   watchEffect(() => {
-    for (let i in JSON.parse(appStore.Transaction)) {
-      transferData.value.push(
-        JSON.parse(appStore.Transaction)[i]
-      )
-    }
-    let data = JSON.parse(appStore.Transaction);
+    if (appStore.Transaction.length != 0) {
+      for (let i in JSON.parse(appStore.Transaction)) {
+        transferData.value.push(
+          JSON.parse(appStore.Transaction)[i]
+        )
+      }
+      let data = JSON.parse(appStore.Transaction);
 
 
-    if (data.length != 0) {
-      rendered(data);
+      if (data.length != 0) {
+        rendered(data);
+      }
     }
+
 
   })
 })

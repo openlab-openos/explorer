@@ -44,10 +44,12 @@ import numberAnimar from "../../components/CountFlop.vue";
 import apexchart from "@/components/plugins/Apexcharts.vue";
 import moment from "moment";
 import { useAppStore } from "@/stores/index";
-import * as echarts from 'echarts';
-import { onMounted, ref } from 'vue'
+// import * as echarts from 'echarts';
+import { onMounted, ref, getCurrentInstance } from 'vue'
 
 const appStore = useAppStore();
+
+const { proxy } = getCurrentInstance();
 
 const data = ref({});
 const chart = ref(null);
@@ -90,10 +92,12 @@ const getTime = (timestamp) => {
   ).fromNow();
 };
 
+console.log(proxy);
+
 fetchData();
 const echartsRef = ref(null);
 const initECharts = () => {
-  const myChart = echarts.init(echartsRef.value);
+  const myChart = proxy.$echart.init(echartsRef.value);
 
   const option = {
     // ECharts 配置项

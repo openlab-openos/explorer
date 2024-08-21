@@ -37,19 +37,8 @@ function toggleAppHeaderSearch(event) {
   appOption.appHeaderSearchToggled = !appOption.appHeaderSearchToggled;
 }
 
-async function requestList(object) {
-  try {
-    const response = await chainRequest(object);
-    // 解析和处理返回的数据
 
-    return response.result; // 现在这个函数会返回解析后的数据
-  } catch (error) {
-    console.error("Error fetching epoch info:", error);
-    return []; // 返回一个空数组或抛出错误取决于你的需求
-  }
-}
-
-async function searchMenu() {
+function searchMenu() {
   if (searchcontent.value == "") {
   } else {
     if (searchcontent.value.length >= 45) {

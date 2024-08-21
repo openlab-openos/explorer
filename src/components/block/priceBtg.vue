@@ -40,8 +40,10 @@
 
 <script setup>
 import { useAppStore } from "../../stores/index";
-import { ref, onMounted, watchEffect } from "vue";
-import * as echarts from 'echarts';
+import { ref, onMounted, watchEffect, getCurrentInstance } from "vue";
+// import * as echarts from 'echarts';
+
+const { proxy } = getCurrentInstance();
 
 
 const appStore = useAppStore();
@@ -52,7 +54,7 @@ const info = ref([]);
 const echartsChar = ref(null);
 
 const initECharts = () => {
-  const myChart = echarts.init(echartsChar.value);
+  const myChart = proxy.$echart.init(echartsChar.value);
 
   const option = {
     // ECharts 配置项

@@ -868,7 +868,6 @@ const pubbtx = (item) => {
 onBeforeUnmount(() => {
   if (activeVueref.value) {
     activeVueref.value.stopTimer()
-    networkref.value.stopTimer()
   }
 })
 </script>

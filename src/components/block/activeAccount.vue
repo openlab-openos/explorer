@@ -42,10 +42,11 @@
 import numberAnimar from "../../components/CountFlop.vue";
 import apexchart from "@/components/plugins/Apexcharts.vue";
 import { order } from "../../request/order";
-import { onMounted, ref, watchEffect } from "vue";
+import { onMounted, ref, watchEffect, getCurrentInstance } from "vue";
 import { useAppStore } from "@/stores/index";
-import * as echarts from 'echarts';
+// import * as echarts from 'echarts';
 
+const { proxy } = getCurrentInstance();
 
 
 const appStore = useAppStore();
@@ -57,7 +58,7 @@ const randomNo = () => {
 const echartsContainers = ref(null);
 
 const initECharts = () => {
-  const myChart = echarts.init(echartsContainers.value);
+  const myChart = proxy.$echart.init(echartsContainers.value);
   const option = {
     // ECharts 配置项
     tooltip: {

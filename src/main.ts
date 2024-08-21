@@ -18,6 +18,8 @@ import piniaPersist from "pinia-plugin-persist";
 // import { createApp } from 'vue';
 import vueMatomo from "vue-matomo";
 
+import echarts from "../src/echarts"
+
 
 import 'bootstrap';
 import './scss/styles.scss';
@@ -39,6 +41,10 @@ let paini = createPinia();
 paini.use(piniaPersist);
 
 const app = createApp(App);
+
+app.config.globalProperties.$echart = echarts;
+
+app.provide('$echart', echarts);
 
 app.component('Card', Card);
 app.component('CardBody', CardBody);
