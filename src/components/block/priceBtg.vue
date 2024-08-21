@@ -20,10 +20,7 @@
 
           <div style="width: 40%; height: 30px">
             <div>
-              <div ref="echartsChar"
-                style="width:100%; height: 40px;display:flex ;justify-content: center;margin-top: -10px;"></div>
-
-              <!-- <apexchart :height="chart.height" :options="chart.options" :series="chart.series"></apexchart> -->
+              <apexchart :height="charts.height" :options="charts.options" :series="charts.series"></apexchart>
             </div>
           </div>
         </div>
@@ -40,10 +37,11 @@
 
 <script setup>
 import { useAppStore } from "../../stores/index";
-import { ref, onMounted, watchEffect, getCurrentInstance } from "vue";
-// import * as echarts from 'echarts';
+import { ref, onMounted, watchEffect } from "vue";
+import { useAppVariableStore } from "@/stores/app-variable";
+import apexchart from "@/components/plugins/Apexcharts.vue";
 
-const { proxy } = getCurrentInstance();
+const appVariable = useAppVariableStore();
 
 
 const appStore = useAppStore();
@@ -53,52 +51,39 @@ const info = ref([]);
 
 const echartsChar = ref(null);
 
-const initECharts = () => {
-  const myChart = proxy.$echart.init(echartsChar.value);
-
-  const option = {
-    // ECharts 配置项
+const charts = ref({
+  height: 30,
+  options: {
+    chart: { type: "line", sparkline: { enabled: true } },
+    colors: [appVariable.color.theme],
+    stroke: {
+      width: 2
+    },
     tooltip: {
-      formatter: function (params) {
-      }
+      enabled: false
     },
-    xAxis: {
-      type: 'category'
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: "65%",
+        endingShape: "rounded",
+      },
     },
-    yAxis: {
-      axisLine: {
-        show: false
-      },
-      splitLine: {
-        show: false
-      },
-      axisLabel: {
-        show: false
-      },
-      max: 5,
-      min: 0
-    },
-    series: [{
-      type: 'line',
+    yaxis: {
+      min: 1500
+    }
+  },
+  series: [
+    {
+      name: "Visitors",
       data: [
-        1.4, 2.2, 1.7, 2.4, 1.8, 1.3, 2.5,
+        1540, 1550, 1560, 1534, 1560, 1555, 1589, 1599, 1593, 1546, 1544
       ],
-      itemStyle: {
-        normal: {
-          barBorderRadius: 0, // 去除条形图的圆角  
-          color: '#008FFB',
-          borderColor: 'rgba(0,0,0,0)', // 去除条形图的边框  
-          borderWidth: 0 // 边框宽度，虽然上面设置了边框颜色为透明，但也可以显式设置宽度为0  
-        }
-      }
-    }]
-  };
-
-  myChart.setOption(option);
-}
+    },
+  ],
+});
 
 onMounted(() => {
-  initECharts();
   watchEffect(() => {
     rate.value = appStore.rate;
     infoRender()
