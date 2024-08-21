@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%">
+  <div style="width: 100%" v-if="loading">
     <h3 class="text-canter">Epoch</h3>
     <card class="md-3">
       <card-body class="card-bodys">
@@ -55,6 +55,9 @@
       </card-body>
     </card>
   </div>
+  <div v-else>
+    <loading-vue />
+  </div>
 </template>
 <script setup>
 import { onMounted, ref } from "vue";
@@ -62,10 +65,13 @@ import { useRoute, useRouter } from "vue-router";
 import { chainRequest } from "../../request/chain";
 import CountUp from "vue-countup-v3";
 import moment from "moment";
+import LoadingVue from "../../components/block/loading.vue"
+
 
 const route = useRoute();
 const router = useRouter();
 const epoch = ref(route.params.num);
+const loading = ref(false);
 
 const blockType = ref(false);
 
@@ -89,6 +95,7 @@ const EpochRequest = async () => {
       lastBlock.value = block.value + response.result.slotsInEpoch - 1;
 
       blockType.value = true;
+      loading.value = true
     })
     .catch((error) => {
       console.error("Error fetching epoch info:", error);

@@ -25,8 +25,8 @@
                   )
                   ">
                   {{
-                      product.result.transaction.signatures[0]
-                    
+                    product.result.transaction.signatures[0]
+
                   }}
                 </td>
                 <td style=" text-align: left; cursor: pointer" class="text-theme" @click="
@@ -114,7 +114,7 @@ const router = useRouter();
 
 const appStore = useAppStore();
 
-const orderData = ref(appStore.Transaction);
+const orderData = ref(JSON.parse(appStore.Transaction));
 
 const stringcate = (str) => {
   return str.slice(0, 6) + "..." + str.slice(-6);;

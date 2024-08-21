@@ -3,10 +3,15 @@ import { useAppOptionStore } from "@/stores/app-option";
 import { chainRequest } from "../../request/chain";
 import moment from "moment";
 import router from "../../router";
+import LoadingVue from "../../components/block/loading.vue"
+
 
 const appOption = useAppOptionStore();
 
 export default {
+  components: {
+    LoadingVue
+  },
   data() {
     return {
       url: null,
@@ -16,6 +21,7 @@ export default {
       transaction: null,
       transactionArray: null,
       success: null,
+      loading: false
     };
   },
   mounted() {
@@ -204,11 +210,12 @@ export default {
       }
     }
     this.success = successCount.length;
+    this.loading = true
   },
 };
 </script>
 <template>
-  <div style="width: 100%">
+  <div style="width: 100%" v-if="loading">
     <div width="50%" style="
         height: 80vh;
         display: flex;
@@ -353,6 +360,9 @@ export default {
         </div>
       </div>
     </div>
+  </div>
+  <div v-else>
+    <loading-vue />
   </div>
 </template>
 

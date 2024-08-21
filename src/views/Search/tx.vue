@@ -2,10 +2,14 @@
 import { useAppOptionStore } from "@/stores/app-option";
 import { chainRequest } from "../../request/chain";
 import moment from "moment";
+import LoadingVue from "../../components/block/loading.vue"
 
 const appOption = useAppOptionStore();
 
 export default {
+  components: {
+    LoadingVue
+  },
   data() {
     return {
       url: null,
@@ -14,6 +18,7 @@ export default {
       type: null,
       preType: false,
       raw: true,
+      laoding: false,
     };
   },
   mounted() {
@@ -177,14 +182,19 @@ export default {
         },
       ],
     });
-    if (this.historyData.meta.logMessages[0].includes("Vote")) {
-      this.preType = true;
+    if (this.historyData) {
+      if (this.historyData.meta.logMessages[0].includes("Vote")) {
+        this.preType = true;
+      }
     }
+
+    this.laoding = true
+
   },
 };
 </script>
 <template>
-  <div style="width: 100%;">
+  <div style="width: 100%;" v-if="laoding">
     <div v-if="url != null">
       <div>
         <h3>Transaction</h3>
@@ -243,13 +253,7 @@ export default {
                   <td class="text-end"> {{ textValue(historyData.version) }} </td>
                 </tr>
               </tbody>
-            </table>
-            <table v-else class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
-              <th>
-              <td>Overview</td>
-              <td class=" text-end"></td>
-              </th>
-              <tbody>
+              <tbody v-else>
                 <tr>
                   <td>Signature</td>
                   <td class="text-end">{{ url }}</td>
@@ -257,7 +261,7 @@ export default {
                 <tr>
                   <td>Result</td>
                   <td class="text-end">
-                    Transaction is not vaild
+                    Transaction is invaild
                   </td>
                 </tr>
               </tbody>
@@ -451,7 +455,9 @@ export default {
       </div>
     </div>
   </div>
-
+  <div v-else>
+    <LoadingVue />
+  </div>
 </template>
 
 <style scoped>

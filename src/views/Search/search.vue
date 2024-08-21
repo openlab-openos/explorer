@@ -3,10 +3,15 @@ import { useAppOptionStore } from "@/stores/app-option";
 import { chainRequest } from "../../request/chain";
 import moment from "moment";
 import router from "../../router";
+import LoadingVue from "../../components/block/loading.vue"
+
 
 const appOption = useAppOptionStore();
 
 export default {
+  components: {
+    LoadingVue
+  },
   data() {
     return {
       url: null,
@@ -15,7 +20,9 @@ export default {
       token: null,
       endUrl: null,
       domains: null,
-      type: false
+      type: false,
+      loading: false
+
     };
   },
   mounted() {
@@ -161,12 +168,13 @@ export default {
         ],
       ],
     });
+    this.loading = true
   },
   async mounted() { },
 };
 </script>
 <template>
-  <div style="width: 100%">
+  <div style="width: 100%" v-if="loading">
     <div v-if="url != null">
       <h3>Account</h3>
       <div v-if="type">
@@ -223,7 +231,7 @@ export default {
                 </tr>
                 <tr>
                   <td>Balance(BTG)</td>
-                  <td class="text-end"> Address is not vaild </td>
+                  <td class="text-end"> Address is invaild </td>
                 </tr>
                 <tr>
                   <td>Allocated Data Size</td>
@@ -331,7 +339,9 @@ export default {
       </div>
     </div>
   </div>
-
+  <div v-else>
+    <loading-vue />
+  </div>
 </template>
 
 <style scoped>
