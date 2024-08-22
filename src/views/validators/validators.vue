@@ -45,7 +45,7 @@
                     </td>
                     <td style="text-align: left">
                       <span class="text-theme" style="cursor: pointer" @click="pubbleys(log.pubkey)">
-                        {{ log.pubkey }}
+                        {{ promaster[log.pubkey] ? promaster[log.pubkey].name : log.pubkey }}
                         <!-- {{ log.pubkey }} -->
                       </span>
                     </td>
@@ -88,11 +88,15 @@
 
 <script setup>
 import { useAppStore } from "../../stores/index";
-import { ref } from "vue";
+import { ref, getCurrentInstance } from "vue";
 import { useRouter } from "vue-router";
 import CountUp from "vue-countup-v3";
 
 const router = useRouter();
+
+const apps = getCurrentInstance()
+
+const promaster = ref(apps?.proxy?.$progream);
 
 const appStore = useAppStore();
 

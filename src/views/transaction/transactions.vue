@@ -25,7 +25,8 @@
                   )
                   ">
                   {{
-                    product.result.transaction.signatures[0]
+                    promaster[product.result.transaction.signatures[0]] ?
+                      promaster[product.result.transaction.signatures[0]].name : product.result.transaction.signatures[0]
 
                   }}
                 </td>
@@ -37,8 +38,10 @@
                   ">
                   {{
                     stringcate(
-                      product.result.transaction.message.instructions[0].parsed
-                        .info.source
+                      promaster[product.result.transaction.message.instructions[0]
+                        .parsed.info.source] ? promaster[product.result.transaction.message.instructions[0]
+                          .parsed.info.source].name : product.result.transaction.message.instructions[0]
+                            .parsed.info.source
                     )
                   }}
                 </td>
@@ -50,8 +53,10 @@
                   ">
                   {{
                     stringcate(
-                      product.result.transaction.message.instructions[0].parsed
-                        .info.destination
+                      promaster[product.result.transaction.message.instructions[0]
+                        .parsed.info.destination] ? promaster[product.result.transaction.message.instructions[0]
+                          .parsed.info.destination].name : product.result.transaction.message.instructions[0]
+                            .parsed.info.destination
                     )
                   }}
                 </td>
@@ -105,10 +110,14 @@
 
 <script setup>
 import { useAppStore } from "../../stores/index";
-import { ref } from "vue";
+import { ref, getCurrentInstance } from "vue";
 import moment from "moment";
 import CountUp from "vue-countup-v3";
 import { useRouter } from "vue-router";
+
+const apps = getCurrentInstance()
+
+const promaster = ref(apps?.proxy?.$progream);
 
 const router = useRouter();
 

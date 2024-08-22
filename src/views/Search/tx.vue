@@ -1,10 +1,17 @@
+<script setup>
+import { getCurrentInstance, ref } from "vue";
+const apps = getCurrentInstance()
+const promaster = apps?.proxy?.$progream;
+</script>
 <script>
 import { useAppOptionStore } from "@/stores/app-option";
 import { chainRequest } from "../../request/chain";
 import moment from "moment";
 import LoadingVue from "../../components/block/loading.vue"
 
+
 const appOption = useAppOptionStore();
+
 
 export default {
   components: {
@@ -210,7 +217,7 @@ export default {
               <tbody v-if="historyData">
                 <tr>
                   <td>Signature</td>
-                  <td class="text-end">{{ this.url }}</td>
+                  <td class="text-end">{{ promaster[this.url] ? promaster[this.url].name : this.url }}</td>
                 </tr>
                 <tr>
                   <td>Result</td>
@@ -238,7 +245,10 @@ export default {
                   <td>Recent Blockhash</td>
                   <td class="text-end text-theme" style="cursor: pointer"
                     @click="pubbleys(historyData.transaction.message.accountKeys[0].pubkey)"> {{
-                      historyData.transaction.message.accountKeys[0].pubkey }} </td>
+                      promaster[historyData.transaction.message.accountKeys[0].pubkey] ?
+                        promaster[historyData.transaction.message.accountKeys[0].pubkey].name
+                        : historyData.transaction.message.accountKeys[0].pubkey
+                    }} </td>
                 </tr>
                 <tr>
                   <td>Fee (BTG)</td>
@@ -294,7 +304,7 @@ export default {
                   </td>
                   <td class="text-theme" style="cursor: pointer" @click="pubbleys(item.programId)">
                     {{
-                      accountInput(item.programId)
+                      promaster[item.programId] ? promaster[item.programId].name : item.programId
                     }}
                   </td>
                   <td></td>
@@ -305,8 +315,8 @@ export default {
                   </td>
                   <td class="text-theme" style="cursor: pointer" @click="pubbleys(item.parsed.info.destination)">
                     {{
-                      accountInput(item.parsed.info.destination)
-                    }}
+                      promaster[item.parsed.info.destination] ? promaster[item.parsed.info.destination].name :
+                        item.parsed.info.destination }}
                   </td>
                   <td></td>
                 </tr>
@@ -315,9 +325,10 @@ export default {
                     To Address
                   </td>
                   <td class="text-theme" style="cursor: pointer" @click="pubbleys(item.parsed.info.source)">
+
                     {{
-                      accountInput(item.parsed.info.source)
-                    }}
+                      promaster[item.parsed.info.source] ? promaster[item.parsed.info.source].name :
+                        item.parsed.info.source }}
                   </td>
                   <td></td>
                 </tr>
@@ -365,7 +376,9 @@ export default {
                     </td>
                     <td class="text-theme" style="cursor: pointer" @click="pubbleys(item.pubkey)">
                       <!-- {{ item.pubkey }} -->
-                      {{ accountInput(item.pubkey) }}
+                      {{
+                        promaster[item.pubkey] ? promaster[item.pubkey].name : item.pubkey
+                      }}
                     </td>
                     <td v-if="historyData.meta.postBalances[index]">
                       <span class="symboldata" :style="styleSysmle(

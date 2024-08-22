@@ -11,7 +11,7 @@ import { useRouter } from "vue-router";
 import { order } from "../../request/order";
 import moment from "moment";
 import { ustdData } from "../../request/ustd";
-import { defineAsyncComponent } from 'vue';
+import { defineAsyncComponent, getCurrentInstance } from 'vue';
 // import blockHeightVue from "../../components/block/blockHeight.vue";
 // import netWorkVue from "../../components/block/netWork.vue";
 // import activeAccountVue from "../../components/block/activeAccount.vue";
@@ -21,8 +21,14 @@ import { defineAsyncComponent } from 'vue';
 // import priceVue from "../../components/block/price.vue";
 // import priceBtgVue from "../../components/block/priceBtg.vue";
 import { useAppStore } from "@/stores/index";
+
 const appStore = useAppStore();
 const appVariable = useAppVariableStore();
+
+const apps = getCurrentInstance()
+
+const promaster = ref(apps?.proxy?.$progream);
+
 
 const slot = ref(1);
 const inepoch = ref(1);
@@ -706,7 +712,12 @@ const getIPLocation = async (ip) => {
 };
 
 const stringcate = (str) => {
-  return str.slice(0, 5) + "..." + str.slice(-5);
+  if (str.length < 10) {
+    return str;
+  } else {
+    return str.slice(0, 5) + "..." + str.slice(-5);
+  }
+
 };
 
 const randomNo = () => {
@@ -1046,7 +1057,8 @@ onBeforeUnmount(() => {
                     ">
                     {{
                       stringcate(
-                        product.result.transaction.signatures[0]
+                        promaster[product.result.transaction.signatures[0]] ?
+                          promaster[product.result.transaction.signatures[0]].name : product.result.transaction.signatures[0]
                       )
                     }}
                   </td>
@@ -1058,8 +1070,10 @@ onBeforeUnmount(() => {
                     ">
                     {{
                       stringcate(
-                        product.result.transaction.message.instructions[0]
-                          .parsed.info.source
+                        promaster[product.result.transaction.message.instructions[0]
+                          .parsed.info.source] ? promaster[product.result.transaction.message.instructions[0]
+                            .parsed.info.source].name : product.result.transaction.message.instructions[0]
+                              .parsed.info.source
                       )
                     }}
                   </td>
@@ -1071,8 +1085,10 @@ onBeforeUnmount(() => {
                     ">
                     {{
                       stringcate(
-                        product.result.transaction.message.instructions[0]
-                          .parsed.info.destination
+                        promaster[product.result.transaction.message.instructions[0]
+                          .parsed.info.destination] ? promaster[product.result.transaction.message.instructions[0]
+                            .parsed.info.destination].name : product.result.transaction.message.instructions[0]
+                              .parsed.info.destination
                       )
                     }}
                   </td>
@@ -1145,8 +1161,7 @@ onBeforeUnmount(() => {
                   </td>
                   <td style="text-align: left">
                     <span class="text-theme" style="cursor: pointer" @click="pubbleys(log.pubkey)">
-                      {{ stringcate(log.pubkey) }}
-                      <!-- {{ log.pubkey }} -->
+                      {{ stringcate(promaster[log.pubkey] ? promaster[log.pubkey].name : log.pubkey) }}
                     </span>
                   </td>
                   <td style="text-align: left; display: flex">

@@ -18,6 +18,7 @@ import piniaPersist from "pinia-plugin-persist";
 // import { createApp } from 'vue';
 import vueMatomo from "vue-matomo";
 
+import { PROGRAM_NAMES, LOADER_IDS, PROGRAM_INFO_BY_ID } from "../src/program";
 
 
 import 'bootstrap';
@@ -40,6 +41,8 @@ let paini = createPinia();
 paini.use(piniaPersist);
 
 const app = createApp(App);
+
+app.config.globalProperties.$progream = PROGRAM_INFO_BY_ID;
 
 
 app.component('Card', Card);
@@ -64,23 +67,3 @@ app.mount('#app');
 
 window._paq.push(['trackPageView']); //To track pageview
 
-// export default function createApp() {
-//     const app = createSSRApp(App);
-//     let painia = createPinia();
-
-//     app.component('Card', Card);
-//     app.component('CardBody', CardBody);
-//     app.component('CardHeader', CardHeader);
-//     app.component('CardFooter', CardFooter);
-//     app.component('CardGroup', CardGroup);
-//     app.component('CardImgOverlay', CardImgOverlay);
-//     app.component('CardExpandToggler', CardExpandToggler);
-
-//     app.use(painia);
-//     app.use(router);
-//     app.use(Vue3ProgressPlugin);
-//     app.use(PerfectScrollbar);
-
-//     app.config.globalProperties.emitter = emitter;
-//     return { app, router, painia };
-// }
