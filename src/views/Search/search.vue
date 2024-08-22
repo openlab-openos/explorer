@@ -1,3 +1,8 @@
+<script setup>
+import { getCurrentInstance, ref } from "vue";
+const apps = getCurrentInstance()
+const promaster = apps?.proxy?.$progream;
+</script>
 <script>
 import { useAppOptionStore } from "@/stores/app-option";
 import { chainRequest } from "../../request/chain";
@@ -191,6 +196,10 @@ export default {
                 <tr>
                   <td>Address</td>
                   <td class="text-end">{{ this.url }}</td>
+                </tr>
+                <tr v-if="promaster[this.url]">
+                  <td>Address Label</td>
+                  <td class="text-end">{{ promaster[this.url].name }}</td>
                 </tr>
                 <tr>
                   <td>Balance(BTG)</td>

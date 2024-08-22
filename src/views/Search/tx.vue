@@ -8,14 +8,15 @@ import { useAppOptionStore } from "@/stores/app-option";
 import { chainRequest } from "../../request/chain";
 import moment from "moment";
 import LoadingVue from "../../components/block/loading.vue"
-
+import InfoTooltip from "../../components/infoTooltip.vue"
 
 const appOption = useAppOptionStore();
 
 
 export default {
   components: {
-    LoadingVue
+    LoadingVue,
+    InfoTooltip
   },
   data() {
     return {
@@ -237,12 +238,20 @@ export default {
                   <td> Confirmation Status </td>
                   <td class="text-end"> {{ textValue(card.value[0].confirmationStatus) }} </td>
                 </tr>
+                <tr>
+                  <td> Confirmation </td>
+                  <td class="text-end"> {{ card.value[0].confirmations ? 'MIN' : 'MAX' }} </td>
+                </tr>
                 <tr v-if="card.value[0].slot">
                   <td>Slot</td>
                   <td class="text-end"> {{ come(card.value[0].slot) }} </td>
                 </tr>
                 <tr>
-                  <td>Recent Blockhash</td>
+                  <td>
+                    <InfoTooltip text="Timestamps are only available for confirmed blocks">
+                      Recent Blockhash
+                    </InfoTooltip>
+                  </td>
                   <td class="text-end text-theme" style="cursor: pointer"
                     @click="pubbleys(historyData.transaction.message.accountKeys[0].pubkey)"> {{
                       promaster[historyData.transaction.message.accountKeys[0].pubkey] ?
