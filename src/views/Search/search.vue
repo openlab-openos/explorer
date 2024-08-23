@@ -24,7 +24,6 @@ export default {
       historyData: null,
       token: null,
       endUrl: null,
-      domains: null,
       type: false,
       loading: false
 
@@ -145,34 +144,6 @@ export default {
   async created() {
     this.endUrl = this.$route.params.url;
     await this.pubbleys(this.$route.params.url);
-    this.domains = await this.requestList({
-      jsonrpc: "2.0",
-      id: "",
-      method: "getProgramAccounts",
-      params: [
-        "namesLPneVptA9Z5rqUDD9tMTWEJwofgaYwp8cawRkX",
-        [
-          {
-            commitment: "confirmed",
-            encoding: "base64",
-            filters: [
-              {
-                memcmp: {
-                  bytes: "58PwtjSDuFHuUkYjH9BYnnQKHfwo9reZhC2zMJv9JPkx",
-                  offset: 32,
-                },
-              },
-              {
-                memcmp: {
-                  bytes: this.endUrl,
-                  offset: 32,
-                },
-              },
-            ],
-          },
-        ],
-      ],
-    });
     this.loading = true
   },
   watch: {
@@ -180,34 +151,6 @@ export default {
       this.loading = false
       this.endUrl = this.$route.params.url;
       await this.pubbleys(this.$route.params.url);
-      this.domains = await this.requestList({
-        jsonrpc: "2.0",
-        id: "",
-        method: "getProgramAccounts",
-        params: [
-          "namesLPneVptA9Z5rqUDD9tMTWEJwofgaYwp8cawRkX",
-          [
-            {
-              commitment: "confirmed",
-              encoding: "base64",
-              filters: [
-                {
-                  memcmp: {
-                    bytes: "58PwtjSDuFHuUkYjH9BYnnQKHfwo9reZhC2zMJv9JPkx",
-                    offset: 32,
-                  },
-                },
-                {
-                  memcmp: {
-                    bytes: this.endUrl,
-                    offset: 32,
-                  },
-                },
-              ],
-            },
-          ],
-        ],
-      });
       this.loading = true
     }
   },
