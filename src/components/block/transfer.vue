@@ -13,9 +13,9 @@
               justify-content: space-between;
               height: 30px;
               line-height: 30px;
-            " v-if="data.amount != undefined">
+            ">
             <h5 style="display: flex; height: 30px">
-              <numberAnimar :count="JSON.parse(data.amount)" />
+              <numberAnimar :count="data.amount ? JSON.parse(data.amount) : 0" />
               <div style="white-space: nowrap; line-height: 30px; height: 30px; font-size:0.9rem;">
                 &nbsp;BTG
               </div>
@@ -26,12 +26,12 @@
               <font-awesome-icon icon="fas fa-lg fa-fw me-2 fa-exchange-alt" />
             </div>
           </div>
-          <div style="width: 35%;height: 30px;display: flex;justify-content: end;" v-if="data.amount != undefined">
+          <div style="width: 35%;height: 30px;display: flex;justify-content: end;">
             <h5 style="line-height: 30px; font-size:0.9rem;">
               $
             </h5>
             <h5 style="display: flex; height: 30px;">
-              <numberAnimar :count="data.amount * appStore.rate" />
+              <numberAnimar :count="data.amount ? data.amount * appStore.rate : 0" />
             </h5>
           </div>
         </div>

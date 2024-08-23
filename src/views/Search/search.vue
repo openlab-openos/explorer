@@ -105,7 +105,7 @@ export default {
         await this.pubbleys(this.endUrl);
       } else {
         router.push({
-          name: "Address",
+          name: "address",
           params: { url: url },
         });
         await this.pubbleys(url);
@@ -179,8 +179,8 @@ export default {
 };
 </script>
 <template>
-  <div style="width: 100%" v-if="loading">
-    <div v-if="url != null">
+  <!-- <div style="width: 100%" v-if="loading">
+    <div>
       <h3>Account</h3>
       <div v-if="type">
 
@@ -350,6 +350,9 @@ export default {
   </div>
   <div v-else>
     <loading-vue />
+  </div> -->
+  <div>
+    {{ url }}
   </div>
 </template>
 

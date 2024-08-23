@@ -12,15 +12,15 @@
               display: flex;
               justify-content: space-between;
               height: 30px;
-            " v-if="data != undefined">
+            ">
 
             <h5 style="display: flex; height: 30px ;font-size:0.9rem;">
               <span class="supplyText">
-                <numberAnimar :count="JSON.parse(data)" />
+                <numberAnimar :count="data ? JSON.parse(data) : 0" />
               </span>
               <span class="supply-text">
                 {{
-                  formatNumberToMillion(JSON.parse(data))
+                  formatNumberToMillion(data ? JSON.parse(data) : 0)
                 }}
               </span>
               <div style="white-space: nowrap; line-height: 30px; height: 30px; font-size:0.9rem;">
@@ -35,19 +35,18 @@
             </div>
           </div>
 
-          <div style="width: 35%;line-height: 30px;display: flex;justify-content: end; font-size:0.9rem;"
-            v-if="data != undefined">
+          <div style="width: 35%;line-height: 30px;display: flex;justify-content: end; font-size:0.9rem;">
             <h5 style="line-height: 30px;">
               $
             </h5>
             <h5 style="display: flex;height: 30px;  font-size:0.9rem;
 ">
               <span class="supplyText">
-                <numberAnimar :count="data * appStore.rate" />
+                <numberAnimar :count="data ? data * appStore.rate : 0" />
               </span>
               <span class="supply-text">
                 {{
-                  formatNumberToMillion(data * appStore.rate)
+                  formatNumberToMillion(data ? data * appStore.rate : 0)
                 }}
               </span>
             </h5>
