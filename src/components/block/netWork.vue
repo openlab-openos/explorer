@@ -13,8 +13,9 @@
               justify-content: space-between;
               height: 30px;
             ">
-            <h5 style="display: flex; height: 30px" v-if="data.blockHeight != undefined">
-              <numberAnimar :count="JSON.parse(data.transactionCount)" />
+            <h5 style="display: flex; height: 30px">
+
+              <numberAnimar :count="JSON.parse(data)" />
               <!-- {{ data.blockHeight }} -->
             </h5>
           </div>
@@ -26,7 +27,9 @@
         </div>
         <div class="small text-inverse text-opacity-50 text-truncate">
           <template v-for="statInfo in info">
-            <div><i v-bind:class="statInfo.icon"></i> {{ statInfo.text }}</div>
+            <!-- <div><i v-bind:class="statInfo.icon"></i> {{ statInfo.text }}</div> -->
+            <div><font-awesome-icon :icon="statInfo.icon" /> {{ statInfo.text }}</div>
+
           </template>
         </div>
       </card-body>
@@ -41,34 +44,28 @@ import { chainRequest } from "../../request/chain";
 import numberAnimar from "../../components/CountFlop.vue";
 import apexchart from "@/components/plugins/Apexcharts.vue";
 import { useAppVariableStore } from "@/stores/app-variable";
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watchEffect } from 'vue'
+import { useAppStore } from "@/stores/index";
+
 
 const appVariable = useAppVariableStore();
+const appStore = useAppStore();
 
-const data = ref({});
+
+const data = ref(0);
 const chart = ref(null);
 const info = ref(null);
 const timer = ref(null);
 const unnumTranstions = ref([]);
 const trueTramsatiom = ref(0);
 
-const fetchData = async () => {
-  let requestBody = {
-    jsonrpc: "2.0",
-    id: 1,
-    method: "getEpochInfo",
-    params: [], // 如果需要的话}
-  };
-  await chainRequest(requestBody).then((res) => {
-    try {
-      data.value = res.result;
-    } catch (error) {
-      console.log(error);
-    }
-  })
-}
 
-fetchData()
+onMounted(() => {
+  watchEffect(() => {
+    data.value = appStore.network
+  })
+})
+
 
 const performanceSamples = () => {
   let requestBody = {
@@ -90,14 +87,17 @@ const performanceSamples = () => {
       }
       info.value = [
         {
-          icon: "fas fa-lg fa-fw me-2 fa-stop-circle",
-          text: "True TPM" + " " + trueTramsatiom.value,
+          icon: ['fas', 'stop-circle'],
+          text: "True TPM " + trueTramsatiom.value,
         },
         {
-          icon: "far fa-lg fa-fw me-2 fa-registered",
-          text: "Vote TPM" + " " + unnumTranstions.value[23],
+          icon: ['far', 'registered'],
+          text: "Vote TPM " + unnumTranstions.value[23],
         },
-        { icon: "fab fa-lg fa-fw me-2 fa-mizuni", text: "Theoretical TPS 30W" },
+        {
+          icon: ['fab', 'mizuni'],
+          text: "Theoretical TPS 30W",
+        },
       ]
     })
     .catch((error) => {
@@ -110,12 +110,6 @@ performanceSamples()
 const randomNo = () => {
   return Math.floor(Math.random() * 60) + 30;
 };
-
-const setTime = () => {
-  timer.value = setInterval(async () => {
-    await fetchData();
-  }, 3000);
-}
 
 chart.value = {
   height: 45,
@@ -134,20 +128,4 @@ chart.value = {
   series: [randomNo(), randomNo(), randomNo()],
 }
 
-
-
-function stopTimer() {
-  if (timer.value) {
-    clearInterval(timer.value);
-    timer.value = null;
-  }
-}
-
-onMounted(() => {
-  setTime()
-})
-
-defineExpose({
-  stopTimer
-})
 </script>

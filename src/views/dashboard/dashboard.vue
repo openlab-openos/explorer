@@ -1,6 +1,6 @@
 <script setup>
 import { useAppVariableStore } from "@/stores/app-variable";
-import { onBeforeUnmount, onMounted, onUnmounted, ref, watch } from "vue";
+import { onBeforeUnmount, onMounted, ref, watch, computed } from "vue";
 import apexchart from "@/components/plugins/Apexcharts.vue";
 import jsVectorMap from "jsvectormap";
 import "jsvectormap/dist/maps/world.js";
@@ -11,20 +11,24 @@ import { useRouter } from "vue-router";
 import { order } from "../../request/order";
 import moment from "moment";
 import { ustdData } from "../../request/ustd";
-import CountFlop from "../../components/CountFlop.vue";
-import numberAnimar from "../../components/CountFlop.vue";
-import blockHeightVue from "../../components/block/blockHeight.vue";
-import netWorkVue from "../../components/block/netWork.vue";
-import activeAccountVue from "../../components/block/activeAccount.vue";
-import transferVue from "../../components/block/transfer.vue";
-import supplyVue from "../../components/block/supply.vue";
-import activeVue from "../../components/block/active.vue";
-import priceVue from "../../components/block/price.vue";
-import priceBtgVue from "../../components/block/priceBtg.vue";
+import { defineAsyncComponent, getCurrentInstance } from 'vue';
+// import blockHeightVue from "../../components/block/blockHeight.vue";
+// import netWorkVue from "../../components/block/netWork.vue";
+// import activeAccountVue from "../../components/block/activeAccount.vue";
+// import transferVue from "../../components/block/transfer.vue";
+// import supplyVue from "../../components/block/supply.vue";
+// import activeVue from "../../components/block/active.vue";
+// import priceVue from "../../components/block/price.vue";
+// import priceBtgVue from "../../components/block/priceBtg.vue";
 import { useAppStore } from "@/stores/index";
 
 const appStore = useAppStore();
 const appVariable = useAppVariableStore();
+
+const apps = getCurrentInstance()
+
+const promaster = ref(apps?.proxy?.$progream);
+
 
 const slot = ref(1);
 const inepoch = ref(1);
@@ -45,16 +49,39 @@ const mapContainer = ref();
 const pageType = ref(true);
 
 const map = ref(null);
-const activeVueref = ref(null)
-const networkref = ref(null)
-
+const activeVueref = ref(null);
+const networkref = ref(null);
 
 const router = useRouter();
-
 
 const timeFormatter = (time) => {
   return moment(time).fromNow();
 };
+
+const BlockHeightVue = defineAsyncComponent(() =>
+  import("../../components/block/blockHeight.vue")
+);
+const NetWorkVue = defineAsyncComponent(() =>
+  import("../../components/block/netWork.vue")
+);
+const ActiveAccountVue = defineAsyncComponent(() =>
+  import("../../components/block/activeAccount.vue")
+);
+const TransferVue = defineAsyncComponent(() =>
+  import("../../components/block/transfer.vue")
+);
+const SupplyVue = defineAsyncComponent(() =>
+  import("../../components/block/supply.vue")
+);
+const ActiveVue = defineAsyncComponent(() =>
+  import("../../components/block/active.vue")
+);
+const PriceVue = defineAsyncComponent(() =>
+  import("../../components/block/price.vue")
+);
+const PriceBtgVue = defineAsyncComponent(() =>
+  import("../../components/block/priceBtg.vue")
+);
 
 const pubbleys = (url) => {
   router.push({
@@ -71,27 +98,28 @@ ustdData().then((data) => {
   appStore.getRateData(data.data);
 });
 
-const orderrequest = () => {
-  order("new_transactions")
-    .then((res) => {
-      for (let i in res) {
-        orderData.value.push(res[i]);
-      }
-      appStore.setTransaction(JSON.stringify(orderData.value));
-      return res;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+const fetchOrderData = async () => {
+  try {
+    const res = await order("new_transactions");
+    orderData.value = res;
+    appStore.setTransaction(JSON.stringify(orderData.value));
+  } catch (err) {
+    console.error("Error fetching order data:", err);
+  }
 };
 
-orderrequest();
+
+// onMounted(() => {
+//   fetchOrderData();
+// });
 
 const unnumTranstions = ref([]);
 const timeName = ref([]);
 const cote = ref([]);
 const trueTramsatiom = ref([]);
-
+const totalTransactions = computed(() => {
+  return orderData.value.reduce((total, order) => total + order.transactions, 0);
+});
 const performanceSamples = async () => {
   let requestBody = {
     jsonrpc: "2.0",
@@ -124,33 +152,31 @@ const performanceSamples = async () => {
 performanceSamples();
 
 const fetchData = async () => {
-  // 假设这是 Solana 的 JSON-RPC API URL
-  let requestBody = {
-    jsonrpc: "2.0",
-    id: 1,
-    method: "getEpochInfo",
-    params: [], // 如果需要的话
-  };
-  await chainRequest(requestBody)
-    .then((response) => {
-      // 解析和处理返回的数据
-      // this.result = response.result; // 假设 response 结构中有 'result' 字段
-      solttime.value = getTime(
-        response.result.slotsInEpoch - response.result.slotIndex
-      );
-      if (slot.value != 1) {
-      } else {
-        slot.value = response.result.slotIndex;
-        inepoch.value = response.result.slotsInEpoch;
-        epoch.value = response.result.epoch;
-      }
-    })
-    .catch((error) => {
-      console.error("Error fetching epoch info:", error);
-    });
+  try {
+    const requestBody = {
+      jsonrpc: "2.0",
+      id: 1,
+      method: "getEpochInfo",
+      params: [],
+    };
+    const response = await chainRequest(requestBody);
+    solttime.value = getTime(response.result.slotsInEpoch - response.result.slotIndex);
+    if (slot.value === 1) {
+      slot.value = response.result.slotIndex;
+      inepoch.value = response.result.slotsInEpoch;
+      epoch.value = response.result.epoch;
+    }
+  } catch (error) {
+    console.error("Error fetching epoch info:", error);
+  }
 };
 
-fetchData();
+onMounted(() => {
+  fetchData();
+  // setTimeout(() => {
+  fetchOrderData();
+  // }, 1000); // 延迟1秒加载订单数据
+});
 
 const getTime = (timestamp) => {
   return moment(JSON.parse(moment().format("x")) + timestamp * 400).fromNow();
@@ -513,7 +539,6 @@ const getTrafficData = (data) => {
   for (let i in chainArray) {
     chartName.push(chainArray[i].timezone)
   }
-  console.log(chainArray);
   return {
     coun,
     chainArray,
@@ -580,74 +605,79 @@ const getActivityLogData = async () => {
     method: "getVoteAccounts",
     params: [],
   };
-  let ClusterNodesdata = await chainRequest(requestBody);
-  let ClusterNodes_list = ClusterNodesdata.result;
-  let ProgramAccountsdata = await chainRequest(ClusterNodes);
-  let ProgramAccounts_list = ProgramAccountsdata.result;
-  let VoteAccountsdata = await chainRequest(VoteAccounts);
-  let VoteAccounts_list = VoteAccountsdata.result;
-  let list = [];
 
-  for (let i in ProgramAccounts_list) {
-    for (let j in ClusterNodes_list) {
-      if (ClusterNodes_list[j].account.data.parsed) {
-        for (let y in ClusterNodes_list[j].account.data.parsed.info.keys) {
-          if (
-            ClusterNodes_list[j].account.data.parsed.info.keys[y].signer == true
-          ) {
+  Promise.all([
+    chainRequest(requestBody),
+    chainRequest(ClusterNodes),
+    chainRequest(VoteAccounts),
+  ]).then((res) => {
+    let ClusterNodes_list = res[0].result;
+    let ProgramAccounts_list = res[1].result;
+    let VoteAccounts_list = res[2].result;
+    let list = [];
+
+    for (let i in ProgramAccounts_list) {
+      for (let j in ClusterNodes_list) {
+        if (ClusterNodes_list[j].account.data.parsed) {
+          for (let y in ClusterNodes_list[j].account.data.parsed.info.keys) {
             if (
-              ProgramAccounts_list[i].pubkey ==
-              ClusterNodes_list[j].account.data.parsed.info.keys[y].pubkey
+              ClusterNodes_list[j].account.data.parsed.info.keys[y].signer == true
             ) {
-              list.push({
-                ip: ProgramAccounts_list[i].gossip.split(":")[0],
-                name: ClusterNodes_list[j].account.data.parsed.info.configData
-                  .name,
-                pubkey: ProgramAccounts_list[i].pubkey,
-                icon: ClusterNodes_list[j].account.data.parsed.info.configData
-                  .iconUrl,
-                version: ProgramAccounts_list[i].version,
+              if (
+                ProgramAccounts_list[i].pubkey ==
+                ClusterNodes_list[j].account.data.parsed.info.keys[y].pubkey
+              ) {
+                list.push({
+                  ip: ProgramAccounts_list[i].gossip.split(":")[0],
+                  name: ClusterNodes_list[j].account.data.parsed.info.configData
+                    .name,
+                  pubkey: ProgramAccounts_list[i].pubkey,
+                  icon: ClusterNodes_list[j].account.data.parsed.info.configData
+                    .iconUrl,
+                  version: ProgramAccounts_list[i].version,
 
-                activatedStake: "",
-              });
+                  activatedStake: "",
+                });
+              }
             }
           }
         }
       }
     }
-  }
-  let listCount = 0;
-  for (let i in list) {
-    for (let h in VoteAccounts_list.current) {
-      if (VoteAccounts_list.current[h].nodePubkey == list[i].pubkey) {
-        list[i].activatedStake = VoteAccounts_list.current[h].activatedStake;
-      } else {
+    let listCount = 0;
+    for (let i in list) {
+      for (let h in VoteAccounts_list.current) {
+        if (VoteAccounts_list.current[h].nodePubkey == list[i].pubkey) {
+          list[i].activatedStake = VoteAccounts_list.current[h].activatedStake;
+        } else {
+        }
       }
+      listCount += list[i].activatedStake;
     }
-    listCount += list[i].activatedStake;
-  }
-  list.sort((a, b) => {
-    let nameA = a.name.toUpperCase();
-    let nameB = b.name.toUpperCase();
-    if (nameA < nameB) {
-      return -1;
-    }
-    if (nameA > nameB) {
-      return 1;
-    }
-    return 0;
-  });
-  countLog.value = listCount;
-  ActivityLogData.value = list;
-  appStore.setValidators(JSON.stringify(list));
-  appStore
-    .getPartData(
-      (JSON.parse(ClusterNodes_list.length) - JSON.parse(list.length)) /
-      JSON.parse(ClusterNodes_list.length)
-    )
-    .toFixed(2);
-  sessionStorage.setItem("accout", JSON.stringify(list));
-  renderMap();
+    list.sort((a, b) => {
+      let nameA = a.name.toUpperCase();
+      let nameB = b.name.toUpperCase();
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+      return 0;
+    });
+    countLog.value = listCount;
+    ActivityLogData.value = list;
+    appStore.setValidators(JSON.stringify(list));
+    appStore
+      .getPartData(
+        (JSON.parse(ClusterNodes_list.length) - JSON.parse(list.length)) /
+        JSON.parse(ClusterNodes_list.length)
+      )
+      .toFixed(2);
+    sessionStorage.setItem("accout", JSON.stringify(list));
+    renderMap();
+  })
+
 };
 
 const countplount = (num) => {
@@ -682,7 +712,12 @@ const getIPLocation = async (ip) => {
 };
 
 const stringcate = (str) => {
-  return str.slice(0, 5) + "..." + str.slice(-5);
+  if (str.length < 10) {
+    return str;
+  } else {
+    return str.slice(0, 5) + "..." + str.slice(-5);
+  }
+
 };
 
 const randomNo = () => {
@@ -745,8 +780,8 @@ const renderMap = async () => {
       let lng = Number(markers_data[i].coords[1]); // 转换或默认为0  
 
       // 现在进行数值加法  
-      
-      if(i % 2 == 0){
+
+      if (i % 2 == 0) {
         lat += 1;
       } else {
         lat -= 1;
@@ -844,7 +879,6 @@ const pubbtx = (item) => {
 onBeforeUnmount(() => {
   if (activeVueref.value) {
     activeVueref.value.stopTimer()
-    networkref.value.stopTimer()
   }
 })
 </script>
@@ -862,7 +896,6 @@ onBeforeUnmount(() => {
     <priceVue />
     <priceBtgVue />
   </div>
-
   <div class="row">
     <!-- BEGIN stats -->
 
@@ -1015,6 +1048,7 @@ onBeforeUnmount(() => {
                   <th style="width: 10%; text-align: left">TYPE</th>
                   <th style="width: 20%; text-align: left">TIME</th>
                 </tr>
+
                 <tr v-for="(product, index) in orderData" :key="index" style="height: 35px">
                   <td style="width: 20%; text-align: left; cursor: pointer" class="text-theme" @click="
                     pubbtx(
@@ -1023,7 +1057,8 @@ onBeforeUnmount(() => {
                     ">
                     {{
                       stringcate(
-                        product.result.transaction.signatures[0]
+                        promaster[product.result.transaction.signatures[0]] ?
+                          promaster[product.result.transaction.signatures[0]].name : product.result.transaction.signatures[0]
                       )
                     }}
                   </td>
@@ -1035,8 +1070,10 @@ onBeforeUnmount(() => {
                     ">
                     {{
                       stringcate(
-                        product.result.transaction.message.instructions[0]
-                          .parsed.info.source
+                        promaster[product.result.transaction.message.instructions[0]
+                          .parsed.info.source] ? promaster[product.result.transaction.message.instructions[0]
+                            .parsed.info.source].name : product.result.transaction.message.instructions[0]
+                              .parsed.info.source
                       )
                     }}
                   </td>
@@ -1048,8 +1085,10 @@ onBeforeUnmount(() => {
                     ">
                     {{
                       stringcate(
-                        product.result.transaction.message.instructions[0]
-                          .parsed.info.destination
+                        promaster[product.result.transaction.message.instructions[0]
+                          .parsed.info.destination] ? promaster[product.result.transaction.message.instructions[0]
+                            .parsed.info.destination].name : product.result.transaction.message.instructions[0]
+                              .parsed.info.destination
                       )
                     }}
                   </td>
@@ -1122,8 +1161,7 @@ onBeforeUnmount(() => {
                   </td>
                   <td style="text-align: left">
                     <span class="text-theme" style="cursor: pointer" @click="pubbleys(log.pubkey)">
-                      {{ stringcate(log.pubkey) }}
-                      <!-- {{ log.pubkey }} -->
+                      {{ stringcate(promaster[log.pubkey] ? promaster[log.pubkey].name : log.pubkey) }}
                     </span>
                   </td>
                   <td style="text-align: left; display: flex">
@@ -1140,9 +1178,9 @@ onBeforeUnmount(() => {
                     <span :style="{
                       color: log.activatedStake !== '' ? 'green' : 'yellow',
                     }" class="menu-icon">
-                      <i class="fas fa-lg fa-fw me-2 fa-check-circle" v-if="log.activatedStake !== ''"></i>
-                      <i class="fas fa-lg fa-fw me-2 fa-question-circle" v-if="log.activatedStake == ''"></i>
-                      <!-- {{ log.pubkey }} -->
+                      <font-awesome-icon icon="fas fa-lg fa-fw me-2 fa-check-circle" v-if="log.activatedStake !== ''" />
+                      <font-awesome-icon icon="fas fa-lg fa-fw me-2 fa-question-circle"
+                        v-if="log.activatedStake == ''" />
                     </span>
                   </td>
                 </tr>
@@ -1165,4 +1203,10 @@ onBeforeUnmount(() => {
 td {
   text-align: center;
 }
+
+/* .table-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+} */
 </style>

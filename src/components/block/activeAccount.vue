@@ -21,14 +21,17 @@
 
           <div style="width: 40%; height: 30px">
             <div>
-              <div ref="echartsContainers" style="width:100%; height: 40px;display:flex ;justify-content: center;margin-top: -10px;">
-              </div>
+              <!-- <div ref="echartsContainers"
+                style="width:100%; height: 40px;display:flex ;justify-content: center;margin-top: -10px;">
+              </div> -->
+              <apexchart :height="charts.height" :options="charts.options" :series="charts.series"></apexchart>
+
             </div>
           </div>
         </div>
         <div class="small text-inverse text-opacity-50 text-truncate" v-if="info != null">
           <template v-for="statInfo in info">
-            <div><i v-bind:class="statInfo.icon"></i> {{ statInfo.text }}</div>
+            <div><font-awesome-icon :icon="statInfo.icon" /> {{ statInfo.text }}</div>
           </template>
         </div>
       </card-body>
@@ -43,8 +46,9 @@ import apexchart from "@/components/plugins/Apexcharts.vue";
 import { order } from "../../request/order";
 import { onMounted, ref, watchEffect } from "vue";
 import { useAppStore } from "@/stores/index";
-import * as echarts from 'echarts';
+import { useAppVariableStore } from "@/stores/app-variable";
 
+const appVariable = useAppVariableStore();
 
 
 const appStore = useAppStore();
@@ -55,52 +59,34 @@ const randomNo = () => {
 
 const echartsContainers = ref(null);
 
-const initECharts = () => {
-  const myChart = echarts.init(echartsContainers.value);
-  const option = {
-    // ECharts 配置项
+const charts = ref({
+  height: 30,
+  options: {
+    chart: { type: "bar", sparkline: { enabled: true } },
+    colors: [appVariable.color.theme],
     tooltip: {
-      formatter: function (params) {
-      }
+      enabled: false
     },
-    xAxis: {
-      type: 'category'
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: "65%",
+        endingShape: "rounded",
+      },
     },
-    yAxis: {
-      axisLine: {
-        show: false
-      },
-      splitLine: {
-        show: false
-      },
-      axisLabel: {
-        show: false
-      },
-      max: 5,
-      min: 0
-    },
-    series: [{
-      type: 'bar',
+    yaxis: {
+      min: 1500
+    }
+  },
+  series: [
+    {
+      name: "Visitors",
       data: [
-        2.4, 1.2, 2.7, 3.4, 2.8, 2.3, 2.5,3.5,4.3
+         1555, 1589, 1599, 1593, 1546, 1544,1540, 1550, 1560, 1534, 1560,1544
       ],
-      itemStyle: {
-        normal: {
-          barBorderRadius: 0, // 去除条形图的圆角  
-          color: '#008FFB',
-          borderColor: 'rgba(0,0,0,0)', // 去除条形图的边框  
-          borderWidth: 0 // 边框宽度，虽然上面设置了边框颜色为透明，但也可以显式设置宽度为0  
-        }
-      }
-    }]
-  };
-
-  myChart.setOption(option);
-}
-
-onMounted(() => {
-  initECharts();
-})
+    },
+  ],
+});
 
 
 const orderrequest = async (url) => {
@@ -130,8 +116,6 @@ onMounted(() => {
   })
 })
 
-
-console.log(appStore.Validators);
 
 
 

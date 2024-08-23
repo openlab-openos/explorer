@@ -3,10 +3,19 @@ import { useAppOptionStore } from "@/stores/app-option";
 import { chainRequest } from "../../request/chain";
 import moment from "moment";
 import router from "../../router";
+import { getCurrentInstance, ref } from "vue";
+import LoadingVue from "../../components/block/loading.vue"
+
+const apps = getCurrentInstance()
+
+const promaster = ref(apps?.proxy?.$progream);
 
 const appOption = useAppOptionStore();
 
 export default {
+  components: {
+    LoadingVue
+  },
   data() {
     return {
       url: null,
@@ -16,6 +25,7 @@ export default {
       transaction: null,
       transactionArray: null,
       success: null,
+      loading: false
     };
   },
   mounted() {
@@ -82,7 +92,8 @@ export default {
       return itemArray.length;
     },
     sliceSignature(item) {
-      return item.slice(0, 50) + "...";
+      // return item.slice(0, 50) + "...";
+      return item
     },
     programs(item) {
       let arr = [];
@@ -204,11 +215,12 @@ export default {
       }
     }
     this.success = successCount.length;
+    this.loading = true
   },
 };
 </script>
 <template>
-  <div style="width: 100%">
+  <div style="width: 100%" v-if="loading">
     <div width="50%" style="
         height: 80vh;
         display: flex;
@@ -242,7 +254,8 @@ export default {
               <tbody>
                 <tr>
                   <td>Blockhash</td>
-                  <td class="text-end"> {{ this.card.blockhash }} </td>
+                  <td class="text-end">
+                    {{ this.card.blockhash }} </td>
                 </tr>
                 <tr>
                   <td>Block</td>
@@ -283,14 +296,6 @@ export default {
                   <td class="text-end text-theme" style="cursor: pointer" @click="pubbleys(this.historyData[2])">
                     {{ this.historyData[2] }}</td>
                 </tr>
-                <!-- <tr>
-              <td>Processed Transactions</td>
-              <td class="text-end"> {{this.card.transactions.length}}</td>
-            </tr>
-            <tr>
-              <td>Successful Transactions</td>
-              <td class="text-end text-theme"> {{Successful(this.card.transactions)}}</td>
-            </tr> -->
               </tbody>
             </table>
           </card-body>
@@ -353,6 +358,9 @@ export default {
         </div>
       </div>
     </div>
+  </div>
+  <div v-else>
+    <loading-vue />
   </div>
 </template>
 

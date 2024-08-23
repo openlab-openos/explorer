@@ -37,88 +37,8 @@ function toggleAppHeaderSearch(event) {
   appOption.appHeaderSearchToggled = !appOption.appHeaderSearchToggled;
 }
 
-async function requestList(object) {
-  try {
-    const response = await chainRequest(object);
-    // 解析和处理返回的数据
 
-    return response.result; // 现在这个函数会返回解析后的数据
-  } catch (error) {
-    console.error("Error fetching epoch info:", error);
-    return []; // 返回一个空数组或抛出错误取决于你的需求
-  }
-}
-
-Account();
-async function Account() {
-  let requestBody = {
-    id: "35a5860e-2564-4b92-890d-dc57e9c58d75",
-    jsonrpc: "2.0",
-    method: "getProgramAccounts",
-    params: [
-      "Config1111111111111111111111111111111111111",
-      {
-        commitment: "processed",
-        encoding: "jsonParsed",
-      },
-    ],
-  };
-  let ClusterNodes = {
-    id: "d9080c36-8a4d-494f-8a5e-1ba06815e912",
-    jsonrpc: "2.0",
-    method: "getClusterNodes",
-    params: [],
-  };
-  let VoteAccounts = {
-    id: "35a5860e-2564-4b92-890d-dc57e9c58d75",
-    jsonrpc: "2.0",
-    method: "getVoteAccounts",
-    params: [],
-  };
-  let ClusterNodes_list = await requestList(requestBody);
-  let ProgramAccounts_list = await requestList(ClusterNodes);
-  let VoteAccounts_list = await requestList(VoteAccounts);
-  let list = [];
-  for (let i in ProgramAccounts_list) {
-    for (let j in ClusterNodes_list) {
-      if (ClusterNodes_list[j].account.data.parsed) {
-        for (let y in ClusterNodes_list[j].account.data.parsed.info.keys) {
-          if (
-            ClusterNodes_list[j].account.data.parsed.info.keys[y].signer == true
-          ) {
-            if (
-              ProgramAccounts_list[i].pubkey ==
-              ClusterNodes_list[j].account.data.parsed.info.keys[y].pubkey
-            ) {
-              list.push({
-                ip: ProgramAccounts_list[i].gossip.split(":")[0],
-                name: ClusterNodes_list[j].account.data.parsed.info.configData
-                  .name,
-                pubkey: ProgramAccounts_list[i].pubkey,
-                icon: ClusterNodes_list[j].account.data.parsed.info.configData
-                  .iconUrl,
-                activatedStake: "",
-              });
-            }
-          }
-        }
-      }
-    }
-  }
-  return list;
-}
-
-// const filter = (condition, data) => {
-//   return data.filter((item) => {
-//     return Object.keys(condition).every((key) => {
-//       return String(item[key])
-//         .toLowerCase()
-//         .includes(String(condition[key]).trim().toLowerCase());
-//     });
-//   });
-// };
-
-async function searchMenu() {
+function searchMenu() {
   if (searchcontent.value == "") {
   } else {
     if (searchcontent.value.length >= 45) {
@@ -129,37 +49,8 @@ async function searchMenu() {
         },
       });
       searchcontent.value = "";
+      // window.location.reload()
     } else {
-      // let data = await Account();
-      // let end = filter(
-      //   {
-      //     pubkey: searchcontent.value,
-      //   },
-      //   data
-      // );
-      // if (end.length == 0) {
-      //   router
-      //     .push({
-      //       name: "address",
-      //       params: {
-      //         url: searchcontent.value,
-      //       },
-      //     })
-      //     .then(() => {
-      //       searchcontent.value = "";
-      //     });
-      // } else {
-      //   router
-      //     .push({
-      //       name: "address",
-      //       params: {
-      //         url: end[0].pubkey,
-      //       },
-      //     })
-      //     .then(() => {
-      //       searchcontent.value = "";
-      //     });
-      // }
       router
         .push({
           name: "address",
@@ -169,6 +60,8 @@ async function searchMenu() {
         })
         .then(() => {
           searchcontent.value = "";
+          // window.location.reload()
+
         });
     }
   }
@@ -229,7 +122,8 @@ async function searchMenu() {
                   padding: 5px;
                 " />
             </div>
-            <div class="menu-search-icon" style="margin-left: 20px;" @click="searchMenu"><i class="bi bi-search"></i>
+            <div class="menu-search-icon" style="margin-left: 20px;cursor: pointer;" @click="searchMenu"><i
+                class="bi bi-search"></i>
             </div>
           </div>
         </div>

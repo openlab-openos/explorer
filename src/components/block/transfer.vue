@@ -13,9 +13,9 @@
               justify-content: space-between;
               height: 30px;
               line-height: 30px;
-            " v-if="data.amount != undefined">
+            ">
             <h5 style="display: flex; height: 30px">
-              <numberAnimar :count="JSON.parse(data.amount)" />
+              <numberAnimar :count="data.amount ? JSON.parse(data.amount) : 0" />
               <div style="white-space: nowrap; line-height: 30px; height: 30px; font-size:0.9rem;">
                 &nbsp;BTG
               </div>
@@ -23,21 +23,21 @@
           </div>
           <div style="width: 20%;text-align: center;">
             <div style="color: #339a81; font-size: 20px;">
-              <i class="fas fa-lg fa-fw me-2 fa-exchange-alt"></i>
+              <font-awesome-icon icon="fas fa-lg fa-fw me-2 fa-exchange-alt" />
             </div>
           </div>
-          <div style="width: 35%;height: 30px;display: flex;justify-content: end;" v-if="data.amount != undefined">
+          <div style="width: 35%;height: 30px;display: flex;justify-content: end;">
             <h5 style="line-height: 30px; font-size:0.9rem;">
               $
             </h5>
             <h5 style="display: flex; height: 30px;">
-              <numberAnimar :count="data.amount * appStore.rate" />
+              <numberAnimar :count="data.amount ? data.amount * appStore.rate : 0" />
             </h5>
           </div>
         </div>
         <div class="small text-inverse text-opacity-50 text-truncate" v-if="type">
           <template v-for="statInfo in info">
-            <div><i v-bind:class="statInfo.icon"></i> {{ statInfo.text }}</div>
+            <div><font-awesome-icon :icon="statInfo.icon" /> {{ statInfo.text }}</div>
           </template>
         </div>
       </card-body>
@@ -50,7 +50,6 @@
 import numberAnimar from "../../components/CountFlop.vue";
 import apexchart from "@/components/plugins/Apexcharts.vue";
 import { order } from "../../request/order";
-import { ustdData } from "../../request/ustd";
 import { useAppStore } from "../../stores/index";
 import { onMounted, ref, watchEffect } from "vue";
 
@@ -67,25 +66,6 @@ dataRequest();
 const transferData = ref([]);
 
 const transactionData = ref([]);
-const supplyRequest = async () => {
-  if (appStore.Transaction.length == 0) {
-    await order("new_transactions")
-      .then((res) => {
-        console.log(res);
-        for (let i in res) {
-          transferData.value.push(res[i]);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  } else {
-    transferData.value = appStore.Transaction;
-
-  }
-  rendered();
-};
-
 
 const transactions = ref(0);
 
@@ -112,13 +92,13 @@ const toFexedStake = (num) => {
 const info = ref();
 const type = ref(false);
 
-const rendered = () => {
+const rendered = (data) => {
   for (let i in transferData.value) {
     if (transferData.value[i].result.blockTime * 1000 > dataTime.value) {
-      transactionData.value.push(transferData.value[i]);
+      data.push(transferData.value[i]);
     }
     priceTrans.value +=
-      transactionData.value[
+      data[
         i
       ].result.transaction.message.instructions[0].parsed.info.lamports;
   }
@@ -130,7 +110,7 @@ const rendered = () => {
     {
       icon: "fas fa-lg fa-fw me-2 fa-won-sign",
       text:
-        toFexedStake(priceTrans.value / transactionData.value.length) +
+        toFexedStake(priceTrans.value / data.length) +
         " " +
         "BTG" +
         " " +
@@ -140,7 +120,7 @@ const rendered = () => {
       icon: "fas fa-lg fa-fw me-2 fa-yen-sign",
       text:
         (
-          toFexedStake(priceTrans.value / transactionData.value.length) *
+          toFexedStake(priceTrans.value / data.length) *
           appStore.rate
         ).toFixed(2) +
         " " +
@@ -152,8 +132,22 @@ const rendered = () => {
 
 onMounted(() => {
   watchEffect(() => {
-    supplyRequest();
+    if (appStore.Transaction.length != 0) {
+      for (let i in JSON.parse(appStore.Transaction)) {
+        transferData.value.push(
+          JSON.parse(appStore.Transaction)[i]
+        )
+      }
+      let data = JSON.parse(appStore.Transaction);
+
+
+      if (data.length != 0) {
+        rendered(data);
+      }
+    }
+
+
   })
-});
+})
 
 </script>

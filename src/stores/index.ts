@@ -13,6 +13,7 @@ export const useAppStore = defineStore('app', {
         stake: 0,//stake
         part: 0,//part
         country: {},//country
+        network: 0,//network
     }),
     getters: {
         rateData: (state) => {
@@ -48,6 +49,9 @@ export const useAppStore = defineStore('app', {
         getCountry: (state) => {
             return state.country; // 直接返回 state 中的 country  
         },
+        getnetwork: (state) => {
+            return state.network
+        }
     },
     actions: {
         setRate(newRate: any) {
@@ -69,7 +73,7 @@ export const useAppStore = defineStore('app', {
             this.Validators = JSON.parse(newValidators); // 在 actions 中设置 Validators 的值  
         },
         setTransaction(newTransaction: any) {
-            this.Transaction = JSON.parse(newTransaction); // 在 actions 中设置 Transaction 的值  
+            this.Transaction = newTransaction; // 在 actions 中设置 Transaction 的值  
         },
         getRateData(data: any) {
             return this.datarate = data; // 直接返回 state 中的 rate  
@@ -83,6 +87,9 @@ export const useAppStore = defineStore('app', {
         getCountryData(data: any) {
             return this.country = data; // 直接返回 state 中的 country  
         },
+        getNetwork(data: any) {
+            return this.network = data
+        }
     },
     persist: {
         enabled: true,

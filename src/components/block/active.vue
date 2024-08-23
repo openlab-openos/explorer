@@ -4,7 +4,7 @@
     <card class="mb-3" style="height: 160px">
       <card-body>
         <div class="d-flex fw-bold small mb-3">
-          <span class="flex-grow-1">Active Stake (BTG)</span>
+          <span class="flex-grow-1">Active Stake 1(BTG)</span>
         </div>
         <div class="row align-items-center mb-2" style="height: 30px">
           <div style="
@@ -26,7 +26,7 @@
         </div>
         <div class="small text-inverse text-opacity-50 text-truncate">
           <template v-for="statInfo in info">
-            <div><i v-bind:class="statInfo.icon"></i> {{ statInfo.text }}</div>
+            <div><font-awesome-icon :icon="statInfo.icon" /> {{ statInfo.text }}</div>
           </template>
         </div>
       </card-body>
@@ -40,7 +40,6 @@ import numberAnimar from "../../components/CountFlop.vue";
 import apexchart from "@/components/plugins/Apexcharts.vue";
 import { chainRequest } from "../../request/chain";
 import { useAppVariableStore } from "@/stores/app-variable";
-import { ustdData } from "../../request/ustd";
 import { useAppStore } from "../../stores/index";
 import { onMounted, ref, watchEffect } from "vue";
 import { constants } from "buffer";
@@ -53,17 +52,6 @@ const data = ref(1);
 const epoch = ref(1);
 const info = ref();
 
-const chainData = () => {
-  chainRequest({
-    jsonrpc: "2.0",
-    id: 1,
-    method: "getEpochInfo",
-  }).then((res) => {
-    epoch.value = res.result.epoch;
-  });
-};
-
-chainData();
 
 const randomNo = () => {
   return Math.floor(Math.random() * 60) + 30;
@@ -71,12 +59,13 @@ const randomNo = () => {
 
 onMounted(() => {
   watchEffect(() => {
+    epoch.value = appStore.network
     data.value = appStore.pubbley;
 
     stubly.value = appStore.stubly;
     info.value = [
       {
-        icon: "fa fa-chevron-up fa-fw me-1",
+        icon: ['fas', 'chevron-up'],
         text:
           "Average per node" +
           " " +
@@ -84,11 +73,11 @@ onMounted(() => {
           "M",
       },
       {
-        icon: "far fa-hdd fa-fw me-1",
+        icon: ['far', 'hdd'],
         text: "TVL" + " " + "$" + (JSON.parse(appStore.pubbley) * appStore.rate).toFixed(2) + "M",
       },
       {
-        icon: "far fa-hand-point-up fa-fw me-1",
+        icon: ['far', 'hand-point-up'],
         text:
           "Pledge rate" +
           " " +

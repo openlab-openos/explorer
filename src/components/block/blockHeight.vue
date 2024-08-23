@@ -21,14 +21,14 @@
 
           <div style="width: 40%; height: 30px">
             <div>
-              <div ref="echartsRef"
-                style="width:100%; height: 40px;display:flex ;justify-content: center;margin-top: -10px;"></div>
+              <apexchart :height="charts.height" :options="charts.options" :series="charts.series"></apexchart>
             </div>
           </div>
         </div>
         <div class="small text-inverse text-opacity-50 text-truncate">
           <template v-for="statInfo in info">
-            <div><i v-bind:class="statInfo.icon"></i> {{ statInfo.text }}</div>
+            <div><font-awesome-icon :icon="statInfo.icon" /> {{ statInfo.text }}</div>
+
           </template>
         </div>
       </card-body>
@@ -42,12 +42,14 @@ import { chainRequest } from "../../request/chain";
 import numberAnimar from "../../components/CountFlop.vue";
 import apexchart from "@/components/plugins/Apexcharts.vue";
 import moment from "moment";
-import { ustdData } from "../../request/ustd";
 import { useAppStore } from "@/stores/index";
-import * as echarts from 'echarts';
 import { onMounted, ref } from 'vue'
+import { useAppVariableStore } from "@/stores/app-variable";
+
+const appVariable = useAppVariableStore();
 
 const appStore = useAppStore();
+
 
 const data = ref({});
 const chart = ref(null);
@@ -63,6 +65,7 @@ const fetchData = async () => {
   };
   await chainRequest(requestBody).then((res) => {
     data.value = res.result;
+    appStore.getNetwork(res.result.transactionCount)
     info.value = [
       {
         icon: "fab fa-lg fa-fw me-2 fa-openid",
@@ -83,70 +86,42 @@ const fetchData = async () => {
   });
 };
 
-const randomNo = () => {
-  return Math.floor(Math.random() * 60) + 30;
-};
-
 const getTime = (timestamp) => {
   return moment(
     JSON.parse(moment().format("x")) + timestamp * 400
   ).fromNow();
 };
 
-const ustd = async () => {
-  ustdData().then((data) => {
-    appStore.setRate(data.data.rate);
-    appStore.getRateData(data.data);
-  });
-};
+const charts = ref({
+  height: 30,
+  options: {
+    chart: { type: "bar", sparkline: { enabled: true } },
+    colors: [appVariable.color.theme],
+    tooltip: {
+      enabled: false
+    },
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: "65%",
+        endingShape: "rounded",
+      },
+    },
+    yaxis: {
+      min: 1500
+    }
+  },
+  series: [
+    {
+      name: "Visitors",
+      data: [
+        1540, 1550, 1560, 1534, 1560, 1555, 1589, 1599, 1593, 1546, 1544
+      ],
+    },
+  ],
+});
 
 fetchData();
-ustd();
-const echartsRef = ref(null);
-console.log(data.value);
-const initECharts = () => {
-  const myChart = echarts.init(echartsRef.value);
-
-  const option = {
-    // ECharts 配置项
-    tooltip: {
-      formatter: function (params) {
-      }
-    },
-    xAxis: {
-      type: 'category'
-    },
-    yAxis: {
-      axisLine: {
-        show: false
-      },
-      splitLine: {
-        show: false
-      },
-      axisLabel: {
-        show: false
-      },
-      max: 5,
-      min: 0
-    },
-    series: [{
-      type: 'bar',
-      data: [
-        1.4, 2.2, 1.7, 2.4, 1.8, 1.3, 2.5,
-      ],
-      itemStyle: {
-        normal: {
-          barBorderRadius: 0, // 去除条形图的圆角  
-          color: '#008FFB',
-          borderColor: 'rgba(0,0,0,0)', // 去除条形图的边框  
-          borderWidth: 0 // 边框宽度，虽然上面设置了边框颜色为透明，但也可以显式设置宽度为0  
-        }
-      }
-    }]
-  };
-  myChart.setOption(option);
-
-};
 
 const formatNumber = (value) => {
   const num = parseInt(value, 10);
@@ -167,7 +142,7 @@ function stopTimer() {
 
 onMounted(() => {
   startTimer()
-  initECharts();
+  // initECharts();
 })
 
 defineExpose({

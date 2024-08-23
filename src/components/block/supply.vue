@@ -12,15 +12,15 @@
               display: flex;
               justify-content: space-between;
               height: 30px;
-            " v-if="data != undefined">
+            ">
 
             <h5 style="display: flex; height: 30px ;font-size:0.9rem;">
               <span class="supplyText">
-                <numberAnimar :count="JSON.parse(data)" />
+                <numberAnimar :count="data ? JSON.parse(data) : 0" />
               </span>
               <span class="supply-text">
                 {{
-                  formatNumberToMillion(JSON.parse(data))
+                  formatNumberToMillion(data ? JSON.parse(data) : 0)
                 }}
               </span>
               <div style="white-space: nowrap; line-height: 30px; height: 30px; font-size:0.9rem;">
@@ -31,23 +31,22 @@
           </div>
           <div style="width: 20%;text-align: center;">
             <div style="color: #339a81; font-size: 20px;">
-              <i class="fas fa-lg fa-fw me-2 fa-exchange-alt"></i>
+              <font-awesome-icon icon="fas fa-lg fa-fw me-2 fa-exchange-alt" />
             </div>
           </div>
 
-          <div style="width: 35%;line-height: 30px;display: flex;justify-content: end; font-size:0.9rem;"
-            v-if="data != undefined">
+          <div style="width: 35%;line-height: 30px;display: flex;justify-content: end; font-size:0.9rem;">
             <h5 style="line-height: 30px;">
               $
             </h5>
             <h5 style="display: flex;height: 30px;  font-size:0.9rem;
 ">
               <span class="supplyText">
-                <numberAnimar :count="data * appStore.rate" />
+                <numberAnimar :count="data ? data * appStore.rate : 0" />
               </span>
               <span class="supply-text">
                 {{
-                  formatNumberToMillion(data * appStore.rate)
+                  formatNumberToMillion(data ? data * appStore.rate : 0)
                 }}
               </span>
             </h5>
@@ -55,7 +54,7 @@
         </div>
         <div class="small text-inverse text-opacity-50 text-truncate">
           <template v-for="statInfo in info">
-            <div><i v-bind:class="statInfo.icon"></i> {{ statInfo.text }}</div>
+            <div><font-awesome-icon :icon="statInfo.icon" /> {{ statInfo.text }}</div>
           </template>
         </div>
       </card-body>
@@ -66,26 +65,21 @@
 
 <script setup>
 import numberAnimar from "../../components/CountFlop.vue";
-import { chainRequest } from "../../request/chain";
 import { useAppStore } from "../../stores/index";
-import { computed, ref, watch } from "vue";
+import { onMounted, ref, watchEffect } from "vue";
 
 const appStore = useAppStore();
 
 const data = ref();
 
-let request = {
-  jsonrpc: "2.0",
-  id: 1,
-  method: "getSupply",
-};
-
 const convert = ref(0);
 
 const info = ref([]);
-chainRequest(request)
-  .then((res) => {
-    data.value = JSON.stringify(res.result.value.total).slice(0, 9);
+
+
+onMounted(() => {
+  watchEffect(() => {
+    data.value = JSON.stringify(appStore.stuBlys).slice(0, 9);
     info.value = [
       {
         icon: "fas fa-lg fa-fw me-2 fa-dollar-sign",
@@ -106,9 +100,9 @@ chainRequest(request)
       },
     ];
   })
-  .catch((err) => {
-    console.log(err);
-  });
+})
+
+
 
 const formatNumber = (value) => {
   const num = parseInt(value, 10);

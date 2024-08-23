@@ -25,8 +25,9 @@
                   )
                   ">
                   {{
-                      product.result.transaction.signatures[0]
-                    
+                    promaster[product.result.transaction.signatures[0]] ?
+                      promaster[product.result.transaction.signatures[0]].name : product.result.transaction.signatures[0]
+
                   }}
                 </td>
                 <td style=" text-align: left; cursor: pointer" class="text-theme" @click="
@@ -37,8 +38,10 @@
                   ">
                   {{
                     stringcate(
-                      product.result.transaction.message.instructions[0].parsed
-                        .info.source
+                      promaster[product.result.transaction.message.instructions[0]
+                        .parsed.info.source] ? promaster[product.result.transaction.message.instructions[0]
+                          .parsed.info.source].name : product.result.transaction.message.instructions[0]
+                            .parsed.info.source
                     )
                   }}
                 </td>
@@ -50,8 +53,10 @@
                   ">
                   {{
                     stringcate(
-                      product.result.transaction.message.instructions[0].parsed
-                        .info.destination
+                      promaster[product.result.transaction.message.instructions[0]
+                        .parsed.info.destination] ? promaster[product.result.transaction.message.instructions[0]
+                          .parsed.info.destination].name : product.result.transaction.message.instructions[0]
+                            .parsed.info.destination
                     )
                   }}
                 </td>
@@ -105,16 +110,20 @@
 
 <script setup>
 import { useAppStore } from "../../stores/index";
-import { ref } from "vue";
+import { ref, getCurrentInstance } from "vue";
 import moment from "moment";
 import CountUp from "vue-countup-v3";
 import { useRouter } from "vue-router";
+
+const apps = getCurrentInstance()
+
+const promaster = ref(apps?.proxy?.$progream);
 
 const router = useRouter();
 
 const appStore = useAppStore();
 
-const orderData = ref(appStore.Transaction);
+const orderData = ref(JSON.parse(appStore.Transaction));
 
 const stringcate = (str) => {
   return str.slice(0, 6) + "..." + str.slice(-6);;

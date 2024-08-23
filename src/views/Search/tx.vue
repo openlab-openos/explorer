@@ -1,11 +1,23 @@
+<script setup>
+import { getCurrentInstance, ref } from "vue";
+const apps = getCurrentInstance()
+const promaster = apps?.proxy?.$progream;
+</script>
 <script>
 import { useAppOptionStore } from "@/stores/app-option";
 import { chainRequest } from "../../request/chain";
 import moment from "moment";
+import LoadingVue from "../../components/block/loading.vue"
+import InfoTooltip from "../../components/infoTooltip.vue"
 
 const appOption = useAppOptionStore();
 
+
 export default {
+  components: {
+    LoadingVue,
+    InfoTooltip
+  },
   data() {
     return {
       url: null,
@@ -14,6 +26,7 @@ export default {
       type: null,
       preType: false,
       raw: true,
+      laoding: false,
     };
   },
   mounted() {
@@ -148,6 +161,7 @@ export default {
         return { color: '#fa62fc', backgroundColor: '#712c71' }
       }
     }
+
   },
 
   async created() {
@@ -164,7 +178,7 @@ export default {
         },
       ],
     });
-    console.log(this.card);
+
     this.historyData = await this.requestList({
       jsonrpc: "2.0",
       id: "",
@@ -178,22 +192,64 @@ export default {
         },
       ],
     });
-    if (this.historyData.meta.logMessages[0].includes("Vote")) {
-      this.preType = true;
+    if (this.historyData) {
+      if (this.historyData.meta.logMessages[0].includes("Vote")) {
+        this.preType = true;
+      }
     }
+
+    this.laoding = true
+
   },
+  watch: {
+    async $route(to, from) {
+      this.laoding = false
+      this.url = this.$route.params.item;
+      this.type = this.$route.params.err;
+      this.card = await this.requestList({
+        jsonrpc: "2.0",
+        id: "",
+        method: "getSignatureStatuses",
+        params: [
+          [this.url],
+          {
+            searchTransactionHistory: true,
+          },
+        ],
+      });
+      this.historyData = await this.requestList({
+        jsonrpc: "2.0",
+        id: "",
+        method: "getTransaction",
+        params: [
+          this.url,
+          {
+            commitment: "confirmed",
+            encoding: "jsonParsed",
+            maxSupportedTransactionVersion: 0,
+          },
+        ],
+      });
+      if (this.historyData) {
+        if (this.historyData.meta.logMessages[0].includes("Vote")) {
+          this.preType = true;
+        }
+      }
+
+      this.laoding = true
+    }
+  }
 };
 </script>
 <template>
-  <div style="width: 100%;">
+  <div style="width: 100%;" v-if="laoding">
     <div v-if="url != null">
       <div>
         <h3>Transaction</h3>
         <!-- <table> -->
         <card class="md-3">
           <card-body class="card-bodys">
-            <table v-if="card != null"
-              class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
+            <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
               <th>
               <td>Overview</td>
               <td class=" text-end"></td>
@@ -201,7 +257,7 @@ export default {
               <tbody v-if="historyData">
                 <tr>
                   <td>Signature</td>
-                  <td class="text-end">{{ this.url }}</td>
+                  <td class="text-end">{{ promaster[url] ? promaster[url].name : url }}</td>
                 </tr>
                 <tr>
                   <td>Result</td>
@@ -221,15 +277,26 @@ export default {
                   <td> Confirmation Status </td>
                   <td class="text-end"> {{ textValue(card.value[0].confirmationStatus) }} </td>
                 </tr>
+                <tr>
+                  <td> Confirmation </td>
+                  <td class="text-end"> {{ card.value[0].confirmations ? 'MIN' : 'MAX' }} </td>
+                </tr>
                 <tr v-if="card.value[0].slot">
                   <td>Slot</td>
                   <td class="text-end"> {{ come(card.value[0].slot) }} </td>
                 </tr>
                 <tr>
-                  <td>Recent Blockhash</td>
+                  <td>
+                    <InfoTooltip text="Timestamps are only available for confirmed blocks">
+                      Recent Blockhash
+                    </InfoTooltip>
+                  </td>
                   <td class="text-end text-theme" style="cursor: pointer"
                     @click="pubbleys(historyData.transaction.message.accountKeys[0].pubkey)"> {{
-                      historyData.transaction.message.accountKeys[0].pubkey }} </td>
+                      promaster[historyData.transaction.message.accountKeys[0].pubkey] ?
+                        promaster[historyData.transaction.message.accountKeys[0].pubkey].name
+                        : historyData.transaction.message.accountKeys[0].pubkey
+                    }} </td>
                 </tr>
                 <tr>
                   <td>Fee (BTG)</td>
@@ -244,13 +311,7 @@ export default {
                   <td class="text-end"> {{ textValue(historyData.version) }} </td>
                 </tr>
               </tbody>
-            </table>
-            <table v-else class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
-              <th>
-              <td>Overview</td>
-              <td class=" text-end"></td>
-              </th>
-              <tbody>
+              <tbody v-else>
                 <tr>
                   <td>Signature</td>
                   <td class="text-end">{{ url }}</td>
@@ -258,7 +319,7 @@ export default {
                 <tr>
                   <td>Result</td>
                   <td class="text-end">
-                    Transaction is not vaild
+                    Transaction is invaild
                   </td>
                 </tr>
               </tbody>
@@ -291,7 +352,7 @@ export default {
                   </td>
                   <td class="text-theme" style="cursor: pointer" @click="pubbleys(item.programId)">
                     {{
-                      accountInput(item.programId)
+                      promaster[item.programId] ? promaster[item.programId].name : item.programId
                     }}
                   </td>
                   <td></td>
@@ -302,8 +363,8 @@ export default {
                   </td>
                   <td class="text-theme" style="cursor: pointer" @click="pubbleys(item.parsed.info.destination)">
                     {{
-                      accountInput(item.parsed.info.destination)
-                    }}
+                      promaster[item.parsed.info.destination] ? promaster[item.parsed.info.destination].name :
+                        item.parsed.info.destination }}
                   </td>
                   <td></td>
                 </tr>
@@ -312,9 +373,10 @@ export default {
                     To Address
                   </td>
                   <td class="text-theme" style="cursor: pointer" @click="pubbleys(item.parsed.info.source)">
+
                     {{
-                      accountInput(item.parsed.info.source)
-                    }}
+                      promaster[item.parsed.info.source] ? promaster[item.parsed.info.source].name :
+                        item.parsed.info.source }}
                   </td>
                   <td></td>
                 </tr>
@@ -362,7 +424,9 @@ export default {
                     </td>
                     <td class="text-theme" style="cursor: pointer" @click="pubbleys(item.pubkey)">
                       <!-- {{ item.pubkey }} -->
-                      {{ accountInput(item.pubkey) }}
+                      {{
+                        promaster[item.pubkey] ? promaster[item.pubkey].name : item.pubkey
+                      }}
                     </td>
                     <td v-if="historyData.meta.postBalances[index]">
                       <span class="symboldata" :style="styleSysmle(
@@ -452,7 +516,9 @@ export default {
       </div>
     </div>
   </div>
-
+  <div v-else>
+    <LoadingVue />
+  </div>
 </template>
 
 <style scoped>
