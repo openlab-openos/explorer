@@ -49,6 +49,7 @@ function searchMenu() {
         },
       });
       searchcontent.value = "";
+      // window.location.reload()
     } else {
       router
         .push({
@@ -59,6 +60,8 @@ function searchMenu() {
         })
         .then(() => {
           searchcontent.value = "";
+          // window.location.reload()
+
         });
     }
   }

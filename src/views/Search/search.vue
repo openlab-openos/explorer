@@ -175,40 +175,75 @@ export default {
     });
     this.loading = true
   },
+  watch: {
+    async $route(to, from) {
+      this.loading = false
+      this.endUrl = this.$route.params.url;
+      await this.pubbleys(this.$route.params.url);
+      this.domains = await this.requestList({
+        jsonrpc: "2.0",
+        id: "",
+        method: "getProgramAccounts",
+        params: [
+          "namesLPneVptA9Z5rqUDD9tMTWEJwofgaYwp8cawRkX",
+          [
+            {
+              commitment: "confirmed",
+              encoding: "base64",
+              filters: [
+                {
+                  memcmp: {
+                    bytes: "58PwtjSDuFHuUkYjH9BYnnQKHfwo9reZhC2zMJv9JPkx",
+                    offset: 32,
+                  },
+                },
+                {
+                  memcmp: {
+                    bytes: this.endUrl,
+                    offset: 32,
+                  },
+                },
+              ],
+            },
+          ],
+        ],
+      });
+      this.loading = true
+    }
+  },
   async mounted() { },
 };
 </script>
 <template>
-  <!-- <div style="width: 100%" v-if="loading">
+  <div style="width: 100%" v-if="loading">
     <div>
       <h3>Account</h3>
       <div v-if="type">
 
         <card class="md-3 ">
           <card-body class="card-bodys">
-            <table v-if="this.card"
-              class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
+            <table v-if="card" class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
               <th>
               <td>Overview</td>
               <td class=" text-end"></td>
               </th>
-              <tbody v-for="(item, index) in this.card.value[0] == null ? 1 : this.card.value" :key="index">
+              <tbody v-for="(item, index) in card.value[0] == null ? 1 : card.value" :key="index">
                 <tr>
                   <td>Address</td>
-                  <td class="text-end">{{ this.url }}</td>
+                  <td class="text-end">{{ url }}</td>
                 </tr>
-                <tr v-if="promaster[this.url]">
+                <tr v-if="promaster[url]">
                   <td>Address Label</td>
-                  <td class="text-end">{{ promaster[this.url].name }}</td>
+                  <td class="text-end">{{ promaster[url].name }}</td>
                 </tr>
                 <tr>
                   <td>Balance(BTG)</td>
-                  <td class="text-end"> {{ this.card.value[index] == null ? 'Account does not exist' :
+                  <td class="text-end"> {{ card.value[index] == null ? 'Account does not exist' :
                     come(toFexedStake(item.lamports)) }} </td>
                 </tr>
                 <tr>
                   <td>Allocated Data Size</td>
-                  <td class="text-end"> {{ this.card.value[index] == null ? '0' : item.space }} byte(s)</td>
+                  <td class="text-end"> {{ card.value[index] == null ? '0' : item.space }} byte(s)</td>
                 </tr>
                 <tr>
                   <td>Assigned Program Id</td>
@@ -217,7 +252,7 @@ export default {
                 </tr>
                 <tr>
                   <td>Executable</td>
-                  <td class="text-end"> {{ this.card.value[index] == null ? 'NO' : (item.executable ? 'YES' : 'NO') }}
+                  <td class="text-end"> {{ card.value[index] == null ? 'NO' : (item.executable ? 'YES' : 'NO') }}
                   </td>
                 </tr>
               </tbody>
@@ -236,7 +271,7 @@ export default {
               <tbody>
                 <tr>
                   <td>Address</td>
-                  <td class="text-end">{{ this.url }}</td>
+                  <td class="text-end">{{ url }}</td>
                 </tr>
                 <tr>
                   <td>Balance(BTG)</td>
@@ -310,8 +345,8 @@ export default {
             </card>
           </div>
           <div class="tab-pane fade" id="pills-profile">
-            <div v-if="this.token">
-              <div v-show="this.token.value.length !== 0">
+            <div v-if="token">
+              <div v-show="token.value.length !== 0">
                 <table>
                   <tbody>
                     <tr>
@@ -325,7 +360,7 @@ export default {
                         LAMPORTS
                       </th>
                     </tr>
-                    <tr v-for="item, index in this.token.value" :key=index>
+                    <tr v-for="item, index in token.value" :key=index>
                       <td>
                         {{ item.account.data.parsed.mint }}
                       </td>
@@ -339,8 +374,7 @@ export default {
                   </tbody>
                 </table>
               </div>
-              <div v-show="this.token.value.length == 0">No token holdings found</div>
-
+              <div v-show="token.value.length == 0">No token holdings found</div>
             </div>
           </div>
           <div class="tab-pane fade" id="pills-contact">No found</div>
@@ -350,9 +384,6 @@ export default {
   </div>
   <div v-else>
     <loading-vue />
-  </div> -->
-  <div>
-    {{ url }}
   </div>
 </template>
 
