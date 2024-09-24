@@ -918,7 +918,7 @@ onBeforeUnmount(() => {
         <card-body style="min-height: 400px">
           <div class="d-flex fw-bold small mb-3">
             <span class="flex-grow-1"> TPM history </span>
-            <card-expand-toggler />
+            <!-- <card-expand-toggler /> -->
           </div>
           <div class="ratio ratio-21x9 mb-3" v-if="server.chart">
             <apexchart
@@ -1022,7 +1022,7 @@ onBeforeUnmount(() => {
         <card-body style="min-height: 400px">
           <div class="d-flex fw-bold small mb-3">
             <span class="flex-grow-1">NODE ANALYTICS</span>
-            <card-expand-toggler />
+            <!-- <card-expand-toggler /> -->
           </div>
           <div class="ratio ratio-21x9 mb-3">
             <div
@@ -1119,7 +1119,7 @@ onBeforeUnmount(() => {
         <card-body>
           <div class="d-flex fw-bold small mb-3">
             <span class="flex-grow-1">New Transactions</span>
-            <card-expand-toggler />
+            <!-- <card-expand-toggler /> -->
           </div>
           <div class="table-responsive">
             <table
@@ -1254,7 +1254,7 @@ onBeforeUnmount(() => {
         <card-body>
           <div class="d-flex fw-bold small mb-3">
             <span class="flex-grow-1">All Validators</span>
-            <card-expand-toggler />
+            <!-- <card-expand-toggler /> -->
           </div>
           <div class="table-responsive">
             <table
