@@ -754,23 +754,29 @@ const renderMap = async () => {
         ).country_name,
       });
     } else {
-      const ipData = ipAddresses.ip_addresses.find((item) => item.ip == ActivityLogData.value[i].ip);
+      const ipData = ipAddresses.ip_addresses.find(
+        (item) => item.ip == ActivityLogData.value[i].ip
+      );
 
       if (ipData) {
-        // 如果在 ipAddresses 中找到数据
-        marker.coords = ipData.location;
-        marker.try = ipData.try;
-        marker.code = ipData.code;
-        marker.timezone = ipData.timezone;
-        marker.country_name = ipData.country_name;
+        markers_data.push({
+          name: "",
+          coords: ipData.location,
+          try: ipData.try,
+          code: ipData.code,
+          timezone: ipData.timezone,
+          country_name: ipData.country_name,
+        });
       } else {
-        // 如果都没有找到，调用 getIPLocation
-        const loc_lat = await getIPLocation(ip);
-        marker.coords = [loc_lat.latitude, loc_lat.longitude];
-        marker.try = loc_lat.country;
-        marker.code = loc_lat.continent_code;
-        marker.timezone = loc_lat.timezone;
-        marker.country_name = loc_lat.country_name;
+        let loc_lat = await getIPLocation(ActivityLogData.value[i].ip);
+        markers_data.push({
+          name: "",
+          coords: [loc_lat.latitude, loc_lat.longitude],
+          try: loc_lat.country,
+          code: loc_lat.continent_code,
+          timezone: loc_lat.timezone,
+          country_name: loc_lat.country_name,
+        });
       }
     }
   }
