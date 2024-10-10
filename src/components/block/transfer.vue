@@ -93,7 +93,8 @@ const info = ref();
 const type = ref(false);
 
 const rendered = (data) => {
-  for (let i in transferData.value) {
+  if(transactionData.value.length !== 0){
+      for (let i in transferData.value) {
     if (transferData.value[i].result.blockTime * 1000 > dataTime.value) {
       data.push(transferData.value[i]);
     }
@@ -102,6 +103,8 @@ const rendered = (data) => {
         i
       ].result.transaction.message.instructions[0].parsed.info.lamports;
   }
+  }
+
   info.value = [
     {
       icon: "fas fa-lg fa-fw me-2 fa-euro-sign",

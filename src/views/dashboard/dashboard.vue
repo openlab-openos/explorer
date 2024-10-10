@@ -100,7 +100,9 @@ ustdData().then((data) => {
 const fetchOrderData = async () => {
   try {
     const res = await order("new_transactions");
-    orderData.value = res;
+    orderData.value = res.filter(item => item.result != null);
+    console.log(orderData.value);
+    
     appStore.setTransaction(JSON.stringify(orderData.value));
   } catch (err) {
     console.error("Error fetching order data:", err);
@@ -673,6 +675,8 @@ const getActivityLogData = async () => {
       return 0;
     });
     countLog.value = listCount;
+    console.log(list);
+    
     ActivityLogData.value = list;
     appStore.setValidators(JSON.stringify(list));
     appStore
