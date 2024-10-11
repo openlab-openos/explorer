@@ -69,7 +69,7 @@ onMounted(() => {
         text:
           "Average per node" +
           " " +
-          (appStore.stubly / epoch.value).toFixed(2) +
+          (appStore.stubly / (appStore.network/1000000)).toFixed(2) +
           "M",
       },
       {

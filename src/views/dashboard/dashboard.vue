@@ -101,7 +101,6 @@ const fetchOrderData = async () => {
   try {
     const res = await order("new_transactions");
     orderData.value = res.filter(item => item.result != null);
-    console.log(orderData.value);
     
     appStore.setTransaction(JSON.stringify(orderData.value));
   } catch (err) {
@@ -573,9 +572,7 @@ const getTrafficData = (data) => {
         plotOptions: { pie: { donut: { background: "transparent" } } },
         tooltip: {
           custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-            console.log(series, seriesIndex);
-            console.log(series[seriesIndex]);
-            console.log(series);
+
             return `<div class="custom-tooltip" style="padding:5px">  
               <span>${chartName[seriesIndex]}: </span> 
               <span>${series[seriesIndex]} %</span> 
@@ -675,7 +672,6 @@ const getActivityLogData = async () => {
       return 0;
     });
     countLog.value = listCount;
-    console.log(list);
     
     ActivityLogData.value = list;
     appStore.setValidators(JSON.stringify(list));

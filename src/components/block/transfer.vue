@@ -93,10 +93,10 @@ const info = ref();
 const type = ref(false);
 
 const rendered = (data) => {
-  if(transactionData.value.length !== 0){
-      for (let i in transferData.value) {
-    if (transferData.value[i].result.blockTime * 1000 > dataTime.value) {
-      data.push(transferData.value[i]);
+  if(data.length !== 0){
+      for (let i in data) {
+    if (data[i].result.blockTime * 1000 > dataTime.value) {
+      data.push(data[i]);
     }
     priceTrans.value +=
       data[
