@@ -11,7 +11,7 @@ import { useRouter } from "vue-router";
 import { order } from "../../request/order";
 import moment from "moment";
 import { ustdData } from "../../request/ustd";
-import { defineAsyncComponent, getCurrentInstance } from 'vue';
+import { defineAsyncComponent, getCurrentInstance } from "vue";
 // import blockHeightVue from "../../components/block/blockHeight.vue";
 // import netWorkVue from "../../components/block/netWork.vue";
 // import activeAccountVue from "../../components/block/activeAccount.vue";
@@ -21,14 +21,14 @@ import { defineAsyncComponent, getCurrentInstance } from 'vue';
 // import priceVue from "../../components/block/price.vue";
 // import priceBtgVue from "../../components/block/priceBtg.vue";
 import { useAppStore } from "@/stores/index";
+import { ipAddresses } from "./address";
 
 const appStore = useAppStore();
 const appVariable = useAppVariableStore();
 
-const apps = getCurrentInstance()
+const apps = getCurrentInstance();
 
 const promaster = ref(apps?.proxy?.$progream);
-
 
 const slot = ref(1);
 const inepoch = ref(1);
@@ -92,7 +92,6 @@ const pubbleys = (url) => {
   });
 };
 
-
 ustdData().then((data) => {
   appStore.setRate(data.data.rate);
   appStore.getRateData(data.data);
@@ -101,13 +100,13 @@ ustdData().then((data) => {
 const fetchOrderData = async () => {
   try {
     const res = await order("new_transactions");
-    orderData.value = res;
+    orderData.value = res.filter(item => item.result != null);
+    
     appStore.setTransaction(JSON.stringify(orderData.value));
   } catch (err) {
     console.error("Error fetching order data:", err);
   }
 };
-
 
 // onMounted(() => {
 //   fetchOrderData();
@@ -118,7 +117,10 @@ const timeName = ref([]);
 const cote = ref([]);
 const trueTramsatiom = ref([]);
 const totalTransactions = computed(() => {
-  return orderData.value.reduce((total, order) => total + order.transactions, 0);
+  return orderData.value.reduce(
+    (total, order) => total + order.transactions,
+    0
+  );
 });
 const performanceSamples = async () => {
   let requestBody = {
@@ -131,18 +133,20 @@ const performanceSamples = async () => {
     .then((response) => {
       let res = response.result;
       for (let i in response.result) {
-        timeName.value.unshift((JSON.parse(i) + 1) == 1 ? "a" + "minutes ago " : (JSON.parse(i) + 1) + "minutes ago ")
-        cote.value.push(
-          JSON.parse(response.result[i].numTransactions)
+        timeName.value.unshift(
+          JSON.parse(i) + 1 == 1
+            ? "a" + "minutes ago "
+            : JSON.parse(i) + 1 + "minutes ago "
         );
+        cote.value.push(JSON.parse(response.result[i].numTransactions));
         trueTramsatiom.value.push(
           JSON.parse(response.result[i].numNonVoteTransactions)
-        )
+        );
         unnumTranstions.value.push(
           JSON.parse(response.result[i].numTransactions) +
-          JSON.parse(response.result[i].numNonVoteTransactions)
+            JSON.parse(response.result[i].numNonVoteTransactions)
         );
-      };
+      }
     })
     .catch((error) => {
       console.error("Error fetching epoch info:", error);
@@ -160,7 +164,9 @@ const fetchData = async () => {
       params: [],
     };
     const response = await chainRequest(requestBody);
-    solttime.value = getTime(response.result.slotsInEpoch - response.result.slotIndex);
+    solttime.value = getTime(
+      response.result.slotsInEpoch - response.result.slotIndex
+    );
     if (slot.value === 1) {
       slot.value = response.result.slotIndex;
       inepoch.value = response.result.slotsInEpoch;
@@ -314,7 +320,7 @@ const getServerData = () => {
         {
           name: "TPM history",
           data: unnumTranstions.value,
-        }
+        },
       ],
       options: {
         colors: [appVariable.color.theme],
@@ -325,7 +331,6 @@ const getServerData = () => {
         fill: { opacity: 0.65 },
         tooltip: {
           custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-
             return `<div class="custom-tooltip" style="padding:5px">  
               <div>vote: ${cote.value[dataPointIndex]}</div> 
               <div>true ${trueTramsatiom.value[dataPointIndex]}</div> 
@@ -333,7 +338,12 @@ const getServerData = () => {
             </div>`;
           },
         },
-        chart: { height: "100%", type: "bar", toolbar: { show: false }, labels: timeName.value },
+        chart: {
+          height: "100%",
+          type: "bar",
+          toolbar: { show: false },
+          labels: timeName.value,
+        },
         plotOptions: {
           bar: {
             horizontal: false,
@@ -391,7 +401,7 @@ const getServerData = () => {
             tooltip: {
               custom: function ({ series, seriesIndex, dataPointIndex, w }) {
                 return `<div class="custom-tooltip" style="padding:5px">  
-                <span> ${['SlotIndex', 'SlotsInEpoch'][seriesIndex]} : </span> 
+                <span> ${["SlotIndex", "SlotsInEpoch"][seriesIndex]} : </span> 
                 <span>${series[seriesIndex] * 100} % </span> 
               </div>`;
               },
@@ -445,7 +455,7 @@ const getServerData = () => {
             tooltip: {
               custom: function ({ series, seriesIndex, dataPointIndex, w }) {
                 return `<div class="custom-tooltip" style="padding:5px">  
-                <span> ${['BTG Supply', 'Active Stake'][seriesIndex]} : </span> 
+                <span> ${["BTG Supply", "Active Stake"][seriesIndex]} : </span> 
                 <span>${series[seriesIndex] * 100} % </span> 
               </div>`;
               },
@@ -454,14 +464,13 @@ const getServerData = () => {
           series: [
             // JSON.parse(pubbley.value), JSON.parse(stubly.value)
             JSON.parse((pubbley.value / stubly.value).toFixed(2)),
-            JSON.parse((1 - pubbley.value / stubly.value).toFixed(2))
+            JSON.parse((1 - pubbley.value / stubly.value).toFixed(2)),
           ],
         },
       },
     ],
   };
 };
-
 
 function uniqueArrayByProperty(arr, key) {
   // 创建一个映射，其中键是key的值，值是原始数组的项（作为数组）
@@ -491,11 +500,10 @@ const getTrafficData = (data) => {
   let coun = [];
   let countryArray = [];
   let chartArray = [];
-  let chartName = []
+  let chartName = [];
   if (data) {
     let arrayData = uniqueArrayByProperty(data, "try");
     let country = uniqueArrayByProperty(data, "code");
-
 
     for (let i = 0; i < 5; i++) {
       coun.push({
@@ -537,7 +545,7 @@ const getTrafficData = (data) => {
   series.value = chartArray.map(parseFloat);
   let array = series.value;
   for (let i in chainArray) {
-    chartName.push(chainArray[i].timezone)
+    chartName.push(chainArray[i].timezone);
   }
   return {
     coun,
@@ -564,9 +572,7 @@ const getTrafficData = (data) => {
         plotOptions: { pie: { donut: { background: "transparent" } } },
         tooltip: {
           custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-            console.log(series, seriesIndex);
-            console.log(series[seriesIndex]);
-            console.log(series);
+
             return `<div class="custom-tooltip" style="padding:5px">  
               <span>${chartName[seriesIndex]}: </span> 
               <span>${series[seriesIndex]} %</span> 
@@ -578,7 +584,6 @@ const getTrafficData = (data) => {
     },
   };
 };
-
 
 const getActivityLogData = async () => {
   let requestBody = {
@@ -621,7 +626,8 @@ const getActivityLogData = async () => {
         if (ClusterNodes_list[j].account.data.parsed) {
           for (let y in ClusterNodes_list[j].account.data.parsed.info.keys) {
             if (
-              ClusterNodes_list[j].account.data.parsed.info.keys[y].signer == true
+              ClusterNodes_list[j].account.data.parsed.info.keys[y].signer ==
+              true
             ) {
               if (
                 ProgramAccounts_list[i].pubkey ==
@@ -666,18 +672,18 @@ const getActivityLogData = async () => {
       return 0;
     });
     countLog.value = listCount;
+    
     ActivityLogData.value = list;
     appStore.setValidators(JSON.stringify(list));
     appStore
       .getPartData(
         (JSON.parse(ClusterNodes_list.length) - JSON.parse(list.length)) /
-        JSON.parse(ClusterNodes_list.length)
+          JSON.parse(ClusterNodes_list.length)
       )
       .toFixed(2);
     sessionStorage.setItem("accout", JSON.stringify(list));
     renderMap();
-  })
-
+  });
 };
 
 const countplount = (num) => {
@@ -717,7 +723,6 @@ const stringcate = (str) => {
   } else {
     return str.slice(0, 5) + "..." + str.slice(-5);
   }
-
 };
 
 const randomNo = () => {
@@ -749,15 +754,30 @@ const renderMap = async () => {
         ).country_name,
       });
     } else {
-      let loc_lat = await getIPLocation(ActivityLogData.value[i].ip);
-      markers_data.push({
-        name: "",
-        coords: [loc_lat.latitude, loc_lat.longitude],
-        try: loc_lat.country,
-        code: loc_lat.continent_code,
-        timezone: loc_lat.timezone,
-        country_name: loc_lat.country_name,
-      });
+      const ipData = ipAddresses.ip_addresses.find(
+        (item) => item.ip == ActivityLogData.value[i].ip
+      );
+
+      if (ipData) {
+        markers_data.push({
+          name: "",
+          coords: ipData.location,
+          try: ipData.try,
+          code: ipData.code,
+          timezone: ipData.timezone,
+          country_name: ipData.country_name,
+        });
+      } else {
+        let loc_lat = await getIPLocation(ActivityLogData.value[i].ip);
+        markers_data.push({
+          name: "",
+          coords: [loc_lat.latitude, loc_lat.longitude],
+          try: loc_lat.country,
+          code: loc_lat.continent_code,
+          timezone: loc_lat.timezone,
+          country_name: loc_lat.country_name,
+        });
+      }
     }
   }
 
@@ -776,39 +796,36 @@ const renderMap = async () => {
   });
   for (let i in markers_data) {
     if (markers_data[i].count > 1) {
-      let lat = Number(markers_data[i].coords[0]); // 转换或默认为0  
-      let lng = Number(markers_data[i].coords[1]); // 转换或默认为0  
+      let lat = Number(markers_data[i].coords[0]); // 转换或默认为0
+      let lng = Number(markers_data[i].coords[1]); // 转换或默认为0
 
-      // 现在进行数值加法  
+      // 现在进行数值加法
 
       if (i % 2 == 0) {
         lat += 1;
       } else {
         lat -= 1;
       }
-      lng += markers_data[i].count * 2; // 这可能是一个合理的经度偏移量  
+      lng += markers_data[i].count * 2; // 这可能是一个合理的经度偏移量
 
-      // 更新coords数组  
+      // 更新coords数组
       markers_data[i].coords[0] = lat;
       markers_data[i].coords[1] = lng;
     }
-
 
     let currentLat = Number(markers_data[i].coords[0]);
     for (let j = 0; j < markers_data.length; j++) {
       if (j < markers_data.length) {
         if (i != j) {
-          let compareLat = Number(markers_data[j].coords[0]); // 比较项的纬度  
+          let compareLat = Number(markers_data[j].coords[0]); // 比较项的纬度
 
           if (Math.abs(currentLat - compareLat) < 1) {
-
             markers_data[j].coords[0] -= 1;
             markers_data[j].coords[1] += 1;
           }
         }
       }
     }
-
   }
   map.value.addMarkers(markers_data);
 
@@ -845,17 +862,14 @@ const mapCreate = () => {
   });
 };
 
-
 const textValue = (text) => {
   return text.toUpperCase();
 };
-
 
 onMounted(() => {
   getActivityLogData();
   mapCreate();
 });
-
 
 const epochSkip = (num) => {
   router.push({
@@ -873,14 +887,13 @@ const pubbtx = (item) => {
       item: item,
     },
   });
-}
-
+};
 
 onBeforeUnmount(() => {
   if (activeVueref.value) {
-    activeVueref.value.stopTimer()
+    activeVueref.value.stopTimer();
   }
-})
+});
 </script>
 
 
@@ -902,49 +915,95 @@ onBeforeUnmount(() => {
     <!-- BEGIN server-stats -->
     <div class="col-xl-6">
       <card class="mb-3">
-        <card-body style="min-height: 400px;">
+        <card-body style="min-height: 400px">
           <div class="d-flex fw-bold small mb-3">
             <span class="flex-grow-1"> TPM history </span>
-            <card-expand-toggler />
+            <!-- <card-expand-toggler /> -->
           </div>
           <div class="ratio ratio-21x9 mb-3" v-if="server.chart">
-            <apexchart type="bar" width="100%" height="100%" :options="server.chart.options"
-              :series="server.chart.series"></apexchart>
+            <apexchart
+              type="bar"
+              width="100%"
+              height="100%"
+              :options="server.chart.options"
+              :series="server.chart.series"
+            ></apexchart>
           </div>
           <div class="row">
-            <div class="col-lg-6 mb-3 mb-lg-0" v-for="(stat, index) in server.stats" :key="index">
+            <div
+              class="col-lg-6 mb-3 mb-lg-0"
+              v-for="(stat, index) in server.stats"
+              :key="index"
+            >
               <div class="d-flex align-items-center">
                 <div class="w-50px h-50px">
-                  <apexchart :height="stat.chart.height" :options="stat.chart.options" :series="stat.chart.series">
+                  <apexchart
+                    :height="stat.chart.height"
+                    :options="stat.chart.options"
+                    :series="stat.chart.series"
+                  >
                   </apexchart>
                 </div>
                 <div class="ps-3 flex-1">
-                  <div class="fs-10px fw-bold text-inverse text-opacity-50 mb-1">
+                  <div
+                    class="fs-10px fw-bold text-inverse text-opacity-50 mb-1"
+                  >
                     {{ stat.name }}
                   </div>
                   <div class="mb-2 fs-5 text-truncate" style="display: flex">
-                    <count-up duration="3" :startVal="stat.total" :end-val="stat.total"></count-up>
+                    <count-up
+                      duration="3"
+                      :startVal="stat.total"
+                      :end-val="stat.total"
+                    ></count-up>
                     {{ stat.unit }}
-                    /<count-up duration="3" :startVal="stat.totals" :end-val="stat.totals"></count-up>
+                    /<count-up
+                      duration="3"
+                      :startVal="stat.totals"
+                      :end-val="stat.totals"
+                    ></count-up>
                     {{ stat.unit }}
                   </div>
                   <div class="progress h-3px mb-1">
-                    <div class="progress-bar bg-theme" v-bind:style="{
-                      width:
-                        JSON.parse((stat.total / stat.totals).toFixed(2)) *
-                        100 +
-                        '%',
-                    }"></div>
+                    <div
+                      class="progress-bar bg-theme"
+                      v-bind:style="{
+                        width:
+                          JSON.parse((stat.total / stat.totals).toFixed(2)) *
+                            100 +
+                          '%',
+                      }"
+                    ></div>
                   </div>
-                  <div class="fs-11px text-inverse text-opacity-50 mb-2 text-truncate">
+                  <div
+                    class="fs-11px text-inverse text-opacity-50 mb-2 text-truncate"
+                  >
                     {{ stat.time }}
                   </div>
-                  <div class="d-flex align-items-center small" v-for="(info, index) in stat.info" :key="index">
-                    <i class="bi bi-circle-fill fs-6px me-2" v-bind:class="info.class"></i>
-                    <div class="flex-1" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                  <div
+                    class="d-flex align-items-center small"
+                    v-for="(info, index) in stat.info"
+                    :key="index"
+                  >
+                    <i
+                      class="bi bi-circle-fill fs-6px me-2"
+                      v-bind:class="info.class"
+                    ></i>
+                    <div
+                      class="flex-1"
+                      style="
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                      "
+                    >
                       {{ info.title }}
                     </div>
-                    <div :style="info.style" @click="info.click ? epochSkip(info.value) : ''" class="text-theme">
+                    <div
+                      :style="info.style"
+                      @click="info.click ? epochSkip(info.value) : ''"
+                      class="text-theme"
+                    >
                       {{ info.value }}
                     </div>
                   </div>
@@ -960,20 +1019,26 @@ onBeforeUnmount(() => {
     <!-- BEGIN traffic-analytics -->
     <div class="col-xl-6">
       <card class="mb-3">
-        <card-body style="min-height: 400px;">
+        <card-body style="min-height: 400px">
           <div class="d-flex fw-bold small mb-3">
             <span class="flex-grow-1">NODE ANALYTICS</span>
-            <card-expand-toggler />
+            <!-- <card-expand-toggler /> -->
           </div>
           <div class="ratio ratio-21x9 mb-3">
-            <div class="jvm-without-padding" id="map-container maps" ref="mapContainer">
+            <div
+              class="jvm-without-padding"
+              id="map-container maps"
+              ref="mapContainer"
+            >
               <div id="map"></div>
             </div>
           </div>
 
           <div class="row gx-4" v-if="traffic.chart">
             <div class="col-lg-6 mb-3 mb-lg-0">
-              <table class="w-100 small mb-0 text-truncate text-inverse text-opacity-60">
+              <table
+                class="w-100 small mb-0 text-truncate text-inverse text-opacity-60"
+              >
                 <thead>
                   <tr class="text-inverse text-opacity-75">
                     <th class="w-50">COUNTRY</th>
@@ -983,7 +1048,11 @@ onBeforeUnmount(() => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(country, index) in traffic.coun" v-bind:class="country.class" :key="index">
+                  <tr
+                    v-for="(country, index) in traffic.coun"
+                    v-bind:class="country.class"
+                    :key="index"
+                  >
                     <td style="text-align: left">{{ country.country_name }}</td>
                     <td style="text-align: left">{{ country.name }}</td>
 
@@ -993,21 +1062,36 @@ onBeforeUnmount(() => {
                 </tbody>
               </table>
             </div>
-            <div class="col-lg-6" v-if="traffic.lenght != 0" style="margin-top: 6px">
+            <div
+              class="col-lg-6"
+              v-if="traffic.lenght != 0"
+              style="margin-top: 6px"
+            >
               <card>
                 <card-body class="py-2">
                   <div class="d-flex align-items-center">
                     <div class="w-70px">
-                      <apexchart :height="traffic.chart.height" :options="traffic.chart.options"
-                        :series="traffic.chart.series"></apexchart>
+                      <apexchart
+                        :height="traffic.chart.height"
+                        :options="traffic.chart.options"
+                        :series="traffic.chart.series"
+                      ></apexchart>
                     </div>
                     <div class="flex-1 ps-2">
-                      <table class="w-100 small mb-0 text-inverse text-opacity-60">
+                      <table
+                        class="w-100 small mb-0 text-inverse text-opacity-60"
+                      >
                         <tbody>
-                          <tr v-for="(source, index) in traffic.chainArray" :key="index">
+                          <tr
+                            v-for="(source, index) in traffic.chainArray"
+                            :key="index"
+                          >
                             <td>
                               <div class="d-flex align-items-center">
-                                <div class="w-6px h-6px rounded-pill me-2" v-bind:class="source.class"></div>
+                                <div
+                                  class="w-6px h-6px rounded-pill me-2"
+                                  v-bind:class="source.class"
+                                ></div>
                                 {{ source.timezone }}
                               </div>
                             </td>
@@ -1035,10 +1119,12 @@ onBeforeUnmount(() => {
         <card-body>
           <div class="d-flex fw-bold small mb-3">
             <span class="flex-grow-1">New Transactions</span>
-            <card-expand-toggler />
+            <!-- <card-expand-toggler /> -->
           </div>
           <div class="table-responsive">
-            <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
+            <table
+              class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small"
+            >
               <tbody>
                 <tr>
                   <th style="width: 20%; text-align: left">SIGNATURE</th>
@@ -1049,45 +1135,71 @@ onBeforeUnmount(() => {
                   <th style="width: 20%; text-align: left">TIME</th>
                 </tr>
 
-                <tr v-for="(product, index) in orderData" :key="index" style="height: 35px">
-                  <td style="width: 20%; text-align: left; cursor: pointer" class="text-theme" @click="
-                    pubbtx(
-                      product.result.transaction.signatures[0]
-                    )
-                    ">
+                <tr
+                  v-for="(product, index) in orderData"
+                  :key="index"
+                  style="height: 35px"
+                >
+                  <td
+                    style="width: 20%; text-align: left; cursor: pointer"
+                    class="text-theme"
+                    @click="pubbtx(product.result.transaction.signatures[0])"
+                  >
                     {{
                       stringcate(
-                        promaster[product.result.transaction.signatures[0]] ?
-                          promaster[product.result.transaction.signatures[0]].name : product.result.transaction.signatures[0]
+                        promaster[product.result.transaction.signatures[0]]
+                          ? promaster[product.result.transaction.signatures[0]]
+                              .name
+                          : product.result.transaction.signatures[0]
                       )
                     }}
                   </td>
-                  <td style="width: 20%; text-align: left; cursor: pointer" class="text-theme" @click="
-                    pubbleys(
-                      product.result.transaction.message.instructions[0]
-                        .parsed.info.source
-                    )
-                    ">
+                  <td
+                    style="width: 20%; text-align: left; cursor: pointer"
+                    class="text-theme"
+                    @click="
+                      pubbleys(
+                        product.result.transaction.message.instructions[0]
+                          .parsed.info.source
+                      )
+                    "
+                  >
                     {{
                       stringcate(
-                        promaster[product.result.transaction.message.instructions[0]
-                          .parsed.info.source] ? promaster[product.result.transaction.message.instructions[0]
-                            .parsed.info.source].name : product.result.transaction.message.instructions[0]
+                        promaster[
+                          product.result.transaction.message.instructions[0]
+                            .parsed.info.source
+                        ]
+                          ? promaster[
+                              product.result.transaction.message.instructions[0]
+                                .parsed.info.source
+                            ].name
+                          : product.result.transaction.message.instructions[0]
                               .parsed.info.source
                       )
                     }}
                   </td>
-                  <td style="width: 20%; text-align: left; cursor: pointer" class="text-theme" @click="
-                    pubbleys(
-                      product.result.transaction.message.instructions[0]
-                        .parsed.info.destination
-                    )
-                    ">
+                  <td
+                    style="width: 20%; text-align: left; cursor: pointer"
+                    class="text-theme"
+                    @click="
+                      pubbleys(
+                        product.result.transaction.message.instructions[0]
+                          .parsed.info.destination
+                      )
+                    "
+                  >
                     {{
                       stringcate(
-                        promaster[product.result.transaction.message.instructions[0]
-                          .parsed.info.destination] ? promaster[product.result.transaction.message.instructions[0]
-                            .parsed.info.destination].name : product.result.transaction.message.instructions[0]
+                        promaster[
+                          product.result.transaction.message.instructions[0]
+                            .parsed.info.destination
+                        ]
+                          ? promaster[
+                              product.result.transaction.message.instructions[0]
+                                .parsed.info.destination
+                            ].name
+                          : product.result.transaction.message.instructions[0]
                               .parsed.info.destination
                       )
                     }}
@@ -1101,7 +1213,9 @@ onBeforeUnmount(() => {
                     }}
                   </td>
                   <td style="width: 15%; text-align: left">
-                    <button type="button" style="
+                    <button
+                      type="button"
+                      style="
                         width: 80px;
                         height: 20px;
                         padding: 0;
@@ -1112,7 +1226,8 @@ onBeforeUnmount(() => {
                         line-height: 18px;
                         text-align: center;
                         cursor: auto;
-                      ">
+                      "
+                    >
                       {{
                         textValue(
                           product.result.transaction.message.instructions[0]
@@ -1121,7 +1236,7 @@ onBeforeUnmount(() => {
                       }}
                     </button>
                   </td>
-                  <td style="width: 20%; text-align: left;white-space: nowrap;">
+                  <td style="width: 20%; text-align: left; white-space: nowrap">
                     {{ timeFormatter(product.result.blockTime * 1000) }} &nbsp;
                   </td>
                 </tr>
@@ -1139,10 +1254,12 @@ onBeforeUnmount(() => {
         <card-body>
           <div class="d-flex fw-bold small mb-3">
             <span class="flex-grow-1">All Validators</span>
-            <card-expand-toggler />
+            <!-- <card-expand-toggler /> -->
           </div>
           <div class="table-responsive">
-            <table class="table table-striped table-borderless mb-2px small text-nowrap">
+            <table
+              class="table table-striped table-borderless mb-2px small text-nowrap"
+            >
               <tbody>
                 <tr>
                   <th>NAME</th>
@@ -1152,21 +1269,43 @@ onBeforeUnmount(() => {
 
                   <th style="text-align: left">STATUS</th>
                 </tr>
-                <tr v-if="ActivityLogData" v-for="(log, index) in ActivityLogData" :key="index">
+                <tr
+                  v-if="ActivityLogData"
+                  v-for="(log, index) in ActivityLogData"
+                  :key="index"
+                >
                   <td>
                     <span class="d-flex align-items-center">
-                      <img :src="log.icon" alt="" width="20" style="margin: 0px 5px" />
+                      <img
+                        :src="log.icon"
+                        alt=""
+                        width="20"
+                        style="margin: 0px 5px"
+                      />
                       {{ log.name }}
                     </span>
                   </td>
                   <td style="text-align: left">
-                    <span class="text-theme" style="cursor: pointer" @click="pubbleys(log.pubkey)">
-                      {{ stringcate(promaster[log.pubkey] ? promaster[log.pubkey].name : log.pubkey) }}
+                    <span
+                      class="text-theme"
+                      style="cursor: pointer"
+                      @click="pubbleys(log.pubkey)"
+                    >
+                      {{
+                        stringcate(
+                          promaster[log.pubkey]
+                            ? promaster[log.pubkey].name
+                            : log.pubkey
+                        )
+                      }}
                     </span>
                   </td>
                   <td style="text-align: left; display: flex">
-                    <count-up :startVal="toFexedStake(log.activatedStake)" :end-val="toFexedStake(log.activatedStake)"
-                      duration="3"></count-up>
+                    <count-up
+                      :startVal="toFexedStake(log.activatedStake)"
+                      :end-val="toFexedStake(log.activatedStake)"
+                      duration="3"
+                    ></count-up>
                     &nbsp; BTG &nbsp; (
                     {{ countplount(log.activatedStake) }}
                     )
@@ -1175,12 +1314,20 @@ onBeforeUnmount(() => {
                     {{ log.ip }}
                   </td>
                   <td style="text-align: left">
-                    <span :style="{
-                      color: log.activatedStake !== '' ? 'green' : 'yellow',
-                    }" class="menu-icon">
-                      <font-awesome-icon icon="fas fa-lg fa-fw me-2 fa-check-circle" v-if="log.activatedStake !== ''" />
-                      <font-awesome-icon icon="fas fa-lg fa-fw me-2 fa-question-circle"
-                        v-if="log.activatedStake == ''" />
+                    <span
+                      :style="{
+                        color: log.activatedStake !== '' ? 'green' : 'yellow',
+                      }"
+                      class="menu-icon"
+                    >
+                      <font-awesome-icon
+                        icon="fas fa-lg fa-fw me-2 fa-check-circle"
+                        v-if="log.activatedStake !== ''"
+                      />
+                      <font-awesome-icon
+                        icon="fas fa-lg fa-fw me-2 fa-question-circle"
+                        v-if="log.activatedStake == ''"
+                      />
                     </span>
                   </td>
                 </tr>

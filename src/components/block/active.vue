@@ -4,7 +4,7 @@
     <card class="mb-3" style="height: 160px">
       <card-body>
         <div class="d-flex fw-bold small mb-3">
-          <span class="flex-grow-1">Active Stake 1(BTG)</span>
+          <span class="flex-grow-1">Active Stake (BTG)</span>
         </div>
         <div class="row align-items-center mb-2" style="height: 30px">
           <div style="
@@ -69,7 +69,7 @@ onMounted(() => {
         text:
           "Average per node" +
           " " +
-          (appStore.stubly / epoch.value).toFixed(2) +
+          (appStore.stubly / (appStore.network/1000000)).toFixed(2) +
           "M",
       },
       {
