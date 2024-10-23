@@ -36,6 +36,7 @@
     "@picmo/popup-picker": "^5.8.5",
     "@picmo/renderer-twemoji": "^5.8.5",
     "@popperjs/core": "^2.11.8",
+    "@rollup/rollup-darwin-arm64": "^4.24.0",
     "@sipec/vue3-tags-input": "^3.0.4",
     "@solana/web3.js": "^1.91.8",
     "@vuepic/vue-datepicker": "^8.2.0",
