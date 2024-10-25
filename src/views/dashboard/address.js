@@ -153,6 +153,62 @@ export const ipAddresses = {
       code: "EU",
       timezone: "Europe/Berlin",
       country_name: "Germany"
-    }
+    },
+    {
+      ip: "109.123.229.192",
+      location: [35.6164, 139.7425],
+      try: "JP",
+      code: "AS",
+      timezone: "Asia/Tokyo",
+      country_name: "Japan"
+    },
+    {
+      ip: "154.53.60.58",
+      location: [38.5781, -90.4256],
+      try: "US",
+      code: "NA",
+      timezone: "America/Chicago",
+      country_name: "United States"
+    },
+    {
+      ip: "194.238.27.30",
+      location: [38.6364, -90.1985],
+      try: "US",
+      code: "NA",
+      timezone: "America/Chicago",
+      country_name: "United States"
+    },  
+      {
+      ip: "207.244.242.25",
+      location: [38.6364, -90.1985],
+      try: "US",
+      code: "NA",
+      timezone: "America/Chicago",
+      country_name: "United States"
+    },
+    {
+      ip: "212.47.70.86",
+      location: [38.6364, -90.1985],
+      try: "DE",
+      code: "EU",
+      timezone: "Europe/Berlin",
+      country_name: "Germany"
+    },
+    {
+      ip: "38.242.129.86",
+      location: [51.2216, 6.7897],
+      try: "DE",
+      code: "EU",
+      timezone: "Europe/Berlin",
+      country_name: "Germany"
+    },
+    {
+      ip: "92.118.59.172",
+      location: [38.6364, 90.1985],
+      try: "US",
+      code: "NA",
+      timezone: "America/Chicago",
+      country_name: "United States"
+    },
   ]
 };
