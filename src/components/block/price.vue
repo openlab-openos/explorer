@@ -4,7 +4,7 @@
     <card class="mb-3" style="height: 160px">
       <card-body>
         <div class="d-flex fw-bold small mb-3">
-          <span class="flex-grow-1">Staking APY</span>
+          <span class="flex-grow-1">{{ $t("dashboard.staking_apy") }}</span>
         </div>
         <div class="row align-items-center mb-2" style="height: 30px">
           <div style="
@@ -32,7 +32,7 @@
         </div>
         <div class="small text-inverse text-opacity-50 text-truncate">
           <template v-for="statInfo in info">
-            <div><font-awesome-icon :icon="statInfo.icon" /> {{ statInfo.text }}</div>
+            <div><font-awesome-icon :icon="statInfo.icon" /> {{ $t(statInfo.language )}}  {{ statInfo.text }}</div>
           </template>
         </div>
       </card-body>
@@ -46,7 +46,7 @@
 import { chainRequest } from "../../request/chain";
 import { useAppStore } from "../../stores/index";
 import { onMounted, ref, watchEffect } from "vue";
-
+import i18n from "@/i18n"
 const appStore = useAppStore();
 const data = ref();
 
@@ -55,6 +55,16 @@ const skate = ref();
 const info = ref([]);
 const stubly = ref(1);
 const pubbley = ref(1);
+
+// 语言
+function selectLanguage(indexValue){
+  
+  
+  i18n.global.locale = indexValue;
+}
+watchEffect(()=>{
+  selectLanguage(appStore.$state.language);
+})
 
 onMounted(() => {
   // datavalue();
@@ -82,22 +92,22 @@ const skateRequest = async () => {
     info.value = [
       {
         icon: "fab fa-lg fa-fw me-2 fa-speakap",
+        language:"dashboard.daily_output",
         text:
-          "Daily output" +
           " " +
-
-
           formatNumber(((year / 365) * 1000000).toFixed(0)) +
           " " +
           "BTG",
       },
       {
         icon: "fab fa-lg fa-fw me-2 fa-skype",
-        text: "Monthly output" + " " + (year / 12).toFixed(2) * 1000 + "K",
+        language:"dashboard.monthly_output",
+        text: " " + (year / 12).toFixed(2) * 1000 + "K",
       },
       {
         icon: "fab fa-lg fa-fw me-2 fa-sellsy",
-        text: "Annual output" + " " + year + "M",
+        language:"dashboard.annual_output",
+        text: " " + year + "M",
       },
     ];
   });

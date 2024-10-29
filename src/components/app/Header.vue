@@ -5,13 +5,36 @@ import { ref } from "vue";
 import { RouterLink } from "vue-router";
 import { chainRequest } from "../../request/chain";
 import { useRouter } from "vue-router";
+import { useAppStore } from "@/stores/index";
+import um from "../../assets/24x24/um.png"
+import cn from "../../assets/24x24/cn.png"
 
 const router = useRouter();
+const appStore = useAppStore();
+
 
 const appOption = useAppOptionStore();
 const notificationData = [];
 
 const searchcontent = ref("");
+const abbreviationLanguage = ref();
+const languages = ref([
+  { name: 'English', abbreviation: 'en-US', flag: um },
+  { name: '简体中文', abbreviation: 'zh-CN', flag: cn }
+]);
+const selectedLanguage = ref();
+const sessionStorageData = ref(JSON.parse(sessionStorage.getItem('app'))) ;
+languages.value.map(item => {
+  if(item.abbreviation == sessionStorageData.value.language){
+    selectedLanguage.value = item;
+    abbreviationLanguage.value = item.abbreviation;
+  } else{
+    selectedLanguage.value = { name: 'English', abbreviation: 'en-US', flag: um };
+    abbreviationLanguage.value = 'en-US';
+  }
+});
+
+
 
 function toggleAppSidebarCollapsed() {
   if (!appOption.appSidebarHide) {
@@ -66,6 +89,13 @@ function searchMenu() {
     }
   }
 }
+
+const selectLanguage = (language, abbreviation) => {
+  selectedLanguage.value = language;
+  abbreviationLanguage.value = abbreviation;
+  appStore.setLanguage(abbreviation);
+
+};
 
 </script>
 <template>
@@ -129,6 +159,41 @@ function searchMenu() {
         </div>
 
       </div>
+
+      <!-- 语言切换 -->
+      <!-- <div class="menu-item dropdown dropdown-mobile-full" style="width: 20%; justify-content: end;">
+        <a href="#" data-bs-toggle="dropdown" data-bs-display="static" class="menu-link scales" style="padding: 28px;">
+          {{ selectedLanguage}}
+          <i class="bi bi-chevron-down" style="margin: 5px;"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-end me-lg-3 fs-11px mt-1">
+          <div class="dropdown-item align-items-center" :class="{ 'text-theme': abbreviationLanguage === 'en-US' }"
+            style="cursor: pointer; text-align: center;" @click="selectLanguage('English','en-US')">
+            <img src="../../assets/24x24/um.png" alt="">
+            English
+          </div>
+          <div class="dropdown-item align-items-center" :class="{ 'text-theme': abbreviationLanguage === 'zh-CN' }"
+            style="cursor: pointer; text-align: center;" @click="selectLanguage( '简体中文', 'zh-CN')">
+            简体中文
+          </div>
+        </div>
+      </div> -->
+      <div class="menu-item dropdown dropdown-mobile-full" style="width: 20%; justify-content: end;">
+        <a href="#" data-bs-toggle="dropdown" data-bs-display="static" class="menu-link scales" style="padding: 28px;"  >
+          <img :src="selectedLanguage.flag" class="deopdownImage" alt="">
+          <div style="cursor: pointer; text-align: center; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;display: flex;align-items: center;flex-wrap: wrap;"> {{ selectedLanguage.name }} </div>
+          <i class="bi bi-chevron-down" style="margin: 5px;"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-end me-lg-3 fs-11px mt-1">
+          <div class="dropdown-item align-items-center" v-for="(language, index) in languages" :key="index"
+            :class="{ 'text-theme': abbreviationLanguage === language.abbreviation }"
+            style="cursor: pointer; text-align: center;" @click="selectLanguage(language, language.abbreviation)">
+            <img :src="language.flag" alt="">
+            {{ language.name }}
+          </div>
+        </div>
+      </div>
+      <!-- 节点切换 -->
       <div class="menu-item dropdown dropdown-mobile-full" style="width: 20%;justify-content: end;">
         <a href="#" data-bs-toggle="dropdown" data-bs-display="static" class="menu-link scales" style="padding: 28px;">
           Openverse Mainnet
@@ -167,11 +232,19 @@ function searchMenu() {
   padding: 6px 26px;
 }
 
+.deopdownImage {
+  margin: 10px;
+}
+
 @media (max-width: 768px) {
   .scales {
     transform: scale(0.6);
     text-align: center;
     padding: 0 !important;
+  }
+
+  .deopdownImage {
+    display: none;
   }
 }
 </style>

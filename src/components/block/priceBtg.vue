@@ -4,7 +4,7 @@
     <card class="mb-3" style="height: 160px">
       <card-body>
         <div class="d-flex fw-bold small mb-3">
-          <span class="flex-grow-1">Exchange Rate</span>
+          <span class="flex-grow-1"> {{ $t("dashboard.exchange_rate")  }} </span>
         </div>
         <div class="row align-items-center mb-2" style="height: 30px">
           <div style="
@@ -26,7 +26,7 @@
         </div>
         <div class="small text-inverse text-opacity-50 text-truncate">
           <template v-for="statInfo in info">
-            <div><font-awesome-icon :icon="statInfo.icon" /> {{ statInfo.text }}</div>
+            <div><font-awesome-icon :icon="statInfo.icon" /> {{ $t(statInfo.language) }} {{ statInfo.text }}</div>
           </template>
         </div>
       </card-body>
@@ -40,7 +40,7 @@ import { useAppStore } from "../../stores/index";
 import { ref, onMounted, watchEffect } from "vue";
 import { useAppVariableStore } from "@/stores/app-variable";
 import apexchart from "@/components/plugins/Apexcharts.vue";
-
+import i18n from "@/i18n"
 const appVariable = useAppVariableStore();
 
 
@@ -50,6 +50,18 @@ const rate = ref();
 const info = ref([]);
 
 const echartsChar = ref(null);
+
+// 语言
+function selectLanguage(indexValue){
+  
+  
+  i18n.global.locale = indexValue;
+}
+watchEffect(()=>{
+  selectLanguage(appStore.$state.language);
+})
+
+selectLanguage(appStore.$state.language);
 
 const charts = ref({
   height: 30,
@@ -101,13 +113,17 @@ const infoRender = () => {
   info.value = [
     {
       icon: "fas fa-lg fa-fw me-2 fa-hourglass",
-      text: "Updated at" + " " + time,
+      language: "dashboard.update_at_a_day",
+      text: " " + time,
     },
     {
       icon: "fab fa-lg fa-fw me-2 fa-flickr",
-      text: "Reason Words" + " " + appStore.datarate.reason_words,
+      language: "dashboard.reason_words_ido_stage",
+      text: " " + appStore.datarate.reason_words,
     },
-    { icon: "fas fa-lg fa-fw me-2 fa-money-bill-alt", text: "5 USD When Listing" },
+    { icon: "fas fa-lg fa-fw me-2 fa-money-bill-alt",
+      language: "dashboard.when_listing",
+     text: "" },
   ];
 }
 

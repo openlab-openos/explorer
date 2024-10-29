@@ -1,7 +1,19 @@
 <script setup>
-import { getCurrentInstance, ref } from "vue";
+import { getCurrentInstance, ref ,watchEffect} from "vue";
+import i18n from "@/i18n"
+import { useAppStore } from "../../stores/index";
+const appStore = useAppStore();
+
 const apps = getCurrentInstance()
 const promaster = apps?.proxy?.$progream;
+// 语言
+function selectLanguage(indexValue){
+  i18n.global.locale = indexValue;
+}
+
+watchEffect(()=>{
+  selectLanguage(appStore.$state.language);
+})
 </script>
 <script>
 import { useAppOptionStore } from "@/stores/app-option";
@@ -160,41 +172,41 @@ export default {
 <template>
   <div style="width: 100%" v-if="loading">
     <div>
-      <h3>Account</h3>
+      <h3> {{ $t("account.title") }} </h3>
       <div v-if="type">
 
         <card class="md-3 ">
           <card-body class="card-bodys">
             <table v-if="card" class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
               <th>
-              <td>Overview</td>
+              <td>{{ $t("account.overview") }} </td>
               <td class=" text-end"></td>
               </th>
               <tbody v-for="(item, index) in card.value[0] == null ? 1 : card.value" :key="index">
                 <tr>
-                  <td>Address</td>
+                  <td>{{ $t("account.address") }} </td>
                   <td class="text-end">{{ url }}</td>
                 </tr>
                 <tr v-if="promaster[url]">
-                  <td>Address Label</td>
+                  <td>{{ $t("account.address_label") }} </td>
                   <td class="text-end">{{ promaster[url].name }}</td>
                 </tr>
                 <tr>
-                  <td>Balance(BTG)</td>
+                  <td>{{ $t("account.balance") }} (BTG)</td>
                   <td class="text-end"> {{ card.value[index] == null ? 'Account does not exist' :
                     come(toFexedStake(item.lamports)) }} </td>
                 </tr>
                 <tr>
-                  <td>Allocated Data Size</td>
+                  <td>{{ $t("account.allocated_data_size") }} </td>
                   <td class="text-end"> {{ card.value[index] == null ? '0' : item.space }} byte(s)</td>
                 </tr>
                 <tr>
-                  <td>Assigned Program Id</td>
+                  <td>{{ $t("account.assigned_program_id") }} </td>
                   <td class="text-end text-theme" style="cursor: pointer" @click="exexutable(item.owner)">
                     {{ item.executable ? 'Native Loader' : ' System Program' }}</td>
                 </tr>
                 <tr>
-                  <td>Executable</td>
+                  <td>{{ $t("account.executable") }} </td>
                   <td class="text-end"> {{ card.value[index] == null ? 'NO' : (item.executable ? 'YES' : 'NO') }}
                   </td>
                 </tr>
@@ -208,29 +220,29 @@ export default {
           <card-body class="card-bodys">
             <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
               <th>
-              <td>Overview</td>
+              <td>{{ $t("account.overview") }} </td>
               <td class=" text-end"></td>
               </th>
               <tbody>
                 <tr>
-                  <td>Address</td>
+                  <td>{{ $t("account.address") }} </td>
                   <td class="text-end">{{ url }}</td>
                 </tr>
                 <tr>
-                  <td>Balance(BTG)</td>
-                  <td class="text-end"> Address is invaild </td>
+                  <td>{{ $t("account.blance") }} (BTG)</td>
+                  <td class="text-end"> {{ $t("account.error") }}</td>
                 </tr>
                 <tr>
-                  <td>Allocated Data Size</td>
+                  <td>{{ $t("account.allocated_data_size") }}</td>
                   <td class="text-end"> 0 byte(s)</td>
                 </tr>
                 <tr>
-                  <td>Assigned Program Id</td>
+                  <td>{{ $t("account.assigned_program_id") }}</td>
                   <td class="text-end text-theme" style="cursor: pointer">
-                    Native Loader</td>
+                    {{ $t("account.native_label") }}</td>
                 </tr>
                 <tr>
-                  <td>Executable</td>
+                  <td>{{ $t("account.executable") }}</td>
                   <td class="text-end"> NO
                   </td>
                 </tr>
@@ -242,7 +254,7 @@ export default {
       <div style="margin-top:50px" v-if="type">
         <ul class="nav nav-pills mb-3" id="pills-tab">
           <li class="nav-item">
-            <a class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" href="#pills-home">History</a>
+            <a class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" href="#pills-home"> {{ $t("dashboard.history") }} </a>
           </li>
         </ul>
         <div class="tab-content" id="pills-tabContent">
@@ -253,16 +265,16 @@ export default {
                   <tbody>
                     <tr>
                       <th style="width: 70%;">
-                        TRANSACTION SIGNATURE
+                        {{ $t("account.transaction_signature") }}
                       </th>
                       <th style="width: 10%;">
-                        BLOCK
+                        {{ $t("blocks.title") }}
                       </th>
                       <th style="width: 10%;">
-                        AGM
+                        {{ $t("account.age") }}
                       </th>
                       <th style="width: 10%;">
-                        RESULT
+                        {{ $t("account.result") }}
                       </th>
                     </tr>
                     <tr v-for="(item, index) in historyData" :key="index">
@@ -294,13 +306,13 @@ export default {
                   <tbody>
                     <tr>
                       <th>
-                        MINT
+                        {{ $t("account.mini") }}<
                       </th>
                       <th>
-                        TYPE
+                        {{ $t("type") }}<
                       </th>
                       <th>
-                        LAMPORTS
+                        {{ $t("account.lamports") }}<
                       </th>
                     </tr>
                     <tr v-for="item, index in token.value" :key=index>
@@ -317,10 +329,10 @@ export default {
                   </tbody>
                 </table>
               </div>
-              <div v-show="token.value.length == 0">No token holdings found</div>
+              <div v-show="token.value.length == 0">{{ $t("account.token_error") }}</div>
             </div>
           </div>
-          <div class="tab-pane fade" id="pills-contact">No found</div>
+          <div class="tab-pane fade" id="pills-contact">{{ $t("account.not_found") }}</div>
         </div>
       </div>
     </div>

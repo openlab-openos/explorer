@@ -5,6 +5,7 @@ import { Vue3ProgressPlugin } from '@marcoschulte/vue3-progress';
 import PerfectScrollbar from 'vue3-perfect-scrollbar';
 import mitt from 'mitt';
 import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css';
+import i18n from './i18n';
 // import '@marcoschulte/vue3-progress/dist/index.css';
 // import '@fortawesome/fontawesome-free/scss/fontawesome.scss';
 // import '@fortawesome/fontawesome-free/scss/regular.scss';
@@ -55,6 +56,7 @@ app.component('CardExpandToggler', CardExpandToggler);
 app.component('font-awesome-icon', FontAwesomeIcon);
 app.use(paini);
 app.use(router);
+app.use(i18n);
 app.use(Vue3ProgressPlugin);
 app.use(PerfectScrollbar);
 

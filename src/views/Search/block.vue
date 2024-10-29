@@ -219,80 +219,79 @@ export default {
   },
 };
 </script>
+<script setup>
+import { getCurrentInstance, ref ,watchEffect} from "vue";
+import i18n from "@/i18n"
+import { useAppStore } from "../../stores/index";
+const appStore = useAppStore();
+
+const apps = getCurrentInstance()
+const promaster = apps?.proxy?.$progream;
+// 语言
+function selectLanguage(indexValue){
+  i18n.global.locale = indexValue;
+}
+
+watchEffect(()=>{
+  selectLanguage(appStore.$state.language);
+})
+</script>
 <template>
   <div style="width: 100%" v-if="loading">
-    <div width="50%" style="
-        height: 80vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      " v-if="url == null">
-      <form v-on:submit.prevent="submitForm()" method="POST" name="login_form" style="width: 50%">
-        <h1 class="text-center">Search</h1>
-        <div class="text-inverse text-opacity-50 text-center mb-4"></div>
-        <div class="mb-3">
-          <label class="form-label">Email Address <span class="text-danger">*</span></label>
-          <input type="text" class="form-control form-control-lg bg-white bg-opacity-5" value="" placeholder="" />
-        </div>
-        <button type="submit" class="btn btn-outline-theme btn-lg d-block w-100 fw-500 mb-3">
-          Search
-        </button>
-      </form>
-    </div>
     <div v-if="url != null">
       <div>
-        <h3>Block</h3>
+        <h3> {{ $t("blocks.title") }} </h3>
         <!-- <table> -->
         <caed class="md-3">
           <card-body class="card-bodys">
             <table v-if="this.card"
               class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
               <th>
-              <td>Overview</td>
+              <td> {{ $t("transaction.overview") }} </td>
               <td class=" text-end"></td>
               </th>
               <tbody>
                 <tr>
-                  <td>Blockhash</td>
+                  <td>{{ $t("blocks.blockhash") }} </td>
                   <td class="text-end">
                     {{ this.card.blockhash }} </td>
                 </tr>
                 <tr>
-                  <td>Block</td>
+                  <td> {{ $t("blocks.title") }} </td>
                   <td class="text-end">{{ come(this.url) }}</td>
                 </tr>
                 <tr v-if="this.historyData">
-                  <td>Slot Leader</td>
+                  <td>{{ $t("blocks.slot_leader") }} </td>
                   <td class="text-end text-theme" style="cursor: pointer" @click="pubbleys(this.historyData[0])"> {{
                     this.historyData[0] }}
                   </td>
                 </tr>
                 <tr>
-                  <td>Timestamp</td>
+                  <td>{{ $t("transaction.timestamp") }}</td>
                   <td class="text-end"> {{ timeSome2(this.card.blockTime) }} </td>
                 </tr>
                 <tr>
-                  <td>Parent Blockhash</td>
+                  <td>{{ $t("blocks.parent_blockhash") }}</td>
                   <td class="text-end text-theme" style="cursor: pointer"
                     @click="pubbleys(this.card.previousBlockhash)"> {{ this.card.previousBlockhash }} </td>
                 </tr>
                 <tr v-if="this.historyData">
-                  <td>Parent Slot</td>
+                  <td>{{ $t("blocks.parent_slot") }}</td>
                   <td class="text-end text-theme" style="cursor: pointer" @click="soltResult(JSON.parse(this.url) - 1)">
                     {{ come(JSON.parse(this.url) - 1) }} </td>
                 </tr>
                 <tr v-if="this.historyData">
-                  <td>Parent Slot Leader</td>
+                  <td>{{ $t("blocks.parent_slot_leader") }}</td>
                   <td class="text-end text-theme" style="cursor: pointer" @click="pubbleys(this.historyData[1])">
                     {{ this.historyData[1] }} </td>
                 </tr>
                 <tr>
-                  <td>Child Slot</td>
+                  <td>{{ $t("blocks.child_slot") }}</td>
                   <td class="text-end text-theme" style="cursor: pointer" @click="soltResult(JSON.parse(this.url) + 1)">
                     {{ come(JSON.parse(this.url) + 1) }}</td>
                 </tr>
                 <tr v-if="this.historyData">
-                  <td>Child Slot Leader</td>
+                  <td>{{ $t("blocks.child_slot_leader") }}</td>
                   <td class="text-end text-theme" style="cursor: pointer" @click="pubbleys(this.historyData[2])">
                     {{ this.historyData[2] }}</td>
                 </tr>
@@ -304,12 +303,12 @@ export default {
       <div style="margin-top:50px">
         <ul class="nav nav-pills mb-3" id="pills-tab">
           <li class="nav-item">
-            <a class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" href="#pills-home">Transctions</a>
+            <a class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" href="#pills-home">{{ $t("blocks.transctions") }}</a>
           </li>
         </ul>
         <div class="tab-content" id="pills-tabContent">
           <div class="tableHeader">
-            <h5>Filtered Block Transactions( {{ success }}/{{ transaction }} )</h5>
+            <h5>{{ $t("blocks.filtered_block_transactions") }}( {{ success }}/{{ transaction }} )</h5>
           </div>
           <div class="tab-pane fade show active" id="pills-home">
             <card class="md-3">
@@ -319,10 +318,10 @@ export default {
                     class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
                     <tr>
                       <th>#</th>
-                      <th>RESULT</th>
-                      <th>Transaction Signature</th>
-                      <th>Fee</th>
-                      <th class="text-end">Invoked Programs</th>
+                      <th>{{ $t("transaction.result") }}</th>
+                      <th>{{ $t("account.transaction_signature") }}</th>
+                      <th>{{ $t("transaction.fee") }}</th>
+                      <th class="text-end">{{ $t("blocks.invoked_programs") }}</th>
                     </tr>
                     <tr v-for="(item, index) in transactionArray" :key="index"
                       style="border-bottom: 0.5px solid #141816;">

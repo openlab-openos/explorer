@@ -4,29 +4,29 @@ export const useAppSidebarMenuStore = defineStore({
   id: "appSidebarMenu",
   state: () => {
     return [{
-      'text': 'Navigation',
+      'text': 'navigation.title',
       'is_header': true
     }, {
       'url': '/',
       'icon': 'bi bi-house-door',
-      'text': 'Dashboard',
+      'text': 'navigation.dashboard',
       'type': false
     }, {
       'url': 'validators',
       'icon': 'bi bi-columns-gap',
-      'text': 'Validators',
+      'text': 'navigation.validators',
       'type': false
 
     }, {
       'url': 'blocks',
       'icon': 'bi bi-bar-chart',
-      'text': 'Blocks',
+      'text': 'navigation.blocks',
       'type': false
     },
     {
       'url': "transactions",
       'icon': 'bi bi-layout-sidebar',
-      'text': 'Transactions',
+      'text': 'navigation.transactions',
       'type': false
 
     },

@@ -3,20 +3,20 @@
     <card class="mb-3">
       <card-body>
         <div class="d-flex fw-bold small mb-3">
-          <span class="flex-grow-1">New Transaction</span>
+          <span class="flex-grow-1"> {{ $t("transactions.title") }} </span>
           <card-expand-toggler />
         </div>
         <div class="table-responsive">
           <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
             <tbody>
               <tr>
-                <th style=" text-align: left">SIGNATURE</th>
-                <th style=" text-align: left">SOURCE</th>
-                <th style=" text-align: left">DESTINATION</th>
+                <th style=" text-align: left"> {{ $t("transactions.signature") }} </th>
+                <th style=" text-align: left"> {{ $t("transactions.source") }} </th>
+                <th style=" text-align: left"> {{ $t("transactions.destination") }} </th>
                 <th style=" text-align: left">BTG</th>
-                <th style=" text-align: left">TYPE</th>
-                <th style=" text-align: left">SLOT</th>
-                <th style=" text-align: left">TIME</th>
+                <th style=" text-align: left"> {{ $t("type") }} </th>
+                <th style=" text-align: left"> {{ $t("blocks.slot") }} </th>
+                <th style=" text-align: left"> {{ $t("time") }} </th>
               </tr>
               <tr v-for="(product, index) in orderData" :key="index" style="height: 35px">
                 <td style=" text-align: left; cursor: pointer" class="text-theme" @click="
@@ -110,10 +110,11 @@
 
 <script setup>
 import { useAppStore } from "../../stores/index";
-import { ref, getCurrentInstance } from "vue";
+import { ref, getCurrentInstance,watchEffect } from "vue";
 import moment from "moment";
 import CountUp from "vue-countup-v3";
 import { useRouter } from "vue-router";
+import i18n from "@/i18n"
 
 const apps = getCurrentInstance()
 
@@ -124,6 +125,15 @@ const router = useRouter();
 const appStore = useAppStore();
 
 const orderData = ref(JSON.parse(appStore.Transaction));
+
+// 语言
+function selectLanguage(indexValue){
+  i18n.global.locale = indexValue;
+}
+
+watchEffect(()=>{
+  selectLanguage(appStore.$state.language);
+})
 
 const stringcate = (str) => {
   return str.slice(0, 6) + "..." + str.slice(-6);;

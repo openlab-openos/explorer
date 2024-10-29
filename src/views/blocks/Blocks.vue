@@ -2,14 +2,14 @@
   <div class="blocks">
     <div class="blocks-left">
       <div>
-        <h4>Blocks</h4>
+        <h4> {{ $t("blocks.title") }} </h4>
       </div>
       <div class="row">
         <div class="col-xl-3 col-lg-6" v-for="(stat, index) in block" :key="stat">
           <card class="mb-3">
             <card-body>
               <div class="d-flex fw-bold small mb-3">
-                <span class="flex-grow-1">{{ stat.name }} </span>
+                <span class="flex-grow-1">{{ $t(stat.name) }} </span>
               </div>
               <h5 class="text-theme" style="display: flex">
                 <count-up :startVal="initial[index].value" :end-val="stat.value" duration="2"
@@ -32,33 +32,33 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>Cluster time</td>
+                  <td>{{$t("blocks.cluster_time")}}</td>
                   <td style="text-align: right">
                     {{ cluster }}
                   </td>
                 </tr>
                 <tr>
-                  <td>Slot time (1min average)</td>
+                  <td>{{$t("blocks.slot_time")}} (1min average)</td>
                   <td style="text-align: right">400ms</td>
                 </tr>
                 <tr>
-                  <td>Slot time (1hr average)</td>
+                  <td>{{$t("blocks.slot_time")}} (1hr average)</td>
                   <td style="text-align: right">400ms</td>
                 </tr>
                 <tr>
-                  <td>Epoch</td>
+                  <td> {{ $t('epoch') }} </td>
                   <td style="text-align: right; cursor: pointer" class="text-theme" @click="epochSkip(epoch)">
                     {{ epoch }}
                   </td>
                 </tr>
                 <tr>
-                  <td>Epoch progress</td>
+                  <td>{{$t("blocks.epoch_progress")}} </td>
                   <td style="text-align: right" class="text-theme">
                     {{ progress }}%
                   </td>
                 </tr>
                 <tr>
-                  <td>Epoch time remaining (approx.)</td>
+                  <td>{{$t('epoch_time_remaining')}}(approx.)</td>
                   <td style="text-align: right">
                     {{ time }}
                   </td>
@@ -72,11 +72,58 @@
   </div>
 </template>
 
-<script>
+<!-- <script setup> -->
+<!-- <script>
 import { chainRequest } from "../../request/chain";
 import CountUp from "vue-countup-v3";
 import moment from "moment";
 import numberAnimar from "../../components/CountFlop.vue";
+import { ref, onMounted } from "vue";
+import i18n from "@/i18n";
+
+// const block = ref([
+//           {
+//           name: "Slot",
+//           value: 0,
+//           type: false,
+//         },
+//         {
+//           name: "Block height",
+//           value: 0,
+//           type: false,
+//         },
+//         {
+//           name: "Slot time",
+//           value: 400,
+//           type: false,
+//         },
+//         {
+//           name: "Epoch progress",
+//           value: 0,
+//           type: true,
+//         },
+// ])
+
+// const initial = ref([
+//           {
+//           name: "Slot",
+//           value: 0,
+//         },
+//         {
+//           name: "Block height",
+//           value: 0,
+//         },
+//         {
+//           name: "Slot time",
+//           value: 0,
+//         },
+//         {
+//           name: "Epoch progress",
+//           value: 0,
+//         },
+// ])
+
+
 
 export default {
   components: {
@@ -199,6 +246,106 @@ export default {
     }
   },
 };
+</script> -->
+
+<script setup>
+import { useAppStore } from "../../stores/index";
+import { ref, onMounted, onUnmounted,watchEffect } from 'vue';
+import { chainRequest } from "../../request/chain";
+import CountUp from "vue-countup-v3";
+import moment from "moment";
+import { useRouter } from "vue-router";
+import numberAnimar from "../../components/CountFlop.vue";
+import i18n from "@/i18n"
+
+const router = useRouter();
+const appStore = useAppStore();
+const block = ref([
+  { name: "blocks.slot", value: 0, type: false },
+  { name: "dashboard.block_height", value: 0, type: false },
+  { name: "blocks.slot_time", value: 400, type: false },
+  { name: "blocks.epoch_progress", value: 0, type: true },
+]);
+
+const initial = ref([
+  { name: "blocks..slot", value: 0 },
+  { name: "dashboard.block_height", value: 0 },
+  { name: "blocks.slot_time", value: 0 },
+  { name: "blocks.epoch_progress", value: 0 },
+]);
+
+const cards = ref([]);
+const setInter = ref(null);
+const epoch = ref(0);
+const time = ref({
+  day: 0,
+  hours: 0,
+  minutes: 0,
+  remainingSeconds: 0,
+});
+const progress = ref("0%");
+const cluster = ref(null);
+
+
+// 语言
+function selectLanguage(indexValue){
+  i18n.global.locale = indexValue;
+}
+
+watchEffect(()=>{
+  selectLanguage(appStore.$state.language);
+})
+
+const getBlock = async (requestBody) => {
+  try {
+    const result = await chainRequest(requestBody);
+    initial.value[0].value = block.value[0].value;
+    initial.value[1].value = block.value[1].value;
+    block.value[1].value = result.result.blockHeight;
+    block.value[0].value = result.result.absoluteSlot;
+    cards.value = [];
+    epoch.value = result.result.epoch;
+    time.value = getTime(result.result.slotsInEpoch - result.result.slotIndex);
+    let d = new Date();
+    cluster.value = moment(d).utc().format();
+    progress.value = ((result.result.slotIndex / result.result.slotsInEpoch) * 100).toFixed(1);
+    block.value[3].value = progress.value;
+
+    for (let i = 0; i < 5; i++) {
+      let count = JSON.parse(block.value[0].value) - i;
+      cards.value.push({ number: count });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const getTime = (timestamp) => {
+  return moment(JSON.parse(moment().format("x")) + timestamp * 400).fromNow();
+};
+
+const epochSkip = (num) => {
+  // 使用 router 进行导航
+  // 这里需要根据你的路由设置进行调整
+  router.push({ name: "epoch", params: { num: num } });
+};
+
+onMounted(async () => {
+  const request = {
+    id: 2,
+    jsonrpc: "2.0",
+    method: "getEpochInfo",
+    params: [],
+  };
+  await getBlock(request);
+  setInter.value = setInterval(() => {
+    getBlock(request);
+  }, 2000);
+});
+
+onUnmounted(() => {
+  clearInterval(setInter.value);
+});
 </script>
 
 <style scoped>

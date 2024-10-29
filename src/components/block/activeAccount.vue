@@ -4,7 +4,7 @@
     <card class="mb-3">
       <card-body>
         <div class="d-flex fw-bold small mb-3">
-          <span class="flex-grow-1">24H Active Account</span>
+          <span class="flex-grow-1">24H {{$t ("dashboard.active_account") }}</span>
         </div>
         <div class="row align-items-center mb-2" style="height: 30px">
           <div style="
@@ -31,7 +31,7 @@
         </div>
         <div class="small text-inverse text-opacity-50 text-truncate" v-if="info != null">
           <template v-for="statInfo in info">
-            <div><font-awesome-icon :icon="statInfo.icon" /> {{ statInfo.text }}</div>
+            <div><font-awesome-icon :icon="statInfo.icon" /> {{ $t(statInfo.language) }}  {{ statInfo.text }}</div>
           </template>
         </div>
       </card-body>
@@ -47,7 +47,7 @@ import { order } from "../../request/order";
 import { onMounted, ref, watchEffect } from "vue";
 import { useAppStore } from "@/stores/index";
 import { useAppVariableStore } from "@/stores/app-variable";
-
+import i18n from "@/i18n";
 const appVariable = useAppVariableStore();
 
 
@@ -56,6 +56,14 @@ const data = ref({});
 const randomNo = () => {
   return Math.floor(Math.random() * 60) + 30;
 };
+
+// 语言
+function selectLanguage(indexValue){
+  i18n.global.locale = indexValue;
+}
+watchEffect(()=>{
+  selectLanguage(appStore.$state.language);
+})
 
 const echartsContainers = ref(null);
 
@@ -123,21 +131,20 @@ const renders = () => {
   info.value = [
     {
       icon: "fas fa-lg fa-fw me-2 fa-chart-pie",
-      text: "9.4% more than last week",
+      text: "9.4% ",
+      language:"dashboard.more_than_last_week"
     },
     {
       icon: "fas fa-lg fa-fw me-2 fa-adjust",
-      text: infoDatalength.value + " " + "Validators",
+      text: infoDatalength.value + " " ,
+      language:"validators.title"
     },
     {
       icon: "fab fa-lg fa-fw me-2 fa-chrome",
+      language:"dashboard.europe_node_for",
       text:
-        countName.value ? countName.value +
-          " " +
-          "node  for" +
-          " " +
           counPct.value +
-          "%" : 'Loading……'
+          "%"
     },
   ];
 }

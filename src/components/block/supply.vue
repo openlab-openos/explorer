@@ -4,7 +4,7 @@
     <card class="mb-3" style="height: 160px">
       <card-body>
         <div class="d-flex fw-bold small mb-3">
-          <span class="flex-grow-1">BTG Supply</span>
+          <span class="flex-grow-1">BTG {{ $t("dashboard.supply") }} </span>
         </div>
         <div class="row align-items-center mb-2" style="height: 30px">
           <div style="
@@ -54,7 +54,7 @@
         </div>
         <div class="small text-inverse text-opacity-50 text-truncate">
           <template v-for="statInfo in info">
-            <div><font-awesome-icon :icon="statInfo.icon" /> {{ statInfo.text }}</div>
+            <div><font-awesome-icon :icon="statInfo.icon" /> {{ $t(statInfo.language) }}  {{ statInfo.text }} {{ $t(statInfo.unit) }} </div>
           </template>
         </div>
       </card-body>
@@ -67,6 +67,8 @@
 import numberAnimar from "../../components/CountFlop.vue";
 import { useAppStore } from "../../stores/index";
 import { onMounted, ref, watchEffect } from "vue";
+import i18n from "@/i18n";
+
 
 const appStore = useAppStore();
 
@@ -76,6 +78,15 @@ const convert = ref(0);
 
 const info = ref([]);
 
+// 语言
+function selectLanguage(indexValue){
+  
+  
+  i18n.global.locale = indexValue;
+}
+watchEffect(()=>{
+  selectLanguage(appStore.$state.language);
+})
 
 onMounted(() => {
   watchEffect(() => {
@@ -83,20 +94,24 @@ onMounted(() => {
     info.value = [
       {
         icon: "fas fa-lg fa-fw me-2 fa-dollar-sign",
-        text: "Total 200 million",
+        text: "200",
+        language:"dashboard.total",
+        unit:"dashboard.million"
       },
       {
         icon: "fas fa-lg fa-fw me-2 fa-database",
-        text: "Mining allocation of total 100 million",
+        text: "100",
+        language:"dashboard.mining_allocation_of_total",
+        unit:"dashboard.million"
       },
       {
         icon: "fas fa-lg fa-fw me-2 fa-cubes",
         text:
-          "Supplied output" +
-          " " +
           formatNumber((JSON.parse(data.value) - 100000000)) +
           " " +
           "BTG",
+        language:"dashboard.supplied_output",
+        unit:""
       },
     ];
   })
