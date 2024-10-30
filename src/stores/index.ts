@@ -14,6 +14,7 @@ export const useAppStore = defineStore('app', {
         part: 0,//part
         country: {},//country
         network: 0,//network
+        language: "en-US",//language
     }),
     getters: {
         rateData: (state) => {
@@ -51,7 +52,10 @@ export const useAppStore = defineStore('app', {
         },
         getnetwork: (state) => {
             return state.network
-        }
+        },
+        getLanguage : (state) => {
+            return state.language
+        },
     },
     actions: {
         setRate(newRate: any) {
@@ -89,6 +93,9 @@ export const useAppStore = defineStore('app', {
         },
         getNetwork(data: any) {
             return this.network = data
+        },
+        setLanguage(data: any){
+            return this.language = data
         }
     },
     persist: {

@@ -4,8 +4,8 @@
     <card class="mb-3" style="height: 160px">
       <card-body>
         <div class="d-flex fw-bold small mb-3">
-          <span class="flex-grow-1"> Block Height </span>
-        </div>
+          <span class="flex-grow-1"> {{ $t("dashboard.block_height") }} </span>
+        </div> 
         <div class="row align-items-center mb-2" style="height: 30px">
           <div style="
               width: 60%;
@@ -27,8 +27,7 @@
         </div>
         <div class="small text-inverse text-opacity-50 text-truncate">
           <template v-for="statInfo in info">
-            <div><font-awesome-icon :icon="statInfo.icon" /> {{ statInfo.text }}</div>
-
+            <div><font-awesome-icon :icon="statInfo.icon" />  {{ $t(statInfo.language) }} {{ statInfo.text }}</div>
           </template>
         </div>
       </card-body>
@@ -43,8 +42,10 @@ import numberAnimar from "../../components/CountFlop.vue";
 import apexchart from "@/components/plugins/Apexcharts.vue";
 import moment from "moment";
 import { useAppStore } from "@/stores/index";
-import { onMounted, ref } from 'vue'
+import { onMounted, ref,watchEffect } from 'vue'
 import { useAppVariableStore } from "@/stores/app-variable";
+import i18n from "@/i18n";
+
 
 const appVariable = useAppVariableStore();
 
@@ -55,6 +56,16 @@ const data = ref({});
 const chart = ref(null);
 const info = ref(null);
 const timer = ref(null);
+
+// 语言
+function selectLanguage(indexValue){
+  
+  
+  i18n.global.locale = indexValue;
+}
+watchEffect(()=>{
+  selectLanguage(appStore.$state.language);
+})
 
 const fetchData = async () => {
   let requestBody = {
@@ -69,16 +80,18 @@ const fetchData = async () => {
     info.value = [
       {
         icon: "fab fa-lg fa-fw me-2 fa-openid",
-        text: "Current Slot" + " " + formatNumber(data.value.slotIndex),
+        language:"dashboard.current_solt",
+        text: " " + formatNumber(data.value.slotIndex),
       },
       {
         icon: "fab fa-lg fa-fw me-2 fa-pagelines",
-        text: "Total Slot" + " " + formatNumber(data.value.slotsInEpoch),
+        language:"dashboard.total_slot",
+        text: " " + formatNumber(data.value.slotsInEpoch),
       },
       {
         icon: "fab fa-lg fa-fw me-2 fa-yelp",
+        language:"dashboard.epoch_time_remaining_in",
         text:
-          "Epoch time remaining" +
           " " +
           getTime(data.value.slotsInEpoch - data.value.slotIndex),
       },

@@ -4,7 +4,7 @@
     <card class="mb-3" style="height: 160px">
       <card-body>
         <div class="d-flex fw-bold small mb-3">
-          <span class="flex-grow-1">Network Transactions</span>
+          <span class="flex-grow-1"> {{ $t( "dashboard.network_transactions" ) }} </span>
         </div>
         <div class="row align-items-center mb-2" style="height: 30px">
           <div style="
@@ -28,7 +28,7 @@
         <div class="small text-inverse text-opacity-50 text-truncate">
           <template v-for="statInfo in info">
             <!-- <div><i v-bind:class="statInfo.icon"></i> {{ statInfo.text }}</div> -->
-            <div><font-awesome-icon :icon="statInfo.icon" /> {{ statInfo.text }}</div>
+            <div><font-awesome-icon :icon="statInfo.icon" /> {{ $t(statInfo.language) }}  {{ statInfo.text }}</div>
 
           </template>
         </div>
@@ -46,6 +46,7 @@ import apexchart from "@/components/plugins/Apexcharts.vue";
 import { useAppVariableStore } from "@/stores/app-variable";
 import { onMounted, ref, watchEffect } from 'vue'
 import { useAppStore } from "@/stores/index";
+import i18n from "@/i18n";
 
 
 const appVariable = useAppVariableStore();
@@ -59,6 +60,16 @@ const timer = ref(null);
 const unnumTranstions = ref([]);
 const trueTramsatiom = ref(0);
 
+
+// 语言
+function selectLanguage(indexValue){
+  
+  
+  i18n.global.locale = indexValue;
+}
+watchEffect(()=>{
+  selectLanguage(appStore.$state.language);
+})
 
 onMounted(() => {
   watchEffect(() => {
@@ -88,15 +99,18 @@ const performanceSamples = () => {
       info.value = [
         {
           icon: ['fas', 'stop-circle'],
-          text: "True TPM " + trueTramsatiom.value,
+          language:"dashboard.true",
+          text: trueTramsatiom.value,
         },
         {
           icon: ['far', 'registered'],
-          text: "Vote TPM " + unnumTranstions.value[23],
+          language:"dashboard.vote",
+          text:  unnumTranstions.value[23],
         },
         {
           icon: ['fab', 'mizuni'],
-          text: "Theoretical TPS 30W",
+          language:"dashboard.theoretical",
+          text: " 300K",
         },
       ]
     })

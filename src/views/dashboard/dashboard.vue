@@ -1,6 +1,6 @@
 <script setup>
 import { useAppVariableStore } from "@/stores/app-variable";
-import { onBeforeUnmount, onMounted, ref, watch, computed } from "vue";
+import { onBeforeUnmount, onMounted, ref, watch, computed, watchEffect } from "vue";
 import apexchart from "@/components/plugins/Apexcharts.vue";
 import jsVectorMap from "jsvectormap";
 import "jsvectormap/dist/maps/world.js";
@@ -12,16 +12,9 @@ import { order } from "../../request/order";
 import moment from "moment";
 import { ustdData } from "../../request/ustd";
 import { defineAsyncComponent, getCurrentInstance } from "vue";
-// import blockHeightVue from "../../components/block/blockHeight.vue";
-// import netWorkVue from "../../components/block/netWork.vue";
-// import activeAccountVue from "../../components/block/activeAccount.vue";
-// import transferVue from "../../components/block/transfer.vue";
-// import supplyVue from "../../components/block/supply.vue";
-// import activeVue from "../../components/block/active.vue";
-// import priceVue from "../../components/block/price.vue";
-// import priceBtgVue from "../../components/block/priceBtg.vue";
 import { useAppStore } from "@/stores/index";
 import { ipAddresses } from "./address";
+import i18n from "@/i18n";
 
 const appStore = useAppStore();
 const appVariable = useAppVariableStore();
@@ -83,6 +76,17 @@ const PriceBtgVue = defineAsyncComponent(() =>
   import("../../components/block/priceBtg.vue")
 );
 
+// 语言
+function selectLanguage(indexValue){
+  
+  
+  i18n.global.locale = indexValue;
+}
+
+watchEffect(()=>{
+  selectLanguage(appStore.$state.language);
+})
+
 const pubbleys = (url) => {
   router.push({
     name: "address",
@@ -108,9 +112,6 @@ const fetchOrderData = async () => {
   }
 };
 
-// onMounted(() => {
-//   fetchOrderData();
-// });
 
 const unnumTranstions = ref([]);
 const timeName = ref([]);
@@ -361,22 +362,23 @@ const getServerData = () => {
     },
     stats: [
       {
-        name: "EPOCH PROGRESS",
+        name: "epoch_progress",
+        // name:"dashboard",
         total: slot.value,
         totals: inepoch.value,
         unit: "",
         progress: "20%",
-        time: "Last updated 1 min ago",
+        time: "dashboard.last_time",
         info: [
           {
-            title: "Epoch",
+            title: "epoch",
             value: epoch.value,
             class: "text-theme",
             style: "cursor: pointer",
             click: true,
           },
           {
-            title: "Epoch time remaining",
+            title: "epoch_time_remaining",
             value: solttime.value,
             class: "text-theme text-opacity-50",
             style: "",
@@ -415,23 +417,22 @@ const getServerData = () => {
         },
       },
       {
-        name: "Active Stake (BTG)",
+        name: "dashboard.active_stake",
         total: pubbley.value,
         totals: stubly.value,
         unit: "M",
-
         progress: "10%",
-        time: "Last updated 1 min ago",
+        time: "dashboard.last_time",
         info: [
           {
-            title: "Active Stake",
+            title: "dashboard.active_stake",
             value: pubbley.value + "M",
             class: "text-theme",
             style: "",
             click: false,
           },
           {
-            title: "Total Supply",
+            title: "dashboard.total_supply",
             value: stubly.value + "M",
             class: "text-theme text-opacity-50",
             click: false,
@@ -917,7 +918,7 @@ onBeforeUnmount(() => {
       <card class="mb-3">
         <card-body style="min-height: 400px">
           <div class="d-flex fw-bold small mb-3">
-            <span class="flex-grow-1"> TPM history </span>
+            <span class="flex-grow-1"> TPM {{ $t("dashboard.history") }} </span>
             <!-- <card-expand-toggler /> -->
           </div>
           <div class="ratio ratio-21x9 mb-3" v-if="server.chart">
@@ -948,7 +949,7 @@ onBeforeUnmount(() => {
                   <div
                     class="fs-10px fw-bold text-inverse text-opacity-50 mb-1"
                   >
-                    {{ stat.name }}
+                    {{ $t(stat.name)}}
                   </div>
                   <div class="mb-2 fs-5 text-truncate" style="display: flex">
                     <count-up
@@ -978,7 +979,7 @@ onBeforeUnmount(() => {
                   <div
                     class="fs-11px text-inverse text-opacity-50 mb-2 text-truncate"
                   >
-                    {{ stat.time }}
+                    {{ $t(stat.time)}}
                   </div>
                   <div
                     class="d-flex align-items-center small"
@@ -997,7 +998,7 @@ onBeforeUnmount(() => {
                         white-space: nowrap;
                       "
                     >
-                      {{ info.title }}
+                      {{ $t(info.title) }}
                     </div>
                     <div
                       :style="info.style"
@@ -1021,7 +1022,7 @@ onBeforeUnmount(() => {
       <card class="mb-3">
         <card-body style="min-height: 400px">
           <div class="d-flex fw-bold small mb-3">
-            <span class="flex-grow-1">NODE ANALYTICS</span>
+            <span class="flex-grow-1">{{ $t("dashboard.node_analytics") }}</span>
             <!-- <card-expand-toggler /> -->
           </div>
           <div class="ratio ratio-21x9 mb-3">
@@ -1041,10 +1042,10 @@ onBeforeUnmount(() => {
               >
                 <thead>
                   <tr class="text-inverse text-opacity-75">
-                    <th class="w-50">COUNTRY</th>
-                    <th class="w-25">CODE</th>
-                    <th class="w-25">VAILDATORS</th>
-                    <th class="w-25 text-end">PCT%</th>
+                    <th class="w-50">{{ $t("dashboard.country") }}</th>
+                    <th class="w-25">{{ $t('dashboard.code') }}</th>
+                    <th class="w-25">{{ $t("dashboard.vaildators") }}</th>
+                    <th class="w-25 text-end">{{ $t("dashboard.pct") }}%</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1118,7 +1119,7 @@ onBeforeUnmount(() => {
       <card class="mb-3">
         <card-body>
           <div class="d-flex fw-bold small mb-3">
-            <span class="flex-grow-1">New Transactions</span>
+            <span class="flex-grow-1">{{ $t("dashboard.new_transactions") }}</span>
             <!-- <card-expand-toggler /> -->
           </div>
           <div class="table-responsive">
@@ -1127,12 +1128,12 @@ onBeforeUnmount(() => {
             >
               <tbody>
                 <tr>
-                  <th style="width: 20%; text-align: left">SIGNATURE</th>
-                  <th style="width: 20%; text-align: left">SOURCE</th>
-                  <th style="width: 20%; text-align: left">DESTINATION</th>
-                  <th style="width: 10%; text-align: left">BTG</th>
-                  <th style="width: 10%; text-align: left">TYPE</th>
-                  <th style="width: 20%; text-align: left">TIME</th>
+                  <th style="width: 20%; text-align: left">{{ $t("transactions.signature") }}</th>
+                  <th style="width: 20%; text-align: left">{{ $t("transactions.source") }}</th>
+                  <th style="width: 20%; text-align: left">{{ $t("transactions.destination") }}</th>
+                  <th style="width: 10%; text-align: left">{{ $t("transactions.btg") }}</th>
+                  <th style="width: 10%; text-align: left">{{ $t("transactions.type") }}</th>
+                  <th style="width: 20%; text-align: left">{{ $t("transactions.time") }}</th>
                 </tr>
 
                 <tr
@@ -1253,7 +1254,7 @@ onBeforeUnmount(() => {
       <card class="mb-3">
         <card-body>
           <div class="d-flex fw-bold small mb-3">
-            <span class="flex-grow-1">All Validators</span>
+            <span class="flex-grow-1"> {{ $t("dashboard.all_validators") }} </span>
             <!-- <card-expand-toggler /> -->
           </div>
           <div class="table-responsive">
@@ -1262,12 +1263,12 @@ onBeforeUnmount(() => {
             >
               <tbody>
                 <tr>
-                  <th>NAME</th>
-                  <th style="text-align: left">PUBKEY</th>
-                  <th style="text-align: left">ACTIVATEDSTAKE</th>
-                  <th style="text-align: left">GOSSIP</th>
+                  <th>{{ $t("validators.name") }}</th>
+                  <th style="text-align: left">{{ $t("validators.pubkey") }}</th>
+                  <th style="text-align: left">{{ $t("validators.activated_stake") }}</th>
+                  <th style="text-align: left">{{ $t("validators.gossip") }}</th>
 
-                  <th style="text-align: left">STATUS</th>
+                  <th style="text-align: left">{{ $t("validators.status") }}</th>
                 </tr>
                 <tr
                   v-if="ActivityLogData"

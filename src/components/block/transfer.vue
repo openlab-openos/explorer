@@ -4,7 +4,7 @@
     <card class="mb-3" style="height: 160px">
       <card-body>
         <div class="d-flex fw-bold small mb-3">
-          <span class="flex-grow-1">24H Transfer Amount</span>
+          <span class="flex-grow-1">{{ $t('transaction.transfer_amount') }}</span>
         </div>
         <div class="row align-items-center mb-2" style="height: 30px">
           <div style="
@@ -37,7 +37,7 @@
         </div>
         <div class="small text-inverse text-opacity-50 text-truncate" v-if="type">
           <template v-for="statInfo in info">
-            <div><font-awesome-icon :icon="statInfo.icon" /> {{ statInfo.text }}</div>
+            <div><font-awesome-icon :icon="statInfo.icon" /> {{ $t(statInfo.language) }}  {{ statInfo.text }} </div>
           </template>
         </div>
       </card-body>
@@ -52,6 +52,7 @@ import apexchart from "@/components/plugins/Apexcharts.vue";
 import { order } from "../../request/order";
 import { useAppStore } from "../../stores/index";
 import { onMounted, ref, watchEffect } from "vue";
+import i18n from "@/i18n";
 
 const appStore = useAppStore();
 
@@ -62,6 +63,15 @@ const dataRequest = async () => {
   });
 };
 dataRequest();
+// 语言
+function selectLanguage(indexValue){
+  
+  
+  i18n.global.locale = indexValue;
+}
+watchEffect(()=>{
+  selectLanguage(appStore.$state.language);
+})
 
 const transferData = ref([]);
 
@@ -108,7 +118,8 @@ const rendered = (data) => {
   info.value = [
     {
       icon: "fas fa-lg fa-fw me-2 fa-euro-sign",
-      text: timeout() + " " + "Transactions 24 hours" + " ",
+      text: timeout() + " " ,
+      language:"dashboard.transactions"
     },
     {
       icon: "fas fa-lg fa-fw me-2 fa-won-sign",
@@ -116,8 +127,9 @@ const rendered = (data) => {
         toFexedStake(priceTrans.value / data.length) +
         " " +
         "BTG" +
-        " " +
-        "Per Transaction",
+        " " ,
+      language:"dashboard.per_transaction"
+
     },
     {
       icon: "fas fa-lg fa-fw me-2 fa-yen-sign",
@@ -126,8 +138,8 @@ const rendered = (data) => {
           toFexedStake(priceTrans.value / data.length) *
           appStore.rate
         ).toFixed(2) +
-        " " +
-        "USD Per Transaction",
+        " USD",
+      language:"dashboard.per_transactions"
     },
   ];
   type.value = true;

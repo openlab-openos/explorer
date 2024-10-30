@@ -6,7 +6,7 @@
         <card class="mb-3">
           <card-body>
             <div class="d-flex fw-bold small mb-3">
-              <span class="flex-grow-1">{{ item.name }} </span>
+              <span class="flex-grow-1">{{ $t(item.name) }} </span>
 
               <card-expand-toggler />
             </div>
@@ -22,19 +22,19 @@
         <card class="mb-3">
           <card-body>
             <div class="d-flex fw-bold small mb-3">
-              <span class="flex-grow-1">Validators</span>
+              <span class="flex-grow-1"> {{ $t("validators.title") }} </span>
               <card-expand-toggler />
             </div>
             <div class="table-responsive">
               <table class="table table-striped table-borderless mb-2px small text-nowrap">
                 <tbody>
                   <tr>
-                    <th>NAME</th>
-                    <th style="text-align: left">PUBKEY</th>
-                    <th style="text-align: left">ACTIVATED STAKE</th>
-                    <th style="text-align: left">GOSSIP</th>
+                    <th> {{ $t("validators.name") }} </th>
+                    <th style="text-align: left">{{ $t("validators.pubkey") }}</th>
+                    <th style="text-align: left"> {{ $t("validators.activated_stake") }} </th>
+                    <th style="text-align: left">{{ $t("validators.gossip") }}</th>
 
-                    <th style="text-align: left">STATUS</th>
+                    <th style="text-align: left">{{ $t("validators.status") }}</th>
                   </tr>
                   <tr v-if="ActivityLogData" v-for="(log, index) in ActivityLogData" :key="index">
                     <td>
@@ -72,7 +72,7 @@
                     </td>
                   </tr>
                   <tr v-else>
-                    <td colspan="4">No records found</td>
+                    <td colspan="4">{{ $t("not_found") }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -81,16 +81,17 @@
         </card>
       </div>
     </div>
-    <div v-show="!shoeType">Loading……</div>
+    <div v-show="!shoeType">{{ $t("loading") }}</div>
   </div>
 </template>
 
 
 <script setup>
 import { useAppStore } from "../../stores/index";
-import { ref, getCurrentInstance } from "vue";
+import { ref, getCurrentInstance ,watchEffect} from "vue";
 import { useRouter } from "vue-router";
 import CountUp from "vue-countup-v3";
+import i18n from "@/i18n"
 
 const router = useRouter();
 
@@ -104,22 +105,33 @@ const shoeType = ref(false);
 
 const Vaildators = ref([
   {
-    name: "Vaildators",
+    name: "validators.title",
     value: 0,
   },
   {
-    name: "Weighted Skip Rate",
+    name: "validators.weighted_skip_rate",
     value: 0,
   },
   {
-    name: "Nominal Staking APY",
+    name: "validators.nominal_staking_apy",
     value: 0,
   },
   {
-    name: "Node Versions",
+    name: "validators.node_versions",
     value: 0,
   },
 ]);
+
+// 语言
+function selectLanguage(indexValue){
+  
+  
+  i18n.global.locale = indexValue;
+}
+
+watchEffect(()=>{
+  selectLanguage(appStore.$state.language);
+})
 
 const ActivityLogData = ref([]);
 ActivityLogData.value = appStore.Validators;
