@@ -8,21 +8,22 @@
           <template v-else>
             <div v-if="!menu.type" class="menu-item" :class="{ active: isActive(menu.url) }"
               :style="{ display: Number(index) ? 'block' : 'none' }">
-              <router-link :to="{ name: menu.url === '/' ? 'dashboard' : menu.url }" class="menu-link">
+              <router-link :to="{ name: menu.url === '/' ? 'dashboard' : menu.url }" class="menu-link"  >
                 <span class="menu-icon">
                   <i class="menu-icon" :class="menu.icon"></i>
                 </span>
-                <!-- <span class="menu-text">{{ $t( "navigation.validators" ) }}</span> -->
                 <span class="menu-text">{{ $t(menu.text) }}</span>
-                <!-- <span class="menu-text">{{ menu.text }}</span> -->
               </router-link>
             </div>
-            <div v-if="menu.type" class="menu-item">
+            <div v-if="menu.type" class="menu-item "  :class="{ active: isActive(menu.url) }"
+            :style="{ display: Number(index) ? 'block' : 'none' }" >
               <a :href="menu.url" class="menu-link arrs" target="_blank">
-                <span class="menu-icon">
+                <span class="menu-icon" widdth="50" height="24">
                   <i class="menu-icon" :class="menu.icon"></i>
                 </span>
-                <span class="menu-text">{{ menu.text }}</span>
+                <!-- <div class="col-md-6 col-sm-6 col-xs-6 mb-1 text-truncate"><i class="fab fa-lg fa-fw me-2 fa-github"></i> <span>github</span></div> -->
+                 
+                <span class="menu-text">{{ $t(menu.text) }}</span>
               </a>
             </div>
           </template>

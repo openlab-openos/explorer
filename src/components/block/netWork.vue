@@ -100,17 +100,17 @@ const performanceSamples = () => {
         {
           icon: ['fas', 'stop-circle'],
           language:"dashboard.true",
-          text: " TPM " + trueTramsatiom.value,
+          text: trueTramsatiom.value,
         },
         {
           icon: ['far', 'registered'],
           language:"dashboard.vote",
-          text: "TPM " + unnumTranstions.value[23],
+          text:  unnumTranstions.value[23],
         },
         {
           icon: ['fab', 'mizuni'],
           language:"dashboard.theoretical",
-          text: " TPS 30W",
+          text: " 300K",
         },
       ]
     })

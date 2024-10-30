@@ -4,7 +4,7 @@
     <card class="mb-3">
       <card-body>
         <div class="d-flex fw-bold small mb-3">
-          <span class="flex-grow-1">24H {{$t ("dashboard.active_account") }}</span>
+          <span class="flex-grow-1">{{$t ("dashboard.active_account") }}</span>
         </div>
         <div class="row align-items-center mb-2" style="height: 30px">
           <div style="
@@ -137,7 +137,7 @@ const renders = () => {
     {
       icon: "fas fa-lg fa-fw me-2 fa-adjust",
       text: infoDatalength.value + " " ,
-      language:"validators.title"
+      language:"dashboard.vaildators"
     },
     {
       icon: "fab fa-lg fa-fw me-2 fa-chrome",

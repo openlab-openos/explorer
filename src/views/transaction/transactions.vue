@@ -13,9 +13,9 @@
                 <th style=" text-align: left"> {{ $t("transactions.signature") }} </th>
                 <th style=" text-align: left"> {{ $t("transactions.source") }} </th>
                 <th style=" text-align: left"> {{ $t("transactions.destination") }} </th>
-                <th style=" text-align: left">BTG</th>
-                <th style=" text-align: left"> {{ $t("type") }} </th>
-                <th style=" text-align: left"> {{ $t("blocks.slot") }} </th>
+                <th style=" text-align: left">{{ $t("transactions.btg") }}</th>
+                <th style=" text-align: left"> {{ $t("transactions.type") }}</th>
+                <th style=" text-align: left"> {{ $t("transactions.slot") }} </th>
                 <th style=" text-align: left"> {{ $t("time") }} </th>
               </tr>
               <tr v-for="(product, index) in orderData" :key="index" style="height: 35px">

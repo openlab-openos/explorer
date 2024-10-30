@@ -112,9 +112,6 @@ const fetchOrderData = async () => {
   }
 };
 
-// onMounted(() => {
-//   fetchOrderData();
-// });
 
 const unnumTranstions = ref([]);
 const timeName = ref([]);
@@ -1131,12 +1128,12 @@ onBeforeUnmount(() => {
             >
               <tbody>
                 <tr>
-                  <th style="width: 20%; text-align: left">{{ $t("dashboard.signature") }}</th>
-                  <th style="width: 20%; text-align: left">{{ $t("dashboard.source") }}</th>
-                  <th style="width: 20%; text-align: left">{{ $t("dashboard.destination") }}</th>
-                  <th style="width: 10%; text-align: left">BTG</th>
-                  <th style="width: 10%; text-align: left">{{ $t("type") }}</th>
-                  <th style="width: 20%; text-align: left">{{ $t("item") }}</th>
+                  <th style="width: 20%; text-align: left">{{ $t("transactions.signature") }}</th>
+                  <th style="width: 20%; text-align: left">{{ $t("transactions.source") }}</th>
+                  <th style="width: 20%; text-align: left">{{ $t("transactions.destination") }}</th>
+                  <th style="width: 10%; text-align: left">{{ $t("transactions.btg") }}</th>
+                  <th style="width: 10%; text-align: left">{{ $t("transactions.type") }}</th>
+                  <th style="width: 20%; text-align: left">{{ $t("transactions.time") }}</th>
                 </tr>
 
                 <tr
@@ -1266,7 +1263,7 @@ onBeforeUnmount(() => {
             >
               <tbody>
                 <tr>
-                  <th>{{ $t("name") }}</th>
+                  <th>{{ $t("validators.name") }}</th>
                   <th style="text-align: left">{{ $t("validators.pubkey") }}</th>
                   <th style="text-align: left">{{ $t("validators.activated_stake") }}</th>
                   <th style="text-align: left">{{ $t("validators.gossip") }}</th>

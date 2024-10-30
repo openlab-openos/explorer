@@ -96,8 +96,7 @@ const skateRequest = async () => {
         text:
           " " +
           formatNumber(((year / 365) * 1000000).toFixed(0)) +
-          " " +
-          "BTG",
+          " " ,
       },
       {
         icon: "fab fa-lg fa-fw me-2 fa-skype",

@@ -13,8 +13,8 @@
               </div>
               <h5 class="text-theme" style="display: flex">
                 <count-up :startVal="initial[index].value" :end-val="stat.value" duration="2"
-                  :decimalPlaces="stat.type ? 1 : 0"></count-up>
-                <span v-show="stat.type">%</span>
+                  :decimalPlaces="index == 3 ? 1 : 0"></count-up>
+                <span v-show="stat.type"> {{ index== 3 ? "%" : "ms"  }}</span>
               </h5>
             </card-body>
           </card>
@@ -263,7 +263,7 @@ const appStore = useAppStore();
 const block = ref([
   { name: "blocks.slot", value: 0, type: false },
   { name: "dashboard.block_height", value: 0, type: false },
-  { name: "blocks.slot_time", value: 400, type: false },
+  { name: "blocks.slot_time", value: 400, type: true },
   { name: "blocks.epoch_progress", value: 0, type: true },
 ]);
 

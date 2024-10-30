@@ -230,7 +230,7 @@ export default {
                 </tr>
                 <tr>
                   <td>{{ $t("account.blance") }} (BTG)</td>
-                  <td class="text-end"> {{ $t("account.error") }}</td>
+                  <td class="text-end" style="color: red;"> {{ $t("account.error") }}</td>
                 </tr>
                 <tr>
                   <td>{{ $t("account.allocated_data_size") }}</td>

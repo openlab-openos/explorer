@@ -268,7 +268,7 @@ export default {
               </th>
               <tbody v-if="historyData">
                 <tr>
-                  <td>{{ $t("transactions.signature") }}<</td>
+                  <td>{{ $t("transactions.signature") }}</td>
                   <td class="text-end">{{ promaster[url] ? promaster[url].name : url }}</td>
                 </tr>
                 <tr>

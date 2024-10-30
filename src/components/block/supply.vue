@@ -54,7 +54,7 @@
         </div>
         <div class="small text-inverse text-opacity-50 text-truncate">
           <template v-for="statInfo in info">
-            <div><font-awesome-icon :icon="statInfo.icon" /> {{ $t(statInfo.language) }}  {{ statInfo.text }} {{ $t(statInfo.unit) }} </div>
+            <div><font-awesome-icon :icon="statInfo.icon" /> {{ $t(statInfo.language) }}  {{ statInfo.text }}{{ $t(statInfo.unit) }} </div>
           </template>
         </div>
       </card-body>
@@ -107,9 +107,8 @@ onMounted(() => {
       {
         icon: "fas fa-lg fa-fw me-2 fa-cubes",
         text:
-          formatNumber((JSON.parse(data.value) - 100000000)) +
-          " " +
-          "BTG",
+          ((JSON.parse(data.value) - 100000000)/1000000).toFixed(2) +
+          "M", 
         language:"dashboard.supplied_output",
         unit:""
       },

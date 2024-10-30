@@ -54,12 +54,10 @@ const epoch = ref(1);
 const info = ref();
 
 // 语言
-function selectLanguage(indexValue){
-  
-  
+function selectLanguage(indexValue) {
   i18n.global.locale = indexValue;
 }
-watchEffect(()=>{
+watchEffect(() => {
   selectLanguage(appStore.$state.language);
 })
 
@@ -76,20 +74,20 @@ onMounted(() => {
     info.value = [
       {
         icon: ['fas', 'chevron-up'],
-        language:"dashboard.average_per_node",
+        language: "dashboard.average_per_node",
         text:
           " " +
-          (appStore.stubly / (appStore.network/1000000)).toFixed(2) +
+          (appStore.stubly / (appStore.network / 1000000)).toFixed(2) +
           "M",
       },
       {
         icon: ['far', 'hdd'],
-        language:"",
+        language: "",
         text: "TVL" + " " + "$" + (JSON.parse(appStore.pubbley) * appStore.rate).toFixed(2) + "M",
       },
       {
         icon: ['far', 'hand-point-up'],
-        language:"dashboard.pledge_rate",
+        language: "dashboard.pledge_rate",
         text:
           " " +
           ((appStore.btgcount / (appStore.stuBlys - 74)) * 100).toFixed(2) +

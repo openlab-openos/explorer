@@ -4,7 +4,7 @@
     <card class="mb-3" style="height: 160px">
       <card-body>
         <div class="d-flex fw-bold small mb-3">
-          <span class="flex-grow-1">24H {{ $t('transaction.transfer_amount') }}</span>
+          <span class="flex-grow-1">{{ $t('transaction.transfer_amount') }}</span>
         </div>
         <div class="row align-items-center mb-2" style="height: 30px">
           <div style="
@@ -37,7 +37,7 @@
         </div>
         <div class="small text-inverse text-opacity-50 text-truncate" v-if="type">
           <template v-for="statInfo in info">
-            <div><font-awesome-icon :icon="statInfo.icon" /> {{ statInfo.text }} {{ $t(statInfo.language) }} </div>
+            <div><font-awesome-icon :icon="statInfo.icon" /> {{ $t(statInfo.language) }}  {{ statInfo.text }} </div>
           </template>
         </div>
       </card-body>
@@ -138,8 +138,8 @@ const rendered = (data) => {
           toFexedStake(priceTrans.value / data.length) *
           appStore.rate
         ).toFixed(2) +
-        " ",
-      language:"dashboard.per_transaction"
+        " USD",
+      language:"dashboard.per_transactions"
     },
   ];
   type.value = true;
