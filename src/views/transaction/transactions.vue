@@ -16,7 +16,7 @@
                 <th style=" text-align: left">{{ $t("transactions.btg") }}</th>
                 <th style=" text-align: left"> {{ $t("transactions.type") }}</th>
                 <th style=" text-align: left"> {{ $t("transactions.slot") }} </th>
-                <th style=" text-align: left"> {{ $t("time") }} </th>
+                <th style=" text-align: left"> {{ $t("transactions.time") }} </th>
               </tr>
               <tr v-for="(product, index) in orderData" :key="index" style="height: 35px">
                 <td style=" text-align: left; cursor: pointer" class="text-theme" @click="
