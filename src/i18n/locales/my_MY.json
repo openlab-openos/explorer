@@ -12,6 +12,7 @@
     "success": "Berjaya",
     "error": "Ralat",
     "name": "Nama",
+    "developer":"pembangun",
     "placehold": "Sila masukkan alamat, transaksi, blok",
     "navigation": {
         "title": "Navigasi",

@@ -49,6 +49,11 @@ export const useAppSidebarMenuStore = defineStore({
       'text': 'navigation.document',
       'type': true
     },{
+      'url': 'https://docs.openos.info/',
+      'icon': 'bi bi-person-square',
+      'text': 'developer',
+      'type': true
+    },{
       'url': 'https://github.com/orgs/openlab-openos/repositories',
       'icon': 'bi bi-github',
       'text': 'Github',

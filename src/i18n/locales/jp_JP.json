@@ -12,6 +12,7 @@
     "success": "成功",
     "error": "エラー",
     "name": "名前",
+    "developer":"開発者",
     "placehold": "アドレス、取引、ブロックを入力してください",
     "navigation": {
         "title": "ナビゲーション",

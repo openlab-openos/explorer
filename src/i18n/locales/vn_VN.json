@@ -12,6 +12,7 @@
     "success": "Thành công",
     "error": "Lỗi",
     "name": "Tên",
+    "developer":"nhà phát triển",
     "placehold": "Vui lòng nhập địa chỉ, giao dịch, khối",
     "navigation": {
         "title": "Điều hướng",
