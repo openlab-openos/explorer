@@ -12,6 +12,7 @@
     "success": "Erfolg",
     "error": "Fehler",
     "name": "Name",
+    "developer":"Den entwickler",
     "placehold": "Bitte Adresse, Transaktion, Block eingeben",
     "navigation": {
         "title": "Navigation",

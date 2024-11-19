@@ -12,6 +12,7 @@
     "success":"Success",
     "error":"Error",
     "name":"Name",
+    "developer":"Developer",
     "placehold":"Search Address Account Transaction",
     "navigation":{
         "title": "Navigation",

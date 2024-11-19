@@ -44,7 +44,8 @@ export const ipAddresses = {
     },
     {
       ip: "158.220.87.26",
-      location: [50.8544, -1.002],
+      // location: [50.8544, -1.002],
+      location: [51.9190, -125.1207],
       try: "GB",
       code: "EU",
       timezone: "Europe/London",
@@ -60,7 +61,8 @@ export const ipAddresses = {
     },
     {
       ip: "161.97.141.179",
-      location: [51.1878, 6.8607],
+      // location: [51.1878, 6.8607],
+      "location": [30.5595, 30.9375],
       try: "DE",
       code: "EU",
       timezone: "Europe/Berlin",
@@ -92,7 +94,8 @@ export const ipAddresses = {
     },
     {
       ip: "209.126.2.203",
-      location: [38.6364, -90.1985],
+      // location: [38.6364, -90.1985],
+      location: [-23.5505, -46.6333],
       try: "US",
       code: "NA",
       timezone: "America/Chicago",
@@ -204,11 +207,53 @@ export const ipAddresses = {
     },
     {
       ip: "92.118.59.172",
-      location: [38.6364, 90.1985],
+      location: [51.2216, 6.7897],
       try: "US",
       code: "NA",
       timezone: "America/Chicago",
       country_name: "United States"
     },
+    {
+      ip: "156.67.105.126",
+      location: [19.0748, 72.8856],
+      try: "IN",
+      code: "AS",
+      timezone: "Asia/Kolkata",
+      country_name: "India"
+    },
+    {
+      ip: "81.0.221.100",
+      location: [50.8544, -1.002],
+      try: "GB",
+      code: "AS",
+      timezone: "Europe/London",
+      country_name: "United Kingdom"
+    },
+    // {
+    //   ip: "81.0.248.53",
+    //   location: [50.8544, -1.002],
+    //   // location: [15.7563, 70.5018],
+    //   try: "GB",
+    //   code: "EU",
+    //   timezone: "Europe/London",
+    //   country_name: "United Kingdom"
+    // },
+    {
+      // ip: "171.96.191.1",
+      ip: "81.0.248.53",
+      location: [13.0444, 100.2357],
+      try: "TH",
+      code: "AS",
+      timezone: "Asia/Bangkok",
+      country_name: "Thailand"
+    }
+    // {
+    //   "ip": "171.96.191.1",
+    //   "location": [13.7563, 100.5018],
+    //   "try": "TH",
+    //   "code": "AS",
+    //   "timezone": "Asia/Bangkok",
+    //   "country_name": "Thailand"
+    // }
   ]
 };
