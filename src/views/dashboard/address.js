@@ -210,5 +210,29 @@ export const ipAddresses = {
       timezone: "America/Chicago",
       country_name: "United States"
     },
+    {
+      ip: "156.67.105.126",
+      location: [19.0748, 72.8856],
+      try: "IN",
+      code: "AS",
+      timezone: "Asia/Kolkata",
+      country_name: "India"
+    },
+    {
+      ip: "81.0.221.100",
+      location: [50.8544, -1.002],
+      try: "GB",
+      code: "AS",
+      timezone: "Europe/London",
+      country_name: "United Kingdom"
+    },
+    {
+      ip: "81.0.248.53",
+      location: [50.8544, -1.002],
+      try: "GB",
+      code: "EU",
+      timezone: "Europe/London",
+      country_name: "United Kingdom"
+    },
   ]
 };
