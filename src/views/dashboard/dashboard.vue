@@ -77,13 +77,13 @@ const PriceBtgVue = defineAsyncComponent(() =>
 );
 
 // 语言
-function selectLanguage(indexValue){
-  
-  
+function selectLanguage(indexValue) {
+
+
   i18n.global.locale = indexValue;
 }
 
-watchEffect(()=>{
+watchEffect(() => {
   selectLanguage(appStore.$state.language);
 })
 
@@ -105,7 +105,7 @@ const fetchOrderData = async () => {
   try {
     const res = await order("new_transactions");
     orderData.value = res.filter(item => item.result != null);
-    
+
     appStore.setTransaction(JSON.stringify(orderData.value));
   } catch (err) {
     console.error("Error fetching order data:", err);
@@ -145,7 +145,7 @@ const performanceSamples = async () => {
         );
         unnumTranstions.value.push(
           JSON.parse(response.result[i].numTransactions) +
-            JSON.parse(response.result[i].numNonVoteTransactions)
+          JSON.parse(response.result[i].numNonVoteTransactions)
         );
       }
     })
@@ -673,13 +673,13 @@ const getActivityLogData = async () => {
       return 0;
     });
     countLog.value = listCount;
-    
+
     ActivityLogData.value = list;
     appStore.setValidators(JSON.stringify(list));
     appStore
       .getPartData(
         (JSON.parse(ClusterNodes_list.length) - JSON.parse(list.length)) /
-          JSON.parse(ClusterNodes_list.length)
+        JSON.parse(ClusterNodes_list.length)
       )
       .toFixed(2);
     sessionStorage.setItem("accout", JSON.stringify(list));
@@ -755,30 +755,34 @@ const renderMap = async () => {
         ).country_name,
       });
     } else {
-      const ipData = ipAddresses.ip_addresses.find(
-        (item) => item.ip == ActivityLogData.value[i].ip
-      );
+      if (ipAddresses.ip_addresses) {
+        const ipData = ipAddresses.ip_addresses.find(
+          (item) => item.ip == ActivityLogData.value[i].ip
+        );
 
-      if (ipData) {
-        markers_data.push({
-          name: "",
-          coords: ipData.location,
-          try: ipData.try,
-          code: ipData.code,
-          timezone: ipData.timezone,
-          country_name: ipData.country_name,
-        });
-      } else {
-        let loc_lat = await getIPLocation(ActivityLogData.value[i].ip);
-        markers_data.push({
-          name: "",
-          coords: [loc_lat.latitude, loc_lat.longitude],
-          try: loc_lat.country,
-          code: loc_lat.continent_code,
-          timezone: loc_lat.timezone,
-          country_name: loc_lat.country_name,
-        });
+        if (ipData) {
+          markers_data.push({
+            name: "",
+            coords: ipData.location,
+            try: ipData.try,
+            code: ipData.code,
+            timezone: ipData.timezone,
+            country_name: ipData.country_name,
+          });
+        } else {
+          let loc_lat = await getIPLocation(ActivityLogData.value[i].ip);
+
+          markers_data.push({
+            name: "",
+            coords: [loc_lat.latitude, loc_lat.longitude],
+            try: loc_lat.country,
+            code: loc_lat.continent_code,
+            timezone: loc_lat.timezone,
+            country_name: loc_lat.country_name,
+          });
+        }
       }
+
     }
   }
 
@@ -922,89 +926,47 @@ onBeforeUnmount(() => {
             <!-- <card-expand-toggler /> -->
           </div>
           <div class="ratio ratio-21x9 mb-3" v-if="server.chart">
-            <apexchart
-              type="bar"
-              width="100%"
-              height="100%"
-              :options="server.chart.options"
-              :series="server.chart.series"
-            ></apexchart>
+            <apexchart type="bar" width="100%" height="100%" :options="server.chart.options"
+              :series="server.chart.series"></apexchart>
           </div>
           <div class="row">
-            <div
-              class="col-lg-6 mb-3 mb-lg-0"
-              v-for="(stat, index) in server.stats"
-              :key="index"
-            >
+            <div class="col-lg-6 mb-3 mb-lg-0" v-for="(stat, index) in server.stats" :key="index">
               <div class="d-flex align-items-center">
                 <div class="w-50px h-50px">
-                  <apexchart
-                    :height="stat.chart.height"
-                    :options="stat.chart.options"
-                    :series="stat.chart.series"
-                  >
+                  <apexchart :height="stat.chart.height" :options="stat.chart.options" :series="stat.chart.series">
                   </apexchart>
                 </div>
                 <div class="ps-3 flex-1">
-                  <div
-                    class="fs-10px fw-bold text-inverse text-opacity-50 mb-1"
-                  >
-                    {{ $t(stat.name)}}
+                  <div class="fs-10px fw-bold text-inverse text-opacity-50 mb-1">
+                    {{ $t(stat.name) }}
                   </div>
                   <div class="mb-2 fs-5 text-truncate" style="display: flex">
-                    <count-up
-                      duration="3"
-                      :startVal="stat.total"
-                      :end-val="stat.total"
-                    ></count-up>
+                    <count-up duration="3" :startVal="stat.total" :end-val="stat.total"></count-up>
                     {{ stat.unit }}
-                    /<count-up
-                      duration="3"
-                      :startVal="stat.totals"
-                      :end-val="stat.totals"
-                    ></count-up>
+                    /<count-up duration="3" :startVal="stat.totals" :end-val="stat.totals"></count-up>
                     {{ stat.unit }}
                   </div>
                   <div class="progress h-3px mb-1">
-                    <div
-                      class="progress-bar bg-theme"
-                      v-bind:style="{
-                        width:
-                          JSON.parse((stat.total / stat.totals).toFixed(2)) *
-                            100 +
-                          '%',
-                      }"
-                    ></div>
+                    <div class="progress-bar bg-theme" v-bind:style="{
+                      width:
+                        JSON.parse((stat.total / stat.totals).toFixed(2)) *
+                        100 +
+                        '%',
+                    }"></div>
                   </div>
-                  <div
-                    class="fs-11px text-inverse text-opacity-50 mb-2 text-truncate"
-                  >
-                    {{ $t(stat.time)}}
+                  <div class="fs-11px text-inverse text-opacity-50 mb-2 text-truncate">
+                    {{ $t(stat.time) }}
                   </div>
-                  <div
-                    class="d-flex align-items-center small"
-                    v-for="(info, index) in stat.info"
-                    :key="index"
-                  >
-                    <i
-                      class="bi bi-circle-fill fs-6px me-2"
-                      v-bind:class="info.class"
-                    ></i>
-                    <div
-                      class="flex-1"
-                      style="
+                  <div class="d-flex align-items-center small" v-for="(info, index) in stat.info" :key="index">
+                    <i class="bi bi-circle-fill fs-6px me-2" v-bind:class="info.class"></i>
+                    <div class="flex-1" style="
                         overflow: hidden;
                         text-overflow: ellipsis;
                         white-space: nowrap;
-                      "
-                    >
+                      ">
                       {{ $t(info.title) }}
                     </div>
-                    <div
-                      :style="info.style"
-                      @click="info.click ? epochSkip(info.value) : ''"
-                      class="text-theme"
-                    >
+                    <div :style="info.style" @click="info.click ? epochSkip(info.value) : ''" class="text-theme">
                       {{ info.value }}
                     </div>
                   </div>
@@ -1026,20 +988,14 @@ onBeforeUnmount(() => {
             <!-- <card-expand-toggler /> -->
           </div>
           <div class="ratio ratio-21x9 mb-3">
-            <div
-              class="jvm-without-padding"
-              id="map-container maps"
-              ref="mapContainer"
-            >
+            <div class="jvm-without-padding" id="map-container maps" ref="mapContainer">
               <div id="map"></div>
             </div>
           </div>
 
           <div class="row gx-4" v-if="traffic.chart">
             <div class="col-lg-6 mb-3 mb-lg-0">
-              <table
-                class="w-100 small mb-0 text-truncate text-inverse text-opacity-60"
-              >
+              <table class="w-100 small mb-0 text-truncate text-inverse text-opacity-60">
                 <thead>
                   <tr class="text-inverse text-opacity-75">
                     <th class="w-50">{{ $t("dashboard.country") }}</th>
@@ -1049,11 +1005,7 @@ onBeforeUnmount(() => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr
-                    v-for="(country, index) in traffic.coun"
-                    v-bind:class="country.class"
-                    :key="index"
-                  >
+                  <tr v-for="(country, index) in traffic.coun" v-bind:class="country.class" :key="index">
                     <td style="text-align: left">{{ country.country_name }}</td>
                     <td style="text-align: left">{{ country.name }}</td>
 
@@ -1063,36 +1015,21 @@ onBeforeUnmount(() => {
                 </tbody>
               </table>
             </div>
-            <div
-              class="col-lg-6"
-              v-if="traffic.lenght != 0"
-              style="margin-top: 6px"
-            >
+            <div class="col-lg-6" v-if="traffic.lenght != 0" style="margin-top: 6px">
               <card>
                 <card-body class="py-2">
                   <div class="d-flex align-items-center">
                     <div class="w-70px">
-                      <apexchart
-                        :height="traffic.chart.height"
-                        :options="traffic.chart.options"
-                        :series="traffic.chart.series"
-                      ></apexchart>
+                      <apexchart :height="traffic.chart.height" :options="traffic.chart.options"
+                        :series="traffic.chart.series"></apexchart>
                     </div>
                     <div class="flex-1 ps-2">
-                      <table
-                        class="w-100 small mb-0 text-inverse text-opacity-60"
-                      >
+                      <table class="w-100 small mb-0 text-inverse text-opacity-60">
                         <tbody>
-                          <tr
-                            v-for="(source, index) in traffic.chainArray"
-                            :key="index"
-                          >
+                          <tr v-for="(source, index) in traffic.chainArray" :key="index">
                             <td>
                               <div class="d-flex align-items-center">
-                                <div
-                                  class="w-6px h-6px rounded-pill me-2"
-                                  v-bind:class="source.class"
-                                ></div>
+                                <div class="w-6px h-6px rounded-pill me-2" v-bind:class="source.class"></div>
                                 {{ source.timezone }}
                               </div>
                             </td>
@@ -1123,9 +1060,7 @@ onBeforeUnmount(() => {
             <!-- <card-expand-toggler /> -->
           </div>
           <div class="table-responsive">
-            <table
-              class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small"
-            >
+            <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
               <tbody>
                 <tr>
                   <th style="width: 20%; text-align: left">{{ $t("transactions.signature") }}</th>
@@ -1136,35 +1071,24 @@ onBeforeUnmount(() => {
                   <th style="width: 20%; text-align: left">{{ $t("transactions.time") }}</th>
                 </tr>
 
-                <tr
-                  v-for="(product, index) in orderData"
-                  :key="index"
-                  style="height: 35px"
-                >
-                  <td
-                    style="width: 20%; text-align: left; cursor: pointer"
-                    class="text-theme"
-                    @click="pubbtx(product.result.transaction.signatures[0])"
-                  >
+                <tr v-for="(product, index) in orderData" :key="index" style="height: 35px">
+                  <td style="width: 20%; text-align: left; cursor: pointer" class="text-theme"
+                    @click="pubbtx(product.result.transaction.signatures[0])">
                     {{
                       stringcate(
                         promaster[product.result.transaction.signatures[0]]
                           ? promaster[product.result.transaction.signatures[0]]
-                              .name
+                            .name
                           : product.result.transaction.signatures[0]
                       )
                     }}
                   </td>
-                  <td
-                    style="width: 20%; text-align: left; cursor: pointer"
-                    class="text-theme"
-                    @click="
-                      pubbleys(
-                        product.result.transaction.message.instructions[0]
-                          .parsed.info.source
-                      )
-                    "
-                  >
+                  <td style="width: 20%; text-align: left; cursor: pointer" class="text-theme" @click="
+                    pubbleys(
+                      product.result.transaction.message.instructions[0]
+                        .parsed.info.source
+                    )
+                    ">
                     {{
                       stringcate(
                         promaster[
@@ -1172,24 +1096,20 @@ onBeforeUnmount(() => {
                             .parsed.info.source
                         ]
                           ? promaster[
-                              product.result.transaction.message.instructions[0]
-                                .parsed.info.source
-                            ].name
-                          : product.result.transaction.message.instructions[0]
+                            product.result.transaction.message.instructions[0]
                               .parsed.info.source
+                          ].name
+                          : product.result.transaction.message.instructions[0]
+                            .parsed.info.source
                       )
                     }}
                   </td>
-                  <td
-                    style="width: 20%; text-align: left; cursor: pointer"
-                    class="text-theme"
-                    @click="
-                      pubbleys(
-                        product.result.transaction.message.instructions[0]
-                          .parsed.info.destination
-                      )
-                    "
-                  >
+                  <td style="width: 20%; text-align: left; cursor: pointer" class="text-theme" @click="
+                    pubbleys(
+                      product.result.transaction.message.instructions[0]
+                        .parsed.info.destination
+                    )
+                    ">
                     {{
                       stringcate(
                         promaster[
@@ -1197,11 +1117,11 @@ onBeforeUnmount(() => {
                             .parsed.info.destination
                         ]
                           ? promaster[
-                              product.result.transaction.message.instructions[0]
-                                .parsed.info.destination
-                            ].name
-                          : product.result.transaction.message.instructions[0]
+                            product.result.transaction.message.instructions[0]
                               .parsed.info.destination
+                          ].name
+                          : product.result.transaction.message.instructions[0]
+                            .parsed.info.destination
                       )
                     }}
                   </td>
@@ -1214,9 +1134,7 @@ onBeforeUnmount(() => {
                     }}
                   </td>
                   <td style="width: 15%; text-align: left">
-                    <button
-                      type="button"
-                      style="
+                    <button type="button" style="
                         width: 80px;
                         height: 20px;
                         padding: 0;
@@ -1227,8 +1145,7 @@ onBeforeUnmount(() => {
                         line-height: 18px;
                         text-align: center;
                         cursor: auto;
-                      "
-                    >
+                      ">
                       {{
                         textValue(
                           product.result.transaction.message.instructions[0]
@@ -1258,9 +1175,7 @@ onBeforeUnmount(() => {
             <!-- <card-expand-toggler /> -->
           </div>
           <div class="table-responsive">
-            <table
-              class="table table-striped table-borderless mb-2px small text-nowrap"
-            >
+            <table class="table table-striped table-borderless mb-2px small text-nowrap">
               <tbody>
                 <tr>
                   <th>{{ $t("validators.name") }}</th>
@@ -1270,28 +1185,15 @@ onBeforeUnmount(() => {
 
                   <th style="text-align: left">{{ $t("validators.status") }}</th>
                 </tr>
-                <tr
-                  v-if="ActivityLogData"
-                  v-for="(log, index) in ActivityLogData"
-                  :key="index"
-                >
+                <tr v-if="ActivityLogData" v-for="(log, index) in ActivityLogData" :key="index">
                   <td>
                     <span class="d-flex align-items-center">
-                      <img
-                        :src="log.icon"
-                        alt=""
-                        width="20"
-                        style="margin: 0px 5px"
-                      />
+                      <img :src="log.icon" alt="" width="20" style="margin: 0px 5px" />
                       {{ log.name }}
                     </span>
                   </td>
                   <td style="text-align: left">
-                    <span
-                      class="text-theme"
-                      style="cursor: pointer"
-                      @click="pubbleys(log.pubkey)"
-                    >
+                    <span class="text-theme" style="cursor: pointer" @click="pubbleys(log.pubkey)">
                       {{
                         stringcate(
                           promaster[log.pubkey]
@@ -1302,11 +1204,8 @@ onBeforeUnmount(() => {
                     </span>
                   </td>
                   <td style="text-align: left; display: flex">
-                    <count-up
-                      :startVal="toFexedStake(log.activatedStake)"
-                      :end-val="toFexedStake(log.activatedStake)"
-                      duration="3"
-                    ></count-up>
+                    <count-up :startVal="toFexedStake(log.activatedStake)" :end-val="toFexedStake(log.activatedStake)"
+                      duration="3"></count-up>
                     &nbsp; BTG &nbsp; (
                     {{ countplount(log.activatedStake) }}
                     )
@@ -1315,20 +1214,12 @@ onBeforeUnmount(() => {
                     {{ log.ip }}
                   </td>
                   <td style="text-align: left">
-                    <span
-                      :style="{
-                        color: log.activatedStake !== '' ? 'green' : 'yellow',
-                      }"
-                      class="menu-icon"
-                    >
-                      <font-awesome-icon
-                        icon="fas fa-lg fa-fw me-2 fa-check-circle"
-                        v-if="log.activatedStake !== ''"
-                      />
-                      <font-awesome-icon
-                        icon="fas fa-lg fa-fw me-2 fa-question-circle"
-                        v-if="log.activatedStake == ''"
-                      />
+                    <span :style="{
+                      color: log.activatedStake !== '' ? 'green' : 'yellow',
+                    }" class="menu-icon">
+                      <font-awesome-icon icon="fas fa-lg fa-fw me-2 fa-check-circle" v-if="log.activatedStake !== ''" />
+                      <font-awesome-icon icon="fas fa-lg fa-fw me-2 fa-question-circle"
+                        v-if="log.activatedStake == ''" />
                     </span>
                   </td>
                 </tr>

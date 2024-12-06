@@ -215,7 +215,8 @@ export const ipAddresses = {
     },
     {
       ip: "156.67.105.126",
-      location: [19.0748, 72.8856],
+      // location: [19.0748, 72.8856],
+      location: [13.0444, 100.2357],
       try: "IN",
       code: "AS",
       timezone: "Asia/Kolkata",
@@ -224,6 +225,8 @@ export const ipAddresses = {
     {
       ip: "81.0.221.100",
       location: [50.8544, -1.002],
+      // location: [13.0444, 100.2357],
+
       try: "GB",
       code: "AS",
       timezone: "Europe/London",
@@ -239,13 +242,52 @@ export const ipAddresses = {
     //   country_name: "United Kingdom"
     // },
     {
-      // ip: "171.96.191.1",
       ip: "81.0.248.53",
       location: [13.0444, 100.2357],
       try: "TH",
       code: "AS",
       timezone: "Asia/Bangkok",
       country_name: "Thailand"
+    },
+    {
+      ip: "94.72.112.196",
+      location: [38.6364, -90.1985],
+      try: "US",
+      code: "NA",
+      timezone: "America/Chicago",
+      country_name: "United States"
+    },
+    {
+      ip: "149.102.133.8",
+      location: [51.2216, 6.7897],
+      try: "DE",
+      code: "EU",
+      timezone: "Europe/Berlin",
+      country_name: "Germany"
+    },
+    {
+      ip: "185.250.38.234",
+      location: [1.3552, 103.8859],
+      try: "SG",
+      code: "AS",
+      timezone: "Asia/Singapore",
+      country_name: "Singapore"
+    },
+    {
+      ip: "212.28.186.142",
+      location: [38.6364, -90.1985],
+      try: "US",
+      code: "NA",
+      timezone: "America/Chicago",
+      country_name: "United States"
+    },
+    {
+      ip: "38.242.216.73",
+      location: [51.2216, 6.7897],
+      try: "DE",
+      code: "EU",
+      timezone: "Europe/Berlin",
+      country_name: "Germany"
     }
     // {
     //   "ip": "171.96.191.1",
