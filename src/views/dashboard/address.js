@@ -290,12 +290,20 @@ export const ipAddresses = {
       country_name: "Germany"
     },
     {
-      "ip": "154.26.159.163",
-      "location": [1.2805, 103.848],
-      "try": "SG",  // 假设这是国家代码
-      "code": "AS", // 假设这是大陆代码
-      "timezone": "Asia/Singapore",
-      "country_name": "Singapore"
+      ip: "154.26.159.163",
+      location: [1.2805, 103.848],
+      try: "SG", 
+      code: "AS", 
+      timezone: "Asia/Singapore",
+      country_name: "Singapore"
+    },
+    {
+      ip: "46.250.255.174",
+      location: [51.5094, -0.059],
+      country_code: "GB",
+      continent_code: "EU",
+      timezone: "Europe/London",
+      country_name: "United Kingdom"
     }
   ]
 };
