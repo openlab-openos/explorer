@@ -659,7 +659,9 @@ const getActivityLogData = async () => {
         } else {
         }
       }
-      listCount += list[i].activatedStake;
+      if (list[i].activatedStake) {
+        listCount += JSON.parse(list[i].activatedStake);
+      }
     }
     list.sort((a, b) => {
       let nameA = a.name.toUpperCase();
@@ -673,7 +675,8 @@ const getActivityLogData = async () => {
       return 0;
     });
     countLog.value = listCount;
-
+    console.log(list);
+    
     ActivityLogData.value = list;
     appStore.setValidators(JSON.stringify(list));
     appStore
@@ -688,6 +691,9 @@ const getActivityLogData = async () => {
 };
 
 const countplount = (num) => {
+  console.log(num);
+  console.log(countLog.value);
+  
   return ((num / countLog.value) * 100).toFixed(2) + "%";
 };
 

@@ -288,14 +288,14 @@ export const ipAddresses = {
       code: "EU",
       timezone: "Europe/Berlin",
       country_name: "Germany"
+    },
+    {
+      "ip": "154.26.159.163",
+      "location": [1.2805, 103.848],
+      "try": "SG",  // 假设这是国家代码
+      "code": "AS", // 假设这是大陆代码
+      "timezone": "Asia/Singapore",
+      "country_name": "Singapore"
     }
-    // {
-    //   "ip": "171.96.191.1",
-    //   "location": [13.7563, 100.5018],
-    //   "try": "TH",
-    //   "code": "AS",
-    //   "timezone": "Asia/Bangkok",
-    //   "country_name": "Thailand"
-    // }
   ]
 };
