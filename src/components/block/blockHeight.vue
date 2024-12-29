@@ -155,7 +155,6 @@ function stopTimer() {
 
 onMounted(() => {
   startTimer()
-  // initECharts();
 })
 
 defineExpose({

@@ -8,13 +8,12 @@ import "jsvectormap/dist/css/jsvectormap.min.css";
 import { chainRequest } from "../../request/chain";
 import CountUp from "vue-countup-v3";
 import { useRouter } from "vue-router";
-import { order } from "../../request/order";
-import moment from "moment";
 import { ustdData } from "../../request/ustd";
 import { defineAsyncComponent, getCurrentInstance } from "vue";
 import { useAppStore } from "@/stores/index";
-import { ipAddresses } from "./address";
 import i18n from "@/i18n";
+import moment from "moment";
+
 
 const appStore = useAppStore();
 const appVariable = useAppVariableStore();
@@ -27,16 +26,11 @@ const slot = ref(1);
 const inepoch = ref(1);
 const epoch = ref();
 const solttime = ref();
-const traffic = ref([]);
 
 const pubbley = ref(1);
 const stubly = ref(1);
-const country = ref();
-const source = ref();
-const series = ref();
 const countLog = ref();
 const ActivityLogData = ref([]);
-const orderData = ref([]);
 const server = ref([]);
 const mapContainer = ref();
 const pageType = ref(true);
@@ -47,9 +41,6 @@ const networkref = ref(null);
 
 const router = useRouter();
 
-const timeFormatter = (time) => {
-  return moment(time).fromNow();
-};
 
 const BlockHeightVue = defineAsyncComponent(() =>
   import("../../components/block/blockHeight.vue")
@@ -75,11 +66,15 @@ const PriceVue = defineAsyncComponent(() =>
 const PriceBtgVue = defineAsyncComponent(() =>
   import("../../components/block/priceBtg.vue")
 );
+const mapDeshboard = defineAsyncComponent(() =>
+  import("../../components/dashboard/map.vue")
+);
+const orderVue = defineAsyncComponent(() =>
+  import("../../components/dashboard/order.vue")
+);
 
 // 语言
 function selectLanguage(indexValue) {
-
-
   i18n.global.locale = indexValue;
 }
 
@@ -100,18 +95,6 @@ ustdData().then((data) => {
   appStore.setRate(data.data.rate);
   appStore.getRateData(data.data);
 });
-
-const fetchOrderData = async () => {
-  try {
-    const res = await order("new_transactions");
-    orderData.value = res.filter(item => item.result != null);
-
-    appStore.setTransaction(JSON.stringify(orderData.value));
-  } catch (err) {
-    console.error("Error fetching order data:", err);
-  }
-};
-
 
 const unnumTranstions = ref([]);
 const timeName = ref([]);
@@ -180,9 +163,6 @@ const fetchData = async () => {
 
 onMounted(() => {
   fetchData();
-  // setTimeout(() => {
-  fetchOrderData();
-  // }, 1000); // 延迟1秒加载订单数据
 });
 
 const getTime = (timestamp) => {
@@ -473,119 +453,6 @@ const getServerData = () => {
   };
 };
 
-function uniqueArrayByProperty(arr, key) {
-  // 创建一个映射，其中键是key的值，值是原始数组的项（作为数组）
-  const uniqueItemsMap = arr.reduce((acc, item) => {
-    const keyValue = item[key];
-    // 如果该key还没有在映射中，则添加一个新的数组项
-    if (!acc[keyValue]) {
-      acc[keyValue] = [item];
-    } else {
-      // 如果已经存在，则将项添加到现有数组中
-      acc[keyValue].push(item);
-    }
-    return acc;
-  }, {});
-
-  // 将映射转换为一个数组，其中每个对象包含原始数据和它的出现次数
-  return Object.entries(uniqueItemsMap).map(([key, items]) => ({
-    value: key, // 如果需要key的值，可以保留这一行
-    items: items[0].timezone.split("/")[0], // 这是具有相同key值的原始数据项数组
-    count: items.length, // 这是该项的出现次数
-    country_name: items[0].country_name,
-    timezone: items[0].timezone,
-  }));
-}
-
-const getTrafficData = (data) => {
-  let coun = [];
-  let countryArray = [];
-  let chartArray = [];
-  let chartName = [];
-  if (data) {
-    let arrayData = uniqueArrayByProperty(data, "try");
-    let country = uniqueArrayByProperty(data, "code");
-
-    for (let i = 0; i < 5; i++) {
-      coun.push({
-        name: arrayData[i].value,
-        visits: arrayData[i].count,
-        pct: (
-          (JSON.parse(arrayData[i].count) / JSON.parse(data.length)) *
-          100
-        ).toFixed(2),
-        class: 0,
-        timezone: arrayData[i].items,
-        country_name: arrayData[i].country_name,
-      });
-    }
-    for (let i in country) {
-      countryArray.push({
-        name: country[i].value,
-        visits: country[i].count,
-        pct: (
-          (JSON.parse(country[i].count) / JSON.parse(data.length)) *
-          100
-        ).toFixed(2),
-        class: 0,
-        timezone: country[i].items,
-        country_name: country[i].country_name,
-      });
-      chartArray.push(
-        (
-          (JSON.parse(arrayData[i].count) / JSON.parse(data.length)) *
-          100
-        ).toFixed(2)
-      );
-    }
-  }
-  let chainArray = countryArray.sort((a, b) => a - b);
-  country.value = coun;
-  source.value = coun.sort((a, b) => a - b);
-  appStore.getCountryData(chainArray[0]);
-  series.value = chartArray.map(parseFloat);
-  let array = series.value;
-  for (let i in chainArray) {
-    chartName.push(chainArray[i].timezone);
-  }
-  return {
-    coun,
-    chainArray,
-    chart: {
-      height: 70,
-      options: {
-        chart: { type: "donut", sparkline: { enabled: true } },
-        colors: [
-          "rgba(" + appVariable.color.themeRgb + ", .15)",
-          "rgba(" + appVariable.color.themeRgb + ", .35)",
-          "rgba(" + appVariable.color.themeRgb + ", .55)",
-          "rgba(" + appVariable.color.themeRgb + ", .75)",
-          "rgba(" + appVariable.color.themeRgb + ", .95)",
-        ],
-        stroke: {
-          show: false,
-          curve: "smooth",
-          lineCap: "butt",
-          colors: "rgba(" + appVariable.color.blackRgb + ", .25)",
-          width: 2,
-          dashArray: 0,
-        },
-        plotOptions: { pie: { donut: { background: "transparent" } } },
-        tooltip: {
-          custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-
-            return `<div class="custom-tooltip" style="padding:5px">  
-              <span>${chartName[seriesIndex]}: </span> 
-              <span>${series[seriesIndex]} %</span> 
-            </div>`;
-          },
-        },
-      },
-      series: array,
-    },
-  };
-};
-
 const getActivityLogData = async () => {
   let requestBody = {
     id: "35a5860e-2564-4b92-890d-dc57e9c58d75",
@@ -675,8 +542,7 @@ const getActivityLogData = async () => {
       return 0;
     });
     countLog.value = listCount;
-    console.log(list);
-    
+
     ActivityLogData.value = list;
     appStore.setValidators(JSON.stringify(list));
     appStore
@@ -686,14 +552,11 @@ const getActivityLogData = async () => {
       )
       .toFixed(2);
     sessionStorage.setItem("accout", JSON.stringify(list));
-    renderMap();
+    // renderMap();
   });
 };
 
 const countplount = (num) => {
-  console.log(num);
-  console.log(countLog.value);
-  
   return ((num / countLog.value) * 100).toFixed(2) + "%";
 };
 
@@ -707,23 +570,6 @@ const requestList = async (object) => {
     });
 };
 
-const getIPLocation = async (ip) => {
-  const url = `https://ipapi.co/${ip}/json`; // 使用你的访问令牌
-
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    const data = await response.json();
-    localStorage.setItem(ip, JSON.stringify(data));
-    return data; // 返回包含地理位置信息的对象
-  } catch (error) {
-    console.error("Error fetching location:", error);
-    return error; // 或抛出错误
-  }
-};
-
 const stringcate = (str) => {
   if (str.length < 10) {
     return str;
@@ -732,154 +578,9 @@ const stringcate = (str) => {
   }
 };
 
-const randomNo = () => {
-  return Math.floor(Math.random() * 60) + 30;
-};
-
-const mapData = ref([]);
-
-const renderMap = async () => {
-  let markers_data = [];
-  for (let i in ActivityLogData.value) {
-    if (localStorage.getItem(ActivityLogData.value[i].ip)) {
-      markers_data.push({
-        name: "",
-        coords: [
-          JSON.parse(localStorage.getItem(ActivityLogData.value[i].ip))
-            .latitude,
-          JSON.parse(localStorage.getItem(ActivityLogData.value[i].ip))
-            .longitude,
-        ],
-        try: JSON.parse(localStorage.getItem(ActivityLogData.value[i].ip))
-          .country,
-        code: JSON.parse(localStorage.getItem(ActivityLogData.value[i].ip))
-          .continent_code,
-        timezone: JSON.parse(localStorage.getItem(ActivityLogData.value[i].ip))
-          .timezone,
-        country_name: JSON.parse(
-          localStorage.getItem(ActivityLogData.value[i].ip)
-        ).country_name,
-      });
-    } else {
-      if (ipAddresses.ip_addresses) {
-        const ipData = ipAddresses.ip_addresses.find(
-          (item) => item.ip == ActivityLogData.value[i].ip
-        );
-
-        if (ipData) {
-          markers_data.push({
-            name: "",
-            coords: ipData.location,
-            try: ipData.try,
-            code: ipData.code,
-            timezone: ipData.timezone,
-            country_name: ipData.country_name,
-          });
-        } else {
-          let loc_lat = await getIPLocation(ActivityLogData.value[i].ip);
-
-          markers_data.push({
-            name: "",
-            coords: [loc_lat.latitude, loc_lat.longitude],
-            try: loc_lat.country,
-            code: loc_lat.continent_code,
-            timezone: loc_lat.timezone,
-            country_name: loc_lat.country_name,
-          });
-        }
-      }
-
-    }
-  }
-
-  const coordsCounts = new Map();
-
-  markers_data.forEach((obj) => {
-    const key = obj.coords[0];
-    if (coordsCounts.has(key)) {
-      const currentCount = coordsCounts.get(key);
-      coordsCounts.set(key, currentCount + 1);
-      obj.count = currentCount + 1;
-    } else {
-      coordsCounts.set(key, 1);
-      obj.count = 1;
-    }
-  });
-  for (let i in markers_data) {
-    if (markers_data[i].count > 1) {
-      let lat = Number(markers_data[i].coords[0]); // 转换或默认为0
-      let lng = Number(markers_data[i].coords[1]); // 转换或默认为0
-
-      // 现在进行数值加法
-
-      if (i % 2 == 0) {
-        lat += 1;
-      } else {
-        lat -= 1;
-      }
-      lng += markers_data[i].count * 2; // 这可能是一个合理的经度偏移量
-
-      // 更新coords数组
-      markers_data[i].coords[0] = lat;
-      markers_data[i].coords[1] = lng;
-    }
-
-    let currentLat = Number(markers_data[i].coords[0]);
-    for (let j = 0; j < markers_data.length; j++) {
-      if (j < markers_data.length) {
-        if (i != j) {
-          let compareLat = Number(markers_data[j].coords[0]); // 比较项的纬度
-
-          if (Math.abs(currentLat - compareLat) < 1) {
-            markers_data[j].coords[0] -= 1;
-            markers_data[j].coords[1] += 1;
-          }
-        }
-      }
-    }
-  }
-  map.value.addMarkers(markers_data);
-
-  mapData.value = markers_data;
-  traffic.value = getTrafficData(markers_data);
-};
-
-const mapCreate = () => {
-  map.value = new jsVectorMap({
-    selector: "#map",
-    map: "world",
-    zoomButtons: true,
-    normalizeFunction: "polynomial",
-    hoverOpacity: 0.5,
-    hoverColor: false,
-    zoomOnScroll: false,
-    focusOn: { x: 0.5, y: 0.5, scale: 1 },
-    markers: mapData.value,
-    markerStyle: {
-      initial: { fill: appVariable.color.theme, stroke: "none", r: 4 },
-      hover: { fill: appVariable.color.theme },
-    },
-    regionStyle: {
-      initial: {
-        fill: appVariable.color.inverse,
-        fillOpacity: 0.35,
-        stroke: "none",
-        strokeWidth: 0.4,
-        strokeOpacity: 1,
-      },
-      hover: { fillOpacity: 0.5 },
-    },
-    backgroundColor: "transparent",
-  });
-};
-
-const textValue = (text) => {
-  return text.toUpperCase();
-};
 
 onMounted(() => {
   getActivityLogData();
-  mapCreate();
 });
 
 const epochSkip = (num) => {
@@ -887,15 +588,6 @@ const epochSkip = (num) => {
     name: "epoch",
     params: {
       num: num,
-    },
-  });
-};
-
-const pubbtx = (item) => {
-  router.push({
-    name: "tx",
-    params: {
-      item: item,
     },
   });
 };
@@ -986,191 +678,11 @@ onBeforeUnmount(() => {
     <!-- END server-stats -->
 
     <!-- BEGIN traffic-analytics -->
-    <div class="col-xl-6">
-      <card class="mb-3">
-        <card-body style="min-height: 400px">
-          <div class="d-flex fw-bold small mb-3">
-            <span class="flex-grow-1">{{ $t("dashboard.node_analytics") }}</span>
-            <!-- <card-expand-toggler /> -->
-          </div>
-          <div class="ratio ratio-21x9 mb-3">
-            <div class="jvm-without-padding" id="map-container maps" ref="mapContainer">
-              <div id="map"></div>
-            </div>
-          </div>
-
-          <div class="row gx-4" v-if="traffic.chart">
-            <div class="col-lg-6 mb-3 mb-lg-0">
-              <table class="w-100 small mb-0 text-truncate text-inverse text-opacity-60">
-                <thead>
-                  <tr class="text-inverse text-opacity-75">
-                    <th class="w-50">{{ $t("dashboard.country") }}</th>
-                    <th class="w-25">{{ $t('dashboard.code') }}</th>
-                    <th class="w-25">{{ $t("dashboard.vaildators") }}</th>
-                    <th class="w-25 text-end">{{ $t("dashboard.pct") }}%</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(country, index) in traffic.coun" v-bind:class="country.class" :key="index">
-                    <td style="text-align: left">{{ country.country_name }}</td>
-                    <td style="text-align: left">{{ country.name }}</td>
-
-                    <td style="text-align: left">{{ country.visits }}</td>
-                    <td class="text-end">{{ country.pct }}%</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="col-lg-6" v-if="traffic.lenght != 0" style="margin-top: 6px">
-              <card>
-                <card-body class="py-2">
-                  <div class="d-flex align-items-center">
-                    <div class="w-70px">
-                      <apexchart :height="traffic.chart.height" :options="traffic.chart.options"
-                        :series="traffic.chart.series"></apexchart>
-                    </div>
-                    <div class="flex-1 ps-2">
-                      <table class="w-100 small mb-0 text-inverse text-opacity-60">
-                        <tbody>
-                          <tr v-for="(source, index) in traffic.chainArray" :key="index">
-                            <td>
-                              <div class="d-flex align-items-center">
-                                <div class="w-6px h-6px rounded-pill me-2" v-bind:class="source.class"></div>
-                                {{ source.timezone }}
-                              </div>
-                            </td>
-                            <td>
-                              {{ source.name }}
-                            </td>
-                            <td class="text-end">{{ source.pct }}%</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </card-body>
-              </card>
-            </div>
-          </div>
-        </card-body>
-      </card>
-    </div>
+    <mapDeshboard></mapDeshboard>
     <!-- END traffic-analytics -->
-
-    <!-- BEGIN top-products -->
     <div class="col-xl-6">
-      <card class="mb-3">
-        <card-body>
-          <div class="d-flex fw-bold small mb-3">
-            <span class="flex-grow-1">{{ $t("dashboard.new_transactions") }}</span>
-            <!-- <card-expand-toggler /> -->
-          </div>
-          <div class="table-responsive">
-            <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
-              <tbody>
-                <tr>
-                  <th style="width: 20%; text-align: left">{{ $t("transactions.signature") }}</th>
-                  <th style="width: 20%; text-align: left">{{ $t("transactions.source") }}</th>
-                  <th style="width: 20%; text-align: left">{{ $t("transactions.destination") }}</th>
-                  <th style="width: 10%; text-align: left">{{ $t("transactions.btg") }}</th>
-                  <th style="width: 10%; text-align: left">{{ $t("transactions.type") }}</th>
-                  <th style="width: 20%; text-align: left">{{ $t("transactions.time") }}</th>
-                </tr>
-
-                <tr v-for="(product, index) in orderData" :key="index" style="height: 35px">
-                  <td style="width: 20%; text-align: left; cursor: pointer" class="text-theme"
-                    @click="pubbtx(product.result.transaction.signatures[0])">
-                    {{
-                      stringcate(
-                        promaster[product.result.transaction.signatures[0]]
-                          ? promaster[product.result.transaction.signatures[0]]
-                            .name
-                          : product.result.transaction.signatures[0]
-                      )
-                    }}
-                  </td>
-                  <td style="width: 20%; text-align: left; cursor: pointer" class="text-theme" @click="
-                    pubbleys(
-                      product.result.transaction.message.instructions[0]
-                        .parsed.info.source
-                    )
-                    ">
-                    {{
-                      stringcate(
-                        promaster[
-                          product.result.transaction.message.instructions[0]
-                            .parsed.info.source
-                        ]
-                          ? promaster[
-                            product.result.transaction.message.instructions[0]
-                              .parsed.info.source
-                          ].name
-                          : product.result.transaction.message.instructions[0]
-                            .parsed.info.source
-                      )
-                    }}
-                  </td>
-                  <td style="width: 20%; text-align: left; cursor: pointer" class="text-theme" @click="
-                    pubbleys(
-                      product.result.transaction.message.instructions[0]
-                        .parsed.info.destination
-                    )
-                    ">
-                    {{
-                      stringcate(
-                        promaster[
-                          product.result.transaction.message.instructions[0]
-                            .parsed.info.destination
-                        ]
-                          ? promaster[
-                            product.result.transaction.message.instructions[0]
-                              .parsed.info.destination
-                          ].name
-                          : product.result.transaction.message.instructions[0]
-                            .parsed.info.destination
-                      )
-                    }}
-                  </td>
-                  <td style="width: 10%; text-align: left">
-                    {{
-                      toFexedStake(
-                        product.result.transaction.message.instructions[0]
-                          .parsed.info.lamports
-                      )
-                    }}
-                  </td>
-                  <td style="width: 15%; text-align: left">
-                    <button type="button" style="
-                        width: 80px;
-                        height: 20px;
-                        padding: 0;
-                        border: 1px solid #3cd2a5;
-                        background-color: #212b38;
-                        color: #3cd2a5;
-                        border-radius: 2px;
-                        line-height: 18px;
-                        text-align: center;
-                        cursor: auto;
-                      ">
-                      {{
-                        textValue(
-                          product.result.transaction.message.instructions[0]
-                            .parsed.type
-                        )
-                      }}
-                    </button>
-                  </td>
-                  <td style="width: 20%; text-align: left; white-space: nowrap">
-                    {{ timeFormatter(product.result.blockTime * 1000) }} &nbsp;
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </card-body>
-      </card>
+      <orderVue :boolean="true" />
     </div>
-    <!-- END top-products -->
 
     <!-- BEGIN activity-log -->
     <div class="col-xl-6">

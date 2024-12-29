@@ -46,7 +46,6 @@
                     <td style="text-align: left">
                       <span class="text-theme" style="cursor: pointer" @click="pubbleys(log.pubkey)">
                         {{ promaster[log.pubkey] ? promaster[log.pubkey].name : log.pubkey }}
-                        <!-- {{ log.pubkey }} -->
                       </span>
                     </td>
                     <td style="text-align: left; display: flex">
@@ -67,7 +66,6 @@
                           v-if="log.activatedStake !== ''" />
                         <font-awesome-icon icon="fas fa-lg fa-fw me-2 fa-question-circle"
                           v-if="log.activatedStake == ''" />
-                        <!-- {{ log.pubkey }} -->
                       </span>
                     </td>
                   </tr>
