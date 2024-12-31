@@ -8,6 +8,6 @@
 import { defineAsyncComponent } from "vue";
 
 const orderVue = defineAsyncComponent(() =>
-  import("../../components/dashboard/order.vue")
+  import("../../components/transaction/list.vue")
 );
 </script>

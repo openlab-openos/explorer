@@ -35,7 +35,8 @@ import CardFooter from '@/components/bootstrap/CardFooter.vue';
 import CardGroup from '@/components/bootstrap/CardGroup.vue';
 import CardImgOverlay from '@/components/bootstrap/CardImgOverlay.vue';
 import CardExpandToggler from '@/components/bootstrap/CardExpandToggler.vue';
-
+import { Buffer } from 'buffer/';
+window.Buffer = Buffer;
 const emitter = mitt();
 
 let paini = createPinia();

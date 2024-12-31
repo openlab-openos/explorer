@@ -37,7 +37,7 @@
                                     product.result.transaction.signatures[0]
                                 )
                                 ">
-                                 {{
+                                {{
                                     promaster[product.result.transaction.signatures[0]] ?
                                         promaster[product.result.transaction.signatures[0]].name :
                                         product.result.transaction.signatures[0]
@@ -92,9 +92,7 @@
                       border-radius: 2px;
                       line-height: 18px;
                       text-align: center;
-                      cursor: auto;
-
-                    ">
+                      cursor: auto;">
                                     {{
                                         textValue(
                                             product.result.transaction.message.instructions[0]
@@ -127,6 +125,9 @@ import { useAppStore } from "@/stores/index";
 import CountUp from "vue-countup-v3";
 import moment from "moment";
 import { useRouter } from "vue-router";
+import { chainRequest } from "../../request/chain";
+import { solanaRequest } from "../../request/solanaReques";
+
 
 const props = defineProps({
     boolean: {
@@ -192,12 +193,43 @@ const soltResult = (solt) => {
 
 
 const pubbleys = (url) => {
-    router.push({
-        name: "address",
-        params: {
-            url: url,
-        },
+    let method = {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "getAccountInfo",
+        "params": [
+            url,
+            {
+                "encoding": "jsonParsed"
+            }
+        ]
+    };
+    chainRequest(method).then(res => {
+        console.log(res);
+        console.log(res.result.value.owner);
+
+        if (res.result.value.owner == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c" ||
+            res.result.value.owner == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA") {
+            console.log(123);
+            solanaRequest(url, res.result.value.owner).then(res => {
+                console.log(res);
+                console.log(res.result.value.owner);
+            });
+        } else {
+            router.push({
+                name: "address",
+                params: {
+                    url: url,
+                },
+            });
+        }
     });
+    // router.push({
+    //     name: "address",
+    //     params: {
+    //         url: url,
+    //     },
+    // });
 };
 
 const pubbtx = (item) => {

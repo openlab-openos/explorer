@@ -62,7 +62,7 @@ export const ipAddresses = {
     {
       ip: "161.97.141.179",
       // location: [51.1878, 6.8607],
-      "location": [30.5595, 30.9375],
+      location: [30.5595, 30.9375],
       try: "DE",
       code: "EU",
       timezone: "Europe/Berlin",
@@ -232,15 +232,6 @@ export const ipAddresses = {
       timezone: "Europe/London",
       country_name: "United Kingdom"
     },
-    // {
-    //   ip: "81.0.248.53",
-    //   location: [50.8544, -1.002],
-    //   // location: [15.7563, 70.5018],
-    //   try: "GB",
-    //   code: "EU",
-    //   timezone: "Europe/London",
-    //   country_name: "United Kingdom"
-    // },
     {
       ip: "81.0.248.53",
       location: [13.0444, 100.2357],
@@ -306,82 +297,110 @@ export const ipAddresses = {
       country_name: "United Kingdom"
     },
     {
-      "ip": "154.26.159.163",
-      "location": [1.2805, 103.848],
-      "try": "SG",
-      "code": "AS",
-      "timezone": "Asia/Singapore",
-      "country_name": "Singapore"
+      ip: "154.26.159.163",
+      location: [1.2805, 103.848],
+      try: "SG",
+      code: "AS",
+      timezone: "Asia/Singapore",
+      country_name: "Singapore"
     },
     {
-      "ip": "38.242.216.73",
-      "location": [51.2216, 6.7897],
-      "try": "DE",
-      "code": "EU",
-      "timezone": "Europe/Berlin",
-      "country_name": "Germany"
+      ip: "38.242.216.73",
+      location: [51.2216, 6.7897],
+      try: "DE",
+      code: "EU",
+      timezone: "Europe/Berlin",
+      country_name: "Germany"
     },
     {
-      "ip": "46.250.255.174",
-      "location": [51.5094, -0.059],
-      "try": "GB",
-      "code": "EU",
-      "timezone": "Europe/London",
-      "country_name": "United Kingdom"
+      ip: "46.250.255.174",
+      location: [51.5094, -0.059],
+      try: "GB",
+      code: "EU",
+      timezone: "Europe/London",
+      country_name: "United Kingdom"
     },
     {
-      "ip": "81.0.248.53",
-      "location": [50.8544, -1.002],
-      "try": "GB",
-      "code": "EU",
-      "timezone": "Europe/London",
-      "country_name": "United Kingdom"
+      ip: "81.0.248.53",
+      location: [50.8544, -1.002],
+      try: "GB",
+      code: "EU",
+      timezone: "Europe/London",
+      country_name: "United Kingdom"
     },
     {
-      "ip": "94.136.185.25",
-      "location": [19.0748, 72.8856],
-      "try": "IN",
-      "code": "AS",
-      "timezone": "Asia/Kolkata",
-      "country_name": "India"
+      ip: "94.136.185.25",
+      location: [19.0748, 72.8856],
+      try: "IN",
+      code: "AS",
+      timezone: "Asia/Kolkata",
+      country_name: "India"
     },
     {
-      "ip": "144.126.139.0",
-      "location": [38.6364, -90.1985],
-      "try": "US",
-      "code": "NA",
-      "timezone": "America/Chicago",
-      "country_name": "United States"
+      ip: "144.126.139.0",
+      location: [38.6364, -90.1985],
+      try: "US",
+      code: "NA",
+      timezone: "America/Chicago",
+      country_name: "United States"
     },
     {
-      "ip": "85.239.234.139",
-      "location": [47.3066, -122.2619],
-      "try": "US",
-      "code": "NA",
-      "timezone": "America/Los_Angeles",
-      "country_name": "United States"
+      ip: "85.239.234.139",
+      location: [47.3066, -122.2619],
+      try: "US",
+      code: "NA",
+      timezone: "America/Los_Angeles",
+      country_name: "United States"
     },
     {
-      "ip": "154.26.159.163",
-      "location": [1.2805, 103.848],
-      "try": "SG",
-      "code": "AS",
-      "timezone": "Asia/Singapore",
-      "country_name": "Singapore"
+      ip: "154.26.159.163",
+      location: [1.2805, 103.848],
+      try: "SG",
+      code: "AS",
+      timezone: "Asia/Singapore",
+      country_name: "Singapore"
     },{
-      "ip": "46.250.255.174",
-      "location": [51.5094, -0.059],
-      "try": "GB",
-      "code": "EU",
-      "timezone": "Europe/London",
-      "country_name": "United Kingdom"
+      ip: "46.250.255.174",
+      location: [51.5094, -0.059],
+      try: "GB",
+      code: "EU",
+      timezone: "Europe/London",
+      country_name: "United Kingdom"
     },{
-      "ip": "85.239.234.139",
-      "location": [47.3066, -122.2619],
-      "try": "US",
-      "code": "NA",
-      "timezone": "America/Los_Angeles",
-      "country_name": "United States"
+      ip: "85.239.234.139",
+      location: [47.3066, -122.2619],
+      try: "US",
+      code: "NA",
+      timezone: "America/Los_Angeles",
+      country_name: "United States"
+    },{
+      ip: "85.239.234.30",
+      location: [47.3066, -122.2619],
+      try: "US",
+      code: "NA", 
+      timezone: "America/Los_Angeles",
+      country_name: "United States"
+    },{
+      ip: "85.239.234.139",
+      location: [47.3066, -122.2619],
+      try: "US", 
+      code: "NA", 
+      timezone: "America/Los_Angeles",
+      country_name: "United States"
+    },{
+      ip: "46.250.255.174",
+      location: [51.5094, -0.059],
+      try: "GB", // 国家代码
+      code: "EU", // 洲代码
+      timezone: "Europe/London",
+      country_name: "United Kingdom"
+    },{
+      ip: "154.26.159.163",
+      location: [1.2805, 103.848],
+      try: "SG", // 国家代码
+      code: "AS", // 洲代码
+      timezone: "Asia/Singapore",
+      country_name: "Singapore"
     }
   ]
 };

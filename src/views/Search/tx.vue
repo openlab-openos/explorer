@@ -190,7 +190,8 @@ export default {
         },
       ],
     });
-
+    console.log(this.card);
+    
     this.historyData = await this.requestList({
       jsonrpc: "2.0",
       id: "",
@@ -204,6 +205,8 @@ export default {
         },
       ],
     });
+    console.log(this.historyData);
+    
     if (this.historyData) {
       if (this.historyData.meta.logMessages[0].includes("Vote")) {
         this.preType = true;

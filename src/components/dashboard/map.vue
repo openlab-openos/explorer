@@ -86,6 +86,8 @@ const series = ref();
 onMounted(() => {
     getActivityLogData();
     mapCreate();
+    console.log("map");
+    
 });
 const traffic = ref([]);
 const ActivityLogData = ref([]);

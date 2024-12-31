@@ -1,6 +1,6 @@
 <script setup>
 import { useAppVariableStore } from "@/stores/app-variable";
-import { onBeforeUnmount, onMounted, ref, watch, computed, watchEffect } from "vue";
+import { onBeforeUnmount, onMounted, ref, watchEffect } from "vue";
 import apexchart from "@/components/plugins/Apexcharts.vue";
 import jsVectorMap from "jsvectormap";
 import "jsvectormap/dist/maps/world.js";
@@ -13,7 +13,6 @@ import { defineAsyncComponent, getCurrentInstance } from "vue";
 import { useAppStore } from "@/stores/index";
 import i18n from "@/i18n";
 import moment from "moment";
-
 
 const appStore = useAppStore();
 const appVariable = useAppVariableStore();
@@ -32,10 +31,7 @@ const stubly = ref(1);
 const countLog = ref();
 const ActivityLogData = ref([]);
 const server = ref([]);
-const mapContainer = ref();
-const pageType = ref(true);
 
-const map = ref(null);
 const activeVueref = ref(null);
 const networkref = ref(null);
 
@@ -70,7 +66,7 @@ const mapDeshboard = defineAsyncComponent(() =>
   import("../../components/dashboard/map.vue")
 );
 const orderVue = defineAsyncComponent(() =>
-  import("../../components/dashboard/order.vue")
+  import("../../components/transaction/list.vue")
 );
 
 // 语言
@@ -100,12 +96,7 @@ const unnumTranstions = ref([]);
 const timeName = ref([]);
 const cote = ref([]);
 const trueTramsatiom = ref([]);
-const totalTransactions = computed(() => {
-  return orderData.value.reduce(
-    (total, order) => total + order.transactions,
-    0
-  );
-});
+
 const performanceSamples = async () => {
   let requestBody = {
     jsonrpc: "2.0",

@@ -14,6 +14,7 @@
     "name": "名称",
     "developer":"开发者",
     "placehold":"请输入地址 交易 区块",
+    "from": "支付者",
     "navigation": {
         "title": "导航",
         "dashboard": "仪表盘",
