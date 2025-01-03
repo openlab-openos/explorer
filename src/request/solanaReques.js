@@ -1,6 +1,5 @@
 import { Connection, PublicKey } from "@solana/web3.js";
 import { getMint } from "open-token-web3";
-
 export function solanaRequest(AccountPublicKey, Program) {
 
     return (async () => {

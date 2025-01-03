@@ -15,6 +15,7 @@
     "developer": "Developer",
     "placehold": "Search Address Account Transaction",
     "from": "Disburser",
+    "token":"Token",
     "navigation": {
         "title": "Navigation",
         "dashboard": "Dashboard",
@@ -104,7 +105,7 @@
         "signature": "Signature",
         "source": "Source",
         "destination": "Destination",
-        "btg": "BTG",
+        "btg": "Amount",
         "type": "Type",
         "time": "Age",
         "slot": "Slot"
@@ -165,7 +166,23 @@
         "token_error": "No token holdings found",
         "not_found": "No Fond",
         "mini": "Mini",
-        "lamports": "Lamports"
+        "lamports": "Lamports",
+        "Political_integration": "Political integration",
+        "type_administration":"Type of administration",
+        "list_communication":"List of communication policies",
+        "signature": "Signature",
+        "time":"Time",
+        "movement":"Movement",
+        "primary":"Primary",
+        "destination":"Destination",
+        "quantity":"Quantity",
+        "Political":"Political",
+        "value":"Value",
+        "account":"User Account",
+        "token-address":"Token Address",
+        "proportion":"Proportion",
+        "holder-value":"Value",
+        "holder":"Holder"
     },
     "nede": {
         "openverse_mainnet": "Openverse Mainnet",

@@ -38,12 +38,10 @@ const languages = ref([
 ]);
 const selectedLanguage = ref();
 const sessionStorageData = ref(JSON.parse(sessionStorage.getItem('app')));
-console.log(sessionStorageData.value);
 
 if (sessionStorageData.value) {
   languages.value.map(item => {
-    console.log(item.abbreviation == sessionStorageData.value.language);
-    
+ 
     if (item.abbreviation == sessionStorageData.value.language) {
       selectedLanguage.value = item;
       abbreviationLanguage.value = item.abbreviation;
@@ -54,7 +52,6 @@ if (sessionStorageData.value) {
   selectedLanguage.value = { name: 'English', abbreviation: 'en-US', flag: um };
   abbreviationLanguage.value = 'en-US';
 }
-console.log(selectedLanguage.value);
 
 
 // 语言
@@ -117,14 +114,13 @@ function searchMenu() {
         })
         .then(() => {
           searchcontent.value = "";
-          // window.location.reload()
-
+          window.location.reload()
         });
     }
   }
 }
 
-const selectLanguage = (language, abbreviation) => {
+const selectLanguage = (language: any, abbreviation: any) => {
   selectedLanguage.value = language;
   abbreviationLanguage.value = abbreviation;
   appStore.setLanguage(abbreviation);

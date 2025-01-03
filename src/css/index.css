@@ -1,0 +1,12 @@
+.marginTOP-50{
+    margin-top: 50px;
+}
+
+.justify-end{
+    display: flex;
+    justify-content: end;
+}
+
+.padding-10{
+    padding: 10px;
+}

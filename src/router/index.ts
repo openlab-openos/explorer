@@ -27,7 +27,7 @@ const router = createRouter({
       component: Blocks,
     },
     {
-      path: "/address/:url?",
+      path: "/address/:url?/:type?",
       name: "address",
       component: Address,
     },

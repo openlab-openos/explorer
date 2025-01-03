@@ -401,6 +401,20 @@ export const ipAddresses = {
       code: "AS", // 洲代码
       timezone: "Asia/Singapore",
       country_name: "Singapore"
+    },{
+      ip: "156.67.110.101",
+      location: [19.0748, 72.8856],
+      try: "IN", // 国家代码 (country_code)
+      code: "AS", // 洲代码 (continent_code)
+      timezone: "Asia/Kolkata",
+      country_name: "India"
+    },{
+      "ip": "154.53.38.170",
+      "location": [38.5781, -90.4256],
+      "try": "US",
+      "code": "NA",
+      "timezone": "America/Chicago",
+      "country_name": "United States"
     }
   ]
 };

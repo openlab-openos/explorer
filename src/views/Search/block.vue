@@ -5,6 +5,7 @@ import moment from "moment";
 import router from "../../router";
 import { getCurrentInstance, ref } from "vue";
 import LoadingVue from "../../components/block/loading.vue"
+import {solanapubbleys} from "../../components/method/solana"
 
 const apps = getCurrentInstance()
 
@@ -141,12 +142,7 @@ export default {
       }
     },
     pubbleys(url) {
-      this.$router.push({
-        name: "address",
-        params: {
-          url: url,
-        },
-      });
+      solanapubbleys(url,this.$router);
     },
     soltResult(url) {
       this.$router
@@ -220,7 +216,7 @@ export default {
 };
 </script>
 <script setup>
-import { getCurrentInstance, ref ,watchEffect} from "vue";
+import { getCurrentInstance, ref, watchEffect } from "vue";
 import i18n from "@/i18n"
 import { useAppStore } from "../../stores/index";
 const appStore = useAppStore();
@@ -228,11 +224,11 @@ const appStore = useAppStore();
 const apps = getCurrentInstance()
 const promaster = apps?.proxy?.$progream;
 // 语言
-function selectLanguage(indexValue){
+function selectLanguage(indexValue) {
   i18n.global.locale = indexValue;
 }
 
-watchEffect(()=>{
+watchEffect(() => {
   selectLanguage(appStore.$state.language);
 })
 </script>
@@ -303,7 +299,8 @@ watchEffect(()=>{
       <div style="margin-top:50px">
         <ul class="nav nav-pills mb-3" id="pills-tab">
           <li class="nav-item">
-            <a class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" href="#pills-home">{{ $t("blocks.transctions") }}</a>
+            <a class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" href="#pills-home">{{
+              $t("blocks.transctions") }}</a>
           </li>
         </ul>
         <div class="tab-content" id="pills-tabContent">

@@ -1,17 +1,19 @@
 <script setup>
-import { getCurrentInstance, ref ,watchEffect} from "vue";
+import { getCurrentInstance, ref, watchEffect } from "vue";
 import i18n from "@/i18n"
 import { useAppStore } from "../../stores/index";
+import {solanapubbleys} from "../../components/method/solana"
+
 const appStore = useAppStore();
 
 const apps = getCurrentInstance()
 const promaster = apps?.proxy?.$progream;
 // 语言
-function selectLanguage(indexValue){
+function selectLanguage(indexValue) {
   i18n.global.locale = indexValue;
 }
 
-watchEffect(()=>{
+watchEffect(() => {
   selectLanguage(appStore.$state.language);
 })
 </script>
@@ -125,12 +127,7 @@ export default {
       };
     },
     pubbleys(url) {
-      this.$router.push({
-        name: "address",
-        params: {
-          url: url,
-        },
-      });
+      solanapubbleys(url,this.$router);
     },
     dataDeal(item) {
       if (/^\d+$/.test(item.split(" ")[1])) {
@@ -190,8 +187,7 @@ export default {
         },
       ],
     });
-    console.log(this.card);
-    
+  
     this.historyData = await this.requestList({
       jsonrpc: "2.0",
       id: "",
@@ -205,8 +201,7 @@ export default {
         },
       ],
     });
-    console.log(this.historyData);
-    
+ 
     if (this.historyData) {
       if (this.historyData.meta.logMessages[0].includes("Vote")) {
         this.preType = true;
@@ -293,17 +288,17 @@ export default {
                   <td class="text-end"> {{ textValue(card.value[0].confirmationStatus) }} </td>
                 </tr>
                 <tr>
-                  <td> {{ $t("transaction.confirmation") }}  </td>
+                  <td> {{ $t("transaction.confirmation") }} </td>
                   <td class="text-end"> {{ card.value[0].confirmations ? 'MIN' : 'MAX' }} </td>
                 </tr>
                 <tr v-if="card.value[0].slot">
-                  <td>{{$t("blocks.slot")}}</td>
+                  <td>{{ $t("blocks.slot") }}</td>
                   <td class="text-end"> {{ come(card.value[0].slot) }} </td>
                 </tr>
                 <tr>
                   <td>
                     <InfoTooltip text="Timestamps are only available for confirmed blocks">
-                      {{$t("transaction.recent_blockhash")}}
+                      {{ $t("transaction.recent_blockhash") }}
                     </InfoTooltip>
                   </td>
                   <td class="text-end text-theme" style="cursor: pointer"
@@ -314,27 +309,27 @@ export default {
                     }} </td>
                 </tr>
                 <tr>
-                  <td>{{$t("transaction.fee")}} (BTG)</td>
+                  <td>{{ $t("transaction.fee") }} (BTG)</td>
                   <td class="text-end"> {{ toFexedStake(historyData.meta.fee) }} </td>
                 </tr>
                 <tr>
-                  <td>{{$t("transaction.compute_units_consumed")}} </td>
+                  <td>{{ $t("transaction.compute_units_consumed") }} </td>
                   <td class="text-end"> {{ historyData.meta.computeUnitsConsumed }} </td>
                 </tr>
                 <tr>
-                  <td>{{$t("transaction.transaction_version")}}</td>
+                  <td>{{ $t("transaction.transaction_version") }}</td>
                   <td class="text-end"> {{ textValue(historyData.version) }} </td>
                 </tr>
               </tbody>
               <tbody v-else>
                 <tr>
-                  <td>{{$t("transactions.signature")}}</td>
+                  <td>{{ $t("transactions.signature") }}</td>
                   <td class="text-end">{{ url }}</td>
                 </tr>
                 <tr>
-                  <td>{{$t("transaction.result")}}</td>
+                  <td>{{ $t("transaction.result") }}</td>
                   <td class="text-end">
-                    {{$t("transaction.error")}}
+                    {{ $t("transaction.error") }}
                   </td>
                 </tr>
               </tbody>
@@ -344,7 +339,7 @@ export default {
         </card>
       </div>
       <div style="margin-top:50px" v-if="historyData">
-        <h4>{{$t("transaction.instruction")}}</h4>
+        <h4>{{ $t("transaction.instruction") }}</h4>
         <card class="md-3">
           <card-body class="card-bodys" v-if="historyData.transaction.message.instructions">
             <table class=" w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
@@ -352,7 +347,7 @@ export default {
                 <th>
                   <span class="text-theme">
                     #
-                  </span> {{$t("transaction.system_program")}}
+                  </span> {{ $t("transaction.system_program") }}
                 </th>
                 <th>
 
@@ -363,7 +358,7 @@ export default {
               <tbody v-for="item, index in historyData.transaction.message.instructions" :key="index">
                 <tr>
                   <td>
-                    {{$t("transaction.program")}}
+                    {{ $t("transaction.program") }}
                   </td>
                   <td class="text-theme" style="cursor: pointer" @click="pubbleys(item.programId)">
                     {{
@@ -374,7 +369,7 @@ export default {
                 </tr>
                 <tr v-if="item.parsed.info.destination">
                   <td>
-                    {{$t("transaction.from_address")}}
+                    {{ $t("transaction.from_address") }}
                   </td>
                   <td class="text-theme" style="cursor: pointer" @click="pubbleys(item.parsed.info.destination)">
                     {{
@@ -385,7 +380,7 @@ export default {
                 </tr>
                 <tr v-if="item.parsed.info.source">
                   <td>
-                    {{$t("transaction.to_address")}}
+                    {{ $t("transaction.to_address") }}
 
                   </td>
                   <td class="text-theme" style="cursor: pointer" @click="pubbleys(item.parsed.info.source)">
@@ -398,7 +393,7 @@ export default {
                 </tr>
                 <tr v-if="item.parsed.info.lamports">
                   <td>
-                    {{$t("transaction.transfer_amount")}} (BTG)
+                    {{ $t("transaction.transfer_amount") }} (BTG)
                   </td>
                   <td class="text-theme">
                     {{ toFexedStake(item.parsed.info.lamports) }}
@@ -412,7 +407,7 @@ export default {
       </div>
       <div style="margin-top:50px" v-if="historyData">
         <div v-if="historyData.transaction.message.accountKeys">
-          <h4>{{$t("transaction.account_input(s)")}} </h4>
+          <h4>{{ $t("transaction.account_input(s)") }} </h4>
           <card class="md-3">
             <card-body class="card-bodys">
               <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
@@ -422,16 +417,16 @@ export default {
                       #
                     </th>
                     <th>
-                      {{$t("transaction.address")}}
+                      {{ $t("transaction.address") }}
                     </th>
                     <th>
-                      {{$t("transaction.guange")}}(BTG)
+                      {{ $t("transaction.guange") }}(BTG)
                     </th>
                     <th>
-                      {{$t("transaction.post_balance")}}(BTG)
+                      {{ $t("transaction.post_balance") }}(BTG)
                     </th>
                     <th>
-                      {{$t("transaction.detals")}}
+                      {{ $t("transaction.detals") }}
                     </th>
                   </tr>
                   <tr v-for="item, index in historyData.transaction.message.accountKeys" :key="index">
@@ -460,10 +455,10 @@ export default {
                     </td>
                     <td style="text-align: left;font-size: 12px;">
                       <span v-if="item.signer ? (item.writable ? true : false) : false" class="dage bg-info">
-                        {{$t("transaction.fee_payer")}}
+                        {{ $t("transaction.fee_payer") }}
                       </span>
-                      <span v-if="item.signer" class="dage bg-info">{{$t("transaction.signer")}}</span>
-                      <span v-if="item.writable" class="dage bg-solt">{{$t("transaction.writable")}}</span>
+                      <span v-if="item.signer" class="dage bg-info">{{ $t("transaction.signer") }}</span>
+                      <span v-if="item.writable" class="dage bg-solt">{{ $t("transaction.writable") }}</span>
                     </td>
                   </tr>
                 </tbody>
@@ -473,13 +468,13 @@ export default {
         </div>
       </div>
       <div style="margin-top:50px" v-if="preType">
-        <h4>{{$t("transaction.instruction")}}</h4>
+        <h4>{{ $t("transaction.instruction") }}</h4>
         <card class="md-3 ">
           <card-body class="card-bodys">
             <table>
               <tbody v-if="historyData">
                 <tr>
-                  <td style="width:50%"> {{$t("transaction.Instruction_Data")}} (JSON)</td>
+                  <td style="width:50%"> {{ $t("transaction.Instruction_Data") }} (JSON)</td>
                   <td style="width:50%">
                     <pre style="background-color: #18202C;border:none;color:#fff;line-height:15px">
                             {{ historyData.transaction.message.instructions[0].parsed }}
@@ -496,7 +491,7 @@ export default {
           <card-body class="card-bodys">
             <div>
               <div style="width:100%;display:flex;justify-content: space-between;">
-                <h4>{{$t("transaction.LogMessages")}} </h4>
+                <h4>{{ $t("transaction.LogMessages") }} </h4>
                 <div>
                   <span style="cursor: pointer" @click="raw = !raw">Raw</span>
                 </div>

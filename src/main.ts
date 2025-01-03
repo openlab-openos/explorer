@@ -18,7 +18,8 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import piniaPersist from "pinia-plugin-persist";
 // import { createApp } from 'vue';
 import vueMatomo from "vue-matomo";
-
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
 import { PROGRAM_NAMES, LOADER_IDS, PROGRAM_INFO_BY_ID } from "../src/program";
 
 
@@ -35,8 +36,17 @@ import CardFooter from '@/components/bootstrap/CardFooter.vue';
 import CardGroup from '@/components/bootstrap/CardGroup.vue';
 import CardImgOverlay from '@/components/bootstrap/CardImgOverlay.vue';
 import CardExpandToggler from '@/components/bootstrap/CardExpandToggler.vue';
-import { Buffer } from 'buffer/';
-window.Buffer = Buffer;
+import * as buffer from "buffer"; //引入buffer
+ 
+if (typeof (window as any).Buffer === "undefined") { // 判断当前环境是否有Buffer对象
+    console.log(123);
+    
+    (window as any).Buffer = buffer.Buffer; // Buffer对象不存在则创建导入的buffer
+} else {
+    console.log(456);
+    
+}
+
 const emitter = mitt();
 
 let paini = createPinia();
@@ -58,6 +68,7 @@ app.component('font-awesome-icon', FontAwesomeIcon);
 app.use(paini);
 app.use(router);
 app.use(i18n);
+app.use(ElementPlus);
 app.use(Vue3ProgressPlugin);
 app.use(PerfectScrollbar);
 

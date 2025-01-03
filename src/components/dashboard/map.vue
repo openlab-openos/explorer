@@ -86,8 +86,6 @@ const series = ref();
 onMounted(() => {
     getActivityLogData();
     mapCreate();
-    console.log("map");
-    
 });
 const traffic = ref([]);
 const ActivityLogData = ref([]);
@@ -248,8 +246,6 @@ const renderMap = async () => {
                         country_name: ipData.country_name,
                     });
                 } else {
-                    console.log(ActivityLogData.value[i].ip);
-                    console.log("123456");
                     let loc_lat = await getIPLocation(ActivityLogData.value[i].ip);
 
                     markers_data.push({
@@ -316,9 +312,6 @@ const renderMap = async () => {
 
     mapData.value = markers_data;
     traffic.value = getTrafficData(markers_data);
-    console.log(markers_data);
-
-    console.log(traffic.value);
 
 };
 

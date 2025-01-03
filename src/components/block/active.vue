@@ -42,7 +42,6 @@ import { chainRequest } from "../../request/chain";
 import { useAppVariableStore } from "@/stores/app-variable";
 import { useAppStore } from "../../stores/index";
 import { onMounted, ref, watchEffect } from "vue";
-import { constants } from "buffer";
 import i18n from "@/i18n"
 const appStore = useAppStore();
 

@@ -13,79 +13,91 @@
                             <th style=" text-align: left"> {{ $t("transactions.source") }} </th>
                             <th style=" text-align: left"> {{ $t("transactions.destination") }} </th>
                             <th style=" text-align: left">{{ $t("transactions.btg") }}</th>
+                            <th style=" text-align: left"> {{ $t("token") }} </th>
                             <th style=" text-align: left"> {{ $t("transactions.type") }}</th>
-                            <th style=" text-align: left"> {{ $t("transactions.slot") }} </th>
                             <th style=" text-align: left"> {{ $t("transactions.time") }} </th>
                         </tr>
-                        <tr v-for="(product, index) in orderData" :key="index" style="height: 35px">
+                        <tr v-for="(product, index) in arrayData" :key="index" style="height: 35px">
                             <td v-if="props.boolean" style=" text-align: left; cursor: pointer" class="text-theme"
                                 @click="
                                     pubbtx(
-                                        product.result.transaction.signatures[0]
+                                        product.signatures[0]
                                     )
                                     ">
                                 {{
                                     stringcate(
-                                        promaster[product.result.transaction.signatures[0]] ?
-                                            promaster[product.result.transaction.signatures[0]].name :
-                                            product.result.transaction.signatures[0]
+                                        promaster[product.signatures[0]] ?
+                                            promaster[product.signatures[0]].name :
+                                            product.signatures[0]
                                     )
                                 }}
                             </td>
                             <td v-else style=" text-align: left; cursor: pointer" class="text-theme" @click="
                                 pubbtx(
-                                    product.result.transaction.signatures[0]
+                                    product.signatures[0]
                                 )
                                 ">
                                 {{
-                                    promaster[product.result.transaction.signatures[0]] ?
-                                        promaster[product.result.transaction.signatures[0]].name :
-                                        product.result.transaction.signatures[0]
+                                    promaster[product.signatures[0]] ?
+                                        promaster[product.signatures[0]].name :
+                                        product.signatures[0]
                                 }}
                             </td>
                             <td style=" text-align: left; cursor: pointer" class="text-theme" @click="
                                 pubbleys(
-                                    product.result.transaction.message.instructions[0].parsed
+                                    product.message.instructions[0].parsed
                                         .info.source
                                 )
                                 ">
                                 {{
                                     stringcate(
-                                        promaster[product.result.transaction.message.instructions[0]
-                                            .parsed.info.source] ? promaster[product.result.transaction.message.instructions[0]
-                                                .parsed.info.source].name : product.result.transaction.message.instructions[0]
+                                        promaster[product.message.instructions[0]
+                                            .parsed.info.source] ? promaster[product.message.instructions[0]
+                                                .parsed.info.source].name : product.message.instructions[0]
                                                     .parsed.info.source
                                     )
                                 }}
                             </td>
                             <td style=" text-align: left; cursor: pointer" class="text-theme" @click="
                                 pubbleys(
-                                    product.result.transaction.message.instructions[0].parsed
+                                    product.message.instructions[0].parsed
                                         .info.destination
                                 )
                                 ">
                                 {{
                                     stringcate(
-                                        promaster[product.result.transaction.message.instructions[0]
-                                            .parsed.info.destination] ? promaster[product.result.transaction.message.instructions[0]
-                                                .parsed.info.destination].name : product.result.transaction.message.instructions[0]
+                                        promaster[product.message.instructions[0]
+                                            .parsed.info.destination] ? promaster[product.message.instructions[0]
+                                                .parsed.info.destination].name : product.message.instructions[0]
                                                     .parsed.info.destination
                                     )
                                 }}
                             </td>
                             <td style=" text-align: left">
                                 {{
-                                    toFexedStake(
-                                        product.result.transaction.message.instructions[0].parsed
-                                            .info.lamports
+                                    product.message.instructions[0]
+                                        .parsed.info.mint ? product.message.instructions[0]
+                                            .parsed.info.tokenAmount.uiAmount : toFexedStake(
+                                                product.message.instructions[0].parsed
+                                                    .info.lamports
+                                            )
+
+                                }}
+                            </td>
+                            <td style=" text-align: left;" class="text-theme" @click=" ">
+                                {{
+                                    stringcate(
+                                        product.message.instructions[0]
+                                            .parsed.info.mint ? product.message.instructions[0]
+                                                .parsed.info.mint : "BTG"
                                     )
                                 }}
                             </td>
                             <td style=" text-align: left">
                                 <button type="button" style="
-                      width: 80px;
                       height: 20px;
                       padding: 0;
+                      padding: 0px 8px;
                       border: 1px solid #3cd2a5;
                       background-color: #212b38;
                       color: #3cd2a5;
@@ -95,20 +107,14 @@
                       cursor: auto;">
                                     {{
                                         textValue(
-                                            product.result.transaction.message.instructions[0]
-                                                .parsed.type
+                                            product.message.instructions[0]
+                                                .parsed.type == "transfer" ? "Transfer" : "token_transfer"
                                         )
                                     }}
                                 </button>
                             </td>
-                            <td class="text-theme" style=" text-align: left; cursor: pointer"
-                                @click="soltResult(product.result.slot)">
-                                <count-up duration="3" :startVal="product.result.slot"
-                                    :end-val="product.result.slot"></count-up>
-                                <!-- {{ product.result.slot }} -->
-                            </td>
                             <td style=" text-align: left">
-                                {{ timeFormatter(product.result.blockTime * 1000) }} &nbsp;
+                                {{ timeFormatter(orderData[index].result.blockTime * 1000) }} &nbsp;
                             </td>
                         </tr>
                     </tbody>
@@ -125,9 +131,7 @@ import { useAppStore } from "@/stores/index";
 import CountUp from "vue-countup-v3";
 import moment from "moment";
 import { useRouter } from "vue-router";
-import { chainRequest } from "../../request/chain";
-import { solanaRequest } from "../../request/solanaReques";
-
+import { solanapubbleys } from "../../components/method/solana"
 
 const props = defineProps({
     boolean: {
@@ -135,7 +139,6 @@ const props = defineProps({
         default: false
     }
 });
-console.log(props.boolean);
 
 const router = useRouter();
 
@@ -149,9 +152,16 @@ const promaster = ref(apps?.proxy?.$progream);
 onMounted(() => {
     fetchOrderData();
 });
+const arrayData = ref([]);
 const fetchOrderData = async () => {
     try {
         const res = await order("new_transactions");
+        for (let i in res) {
+            if (res[i].result) {
+                arrayData.value.push(res[i].result.transaction)
+            }
+        }
+
         orderData.value = res.filter(item => item.result != null);
 
         appStore.setTransaction(JSON.stringify(orderData.value));
@@ -193,43 +203,7 @@ const soltResult = (solt) => {
 
 
 const pubbleys = (url) => {
-    let method = {
-        "jsonrpc": "2.0",
-        "id": 1,
-        "method": "getAccountInfo",
-        "params": [
-            url,
-            {
-                "encoding": "jsonParsed"
-            }
-        ]
-    };
-    chainRequest(method).then(res => {
-        console.log(res);
-        console.log(res.result.value.owner);
-
-        if (res.result.value.owner == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c" ||
-            res.result.value.owner == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA") {
-            console.log(123);
-            solanaRequest(url, res.result.value.owner).then(res => {
-                console.log(res);
-                console.log(res.result.value.owner);
-            });
-        } else {
-            router.push({
-                name: "address",
-                params: {
-                    url: url,
-                },
-            });
-        }
-    });
-    // router.push({
-    //     name: "address",
-    //     params: {
-    //         url: url,
-    //     },
-    // });
+    solanapubbleys(url, router);
 };
 
 const pubbtx = (item) => {

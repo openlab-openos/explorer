@@ -86,10 +86,11 @@
 
 <script setup>
 import { useAppStore } from "../../stores/index";
-import { ref, getCurrentInstance ,watchEffect} from "vue";
+import { ref, getCurrentInstance, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 import CountUp from "vue-countup-v3";
 import i18n from "@/i18n"
+import {solanapubbleys} from "../../components/method/solana"
 
 const router = useRouter();
 
@@ -121,13 +122,13 @@ const Vaildators = ref([
 ]);
 
 // 语言
-function selectLanguage(indexValue){
-  
-  
+function selectLanguage(indexValue) {
+
+
   i18n.global.locale = indexValue;
 }
 
-watchEffect(()=>{
+watchEffect(() => {
   selectLanguage(appStore.$state.language);
 })
 
@@ -159,11 +160,6 @@ const countplount = (num) => {
 shoeType.value = true;
 
 const pubbleys = (url) => {
-  router.push({
-    name: "address",
-    params: {
-      url: url,
-    },
-  });
+    solanapubbleys(url,router);
 };
 </script>

@@ -1,21 +1,31 @@
-import { fileURLToPath, URL } from "url";
-import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
-import vueJsx from "@vitejs/plugin-vue-jsx";
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import vueJsx from '@vitejs/plugin-vue-jsx';
+import {nodePolyfills} from 'vite-plugin-node-polyfills';
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(), vueJsx()],
+  plugins: [
+    vue(),
+    vueJsx(),
+    nodePolyfills({
+      // 包含你需要的 polyfills
+      include: ['buffer'], // 可以根据需要添加更多模块
+    }),
+  ],
   resolve: {
     alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url)),
+      '@': '/src',
     },
   },
   optimizeDeps: {
-    exclude: ['vue-demi']
+    exclude: ['vue-demi'],
+    esbuildOptions: {
+      define: {
+        global: 'globalThis',
+      },
+    },
   },
   build: {
-    // 确保使用 Terser 进行压缩
     minify: 'terser',
     terserOptions: {
       compress: {
@@ -23,7 +33,6 @@ export default defineConfig({
         drop_debugger: true, // 移除 debugger
       },
     },
-    // 配置代码拆分
     sourcemap: true,
     rollupOptions: {
       output: {
@@ -35,8 +44,8 @@ export default defineConfig({
         globals: {
           buffer: 'Buffer',
         },
-      }
-    }
+      },
+    },
   },
   server: {
     host: "0.0.0.0",
@@ -46,7 +55,6 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/dataapi/, ""),
       },
-      // 其他代理配置
     },
   },
 });

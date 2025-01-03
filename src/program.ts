@@ -443,12 +443,12 @@ export const SYSVAR_IDS: { [key: string]: string } = {
 
 export const TOKEN_IDS: { [key: string]: string } = {
   TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA: 'Token Program',
-  TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb: 'Token-2022 Program',
+  Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c: 'Token-2022 Program',
 } as const;
 
-export type TokenProgram = 'spl-token' | 'spl-token-2022';
+export type TokenProgram = 'open-token' | 'open-token-2022';
 export function assertIsTokenProgram(program: string): asserts program is TokenProgram {
-    if (program !== 'spl-token' && program !== 'spl-token-2022') throw new Error("Expected token program name of `spl-token` or `spl-token-2022`");
+    if (program !== 'open-token' && program !== 'open-token-2022') throw new Error("Expected token program name of `open-token` or `open-token-2022`");
 }
 export function isTokenProgram(program: string): program is TokenProgram {
     try {
