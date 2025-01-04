@@ -32,7 +32,7 @@ export const solanapubbleys = (url, router) => {
                     }).then(() => {
                         window.location.reload();
                     });;
-                });
+                });//通证
             } catch (err) {
                 router.push({
                     name: "address",
@@ -43,7 +43,7 @@ export const solanapubbleys = (url, router) => {
                     },
                 }).then(() => {
                     window.location.reload();
-                });;
+                });;//通证账户
             }
         } else {
             router.push({
@@ -54,7 +54,7 @@ export const solanapubbleys = (url, router) => {
                 },
             }).then(() => {
                 window.location.reload();
-            });;
+            });;//普通账户或非openverse账户
         }
     });
 };

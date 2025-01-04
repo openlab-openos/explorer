@@ -9,6 +9,8 @@ import LoadingVue from "../../components/block/loading.vue"
 import { solanapubbleys } from "../../components/method/solana"
 import transferView from "../../components/address/transfer_list.vue";
 import holderView from "../../components/address/holder_list.vue";
+import tokenView from "../../components/address/token.vue";
+import tokenAccountView from "../../components/address/token_account.vue";
 
 const activeName = ref('first')
 const router = useRouter();
@@ -122,7 +124,7 @@ const pubbleys = async (url) => {
 };
 
 const menufunction = async (url) => {
-  for(let i in paramsId.value){
+  for (let i in paramsId.value) {
     let methods =
     {
       "jsonrpc": "2.0",
@@ -162,7 +164,7 @@ const exexutable = async (url) => {
 onMounted(async () => {
   await menufunction(url.value);
   await pubbleys(url.value);
-  if(menu.value.length == 0){
+  if (menu.value.length == 0) {
     accountType.value = false
   } else {
     accountType.value = true
@@ -171,7 +173,7 @@ onMounted(async () => {
 })
 
 
-watch((to,from) => {
+watch((to, from) => {
   endUrl.value = route.params.url;
   url.value = route.params.url;
 })
@@ -181,11 +183,17 @@ watch((to,from) => {
 <template>
   <div style="width: 100%" v-if="loading">
     <div>
-      <h3> {{ $t("account.title") }} </h3>
+      <h3 v-if="typeAddress == 'address'"> {{ $t("account.title") }} </h3>
+      <!-- 普通账户或非openverse账户 -->
+      <h3 v-if="typeAddress == 'health'"> {{ $t("account.token") }} </h3>
+      <!-- 通政 -->
+      <h3 v-if="typeAddress == 'integration'"> {{ $t("account.token_account") }} </h3>
+      <!-- 通证账户 -->
       <div v-if="type">
         <card class="md-3 ">
           <card-body class="card-bodys">
-            <table  class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
+            <table v-if="typeAddress == 'address'"
+              class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
               <th>
               <td>{{ $t("account.overview") }} </td>
               <td class=" text-end"></td>
@@ -223,6 +231,9 @@ watch((to,from) => {
             </table>
           </card-body>
         </card>
+        <!-- <token-view v-if="typeAddress == 'health'" :url="url"></token-view> -->
+        <token-view />
+        <token-account-view v-if="typeAddress == 'integration'" :url="url"></token-account-view>
       </div>
       <div v-else>
         <card class="md-3">
@@ -260,7 +271,9 @@ watch((to,from) => {
           </card-body>
         </card>
       </div>
-      <div v-if="!accountType && !isValidResponse(card_data[0].owner) && card_data[0] != null && typeAddress == 'address' " class="marginTOP-50">
+      <div
+        v-if="!accountType && !isValidResponse(card_data[0].owner) && card_data[0] != null && typeAddress == 'address'"
+        class="marginTOP-50">
         <card class="md-3" v-if="menu">
           <card-body>
             <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
@@ -293,13 +306,13 @@ watch((to,from) => {
         <card class="md-3">
           <card-body class="card-bodys">
             <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
-              <el-tab-pane :label="$t('transfer')" name="first">
+              <el-tab-pane v-if="false" :label="$t('transfer')" name="first">
                 <transfer-view :url="url"></transfer-view>
               </el-tab-pane>
               <el-tab-pane :label="$t('dashboard.history')" name="second">
                 <history-view :url="url"></history-view>
               </el-tab-pane>
-              <el-tab-pane  v-if="typeAddress == 'health'" :label="$t('account.holder')" name="third">
+              <el-tab-pane v-if="typeAddress == 'health'" :label="$t('account.holder')" name="third">
                 <holder-view :url="url" :paramsId="card_data[0].owner"></holder-view>
               </el-tab-pane>
             </el-tabs>

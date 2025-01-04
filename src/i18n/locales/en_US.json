@@ -182,7 +182,19 @@
         "token-address":"Token Address",
         "proportion":"Proportion",
         "holder-value":"Value",
-        "holder":"Holder"
+        "holder":"Holder",
+        "token":"Token",
+        "token_account":"Token account",
+        "mint_account":"Mint account",
+        "status":"Status",
+        "amount":"Amount",
+        "freezeAuthority":"Freeze Authority",
+        "account_authorization":"Account authorization",
+        "foundry_license":"Foundry license",
+        "freeze_authorization":"Freeze authorization",
+        "no":"No",
+        "general_situation":"General situation",
+        "umber_held":"Number of addresses held"
     },
     "nede": {
         "openverse_mainnet": "Openverse Mainnet",

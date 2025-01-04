@@ -96,7 +96,7 @@
 <script setup>
 import { onMounted, ref, watchEffect, computed } from "vue";
 import moment from "moment";
-import { order } from "../../request/class";
+import { order } from "../../request/order";
 import { chainRequest } from "../../request/chain";
 import { useRouter } from "vue-router";
 import { solanapubbleys } from "../method/solana"
