@@ -26,7 +26,7 @@ export const solanapubbleys = (url, router) => {
                         name: "address",
                         params: {
                             url: url,
-                            type: "health",
+                            type: "mint",
                             // type:"account"
                         },
                     }).then(() => {

@@ -15,24 +15,29 @@
                     {{ $t("account.proportion") }}
                 </th>
             </tr>
-            <tr v-for="(item, index) in paginatedHistoryData" :key="index">
-                <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.signature)">
-                    {{ item.pubkey }}
-                </td>
-                <td class="text-theme" style="cursor: pointer" @click="slot(item.slot)">
-                    {{ item.account.data.parsed.info.owner }}
-                </td>
-                <td>
-                    {{ item.account.data.parsed.info.tokenAmount.uiAmount }}
-                </td>
-                <td>
-                    <!-- {{ item.err == null ? 'Success' : 'Failed' }} -->
-                    {{ percent(item.account.data.parsed.info.tokenAmount.uiAmount, proportion_amount) }} %
-                </td>
-            </tr>
+            <template v-if="historyData.length != 0">
+                <tr v-for="(item, index) in paginatedHistoryData" :key="index">
+                    <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.signature)">
+                        {{ item.pubkey }}
+                    </td>
+                    <td class="text-theme" style="cursor: pointer" @click="slot(item.slot)">
+                        {{ item.account.data.parsed.info.owner }}
+                    </td>
+                    <td>
+                        {{ item.account.data.parsed.info.tokenAmount.uiAmount }}
+                    </td>
+                    <td>
+                        <!-- {{ item.err == null ? 'Success' : 'Failed' }} -->
+                        {{ percent(item.account.data.parsed.info.tokenAmount.uiAmount, proportion_amount) }} %
+                    </td>
+                </tr>
+            </template>
         </tbody>
     </table>
-    <div class="justify-end padding-10">
+    <div v-if="historyData.length == 0">
+        {{ $t("account.available") }}
+    </div>
+    <div class="justify-end padding-10" v-if="historyData.length != 0">
         <!-- <el-pagination background :hide-on-single-page="true" :page-sizes="[25]" layout="prev, pager, next" :total="historyData.length" /> -->
         <el-pagination background layout="prev, pager, next" :hide-on-single-page="true" :current-page="currentPage"
             :page-size="pageSize" :total="totalItems" @current-change="handlePageChange" />
@@ -113,8 +118,8 @@ onMounted(async () => {
         "jsonrpc": "2.0", "id": 1,
         "method": "getTokenSupply",
         "params": [
-        // "GragM9tHgicpxtf9qrTkbY1fFZYA8CJaDgLuFnZikdqs"
-        props.url
+            // "GragM9tHgicpxtf9qrTkbY1fFZYA8CJaDgLuFnZikdqs"
+            props.url
         ]
     };
     totalItems.value = historyData.value.length;
@@ -140,7 +145,7 @@ const timeSome = (time) => {
 }
 
 const percent = (lod, nem) => {
-    return JSON.parse((lod / nem *100 ).toFixed(2));
+    return JSON.parse((lod / nem * 100).toFixed(2));
 }
 
 </script>

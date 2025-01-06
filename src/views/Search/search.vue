@@ -185,7 +185,7 @@ watch((to, from) => {
     <div>
       <h3 v-if="typeAddress == 'address'"> {{ $t("account.title") }} </h3>
       <!-- 普通账户或非openverse账户 -->
-      <h3 v-if="typeAddress == 'health'"> {{ $t("account.token") }} </h3>
+      <h3 v-if="typeAddress == 'mint'"> {{ $t("account.token") }} </h3>
       <!-- 通政 -->
       <h3 v-if="typeAddress == 'integration'"> {{ $t("account.token_account") }} </h3>
       <!-- 通证账户 -->
@@ -231,9 +231,10 @@ watch((to, from) => {
             </table>
           </card-body>
         </card>
-        <!-- <token-view v-if="typeAddress == 'health'" :url="url"></token-view> -->
-        <token-view />
+        <token-view v-if="typeAddress == 'mint'" :url="url"></token-view>
+        <!-- <token-view /> -->
         <token-account-view v-if="typeAddress == 'integration'" :url="url"></token-account-view>
+         <!-- <token-account-view/> -->
       </div>
       <div v-else>
         <card class="md-3">
@@ -293,6 +294,7 @@ watch((to, from) => {
                       aria-haspopup="true" aria-expanded="false">Filter products &nbsp;</button>
                     <div class="dropdown-menu">
                       <a class="dropdown-item" href="#">
+                        
                       </a>
                     </div>
                   </td>
@@ -306,13 +308,13 @@ watch((to, from) => {
         <card class="md-3">
           <card-body class="card-bodys">
             <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
-              <el-tab-pane v-if="false" :label="$t('transfer')" name="first">
-                <transfer-view :url="url"></transfer-view>
+              <el-tab-pane :label="$t('transfer')" name="first">
+                <transfer-view :url="url" :owner="card_data[0].owner"></transfer-view>
               </el-tab-pane>
               <el-tab-pane :label="$t('dashboard.history')" name="second">
                 <history-view :url="url"></history-view>
               </el-tab-pane>
-              <el-tab-pane v-if="typeAddress == 'health'" :label="$t('account.holder')" name="third">
+              <el-tab-pane v-if="typeAddress == 'mint'" :label="$t('account.holder')" name="third">
                 <holder-view :url="url" :paramsId="card_data[0].owner"></holder-view>
               </el-tab-pane>
             </el-tabs>

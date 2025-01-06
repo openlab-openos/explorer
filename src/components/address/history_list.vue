@@ -15,31 +15,37 @@
                     {{ $t("account.result") }}
                 </th>
             </tr>
-            <tr v-for="(item, index) in paginatedHistoryData" :key="index">
-                <td class="text-theme" style="width: 70%;cursor: pointer" @click="pubbtx(item.signature)">
-                    {{ item.signature }}
-                </td>
-                <td class="text-theme" style="width: 10%;cursor: pointer" @click="slot(item.slot)">
-                    {{ come(item.slot) }}
-                </td>
-                <td style="width: 10%;">
-                    {{ timeSome(item.blockTime) }}
-                </td>
-                <td style="width: 10%;">
-                    {{ item.err == null ? 'Success' : 'Failed' }}
-                </td>
-            </tr>
+            <template v-if="historyData.length != 0">
+                <tr v-for="(item, index) in paginatedHistoryData" :key="index">
+                    <td class="text-theme" style="width: 70%;cursor: pointer" @click="pubbtx(item.signature)">
+                        {{ item.signature }}
+                    </td>
+                    <td class="text-theme" style="width: 10%;cursor: pointer" @click="slot(item.slot)">
+                        {{ come(item.slot) }}
+                    </td>
+                    <td style="width: 10%;">
+                        {{ timeSome(item.blockTime) }}
+                    </td>
+                    <td style="width: 10%;">
+                        {{ item.err == null ? 'Success' : 'Failed' }}
+                    </td>
+                </tr>
+            </template>
+            <div></div>
         </tbody>
     </table>
-    <div class="justify-end padding-10">
+    <div v-if="historyData.length == 0">
+        {{ $t("account.available") }}
+    </div>
+    <div class="justify-end padding-10" v-if="historyData.length != 0">
         <!-- <el-pagination background :hide-on-single-page="true" :page-sizes="[25]" layout="prev, pager, next" :total="historyData.length" /> -->
-        <el-pagination background layout="prev, pager, next"  :hide-on-single-page="true" :current-page="currentPage"
+        <el-pagination background layout="prev, pager, next" :hide-on-single-page="true" :current-page="currentPage"
             :page-size="pageSize" :total="totalItems" @current-change="handlePageChange" />
     </div>
 </template>
 
 <script setup>
-import { onMounted, ref, watchEffect,computed } from "vue";
+import { onMounted, ref, watchEffect, computed } from "vue";
 import moment from "moment";
 import { order } from "../../request/order";
 import { chainRequest } from "../../request/chain";
@@ -61,7 +67,7 @@ const paginatedHistoryData = computed(() => {
     const end = start + pageSize.value;
     return historyData.value.slice(start, end);
 });
-
+const requestType = ref("false")
 const totalItems = ref(0);
 
 const handlePageChange = (newPage) => {

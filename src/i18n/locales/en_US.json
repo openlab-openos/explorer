@@ -146,7 +146,14 @@
         "error": "Transaction is invaild",
         "reault": "Result",
         "Instruction_Data ": "Instruction Data",
-        "LogMessages": "LogMessages"
+        "LogMessages": "LogMessages",
+        "Initialize":"Token Program: Initialize Mint",
+        "mint":"Mint",
+        "Decimals": "Decimals",
+        "mintAuthority": "MintAuthority",
+        "rentsysvar": "RentSysvar",
+        "unitLimit":"Compute Budget Program: Set Compute Unit Limit",
+        "compute":"Compute Unit Limit"
     },
     "account": {
         "title": "Account",
@@ -194,7 +201,15 @@
         "freeze_authorization":"Freeze authorization",
         "no":"No",
         "general_situation":"General situation",
-        "umber_held":"Number of addresses held"
+        "umber_held":"Number of addresses held",
+        "supply":"Supply",
+        "token_balance":"Token balance",
+        "owning_token":"Owning token",
+        "isFrozen":"isFrozen",
+        "isInitialized":"isInitialized",
+        "isNative":"isNative",
+        "symbol":"Symbol",
+        "available":"No data available"
     },
     "nede": {
         "openverse_mainnet": "Openverse Mainnet",

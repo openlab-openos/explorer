@@ -1,20 +1,20 @@
 import { Connection, PublicKey } from "@solana/web3.js";
-import { getAccount, getMint } from "open-token-web3";
+import { getAccount } from "open-token-web3";
 export function solanagetAccount(AccountPublicKey, Program) {
 
     return (async () => {
         const connection = new Connection("https://us-seattle.openverse.network/api", "confirmed");
 
-        const mintAccountPublicKey = new PublicKey(
+        const tokenAccountPublicKey = new PublicKey(
             AccountPublicKey
         );
 
-        const mintProgram = new PublicKey(
+        const tokenProgram = new PublicKey(
             Program
         )
-        let mintAccount = await getAccount(connection, mintAccountPublicKey, undefined, mintProgram);
-        console.log(mintAccount);
+        let tokenAccount = await getAccount(connection, tokenAccountPublicKey, undefined, tokenProgram);
+        console.log(tokenAccount);
 
-        return mintAccount;
+        return tokenAccount;
     })();
 }

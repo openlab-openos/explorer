@@ -18,6 +18,10 @@
                             <td class="text-end"> {{ tokenData.decimals }} </td>
                         </tr>
                         <tr>
+                            <td>{{ $t("account.supply") }} </td>
+                            <td class="text-end"> {{ come(tokenData.supply) }} </td>
+                        </tr>
+                        <tr>
                             <td>{{ $t("account.number_held") }} </td>
                             <td class="text-end"> {{ holdNumber }} </td>
                         </tr>
@@ -67,8 +71,8 @@ const props = defineProps({
         default: ''
     }
 });
-const url = ref("GragM9tHgicpxtf9qrTkbY1fFZYA8CJaDgLuFnZikdqs");
-// const url = ref(props.url);
+// const url = ref("GragM9tHgicpxtf9qrTkbY1fFZYA8CJaDgLuFnZikdqs");
+const url = ref(props.url);
 const tokenRwquest = async () => {
     let method = {
         "jsonrpc": "2.0",
@@ -83,10 +87,6 @@ const tokenRwquest = async () => {
         ]
     };
     chainRequest(method).then(res => {
-        console.log(res);
-
-        console.log(res.result.value.owner);
-
         try {
             solanaRequest(url.value, res.result.value.owner).then(res => {
                 console.log(res);

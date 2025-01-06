@@ -15,7 +15,6 @@
                 <th>
                     {{ $t("account.destination") }}
                 </th>
-
                 <th>
                     {{ $t("account.Political") }}
                 </th>
@@ -26,40 +25,42 @@
                     {{ $t("account.time") }}
                 </th>
             </tr>
-            <tr v-for="(item, index) in paginatedHistoryData" :key="index">
-                <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.result.transaction.signatures[0])">
-                    {{ stringcate(item.result.transaction.signatures[0]) }}
-                </td>
-                <td style=" text-align: left; cursor: pointer" class="text-theme"
-                    @click="slot(item.result.transaction.message.instructions[0].parsed.info.source)">
-                    {{ item.result.transaction.message.instructions[0].parsed.info.source }}
-                </td>
-                <td style=" text-align: left; cursor: pointer" class="text-theme"
-                    @click="slot(item.result.transaction.message.instructions[0].parsed.info.destination)">
-                    {{ item.result.transaction.message.instructions[0].parsed.info.destination }}
-                </td>
-                <td>
-                    {{
-                        item.result.transaction.message.instructions[0]
-                            .parsed.info.mint ? item.result.transaction.message.instructions[0]
-                                .parsed.info.tokenAmount.uiAmount : toFexedStake(
-                                    item.result.transaction.message.instructions[0].parsed
-                                        .info.lamports
-                                )
-                    }}
-                </td>
-
-                <td>
-                    {{
-                        stringcate(
+            <template v-if="historyData.length !== 0">
+                <tr v-for="(item, index) in paginatedHistoryData" :key="index">
+                    <td  class="text-theme" style="cursor: pointer"
+                        @click="pubbtx(item.result.transaction.signatures[0])">
+                        {{ stringcate(item.result.transaction.signatures[0]) }}
+                    </td>
+                    <td style=" text-align: left; cursor: pointer" class="text-theme"
+                        @click="slot(item.result.transaction.message.instructions[0].parsed.info.source)">
+                        {{ item.result.transaction.message.instructions[0].parsed.info.source }}
+                    </td>
+                    <td style=" text-align: left; cursor: pointer" class="text-theme"
+                        @click="slot(item.result.transaction.message.instructions[0].parsed.info.destination)">
+                        {{ item.result.transaction.message.instructions[0].parsed.info.destination }}
+                    </td>
+                    <td>
+                        {{
                             item.result.transaction.message.instructions[0]
                                 .parsed.info.mint ? item.result.transaction.message.instructions[0]
-                                    .parsed.info.mint : "BTG"
-                        )
-                    }}
-                </td>
-                <td>
-                    <button type="button" style="
+                                    .parsed.info.tokenAmount.uiAmount : toFexedStake(
+                                        item.result.transaction.message.instructions[0].parsed
+                                            .info.lamports
+                                    )
+                        }}
+                    </td>
+
+                    <td>
+                        {{
+                            stringcate(
+                                item.result.transaction.message.instructions[0]
+                                    .parsed.info.mint ? item.result.transaction.message.instructions[0]
+                                        .parsed.info.mint : "BTG"
+                            )
+                        }}
+                    </td>
+                    <td>
+                        <button type="button" style="
                       height: 20px;
                       padding: 0;
                       padding: 0px 8px;
@@ -70,23 +71,26 @@
                       line-height: 18px;
                       text-align: center;
                       cursor: auto;">
-                        {{
-                            textValue(
-                                item.result.transaction.message.instructions[0]
-                                    .parsed.type == "transfer" ? "Transfer" : "token_transfer"
-                            )
-                        }}
-                    </button>
-                </td>
-                <td class="text-theme" style="cursor: pointer">
-                    <!-- {{ come(item.slot) }} -->
-                    {{ timeSome(item.result.blockTime) }}
+                            {{
+                                textValue(
+                                    item.result.transaction.message.instructions[0]
+                                        .parsed.type == "transfer" ? "Transfer" : "token_transfer"
+                                )
+                            }}
+                        </button>
+                    </td>
+                    <td class="text-theme" style="cursor: pointer">
+                        {{ timeSome(item.result.blockTime) }}
 
-                </td>
-            </tr>
+                    </td>
+                </tr>
+            </template>
         </tbody>
     </table>
-    <div class="justify-end padding-10">
+    <div v-if="historyData.length == 0" class="text-center">
+        {{ $t("account.available") }}
+    </div>
+    <div class="justify-end padding-10" v-if="historyData.length != 0">
         <!-- <el-pagination background :hide-on-single-page="true" :page-sizes="[25]" layout="prev, pager, next" :total="historyData.length" /> -->
         <el-pagination background layout="prev, pager, next" :hide-on-single-page="true" :current-page="currentPage"
             :page-size="pageSize" :total="totalItems" @current-change="handlePageChange" />
@@ -107,6 +111,7 @@ const props = defineProps({
         default: ""
     }
 })
+const requestType = ref(false);
 const historyData = ref([]);
 
 const currentPage = ref(1);
@@ -119,6 +124,9 @@ const paginatedHistoryData = computed(() => {
         return historyData.value.slice(start, end);
     }
 });
+console.log(paginatedHistoryData);
+
+console.log(historyData.value.length);
 
 const totalItems = ref(0);
 
@@ -133,8 +141,7 @@ const toFexedStake = (num) => {
 const requestList = async (object) => {
     try {
         const response = await order(object);
-        // 解析和处理返回的数据
-        console.log(response);
+
         return response; // 现在这个函数会返回解析后的数据
     } catch (error) {
         console.error("Error fetching epoch info:", error);
@@ -144,8 +151,17 @@ const requestList = async (object) => {
 
 
 onMounted(async () => {
-    historyData.value = await requestList(props.url);
-     totalItems.value = historyData.value.length;
+    try {
+        historyData.value = await requestList(props.url);
+        totalItems.value = historyData.value.length;
+        if (historyData.value[0].result) {
+            requestType.value = true;
+        } else {
+            requestType.value = false;
+        }
+    } catch {
+        crequestType.value = false;
+    }
 });
 const textValue = (text) => {
     return text.toUpperCase();
