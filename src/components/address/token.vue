@@ -69,10 +69,15 @@ const props = defineProps({
     url: {
         typeof: String,
         default: ''
+    },
+    paramsId: {
+        typeof: String,
+        default: ''
     }
 });
 // const url = ref("GragM9tHgicpxtf9qrTkbY1fFZYA8CJaDgLuFnZikdqs");
 const url = ref(props.url);
+const paramsId = ref(props.paramsId);
 const tokenRwquest = async () => {
     let method = {
         "jsonrpc": "2.0",
@@ -86,7 +91,8 @@ const tokenRwquest = async () => {
             }
         ]
     };
-    chainRequest(method).then(res => {
+     await chainRequest(method).then(res => {
+        paramsId.value = res.result.value.owner;
         try {
             solanaRequest(url.value, res.result.value.owner).then(res => {
                 console.log(res);
@@ -110,21 +116,24 @@ const tokenRwquest = async () => {
     });
 }
 const numberHeld = async () => {
+    console.log(props.url);
+    console.log(props.paramsId);
+
     let method = {
         "jsonrpc": "2.0",
         "id": 1,
         "method": "getProgramAccounts",
         "params": [
-            url.value,
+            paramsId.value,
+            // "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c",
             {
+                "encoding": "jsonParsed",
                 "filters": [
                     {
-                        "dataSize": 17
-                    },
-                    {
                         "memcmp": {
-                            "offset": 4,
-                            "bytes": "3Mc6vR"
+                            "offset": 0,
+                            "bytes": props.url
+                            // "bytes": "GragM9tHgicpxtf9qrTkbY1fFZYA8CJaDgLuFnZikdqs"
                         }
                     }
                 ]
@@ -132,12 +141,22 @@ const numberHeld = async () => {
         ]
     }
     chainRequest(method).then(res => {
+        console.log(method);
+
         console.log(res);
-        holdNumber.value = res.result.length;
+        if (res.err) {
+            holdNumber.value = 0;
+        } else {
+            holdNumber.value = res.result.length;
+        }
+    }).catch(() => {
+        holdNumber.value = 0;
     });
 }
 onMounted(async () => {
     await tokenRwquest();
+    console.log(paramsId.value);
+
     await numberHeld();
 });
 const come = (num) => {

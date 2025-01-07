@@ -11,19 +11,35 @@ import transferView from "../../components/address/transfer_list.vue";
 import holderView from "../../components/address/holder_list.vue";
 import tokenView from "../../components/address/token.vue";
 import tokenAccountView from "../../components/address/token_account.vue";
-
+import { titleUrl } from "../../components/method/title_url"
 const activeName = ref('first')
 const router = useRouter();
 const route = useRoute();
 
 const url = ref(route.params.url);
+console.log(route);
+
+console.log(url.value);
+
 const card_data = ref(null);
 const token = ref(null);
 const type = ref(false);
 const loading = ref(false);
 const endUrl = ref(route.params.url);
 
-const typeAddress = ref(route.params.type)
+const typeAddress = ref();
+const loadTypeAddress = async () => {
+  try {
+    console.log(route.params.url);
+    // console.log(solanapubbleys());
+
+    typeAddress.value = await solanapubbleys(route.params.url);
+  } catch (error) {
+    typeAddress.value = "address";
+  }
+};
+
+
 const handleClick = (tab, event) => {
   console.log(tab, event)
 }
@@ -97,6 +113,7 @@ const pubbleys = async (url) => {
       },
     ],
   });
+  console.log(cardData);
 
   if (cardData) {
     card_data.value = cardData.value;
@@ -140,12 +157,18 @@ const menufunction = async (url) => {
         }
       ]
     }
+    console.log(methods);
+
     let datas = await requestList(methods);
+    console.log(datas);
+
     if (datas) {
       for (let i in datas.value) {
         menu.value.push(datas.value[i])
       }
     }
+    console.log(menu.value);
+
   }
 }
 
@@ -155,27 +178,47 @@ const exexutable = async (url) => {
     router.go(-1);
     await pubbleys(endUrl);
   } else {
-    solanapubbleys(url, router);
+    router.push({
+      name: "address",
+      params: {
+        url: url,
+      },
+    })
     await pubbleys(url);
   }
 };
 
 
 onMounted(async () => {
+  await loadTypeAddress();
+
+  console.log(typeAddress.value);
+
   await menufunction(url.value);
   await pubbleys(url.value);
-  if (menu.value.length == 0) {
-    accountType.value = false
-  } else {
-    accountType.value = true
-  }
   loading.value = true;
 })
+watch(
+  () => route.fullPath, // 监听整个路由的 fullPath 变化
+  (toFullPath, fromFullPath) => {
+    // 确保只有当 fullPath 发生变化时才刷新页面
+    if (toFullPath !== fromFullPath) {
+      console.log('路由发生变化:', toFullPath);
+      window.location.reload();
+    }
+  },
+  { deep: true } // 深度监听 fullPath 的变化
+);
 
+watch(route, (to, from) => {
+  console.log(to, from);
+  console.log(to.fullPath == from.fullPath);
 
-watch((to, from) => {
-  endUrl.value = route.params.url;
-  url.value = route.params.url;
+  // if (to.fullPath != from.fullPath) {
+  //   window.location.reload();
+  // }
+  // endUrl.value = route.params.url;
+  // url.value = route.params.url;
 })
 
 </script>
@@ -190,10 +233,9 @@ watch((to, from) => {
       <h3 v-if="typeAddress == 'integration'"> {{ $t("account.token_account") }} </h3>
       <!-- 通证账户 -->
       <div v-if="type">
-        <card class="md-3 ">
+        <card class="md-3 " v-if="typeAddress == 'address'">
           <card-body class="card-bodys">
-            <table v-if="typeAddress == 'address'"
-              class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
+            <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
               <th>
               <td>{{ $t("account.overview") }} </td>
               <td class=" text-end"></td>
@@ -219,7 +261,7 @@ watch((to, from) => {
                 <tr>
                   <td>{{ $t("account.assigned_program_id") }} </td>
                   <td class="text-end text-theme" style="cursor: pointer" @click="exexutable(item.owner)">
-                    {{ isValidResponse(item.owner) ? 'Native Loader' : ' System Program' }}
+                    {{ titleUrl(item.owner) }}
                   </td>
                 </tr>
                 <tr>
@@ -233,8 +275,8 @@ watch((to, from) => {
         </card>
         <token-view v-if="typeAddress == 'mint'" :url="url"></token-view>
         <!-- <token-view /> -->
-        <token-account-view v-if="typeAddress == 'integration'" :url="url"></token-account-view>
-         <!-- <token-account-view/> -->
+        <token-account-view v-if="typeAddress == 'integration'" :url="url" :paramsId="card_data[0].owner"></token-account-view>
+        <!-- <token-account-view/> -->
       </div>
       <div v-else>
         <card class="md-3">
@@ -273,7 +315,7 @@ watch((to, from) => {
         </card>
       </div>
       <div
-        v-if="!accountType && !isValidResponse(card_data[0].owner) && card_data[0] != null && typeAddress == 'address'"
+        v-if="typeAddress == 'address' && card_data[0].space == 0 && titleUrl(card_data[0].owner) == 'System Program' && !card_data[0].executable"
         class="marginTOP-50">
         <card class="md-3" v-if="menu">
           <card-body>
@@ -287,16 +329,30 @@ watch((to, from) => {
                   <td>{{ $t("account.type_administration") }} </td>
                   <td class="text-end"> {{ menu.length }} {{ $t("account.Political_integration") }} </td>
                 </tr>
-                <tr v-if="menu.length != 0">
+                <!-- v-if="menu.length != 0" -->
+                <tr>
                   <td>{{ $t("account.list_communication") }}</td>
-                  <td class="text-end" style="color: red;">
-                    <button class="btn btn-outline-default dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                      aria-haspopup="true" aria-expanded="false">Filter products &nbsp;</button>
-                    <div class="dropdown-menu">
-                      <a class="dropdown-item" href="#">
-                        
-                      </a>
-                    </div>
+                  <td class="text-end">
+                    <el-dropdown style="border: none;" :disabled="menu.length === 0" >
+                      <div class="text-theme":style="{'cursor': menu.length === 0 ? 'not-allowed' : 'pointer'}">
+                        {{$t("viewaccount")}}
+                      </div>
+                      <template #dropdown>
+                        <el-dropdown-menu style="background-color: transparent;" >
+                          <el-dropdown-item v-for="(item, index) in menu" :key="index">
+                            <div @click="exexutable( item.account.data.parsed.info.mint)" >
+                              <span class="text-theme FontWeight-Bold FontSize-14">
+                                {{ $t("mint") }}: {{ item.account.data.parsed.info.mint }}
+                              </span>
+                              <br>
+                              <span class="FontSize-12 FontWeight-Bold">
+                                {{ $t("amount") }} : {{ item.account.data.parsed.info.tokenAmount.uiAmount }}
+                              </span>
+                            </div>
+                          </el-dropdown-item>
+                        </el-dropdown-menu>
+                      </template>
+                    </el-dropdown>
                   </td>
                 </tr>
               </tbody>
@@ -304,14 +360,14 @@ watch((to, from) => {
           </card-body>
         </card>
       </div>
-      <div class="tab-content marginTOP-50">
+      <div class="tab-content marginTOP-50" v-if="card_data">
         <card class="md-3">
           <card-body class="card-bodys">
             <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
               <el-tab-pane :label="$t('transfer')" name="first">
                 <transfer-view :url="url" :owner="card_data[0].owner"></transfer-view>
               </el-tab-pane>
-              <el-tab-pane :label="$t('dashboard.history')" name="second">
+              <el-tab-pane :label="$t('navigation.transactions')" name="second">
                 <history-view :url="url"></history-view>
               </el-tab-pane>
               <el-tab-pane v-if="typeAddress == 'mint'" :label="$t('account.holder')" name="third">
@@ -355,5 +411,20 @@ table {
 
 :deep(.el-tabs__nav-wrap::after) {
   height: 0px !important;
+}
+
+.example-showcase .el-dropdown-link {
+  cursor: pointer;
+  color: var(--el-color-primary);
+  display: flex;
+  align-items: center;
+}
+
+:deep(.el-dropdown-menu) {
+  background-color: #2E3946 !important;
+}
+
+:deep(.el-dropdown-menu) {
+  background-color: #2E3946 !important;
 }
 </style>

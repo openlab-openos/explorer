@@ -2,11 +2,12 @@
     <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
         <tbody>
             <tr>
-                <th>
-                    {{ $t("account.account") }}
-                </th>
+
                 <th>
                     {{ $t("account.token-address") }}
+                </th>
+                <th>
+                    {{ $t("account.account") }}
                 </th>
                 <th>
                     {{ $t("account.quantity") }}
@@ -17,11 +18,12 @@
             </tr>
             <template v-if="historyData.length != 0">
                 <tr v-for="(item, index) in paginatedHistoryData" :key="index">
-                    <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.signature)">
-                        {{ item.pubkey }}
-                    </td>
-                    <td class="text-theme" style="cursor: pointer" @click="slot(item.slot)">
+
+                    <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.pubkey)">
                         {{ item.account.data.parsed.info.owner }}
+                    </td>
+                    <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.pubkey)">
+                        {{ item.pubkey }}
                     </td>
                     <td>
                         {{ item.account.data.parsed.info.tokenAmount.uiAmount }}
@@ -50,7 +52,8 @@ import moment from "moment";
 import { order } from "../../request/order";
 import { chainRequest } from "../../request/chain";
 import { proportionAmount } from "../method/proportion_account"
-
+import { useRouter } from "vue-router"
+const router = useRouter();
 const props = defineProps({
     url: {
         type: String,
@@ -145,7 +148,14 @@ const timeSome = (time) => {
 }
 
 const percent = (lod, nem) => {
-    return JSON.parse((lod / nem * 100).toFixed(2));
+    return (lod / nem * 100).toFixed(2);
 }
-
+const pubbtx = (url) => {
+    router.push({
+        name: "address",
+        params: {
+            url: url,
+        },
+    })
+}
 </script>

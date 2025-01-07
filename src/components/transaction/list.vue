@@ -49,14 +49,9 @@
                                         .info.source
                                 )
                                 ">
-                                {{
-                                    stringcate(
-                                        promaster[product.message.instructions[0]
-                                            .parsed.info.source] ? promaster[product.message.instructions[0]
-                                                .parsed.info.source].name : product.message.instructions[0]
-                                                    .parsed.info.source
-                                    )
-                                }}
+                                {{ stringcate(
+                                    titleUrl(product.message.instructions[0].parsed.info.source)
+                                ) }}
                             </td>
                             <td style=" text-align: left; cursor: pointer" class="text-theme" @click="
                                 pubbleys(
@@ -66,10 +61,8 @@
                                 ">
                                 {{
                                     stringcate(
-                                        promaster[product.message.instructions[0]
-                                            .parsed.info.destination] ? promaster[product.message.instructions[0]
-                                                .parsed.info.destination].name : product.message.instructions[0]
-                                                    .parsed.info.destination
+                                        titleUrl(product.message.instructions[0]
+                                                    .parsed.info.destination)
                                     )
                                 }}
                             </td>
@@ -84,7 +77,12 @@
 
                                 }}
                             </td>
-                            <td style=" text-align: left;" class="text-theme" @click=" ">
+                            <td style=" text-align: left;" :style="product.message.instructions[0]
+                                .parsed.info.mint ? 'cursor: pointer' : ''" class="text-theme" @click="pubbleys(
+                                                product.message.instructions[0]
+                                                    .parsed.info.mint ? product.message.instructions[0]
+                                                        .parsed.info.mint : ''
+                                            )">
                                 {{
                                     stringcate(
                                         product.message.instructions[0]
@@ -132,7 +130,7 @@ import CountUp from "vue-countup-v3";
 import moment from "moment";
 import { useRouter } from "vue-router";
 import { solanapubbleys } from "../../components/method/solana"
-
+import {titleUrl} from "../../components/method/title_url";
 const props = defineProps({
     boolean: {
         type: Boolean,
@@ -203,7 +201,12 @@ const soltResult = (solt) => {
 
 
 const pubbleys = (url) => {
-    solanapubbleys(url, router);
+    router.push({
+        name: "address",
+        params: {
+            url: url,
+        },
+    })
 };
 
 const pubbtx = (item) => {

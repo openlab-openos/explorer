@@ -415,6 +415,41 @@ export const ipAddresses = {
       "code": "NA",
       "timezone": "America/Chicago",
       "country_name": "United States"
+    },{
+      "ip": "5.104.87.77",
+      "location": [35.6164, 139.7425],
+      "try": "JP",
+      "code": "AS",
+      "timezone": "Asia/Tokyo",
+      "country_name": "Japan"
+    },{
+      "ip": "46.250.255.174",
+      "location": [51.5094, -0.059],
+      "country_code": "GB",
+      "continent_code": "EU",
+      "timezone": "Europe/London",
+      "country_name": "United Kingdom"
+    },{
+      "ip": "154.26.159.163",
+      "location": [1.2805, 103.848],
+      "country_code": "SG",
+      "continent_code": "AS",
+      "timezone": "Asia/Singapore",
+      "country_name": "Singapore"
+    },{
+      "ip": "154.53.38.170",
+      "location": [38.5781, -90.4256],
+      "country_code": "US",
+      "continent_code": "NA",
+      "timezone": "America/Chicago",
+      "country_name": "United States"
+    },{
+      "ip": "154.26.155.139",
+      "location": [1.2805, 103.848],
+      "country_code": "SG",
+      "continent_code": "AS",
+      "timezone": "Asia/Singapore",
+      "country_name": "Singapore"
     }
   ]
 };

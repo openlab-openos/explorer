@@ -25,9 +25,9 @@
                     {{ $t("account.time") }}
                 </th>
             </tr>
-            <template v-if="historyData.length !== 0">
+            <template v-if="historyData.length > 0">
                 <tr v-for="(item, index) in paginatedHistoryData" :key="index">
-                    <td  class="text-theme" style="cursor: pointer"
+                    <td class="text-theme" style="cursor: pointer"
                         @click="pubbtx(item.result.transaction.signatures[0])">
                         {{ stringcate(item.result.transaction.signatures[0]) }}
                     </td>
@@ -81,7 +81,6 @@
                     </td>
                     <td class="text-theme" style="cursor: pointer">
                         {{ timeSome(item.result.blockTime) }}
-
                     </td>
                 </tr>
             </template>
@@ -91,7 +90,6 @@
         {{ $t("account.available") }}
     </div>
     <div class="justify-end padding-10" v-if="historyData.length != 0">
-        <!-- <el-pagination background :hide-on-single-page="true" :page-sizes="[25]" layout="prev, pager, next" :total="historyData.length" /> -->
         <el-pagination background layout="prev, pager, next" :hide-on-single-page="true" :current-page="currentPage"
             :page-size="pageSize" :total="totalItems" @current-change="handlePageChange" />
     </div>
@@ -116,15 +114,16 @@ const historyData = ref([]);
 
 const currentPage = ref(1);
 const pageSize = ref(20);
-
-const paginatedHistoryData = computed(() => {
-    if (historyData.value.length > 0) {
+const paginatedHistoryData = ref([]);
+const paginatedHistoryFunction = (data) => {
+    if (data.length > 0) {
         const start = (currentPage.value - 1) * pageSize.value;
         const end = start + pageSize.value;
-        return historyData.value.slice(start, end);
+        paginatedHistoryData.value = data.slice(start, end)
     }
-});
+};
 console.log(paginatedHistoryData);
+console.log(historyData.value);
 
 console.log(historyData.value.length);
 
@@ -151,16 +150,19 @@ const requestList = async (object) => {
 
 
 onMounted(async () => {
+    console.log(props.url);
+    
     try {
-        historyData.value = await requestList(props.url);
+        historyData.value = await requestList('transactions/'+props.url);
         totalItems.value = historyData.value.length;
         if (historyData.value[0].result) {
             requestType.value = true;
         } else {
             requestType.value = false;
         }
+        paginatedHistoryFunction(historyData.value);
     } catch {
-        crequestType.value = false;
+        requestType.value = false;
     }
 });
 const textValue = (text) => {
@@ -176,7 +178,12 @@ const pubbtx = (item) => {
 };
 
 const slot = (url) => {
-    solanapubbleys(url, router)
+    router.push({
+        name: "address",
+        params: {
+            url: url,
+        },
+    })
 };
 const stringcate = (str) => {
     if (str.length < 10) {

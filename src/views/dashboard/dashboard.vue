@@ -13,7 +13,7 @@ import { defineAsyncComponent, getCurrentInstance } from "vue";
 import { useAppStore } from "@/stores/index";
 import i18n from "@/i18n";
 import moment from "moment";
-import {solanapubbleys} from "../../components/method/solana"
+import { solanapubbleys } from "../../components/method/solana"
 
 const appStore = useAppStore();
 const appVariable = useAppVariableStore();
@@ -80,7 +80,12 @@ watchEffect(() => {
 })
 
 const pubbleys = (url) => {
-  solanapubbleys(url,router);
+  router.push({
+    name: "address",
+    params: {
+      url: url,
+    },
+  })
 };
 
 ustdData().then((data) => {

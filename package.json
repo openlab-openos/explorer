@@ -50,6 +50,7 @@
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "borsh": "^0.7.0",
+    "bs58": "^6.0.0",
     "buffer": "^6.0.3",
     "chart.js": "^4.4.2",
     "cross-env": "^7.0.3",

@@ -55,7 +55,6 @@ import { getExtensionData, ExtensionType } from "open-token-web3";
 import { metaRequest } from "../../request/tokenMeta";
 
 const tokenData = ref();
-console.log(tokenData);
 const pubbleys = ref();
 const getMint = ref();
 const mintData = ref();
@@ -73,11 +72,30 @@ const props = defineProps({
 });
 // const url = ref("9FS3GpfTa98aAUyomeQLFW4HY1GGCn2aFYqp9yr1BQa8");
 const url = ref(props.url);
-const owner = ref(props.owner);
+const owner = ref();
+let method = {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "getAccountInfo",
+    "params": [
+        url.value,
+        {
+            "encoding": "jsonParsed"
+        }
+    ]
+};
+console.log(url.value, owner.value);
+
 const tokenRwquest = async () => {
+    await chainRequest(method).then(res => {
+      
+        owner.value = res.result.value.owner
+    })
+    console.log(owner.value);
+
     try {
         solanagetAccount(url.value, owner.value).then(res => {
-            console.log(res);
+          
             tokenData.value = res;
             if (res.mintAuthority) {
                 let mintAuthorit = res.mintAuthority._bn;
@@ -87,9 +105,11 @@ const tokenRwquest = async () => {
                 pubbleys.value = new PublicKey(mintAuthority);
             }
             if (res.mint) {
-                let mint_bn = res.mint._bn;
+                let mint_bn = res.mint._bn.toString();
                 let mint = BigInt(mint_bn);
-                getMint.value = new PublicKey(mint);
+
+                getMint.value = new PublicKey(mint).toString();
+
                 mintReauest(getMint.value);
             }
         });
@@ -99,20 +119,36 @@ const tokenRwquest = async () => {
 }
 
 const mintReauest = async (url) => {
-    await chainRequest(method).then(async resd => {
-        try {
-            await solanaRequest(url.value, owner.value).then(res => {
-                console.log(res);
-                mintData.value = res;
-            });
-            await metaRequest(url.value, owner.value).then(res => {
-                console.log(res);
-                price.value = res;
-            });
-        } catch (err) {
-            console.log(err);
+    console.log(url);
+
+    await chainRequest(
+        {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "method": "getAccountInfo",
+            "params": [
+                url,
+                {
+                    "encoding": "jsonParsed"
+                }
+            ]
         }
-    });
+    ).then(async resd => {
+            console.log(resd.result.value.owner);
+
+            try {
+                await solanaRequest(url, resd.result.value.owner).then(res => {
+                  
+                    mintData.value = res;
+                });
+                await metaRequest(url, resd.result.value.owner).then(res => {
+                  
+                    price.value = res;
+                });
+            } catch (err) {
+                console.log(err);
+            }
+        });
 };
 
 onMounted(async () => {

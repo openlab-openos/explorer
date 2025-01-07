@@ -142,7 +142,12 @@ export default {
       }
     },
     pubbleys(url) {
-      solanapubbleys(url,this.$router);
+      this.$router.push({
+        name: "address",
+        params: {
+            url: url,
+        },
+    })
     },
     soltResult(url) {
       this.$router

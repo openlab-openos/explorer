@@ -3,7 +3,9 @@ import { getCurrentInstance, ref, watchEffect } from "vue";
 import i18n from "@/i18n"
 import { useAppStore } from "../../stores/index";
 import { solanapubbleys } from "../../components/method/solana"
-
+import { PROGRAM_INFO_BY_ID } from "../../program";
+import { titleUrl } from "../../components/method/title_url";
+import logmessViem from "../transaction/methods/logmessage.vue"
 const appStore = useAppStore();
 
 const apps = getCurrentInstance()
@@ -16,6 +18,10 @@ function selectLanguage(indexValue) {
 watchEffect(() => {
   selectLanguage(appStore.$state.language);
 })
+// oconst 
+const titleFunction = (item) => {
+
+}
 </script>
 <script>
 import { useAppOptionStore } from "@/stores/app-option";
@@ -43,7 +49,7 @@ export default {
       laoding: false,
       instruction: null,
       initialize: null,
-      unitLimit:null
+      unitLimit: null
     };
   },
   mounted() {
@@ -130,7 +136,12 @@ export default {
       };
     },
     pubbleys(url) {
-      solanapubbleys(url, this.$router);
+      this.$router.push({
+        name: "address",
+        params: {
+          url: url,
+        },
+      })
     },
     dataDeal(item) {
       if (/^\d+$/.test(item.split(" ")[1])) {
@@ -209,7 +220,6 @@ export default {
       this.instruction = this.historyData.transaction.message.instructions[0];
       this.initialize = this.historyData.transaction.message.instructions[1];
       this.unitLimit = this.historyData.transaction.message.instructions[2];
-      console.log(this.instruction);
       if (this.historyData.meta.logMessages[0].includes("Vote")) {
         this.preType = true;
       }
@@ -366,10 +376,8 @@ export default {
                   <td>
                     {{ $t("transaction.program") }}
                   </td>
-                  <td class="text-theme" style="cursor: pointer" @click="pubbleys(item.programId)">
-                    {{
-                      promaster[instruction.programId] ? promaster[instruction.programId].name : instruction.programId
-                    }}
+                  <td class="text-theme" style="cursor: pointer" @click="pubbleys(instruction.programId)">
+                    {{ titleUrl(instruction.programId) }}
                   </td>
                   <td></td>
                 </tr>
@@ -378,9 +386,7 @@ export default {
                     {{ $t("transaction.from_address") }}
                   </td>
                   <td class="text-theme" style="cursor: pointer" @click="pubbleys(instruction.parsed.info.source)">
-                    {{
-                      instruction.parsed.info.source ? instruction.parsed.info.source :
-                        $t("account.available") }}
+                    {{ titleUrl(instruction.parsed.info.source) }}
                   </td>
                   <td></td>
                 </tr>
@@ -389,10 +395,8 @@ export default {
                     {{ $t("transaction.to_address") }}
 
                   </td>
-                  <td class="text-theme" style="cursor: pointer" @click="pubbleys(instruction.parsed.info.destination)">
-                    {{
-                      instruction.parsed.info.destination ? instruction.parsed.info.destination :
-                        $t("account.available") }}
+                  <td class="text-theme" style="cursor: pointer" @click="pubbleys(instruction.parsed.info.destination ? instruction.parsed.info.destination : instruction.parsed.info.newAccount)">
+                    {{ titleUrl(instruction.parsed.info.destination ? instruction.parsed.info.destination : instruction.parsed.info.newAccount ) }}
                   </td>
                   <td></td>
                 </tr>
@@ -443,21 +447,17 @@ export default {
                     {{ $t("transaction.mint") }}
                   </td>
                   <td class="text-theme" style="cursor: pointer" @click="pubbleys(initialize.parsed.info.mint)">
-                    {{
-                      initialize.parsed.info.mint ? initialize.parsed.info.mint :
-                        $t("account.available") }}
+                    {{ titleUrl(initialize.parsed.info.mint) }}
                   </td>
                   <td></td>
                 </tr>
                 <tr v-if="initialize.parsed">
                   <td>
                     {{ $t("transaction.mintAuthority") }}
-
                   </td>
-                  <td class="text-theme" style="cursor: pointer" @click="pubbleys(initialize.parsed.info.mintAuthority)">
-                    {{
-                      initialize.parsed.info.mintAuthority ? initialize.parsed.info.mintAuthority :
-                        $t("account.available") }}
+                  <td class="text-theme" style="cursor: pointer"
+                    @click="pubbleys(initialize.parsed.info.mintAuthority)">
+                    {{ titleUrl(initialize.parsed.info.mintAuthority) }}
                   </td>
                   <td></td>
                 </tr>
@@ -465,7 +465,8 @@ export default {
                   <td>
                     {{ $t("transaction.rentsysvar") }} (BTG)
                   </td>
-                  <td class="text-theme"  style="cursor: pointer" @click="pubbleys(initialize.parsed.info.mintAuthority)">
+                  <td class="text-theme" style="cursor: pointer"
+                    @click="pubbleys(initialize.parsed.info.mintAuthority)">
                     Sysvar: Rent
                   </td>
                   <td></td>
@@ -544,10 +545,7 @@ export default {
                       {{ index + 1 }}
                     </td>
                     <td class="text-theme" style="cursor: pointer" @click="pubbleys(item.pubkey)">
-                      <!-- {{ item.pubkey }} -->
-                      {{
-                        promaster[item.pubkey] ? promaster[item.pubkey].name : item.pubkey
-                      }}
+                      {{ titleUrl(item.pubkey) }}
                     </td>
                     <td v-if="historyData.meta.postBalances[index]">
                       <span class="symboldata" :style="styleSysmle(
@@ -564,7 +562,7 @@ export default {
                       {{ come(toFexedStake(historyData.meta.postBalances[index])) }}
                     </td>
                     <td style="text-align: left;font-size: 12px;">
-                      <span v-if="item.signer ? (item.writable ? true : false) : false" class="dage bg-info">
+                      <span v-if="item.signer ? (item.writable ? (index == 0 ? true : false) : false) : false" class="dage bg-info">
                         {{ $t("transaction.fee_payer") }}
                       </span>
                       <span v-if="item.signer" class="dage bg-info">{{ $t("transaction.signer") }}</span>
@@ -596,45 +594,8 @@ export default {
           </card-body>
         </card>
       </div>
-      <div style="margin-top:50px">
-        <card class="md-3 " v-if="historyData">
-          <card-body class="card-bodys">
-            <div>
-              <div style="width:100%;display:flex;justify-content: space-between;">
-                <h4>{{ $t("transaction.LogMessages") }} </h4>
-                <div>
-                  <span style="cursor: pointer" @click="raw = !raw">Raw</span>
-                </div>
-              </div>
-              <div v-if="raw">
-                <div v-for="(item, index) in historyData.transaction.message.instructions" :key="index">
-                  <div style="display:flex;">
-                    <span style="color:#26E97E;background-color:#116939;" class="dage"># {{ index + 1 }}</span>
-                    <!-- <h6 style="margin:0;">{{ textValue(item.parsed.type) }}</h6> -->
-                  </div>
-                  <div>
-                    <ul>
-                      <li v-for="(items, indexs) in historyData.meta.logMessages" :key="indexs" :class="dataDeal(items, item.programId).type == 'success' ? 'text-theme' : ''
-                        ">
-                        {{ dataDeal(items, item.programId).name }}
-                        &nbsp;{{ dataDeal(items, item.programId).value }}
-                        &nbsp;{{ dataDeal(items, item.programId).type
-                        }}
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div v-if="!raw">
-                <pre style="background-color: #18202C;border:none;color:#fff;line-height:15px">
-                            {{
-                              historyData.meta.logMessages
-                            }}
-                        </pre>
-              </div>
-            </div>
-          </card-body>
-        </card>
+      <div style="margin-top:50px" v-if="historyData">
+        <logmess-viem :data="historyData"></logmess-viem>
       </div>
     </div>
   </div>

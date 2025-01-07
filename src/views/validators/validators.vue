@@ -160,6 +160,11 @@ const countplount = (num) => {
 shoeType.value = true;
 
 const pubbleys = (url) => {
-    solanapubbleys(url,router);
+  router.push({
+        name: "address",
+        params: {
+            url: url,
+        },
+    })
 };
 </script>

@@ -1,7 +1,9 @@
 import { chainRequest } from "../../request/chain";
 import { solanaRequest } from "../../request/solanaReques";
 
-export const solanapubbleys = (url, router) => {
+export const solanapubbleys = async (url) => {
+    console.log(url);
+
     let method = {
         "jsonrpc": "2.0",
         "id": 1,
@@ -13,48 +15,22 @@ export const solanapubbleys = (url, router) => {
             }
         ]
     };
-    chainRequest(method).then(res => {
-        console.log(res);
-        console.log(res.result.value.owner);
 
-        if (res.result.value.owner == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c" ||
-            res.result.value.owner == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA") {
-            console.log(123);
-            try {
-                solanaRequest(url, res.result.value.owner).then(res => {
-                     router.push({
-                        name: "address",
-                        params: {
-                            url: url,
-                            type: "mint",
-                            // type:"account"
-                        },
-                    }).then(() => {
-                        window.location.reload();
-                    });;
-                });//通证
-            } catch (err) {
-                router.push({
-                    name: "address",
-                    params: {
-                        url: url,
-                        type: "integration",
-                        // type:"account"
-                    },
-                }).then(() => {
-                    window.location.reload();
-                });;//通证账户
-            }
+    try {
+        const res = await chainRequest(method);
+        console.log(res);
+
+        if (res.result.value.owner === "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c" ||
+            res.result.value.owner === "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA") {
+            // Await the result of solanaRequest and return it directly.
+            return await solanaRequest(url, res.result.value.owner)
+                .then(() => "mint")
+                .catch(() => "integration");
         } else {
-            router.push({
-                name: "address",
-                params: {
-                    url: url,
-                    type: "address"
-                },
-            }).then(() => {
-                window.location.reload();
-            });;//普通账户或非openverse账户
+            return "address";
         }
-    });
+    } catch (err) {
+        console.error(err); // Log the error for debugging purposes.
+        return "address"; // Or handle the error as appropriate.
+    }
 };

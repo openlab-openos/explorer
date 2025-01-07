@@ -1,7 +1,8 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
-import {nodePolyfills} from 'vite-plugin-node-polyfills';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
+// import styleTmport from 'vite-plugin-style-import';
 
 export default defineConfig({
   plugins: [
@@ -46,15 +47,18 @@ export default defineConfig({
         },
       },
     },
+    commonjsOptions: {
+      requireReturnsDefault: 'namespace'
+    }
   },
-  server: {
-    host: "0.0.0.0",
-    proxy: {
-      "/dataapi": {
-        target: "http://198.177.124.16:9527/",
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/dataapi/, ""),
-      },
-    },
-  },
+  // server: {
+  //   host: "0.0.0.0",
+  //   proxy: {
+  //     "/dataapi": {
+  //       target: "http://198.177.124.16:9527/",
+  //       changeOrigin: true,
+  //       rewrite: (path) => path.replace(/^\/dataapi/, ""),
+  //     },
+  //   },
+  // },
 });

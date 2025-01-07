@@ -60,7 +60,7 @@ const props = defineProps({
 const historyData = ref([]);
 
 const currentPage = ref(1);
-const pageSize = ref(10);
+const pageSize = ref(20);
 
 const paginatedHistoryData = computed(() => {
     const start = (currentPage.value - 1) * pageSize.value;
@@ -78,8 +78,6 @@ const requestList = async (object) => {
     try {
         const response = await chainRequest(object);
         // 解析和处理返回的数据
-        console.log(response.result);
-
         return response.result; // 现在这个函数会返回解析后的数据
     } catch (error) {
         console.error("Error fetching epoch info:", error);
@@ -93,7 +91,7 @@ onMounted(async () => {
         jsonrpc: "2.0",
         id: "",
         method: "getConfirmedSignaturesForAddress2",
-        params: [props.url, { limit: 25 }],
+        params: [props.url, { limit: 200 }],
     });
     totalItems.value = historyData.value.length;
 });
