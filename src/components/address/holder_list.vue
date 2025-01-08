@@ -29,14 +29,13 @@
                         {{ item.account.data.parsed.info.tokenAmount.uiAmount }}
                     </td>
                     <td>
-                        <!-- {{ item.err == null ? 'Success' : 'Failed' }} -->
                         {{ percent(item.account.data.parsed.info.tokenAmount.uiAmount, proportion_amount) }} %
                     </td>
                 </tr>
             </template>
         </tbody>
     </table>
-    <div v-if="historyData.length == 0">
+    <div v-if="historyData.length == 0" class="text-center">
         {{ $t("account.available") }}
     </div>
     <div class="justify-end padding-10" v-if="historyData.length != 0">

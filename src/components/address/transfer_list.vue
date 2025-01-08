@@ -114,19 +114,11 @@ const historyData = ref([]);
 
 const currentPage = ref(1);
 const pageSize = ref(20);
-const paginatedHistoryData = ref([]);
-const paginatedHistoryFunction = (data) => {
-    if (data.length > 0) {
-        const start = (currentPage.value - 1) * pageSize.value;
-        const end = start + pageSize.value;
-        paginatedHistoryData.value = data.slice(start, end)
-    }
-};
-console.log(paginatedHistoryData);
-console.log(historyData.value);
-
-console.log(historyData.value.length);
-
+const paginatedHistoryData = computed(() => {
+    const start = (currentPage.value - 1) * pageSize.value;
+    const end = start + pageSize.value;
+    return historyData.value.slice(start, end);
+});
 const totalItems = ref(0);
 
 const handlePageChange = (newPage) => {

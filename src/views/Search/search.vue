@@ -269,6 +269,31 @@ watch(route, (to, from) => {
                   <td class="text-end"> {{ card_data[index] == null ? 'NO' : (item.executable ? 'YES' : 'NO') }}
                   </td>
                 </tr>
+                <tr>
+                  <td>{{ $t("account.list_communication") }}</td>
+                  <td class="text-end">
+                    <el-dropdown style="border: none;" :disabled="menu.length === 0" >
+                      <div class="text-theme":style="{'cursor': menu.length === 0 ? 'not-allowed' : 'pointer'}">
+                        {{$t("viewaccount")}}
+                      </div>
+                      <template #dropdown>
+                        <el-dropdown-menu style="background-color: transparent;" >
+                          <el-dropdown-item v-for="(item, index) in menu" :key="index">
+                            <div @click="exexutable( item.account.data.parsed.info.mint)" >
+                              <span class="text-theme FontWeight-Bold FontSize-14">
+                                {{ $t("mint") }}: {{ item.account.data.parsed.info.mint }}
+                              </span>
+                              <br>
+                              <span class="FontSize-12 FontWeight-Bold">
+                                {{ $t("amount") }} : {{ item.account.data.parsed.info.tokenAmount.uiAmount }}
+                              </span>
+                            </div>
+                          </el-dropdown-item>
+                        </el-dropdown-menu>
+                      </template>
+                    </el-dropdown>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </card-body>
@@ -307,52 +332,6 @@ watch(route, (to, from) => {
                 <tr>
                   <td>{{ $t("account.executable") }}</td>
                   <td class="text-end"> NO
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </card-body>
-        </card>
-      </div>
-      <div
-        v-if="typeAddress == 'address' && card_data[0].space == 0 && titleUrl(card_data[0].owner) == 'System Program' && !card_data[0].executable"
-        class="marginTOP-50">
-        <card class="md-3" v-if="menu">
-          <card-body>
-            <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
-              <th>
-              <td>{{ $t("account.Political_integration") }} </td>
-              <td class=" text-end"></td>
-              </th>
-              <tbody>
-                <tr>
-                  <td>{{ $t("account.type_administration") }} </td>
-                  <td class="text-end"> {{ menu.length }} {{ $t("account.Political_integration") }} </td>
-                </tr>
-                <!-- v-if="menu.length != 0" -->
-                <tr>
-                  <td>{{ $t("account.list_communication") }}</td>
-                  <td class="text-end">
-                    <el-dropdown style="border: none;" :disabled="menu.length === 0" >
-                      <div class="text-theme":style="{'cursor': menu.length === 0 ? 'not-allowed' : 'pointer'}">
-                        {{$t("viewaccount")}}
-                      </div>
-                      <template #dropdown>
-                        <el-dropdown-menu style="background-color: transparent;" >
-                          <el-dropdown-item v-for="(item, index) in menu" :key="index">
-                            <div @click="exexutable( item.account.data.parsed.info.mint)" >
-                              <span class="text-theme FontWeight-Bold FontSize-14">
-                                {{ $t("mint") }}: {{ item.account.data.parsed.info.mint }}
-                              </span>
-                              <br>
-                              <span class="FontSize-12 FontWeight-Bold">
-                                {{ $t("amount") }} : {{ item.account.data.parsed.info.tokenAmount.uiAmount }}
-                              </span>
-                            </div>
-                          </el-dropdown-item>
-                        </el-dropdown-menu>
-                      </template>
-                    </el-dropdown>
                   </td>
                 </tr>
               </tbody>
