@@ -12,9 +12,10 @@ import holderView from "../../components/address/holder_list.vue";
 import tokenView from "../../components/address/token.vue";
 import tokenAccountView from "../../components/address/token_account.vue";
 import { titleUrl } from "../../components/method/title_url"
-import {metaRequest} from "../../request/tokenMeta"
+import { metaRequest } from "../../request/tokenMeta"
 import TokensView from "../../components/address/tokens.vue"
 import acquiesceIcon from "../../assets/icon-acquiesce.png"
+import pledgeView from "../../components/address/pledge.vue"
 const activeName = ref('first')
 const router = useRouter();
 const route = useRoute();
@@ -158,16 +159,16 @@ const menufunction = async (url) => {
         }
       ]
     }
- 
+
     let datas = await requestList(methods);
-    
+
 
     if (datas) {
       for (let i in datas.value) {
         menu.value.push(datas.value[i])
       }
     }
- 
+
 
   }
 }
@@ -188,17 +189,20 @@ const exexutable = async (url) => {
   }
 };
 
-const tokenName = async (url,params) =>{
-  try{
-    const res =  await metaRequest(url,params);
+const tokenName = async (url, params) => {
+  try {
+    const res = await metaRequest(url, params);
     console.log(res);
-    if(res){
+    if (res) {
       token_name.value = res.name ? res.name : "";
       token_img.value = res.uri ? res.uri : "";
     } else {
-      
-    }
 
+    }
+    if (url == "B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz") {
+      token_name.value = "netive";
+      token_img.value = "https://cdn.openverse.network/brands/openverse/icon_128.png";
+    }
   } catch (error) {
     token_name.value = url;
     console.error("Error fetching token info:", error);
@@ -211,7 +215,7 @@ onMounted(async () => {
   await menufunction(url.value);
   await pubbleys(url.value);
   loading.value = true;
-  await tokenName(url.value,card_data.value[0].owner)
+  await tokenName(url.value, card_data.value[0].owner)
 })
 watch(
   () => route.fullPath, // 监听整个路由的 fullPath 变化
@@ -237,14 +241,16 @@ watch(route, (to, from) => {
     <div>
       <h3 v-if="typeAddress == 'address'"> {{ $t("account.title") }} </h3>
       <!-- 普通账户或非openverse账户 -->
-      <h3 v-if="typeAddress == 'mint'" class="align-center"> 
+      <h3 v-if="typeAddress == 'mint'" class="align-center">
         <!-- acquiesce -->
-        <img :src="  token_img ? token_img : acquiesceIcon  " style="width: 25px;opacity: 0.4;" alt="">
-        <text class="marginLeft10"> {{ token_name ?  token_name  : '' }} {{ $t("account.token") }}</text></h3>
+        <img :src="token_img ? token_img : acquiesceIcon" style="width: 25px;"  :style="token_img ? '' : 'opacity: 0.4' " alt="">
+        <text class="marginLeft10"> {{ token_name ? token_name : '' }} {{ $t("account.token") }}</text>
+      </h3>
       <!-- 通政 -->
       <h3 v-if="typeAddress == 'integration'" class="align-center">
-        <img :src="  token_img ? token_img : acquiesceIcon  " style="width: 25px;opacity: 0.4;" alt="">
-         <text class="marginLeft10">{{ $t("account.tokenAccount") }}</text> </h3>
+        <img :src="token_img ? token_img : acquiesceIcon" style="width: 25px;" :style="token_img ? '' : 'opacity: 0.4' " alt="">
+        <text class="marginLeft10">{{ $t("account.tokenAccount") }}</text>
+      </h3>
       <!-- 通证账户 -->
       <div v-if="type">
         <card class="md-3 " v-if="typeAddress == 'address'">
@@ -289,8 +295,10 @@ watch(route, (to, from) => {
         </card>
         <token-view v-if="typeAddress == 'mint'" :url="url"></token-view>
         <!-- <token-view /> -->
-        <token-account-view v-if="typeAddress == 'integration'" :url="url" :paramsId="card_data[0].owner"></token-account-view>
+        <token-account-view v-if="typeAddress == 'integration'" :url="url"
+          :paramsId="card_data[0].owner"></token-account-view>
         <!-- <token-account-view/> -->
+         <!-- <pledgeView></pledgeView> -->
       </div>
 
       <div v-else>
@@ -329,7 +337,8 @@ watch(route, (to, from) => {
           </card-body>
         </card>
       </div>
-      <div class="tab-content marginTOP-50" v-if="typeAddress == 'address' && (card_data[0] == null ? true : (card_data[0].executable ? false : true)) ">
+      <div class="tab-content marginTOP-50"
+        v-if="typeAddress == 'address' && (card_data[0] == null ? true : (card_data[0].executable ? false : true))">
         <Tokens-View :tokens="menu" />
       </div>
       <div class="tab-content marginTOP-50" v-if="card_data">
@@ -339,7 +348,8 @@ watch(route, (to, from) => {
               <el-tab-pane :label="$t('navigation.transactions')" name="first">
                 <history-view :url="url"></history-view>
               </el-tab-pane>
-              <el-tab-pane v-if="card_data[0] == null ? true : (card_data[0].executable ? false : true)" :label="$t('transfer')" name="second">
+              <el-tab-pane v-if="card_data[0] == null ? true : (card_data[0].executable ? false : true)"
+                :label="$t('transfer')" name="second">
                 <transfer-view :url="url" :owner="card_data[0].owner"></transfer-view>
               </el-tab-pane>
               <el-tab-pane v-if="typeAddress == 'mint'" :label="$t('account.holder')" name="third">
@@ -399,14 +409,17 @@ table {
 :deep(.el-dropdown-menu) {
   background-color: #2E3946 !important;
 }
-:deep(.el-tabs__content){
+
+:deep(.el-tabs__content) {
   overflow: auto;
 }
-.align-center{
+
+.align-center {
   display: flex;
   align-items: center;
 }
-.marginLeft10{
+
+.marginLeft10 {
   margin-left: 10px;
 }
 </style>

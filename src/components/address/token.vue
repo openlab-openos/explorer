@@ -19,10 +19,14 @@
                         </tr>
 
                         <tr>
+                            {{ mintToken }}
                             <td>{{ $t("account.supply") }} </td>
                             <td class="text-end"> {{ come(toFexedStake(tokenData.supply, tokenData.decimals)) }}
                                 <span v-if="mintToken">
                                     {{ mintToken.symbol ? "(" + mintToken.symbol + ")" : "" }}
+                                </span>
+                                <span v-if="url == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'">
+                                    ( WBTG )
                                 </span>
                             </td>
                         </tr>
@@ -49,8 +53,9 @@
                     <tbody v-if="tokenData">
                         <tr>
                             <td>{{ $t("account.foundry_license") }} </td>
-                            <td class="text-end text-theme"  :style="pubbleys ? 'cursor: pointer' : ''" @click="pubbtx(pubbleys)"> {{
-                                !pubbleys  ? "N/A" : titleUrl(pubbleys) }} </td>
+                            <td class="text-end text-theme" :style="pubbleys ? 'cursor: pointer' : ''"
+                                @click="pubbtx(pubbleys)"> {{
+                                    !pubbleys ? "N/A" : titleUrl(pubbleys) }} </td>
                         </tr>
                         <tr>
                             <td>{{ $t("account.freeze_authorization") }} </td>
@@ -121,7 +126,7 @@ const tokenRwquest = async () => {
                     let mintAuthority = BigInt(mintAuthorit);
                     pubbleys.value = new PublicKey(mintAuthority);
                     console.log(pubbleys.value);
-                    
+
                 }
                 console.log(pubbleys.value);
 
@@ -140,6 +145,9 @@ const tokenRwquest = async () => {
         }
     });
 }
+console.log(url.value);
+
+
 const numberHeld = async () => {
 
     let method = {
@@ -179,6 +187,12 @@ onMounted(async () => {
     await tokenRwquest();
 
     await numberHeld();
+    if (url.value == "B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz") {
+        mintToken.value = {
+            "name": "netive",
+            "symbol": "WBTG",
+        }
+    }
 });
 const come = (num) => {
     let reg =
