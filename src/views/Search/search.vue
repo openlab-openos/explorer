@@ -12,28 +12,31 @@ import holderView from "../../components/address/holder_list.vue";
 import tokenView from "../../components/address/token.vue";
 import tokenAccountView from "../../components/address/token_account.vue";
 import { titleUrl } from "../../components/method/title_url"
+import {metaRequest} from "../../request/tokenMeta"
+import TokensView from "../../components/address/tokens.vue"
+import acquiesceIcon from "../../assets/icon-acquiesce.png"
 const activeName = ref('first')
 const router = useRouter();
 const route = useRoute();
 
 const url = ref(route.params.url);
-console.log(route);
-
-console.log(url.value);
 
 const card_data = ref(null);
 const token = ref(null);
 const type = ref(false);
 const loading = ref(false);
 const endUrl = ref(route.params.url);
+const token_name = ref(null);
+const token_img = ref(null);
 
 const typeAddress = ref();
 const loadTypeAddress = async () => {
   try {
-    console.log(route.params.url);
+    // console.log(route.params.url);
     // console.log(solanapubbleys());
 
     typeAddress.value = await solanapubbleys(route.params.url);
+
   } catch (error) {
     typeAddress.value = "address";
   }
@@ -41,7 +44,7 @@ const loadTypeAddress = async () => {
 
 
 const handleClick = (tab, event) => {
-  console.log(tab, event)
+  // console.log(tab, event)
 }
 
 const appStore = useAppStore();
@@ -76,7 +79,7 @@ watchEffect(() => {
 
 const toFexedStake = (num) => {
   if (num) {
-    return num / 1000000000;
+    return (num / 1000000000).toFixed(2);
   }
 }
 
@@ -100,7 +103,6 @@ const requestList = async (object) => {
 }
 
 const pubbleys = async (url) => {
-  // this.url = url;
   let cardData = await requestList({
     jsonrpc: "2.0",
     id: 1,
@@ -113,7 +115,6 @@ const pubbleys = async (url) => {
       },
     ],
   });
-  console.log(cardData);
 
   if (cardData) {
     card_data.value = cardData.value;
@@ -157,17 +158,16 @@ const menufunction = async (url) => {
         }
       ]
     }
-    console.log(methods);
-
+ 
     let datas = await requestList(methods);
-    console.log(datas);
+    
 
     if (datas) {
       for (let i in datas.value) {
         menu.value.push(datas.value[i])
       }
     }
-    console.log(menu.value);
+ 
 
   }
 }
@@ -188,15 +188,30 @@ const exexutable = async (url) => {
   }
 };
 
+const tokenName = async (url,params) =>{
+  try{
+    const res =  await metaRequest(url,params);
+    console.log(res);
+    if(res){
+      token_name.value = res.name ? res.name : "";
+      token_img.value = res.uri ? res.uri : "";
+    } else {
+      
+    }
+
+  } catch (error) {
+    token_name.value = url;
+    console.error("Error fetching token info:", error);
+  }
+}
 
 onMounted(async () => {
   await loadTypeAddress();
 
-  console.log(typeAddress.value);
-
   await menufunction(url.value);
   await pubbleys(url.value);
   loading.value = true;
+  await tokenName(url.value,card_data.value[0].owner)
 })
 watch(
   () => route.fullPath, // 监听整个路由的 fullPath 变化
@@ -213,12 +228,6 @@ watch(
 watch(route, (to, from) => {
   console.log(to, from);
   console.log(to.fullPath == from.fullPath);
-
-  // if (to.fullPath != from.fullPath) {
-  //   window.location.reload();
-  // }
-  // endUrl.value = route.params.url;
-  // url.value = route.params.url;
 })
 
 </script>
@@ -228,9 +237,14 @@ watch(route, (to, from) => {
     <div>
       <h3 v-if="typeAddress == 'address'"> {{ $t("account.title") }} </h3>
       <!-- 普通账户或非openverse账户 -->
-      <h3 v-if="typeAddress == 'mint'"> {{ $t("account.token") }} </h3>
+      <h3 v-if="typeAddress == 'mint'" class="align-center"> 
+        <!-- acquiesce -->
+        <img :src="  token_img ? token_img : acquiesceIcon  " style="width: 25px;opacity: 0.4;" alt="">
+        <text class="marginLeft10"> {{ token_name ?  token_name  : '' }} {{ $t("account.token") }}</text></h3>
       <!-- 通政 -->
-      <h3 v-if="typeAddress == 'integration'"> {{ $t("account.token_account") }} </h3>
+      <h3 v-if="typeAddress == 'integration'" class="align-center">
+        <img :src="  token_img ? token_img : acquiesceIcon  " style="width: 25px;opacity: 0.4;" alt="">
+         <text class="marginLeft10">{{ $t("account.tokenAccount") }}</text> </h3>
       <!-- 通证账户 -->
       <div v-if="type">
         <card class="md-3 " v-if="typeAddress == 'address'">
@@ -269,31 +283,6 @@ watch(route, (to, from) => {
                   <td class="text-end"> {{ card_data[index] == null ? 'NO' : (item.executable ? 'YES' : 'NO') }}
                   </td>
                 </tr>
-                <tr>
-                  <td>{{ $t("account.list_communication") }}</td>
-                  <td class="text-end">
-                    <el-dropdown style="border: none;" :disabled="menu.length === 0" >
-                      <div class="text-theme":style="{'cursor': menu.length === 0 ? 'not-allowed' : 'pointer'}">
-                        {{$t("viewaccount")}}
-                      </div>
-                      <template #dropdown>
-                        <el-dropdown-menu style="background-color: transparent;" >
-                          <el-dropdown-item v-for="(item, index) in menu" :key="index">
-                            <div @click="exexutable( item.account.data.parsed.info.mint)" >
-                              <span class="text-theme FontWeight-Bold FontSize-14">
-                                {{ $t("mint") }}: {{ item.account.data.parsed.info.mint }}
-                              </span>
-                              <br>
-                              <span class="FontSize-12 FontWeight-Bold">
-                                {{ $t("amount") }} : {{ item.account.data.parsed.info.tokenAmount.uiAmount }}
-                              </span>
-                            </div>
-                          </el-dropdown-item>
-                        </el-dropdown-menu>
-                      </template>
-                    </el-dropdown>
-                  </td>
-                </tr>
               </tbody>
             </table>
           </card-body>
@@ -303,6 +292,7 @@ watch(route, (to, from) => {
         <token-account-view v-if="typeAddress == 'integration'" :url="url" :paramsId="card_data[0].owner"></token-account-view>
         <!-- <token-account-view/> -->
       </div>
+
       <div v-else>
         <card class="md-3">
           <card-body class="card-bodys">
@@ -339,15 +329,18 @@ watch(route, (to, from) => {
           </card-body>
         </card>
       </div>
+      <div class="tab-content marginTOP-50" v-if="typeAddress == 'address' && (card_data[0] == null ? true : (card_data[0].executable ? false : true)) ">
+        <Tokens-View :tokens="menu" />
+      </div>
       <div class="tab-content marginTOP-50" v-if="card_data">
         <card class="md-3">
           <card-body class="card-bodys">
             <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
-              <el-tab-pane :label="$t('transfer')" name="first">
-                <transfer-view :url="url" :owner="card_data[0].owner"></transfer-view>
-              </el-tab-pane>
-              <el-tab-pane :label="$t('navigation.transactions')" name="second">
+              <el-tab-pane :label="$t('navigation.transactions')" name="first">
                 <history-view :url="url"></history-view>
+              </el-tab-pane>
+              <el-tab-pane v-if="card_data[0] == null ? true : (card_data[0].executable ? false : true)" :label="$t('transfer')" name="second">
+                <transfer-view :url="url" :owner="card_data[0].owner"></transfer-view>
               </el-tab-pane>
               <el-tab-pane v-if="typeAddress == 'mint'" :label="$t('account.holder')" name="third">
                 <holder-view :url="url" :paramsId="card_data[0].owner"></holder-view>
@@ -405,5 +398,15 @@ table {
 
 :deep(.el-dropdown-menu) {
   background-color: #2E3946 !important;
+}
+:deep(.el-tabs__content){
+  overflow: auto;
+}
+.align-center{
+  display: flex;
+  align-items: center;
+}
+.marginLeft10{
+  margin-left: 10px;
 }
 </style>

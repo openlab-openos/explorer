@@ -34,7 +34,7 @@
             <div></div>
         </tbody>
     </table>
-    <div v-if="historyData.length == 0">
+    <div v-if="historyData.length == 0"  class="text-center">
         {{ $t("account.available") }}
     </div>
     <div class="justify-end padding-10" v-if="historyData.length != 0">

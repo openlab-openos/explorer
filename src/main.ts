@@ -39,11 +39,9 @@ import CardExpandToggler from '@/components/bootstrap/CardExpandToggler.vue';
 import * as buffer from "buffer"; //引入buffer
  
 if (typeof (window as any).Buffer === "undefined") { // 判断当前环境是否有Buffer对象
-    console.log(123);
-    
+
     (window as any).Buffer = buffer.Buffer; // Buffer对象不存在则创建导入的buffer
 } else {
-    console.log(456);
     
 }
 

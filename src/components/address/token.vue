@@ -4,26 +4,36 @@
         <card class="md-3">
             <card-body class="card-bodys ">
                 <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
-                    <th>
-                    <th>{{ $t("account.general_situation") }}</th>
-                    <th class="text-end"></th>
-                    </th>
+                    <tr>
+                        <th>{{ $t("account.general_situation") }}</th>
+                        <th class="text-end"></th>
+                    </tr>
                     <tbody v-if="tokenData">
                         <tr>
-                            <td>{{ $t("account.foundry_license") }} </td>
+                            <td>{{ $t("account.token_account") }} </td>
                             <td class="text-end"> {{ address == "" ? "" : address }} </td>
                         </tr>
                         <tr>
-                            <td>{{ $t("account.freeze_authorization") }} </td>
+                            <td>{{ $t("transaction.Decimals") }} </td>
                             <td class="text-end"> {{ tokenData.decimals }} </td>
                         </tr>
+
                         <tr>
                             <td>{{ $t("account.supply") }} </td>
-                            <td class="text-end"> {{ come(tokenData.supply) }} </td>
+                            <td class="text-end"> {{ come(toFexedStake(tokenData.supply, tokenData.decimals)) }}
+                                <span v-if="mintToken">
+                                    {{ mintToken.symbol ? "(" + mintToken.symbol + ")" : "" }}
+                                </span>
+                            </td>
                         </tr>
                         <tr>
                             <td>{{ $t("account.number_held") }} </td>
                             <td class="text-end"> {{ holdNumber }} </td>
+                        </tr>
+                        <tr>
+                            <td>{{ $t("account.owner") }} </td>
+                            <td class="text-end text-theme" style="cursor: pointer" @click="pubbleys(paramsId)"> {{
+                                titleUrl(paramsId) }} </td>
                         </tr>
                     </tbody>
                 </table>
@@ -39,12 +49,13 @@
                     <tbody v-if="tokenData">
                         <tr>
                             <td>{{ $t("account.foundry_license") }} </td>
-                            <td class="text-end"> {{ pubbleys == "" ? "" : pubbleys }} </td>
+                            <td class="text-end text-theme"  :style="pubbleys ? 'cursor: pointer' : ''" @click="pubbtx(pubbleys)"> {{
+                                !pubbleys  ? "N/A" : titleUrl(pubbleys) }} </td>
                         </tr>
                         <tr>
                             <td>{{ $t("account.freeze_authorization") }} </td>
-                            <td class="text-end"> {{ tokenData.freezeAuthority == null ? $t("account.no") :
-                                tokenData.freezeAuthority }} </td>
+                            <td class="text-end"> {{ tokenData.freezeAuthority == null ? "N/A" :
+                                titleUrl(tokenData.freezeAuthority) }} </td>
                         </tr>
                     </tbody>
                 </table>
@@ -58,12 +69,16 @@ import { ref, onMounted } from 'vue';
 import { chainRequest } from "../../request/chain";
 import { solanaRequest } from "../../request/solanaReques";
 import { PublicKey } from "@solana/web3.js";
+import { titleUrl } from "../method/title_url";
+import { useRouter } from "vue-router";
+import { metaRequest } from "../../request/tokenMeta"
 
 const tokenData = ref();
-console.log(tokenData);
-const pubbleys = ref();
+const pubbleys = ref("");
 const address = ref();
 const holdNumber = ref();
+const router = useRouter();
+const mintToken = ref();
 
 const props = defineProps({
     url: {
@@ -75,7 +90,6 @@ const props = defineProps({
         default: ''
     }
 });
-// const url = ref("GragM9tHgicpxtf9qrTkbY1fFZYA8CJaDgLuFnZikdqs");
 const url = ref(props.url);
 const paramsId = ref(props.paramsId);
 const tokenRwquest = async () => {
@@ -91,24 +105,35 @@ const tokenRwquest = async () => {
             }
         ]
     };
-     await chainRequest(method).then(res => {
+    await chainRequest(method).then(res => {
         paramsId.value = res.result.value.owner;
+        console.log(res);
+
         try {
             solanaRequest(url.value, res.result.value.owner).then(res => {
                 console.log(res);
                 tokenData.value = res;
+                console.log(tokenData.value);
+
                 if (res.mintAuthority) {
                     let mintAuthorit = res.mintAuthority._bn;
-                    console.log(mintAuthorit);
 
                     let mintAuthority = BigInt(mintAuthorit);
                     pubbleys.value = new PublicKey(mintAuthority);
+                    console.log(pubbleys.value);
+                    
                 }
+                console.log(pubbleys.value);
+
                 if (res.address) {
                     let addresses = res.address._bn;
                     let addressCard = BigInt(addresses);
                     address.value = new PublicKey(addressCard);
                 }
+            });
+            metaRequest(url.value, res.result.value.owner).then(res => {
+                console.log(res);
+                mintToken.value = res;
             });
         } catch (err) {
             console.log(err);
@@ -116,8 +141,6 @@ const tokenRwquest = async () => {
     });
 }
 const numberHeld = async () => {
-    console.log(props.url);
-    console.log(props.paramsId);
 
     let method = {
         "jsonrpc": "2.0",
@@ -141,7 +164,6 @@ const numberHeld = async () => {
         ]
     }
     chainRequest(method).then(res => {
-        console.log(method);
 
         console.log(res);
         if (res.err) {
@@ -155,7 +177,6 @@ const numberHeld = async () => {
 }
 onMounted(async () => {
     await tokenRwquest();
-    console.log(paramsId.value);
 
     await numberHeld();
 });
@@ -173,8 +194,16 @@ const toFexedStake = (num, decimals) => {
         return 0;
     }
     const divisor = Math.pow(10, JSON.parse(decimals));
-    console.log(divisor);
-    return (JSON.parse(num) / divisor).toFixed(decimals);;
 
+    return (JSON.parse(num) / divisor).toFixed(2);;
+
+};
+const pubbtx = (url) => {
+    router.push({
+        name: "address",
+        params: {
+            url: url,
+        },
+    })
 };
 </script>

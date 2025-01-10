@@ -1,11 +1,14 @@
 <template>
-    <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
+    <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small"
+        style="overflow: auto;">
         <tbody>
             <tr>
                 <th>
                     {{ $t("account.signature") }}
                 </th>
-
+                <th>
+                    {{ $t("account.movement") }}
+                </th>
                 <th>
                     {{ $t("account.primary") }}
                 </th>
@@ -13,14 +16,17 @@
                     {{ $t("account.quantity") }}
                 </th>
                 <th>
+                    {{ $t("account.program") }}
+                </th>
+                <th>
                     {{ $t("account.destination") }}
                 </th>
                 <th>
                     {{ $t("account.Political") }}
                 </th>
-                <th>
+                <!-- <th>
                     {{ $t("account.movement") }}
-                </th>
+                </th> -->
                 <th>
                     {{ $t("account.time") }}
                 </th>
@@ -30,34 +36,6 @@
                     <td class="text-theme" style="cursor: pointer"
                         @click="pubbtx(item.result.transaction.signatures[0])">
                         {{ stringcate(item.result.transaction.signatures[0]) }}
-                    </td>
-                    <td style=" text-align: left; cursor: pointer" class="text-theme"
-                        @click="slot(item.result.transaction.message.instructions[0].parsed.info.source)">
-                        {{ item.result.transaction.message.instructions[0].parsed.info.source }}
-                    </td>
-                    <td style=" text-align: left; cursor: pointer" class="text-theme"
-                        @click="slot(item.result.transaction.message.instructions[0].parsed.info.destination)">
-                        {{ item.result.transaction.message.instructions[0].parsed.info.destination }}
-                    </td>
-                    <td>
-                        {{
-                            item.result.transaction.message.instructions[0]
-                                .parsed.info.mint ? item.result.transaction.message.instructions[0]
-                                    .parsed.info.tokenAmount.uiAmount : toFexedStake(
-                                        item.result.transaction.message.instructions[0].parsed
-                                            .info.lamports
-                                    )
-                        }}
-                    </td>
-
-                    <td>
-                        {{
-                            stringcate(
-                                item.result.transaction.message.instructions[0]
-                                    .parsed.info.mint ? item.result.transaction.message.instructions[0]
-                                        .parsed.info.mint : "BTG"
-                            )
-                        }}
                     </td>
                     <td>
                         <button type="button" style="
@@ -79,6 +57,52 @@
                             }}
                         </button>
                     </td>
+                    <td style=" text-align: left; cursor: pointer" class="text-theme"
+                        @click="slot(item.result.transaction.message.instructions[0].parsed.info.source)">
+                        {{ item.result.transaction.message.instructions[0].parsed.info.source }}
+                    </td>
+                    <td style=" text-align: left; cursor: pointer" class="text-theme"
+                        @click="slot(item.result.transaction.message.instructions[0].parsed.info.destination)">
+                        {{ item.result.transaction.message.instructions[0].parsed.info.destination }}
+                    </td>
+                    <td style=" text-align: left; cursor: pointer" class="text-theme" @click="slot(
+                        item.result.transaction.message.instructions[0]
+                            .programId ? item.result.transaction.message.instructions[0]
+                            .programId : ''
+                    )">
+                        {{
+
+                            item.result.transaction.message.instructions[0]
+                                .programId ? titleUrl(item.result.transaction.message.instructions[0]
+                                    .programId) : "BTG"
+
+                        }}
+                    </td>
+                    <td>
+                        {{
+                            item.result.transaction.message.instructions[0]
+                                .parsed.info.mint ? item.result.transaction.message.instructions[0]
+                                    .parsed.info.tokenAmount.uiAmount : toFexedStake(
+                                        item.result.transaction.message.instructions[0].parsed
+                                            .info.lamports
+                                    )
+                        }}
+                    </td>
+                    <td style=" text-align: left; " :style="item.result.transaction.message.instructions[0]
+                        .parsed.info.mint ? 'cursor: pointer' : ''" class="text-theme" @click="slot(
+                                item.result.transaction.message.instructions[0]
+                                    .parsed.info.mint ? item.result.transaction.message.instructions[0]
+                                        .parsed.info.mint : ''
+                            )">
+                        {{
+
+                            item.result.transaction.message.instructions[0]
+                                .parsed.info.mint ? titleUrl(item.result.transaction.message.instructions[0]
+                                    .parsed.info.mint) : "BTG"
+
+                        }}
+                    </td>
+                    
                     <td class="text-theme" style="cursor: pointer">
                         {{ timeSome(item.result.blockTime) }}
                     </td>
@@ -102,6 +126,8 @@ import { order } from "../../request/order";
 import { chainRequest } from "../../request/chain";
 import { useRouter } from "vue-router";
 import { solanapubbleys } from "../method/solana"
+import { titleUrl } from "../method/title_url";
+
 const router = useRouter();
 const props = defineProps({
     url: {
@@ -142,11 +168,11 @@ const requestList = async (object) => {
 
 
 onMounted(async () => {
-    console.log(props.url);
-    
     try {
-        historyData.value = await requestList('transactions/'+props.url);
+        historyData.value = await requestList('transactions/' + props.url);
+
         totalItems.value = historyData.value.length;
+
         if (historyData.value[0].result) {
             requestType.value = true;
         } else {
@@ -170,12 +196,15 @@ const pubbtx = (item) => {
 };
 
 const slot = (url) => {
-    router.push({
-        name: "address",
-        params: {
-            url: url,
-        },
-    })
+    if (url) {
+        router.push({
+            name: "address",
+            params: {
+                url: url,
+            },
+        })
+    }
+
 };
 const stringcate = (str) => {
     if (str.length < 10) {

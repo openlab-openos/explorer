@@ -2,15 +2,15 @@
     <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
         <tbody>
             <tr>
-
-                <th>
-                    {{ $t("account.token-address") }}
-                </th>
                 <th>
                     {{ $t("account.account") }}
                 </th>
                 <th>
-                    {{ $t("account.quantity") }}
+                    {{ $t("account.tokenAccount") }}
+                </th>
+
+                <th>
+                    {{ $t("account.amount") }}
                 </th>
                 <th>
                     {{ $t("account.proportion") }}
@@ -19,14 +19,14 @@
             <template v-if="historyData.length != 0">
                 <tr v-for="(item, index) in paginatedHistoryData" :key="index">
 
-                    <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.pubkey)">
+                    <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.account.data.parsed.info.owner)">
                         {{ item.account.data.parsed.info.owner }}
                     </td>
                     <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.pubkey)">
                         {{ item.pubkey }}
                     </td>
                     <td>
-                        {{ item.account.data.parsed.info.tokenAmount.uiAmount }}
+                        {{ proportion_amount != 0 ? item.account.data.parsed.info.tokenAmount.uiAmount :0 }}
                     </td>
                     <td>
                         {{ percent(item.account.data.parsed.info.tokenAmount.uiAmount, proportion_amount) }} %
@@ -125,6 +125,8 @@ onMounted(async () => {
         ]
     };
     totalItems.value = historyData.value.length;
+    console.log(historyData.value);
+
     proportion_amount.value = await chainRequest(method).then(res => {
         return res.result.value.uiAmount;
     }).catch(err => {
@@ -147,6 +149,10 @@ const timeSome = (time) => {
 }
 
 const percent = (lod, nem) => {
+    console.log(lod, nem);
+    if(nem == 0){
+        return 0;
+    }
     return (lod / nem * 100).toFixed(2);
 }
 const pubbtx = (url) => {

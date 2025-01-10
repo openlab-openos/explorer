@@ -9,25 +9,27 @@
                     </div>
                 </div>
                 <div v-if="raw">
-                    <div  class="marginTOP-20"  v-for="(item, index) in data.transaction.message.instructions" :key="index">
+                    <div class="marginTOP-20" v-for="(item, index) in (data.transaction.message.instructions)"
+                        :key="index">
                         <div style="display:flex;">
                             <span style="color:#26E97E;background-color:#116939;" class="dage">
                                 # {{ index + 1 }}
                             </span>
                             {{ titleUrl(item.programId) }} Instruction
                         </div>
-                        <div>
-                            <ul >
-                                <li  v-for="(items, indexs) in liList(data.meta.logMessages,item.programId)" :key="indexs" :class="dataDeal(items, item.programId).type == 'success' ? 'text-theme' : ''
-                                    ">
+                        <div v-if="item.programId">
+                            <!-- {{ item.programId }} -->
+                            <ul>
+                                <li v-for="(items, indexs) in liList(data.meta.logMessages, item.programId, index,
+                                    data.transaction.message.instructions[index - 1] ?
+                                        data.transaction.message.instructions[index - 1].programId : null)" :key="indexs"
+                                    :class="dataDeal(items, item.programId).type == 'success' ? 'text-theme' : ''
+                                        ">
                                     {{ dataDeal(items, item.programId).name }}
                                     &nbsp;{{ dataDeal(items, item.programId).value }}
                                     &nbsp;{{ dataDeal(items, item.programId).type
                                     }}
                                 </li>
-                                <!-- <li>
-                                    {{ liList(data.meta.logMessages,item.programId) }}
-                                </li> -->
                             </ul>
                         </div>
                     </div>
@@ -45,7 +47,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { titleUrl } from "../../../components/method/title_url";
 const props = defineProps({
     data: {
@@ -69,38 +71,59 @@ const dataDeal = (item) => {
         };
     }
 };
-const liList = (data,item)=>{
-    const listData =  extractLogsBetweenFirstAndLast(data, item);
-    return listData;
-}
-function extractLogsBetweenFirstAndLast(data, item) {
-    let startIndex = -1;
-    let endIndex = -1;
+const lastindex = ref(0);//上次遍历最后一个符合项
 
-    // 找到第一个和最后一个匹配项的索引
-    data.forEach((entry, index) => {
-        const parts = entry.split(' ');
-        if (parts.length > 1 && parts[1] === item) {
-            if (startIndex === -1) {
-                // 第一次找到匹配项时设置起始索引
-                startIndex = index;
+const extractLogsBetweenFirstAndLast = (data, item, index, lastprogramId) => {
+    let startIndex = 0;
+    let endIndex = 0;
+    if (!lastprogramId) {
+        // 第一次遍历：找到第一个匹配项的索引
+        for (let i = startIndex; i < data.length; i++) {
+            const parts = data[i].split(' ');
+            if (parts.length > 1 && parts[1] === item) {
+                startIndex = i;
+                break; // 找到第一个匹配项后退出循环
             }
-            // 每次找到匹配项时更新结束索引
-            endIndex = index;
         }
-    });
+        console.log(startIndex);
+        for (let i = data.length - 1; i >= 0; i--) {
+            const parts = data[i].split(' ');
+            if (parts.length > 1 && parts[1] === item) {
+                endIndex = i;
+                break; // 找到最后一个匹配项后退出循环
+            }
+        }
+        // lastindex.value = endIndex;
 
-    // 如果找到了至少一个匹配项，则提取并返回中间的所有值
-    // if (startIndex !== -1 && endIndex !== -1) {
-    //     return data.slice(startIndex, endIndex + 1);
-    // }
-    if (startIndex !== -1 && endIndex !== -1) {
-        return data.slice(startIndex, endIndex + 1).filter(entry => !entry.includes("invoke"));
+        const matchedLogs = data.slice(startIndex + index + 1, endIndex + 1);
+        // 如果没有找到任何匹配项，返回空数组
+        return matchedLogs;
+    } else {
+        for (let i = data.length - 1; i >= 0; i--) {
+            const parts = data[i].split(' ');
+            if (parts.length > 1 && parts[1] === lastprogramId) {
+                startIndex = i;
+                break; // 找到最后一个匹配项后退出循环
+            }
+        }
+        for (let i = data.length - 1; i >= startIndex; i--) {
+            const parts = data[i].split(' ');
+            if (parts.length > 1 && parts[1] === item) {
+                endIndex = i;
+                break; // 找到最后一个匹配项后退出循环
+            }
+        }
+        const matchedLogs = data.slice(startIndex + index + 1, endIndex + 1);
+        return matchedLogs;
     }
 
-    // 如果没有找到任何匹配项，返回空数组
-    return [];
-}
+};
+
+// 使用 liList 函数来展示如何调用 extractLogsBetweenFirstAndLast
+const liList = (data, item, index, lastprogramId) => {
+    const listData = extractLogsBetweenFirstAndLast(data, item, index, lastprogramId);
+    return listData;
+};
 
 </script>
 

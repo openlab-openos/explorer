@@ -11,31 +11,35 @@
                             <td>{{ $t("account.token_account") }} </td>
                             <td class="text-end"> {{ url }} </td>
                         </tr>
-                        <tr>
-                            <td>{{ $t("account.Amount") }} </td>
+                        <tr v-if="mintData.supply">
+                            <td>{{ $t("account.balance") }} </td>
                             <td class="text-end">
                                 {{ come(mintData.supply ?
-                                    toFexedStake(mintData.supply, mintData.decimals) : 0) }} </td>
+                                    toFexedStake(mintData.supply, mintData.decimals) : 0) }} 
+                                <span v-if="price">
+                                    {{ price.symbol != '' ? "(" + price.symbol + ")" : "" }}
+                                </span>    
+                            </td>
                         </tr>
                         <tr>
                             <td>{{ $t("account.owning_token") }}</td>
-                            <td class="text-end"> {{ getMint }} </td>
+                            <td class="text-end text-theme"  @click="pubbtx(getMint)" style="cursor: pointer" > {{ titleUrl(getMint) }} </td>
                         </tr>
                         <tr>
-                            <td>{{ $t("account.isFrozen") }} </td>
-                            <td class="text-end">{{ tokenData.isFrozen }} </td>
+                            <td>{{ $t("account.state") }} </td>
+                            <td class="text-end">{{ tokenData.isFrozen ? $t("account.frozen") : $t("account.initialize") }} </td>
                         </tr>
-                        <tr>
-                            <td>{{ $t("account.isInitialized") }} </td>
-                            <td class="text-end">{{ tokenData.isInitialized }} </td>
-                        </tr>
-                        <tr>
-                            <td>{{ $t("account.isNative") }} </td>
-                            <td class="text-end">{{ tokenData.isNative }} </td>
-                        </tr>
-                        <tr v-if="price">
+                        <!-- <tr v-if="price">
                             <td>{{ $t("account.symbol") }} </td>
                             <td class="text-end">{{ price.symbol }} </td>
+                        </tr> -->
+                        <tr>
+                            <td>{{ $t("account.Owner") }} </td>
+                            <td class="text-end text-theme"  @click="pubbtx(owners)" style="cursor: pointer" > {{ titleUrl(owners) }} </td>
+                        </tr>
+                        <tr>
+                            <td>{{ $t("transaction.program") }} </td>
+                            <td class="text-end text-theme"  @click="pubbtx(owners)" style="cursor: pointer" > {{ titleUrl(program) }} </td>
                         </tr>
                     </tbody>
                 </table>
@@ -53,12 +57,17 @@ import { PublicKey, Connection } from "@solana/web3.js";
 import { solanaRequest } from "../../request/solanaReques";
 import { getExtensionData, ExtensionType } from "open-token-web3";
 import { metaRequest } from "../../request/tokenMeta";
-
+import {titleUrl} from "../method/title_url"
+import {useRouter} from "vue-router";
+const router = useRouter();
 const tokenData = ref();
 const pubbleys = ref();
 const getMint = ref();
 const mintData = ref();
 const price = ref();
+const owners= ref();
+const program = ref();
+const data = ref();
 
 const props = defineProps({
     url: {
@@ -84,39 +93,40 @@ let method = {
         }
     ]
 };
-console.log(url.value, owner.value);
 
 const tokenRwquest = async () => {
-    await chainRequest(method).then(res => {
-      
-        owner.value = res.result.value.owner
-    })
-    console.log(owner.value);
-
     try {
-        solanagetAccount(url.value, owner.value).then(res => {
-          
-            tokenData.value = res;
-            if (res.mintAuthority) {
-                let mintAuthorit = res.mintAuthority._bn;
-                console.log(mintAuthorit);
+        const res = await chainRequest(method);
+        owner.value = res.result.value.owner;
+        console.log(owner.value);
 
-                let mintAuthority = BigInt(mintAuthorit);
-                pubbleys.value = new PublicKey(mintAuthority);
-            }
-            if (res.mint) {
-                let mint_bn = res.mint._bn.toString();
-                let mint = BigInt(mint_bn);
+        const res2 = await solanagetAccount(url.value, owner.value);
+        console.log(res2);
+        
+        tokenData.value = res2;
+        data.value = res2;
 
-                getMint.value = new PublicKey(mint).toString();
+        if (res2.mintAuthority) {
+            let mintAuthority = BigInt(res2.mintAuthority._bn);
+            pubbleys.value = new PublicKey(mintAuthority);
+        }
 
-                mintReauest(getMint.value);
-            }
-        });
+        if (res2.mint) {
+            let mint = BigInt(res2.mint._bn.toString());
+            getMint.value = new PublicKey(mint).toString();
+            await mintReauest(getMint.value); // Ensure this is awaited
+        }
+
+        if (res2.owner) {
+            owners.value = new PublicKey(BigInt(res2.owner._bn.toString())).toString();
+            console.log(owners.value);
+        }
+
+        console.log(tokenData.value);
     } catch (err) {
-        console.log(err);
+        console.error(err); // Use console.error for errors
     }
-}
+};
 
 const mintReauest = async (url) => {
     console.log(url);
@@ -135,13 +145,14 @@ const mintReauest = async (url) => {
         }
     ).then(async resd => {
             console.log(resd.result.value.owner);
-
+            program.value = resd.result.value.owner;
             try {
                 await solanaRequest(url, resd.result.value.owner).then(res => {
                   
                     mintData.value = res;
                 });
                 await metaRequest(url, resd.result.value.owner).then(res => {
+                  console.log(res);
                   
                     price.value = res;
                 });
@@ -153,6 +164,8 @@ const mintReauest = async (url) => {
 
 onMounted(async () => {
     await tokenRwquest();
+    console.log(mintData.value);
+    
 });
 const come = (num) => {
     let reg =
@@ -169,7 +182,15 @@ const toFexedStake = (num, decimals) => {
     }
     const divisor = Math.pow(10, JSON.parse(decimals));
     console.log(divisor);
-    return (JSON.parse(num) / divisor).toFixed(decimals);;
+    return (JSON.parse(num) / divisor).toFixed(2);;
 
 };
+const pubbtx = (url) => {
+    router.push({
+        name: "address",
+        params: {
+            url: url,
+        },
+    })
+}
 </script>

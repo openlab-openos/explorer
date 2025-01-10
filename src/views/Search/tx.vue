@@ -103,7 +103,7 @@ export default {
     },
     toFexedStake(num) {
       if (num) {
-        return JSON.stringify(num / 1000000000);
+        return (num / 1000000000).toFixed(2);
       }
     },
     come(num) {
@@ -217,9 +217,7 @@ export default {
     });
 
     if (this.historyData) {
-      this.instruction = this.historyData.transaction.message.instructions[0];
-      this.initialize = this.historyData.transaction.message.instructions[1];
-      this.unitLimit = this.historyData.transaction.message.instructions[2];
+      this.instruction = this.historyData.transaction.message.instructions
       if (this.historyData.meta.logMessages[0].includes("Vote")) {
         this.preType = true;
       }
@@ -354,16 +352,16 @@ export default {
 
         </card>
       </div>
-      <div class="marginTOP-50" v-if="instruction">
-        <h4>{{ $t("transaction.instruction") }}</h4>
-        <card class="md-3">
+      <div>
+        <h4 class="marginTOP-50">{{ $t("transaction.instruction") }}</h4>
+        <card class="md-3" v-for="(item, index) in instruction" :key="index" :class="index != 0 ? 'marginTOP-50' : ''">
           <card-body class="card-bodys">
             <table class=" w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
               <tr>
                 <th>
                   <span class="text-theme">
-                    #
-                  </span> {{ $t("transaction.system_program") }}
+                    #{{ index + 1 }}
+                  </span> {{ titleUrl(item.programId) ? titleUrl(item.programId) : 'Associated Token Program' }}
                 </th>
                 <th>
 
@@ -372,145 +370,138 @@ export default {
                 </th>
               </tr>
               <tbody>
-                <tr>
-                  <td>
-                    {{ $t("transaction.program") }}
-                  </td>
-                  <td class="text-theme" style="cursor: pointer" @click="pubbleys(instruction.programId)">
-                    {{ titleUrl(instruction.programId) }}
-                  </td>
-                  <td></td>
-                </tr>
-                <tr v-if="instruction.parsed">
-                  <td>
-                    {{ $t("transaction.from_address") }}
-                  </td>
-                  <td class="text-theme" style="cursor: pointer" @click="pubbleys(instruction.parsed.info.source)">
-                    {{ titleUrl(instruction.parsed.info.source) }}
-                  </td>
-                  <td></td>
-                </tr>
-                <tr v-if="instruction.parsed">
-                  <td>
-                    {{ $t("transaction.to_address") }}
+                <template v-if="item.parsed">
+                  <tr v-if="item.parsed.info.decimals">
+                    <td>
+                      {{ $t("transaction.Decimals") }}
+                    </td>
+                    <td class="text-end">
+                      {{ item.parsed.info.decimals }}
+                    </td>
+                  </tr>
+                </template>
+                <template v-if="item.parsed">
+                  <tr v-if="item.parsed.info.authority">
+                    <td>{{ $t("transaction.authority") }}</td>
+                    <td class="text-theme text-end" style="cursor: pointer"
+                      @click="pubbleys(item.parsed.info.authority)">{{ titleUrl(item.parsed.info.authority) }}</td>
+                  </tr>
+                </template>
+                <template v-if="item.programId">
+                  <tr>
+                    <td>
+                      {{ $t("transaction.program") }}
+                    </td>
+                    <td class="text-theme text-end" style="cursor: pointer" @click="pubbleys(item.programId)">
+                      {{ titleUrl(item.programId) }}
+                    </td>
+                  </tr>
+                </template>
+                <template v-if="item.parsed">
+                  <tr v-if="item.parsed.info.source">
+                    <td>
+                      {{ item.parsed.info.source ? $t('transaction.from_address') : $t('transaction.mint') }}
+                    </td>
+                    <td class="text-theme text-end" style="cursor: pointer" @click="pubbleys(item.parsed.info.source)">
+                      {{ titleUrl(item.parsed.info.source) }}
+                    </td>
+                  </tr>
+                </template>
+                <template v-if="item.parsed">
+                  <tr v-if="item.parsed.info.mint">
+                    <td>
+                      {{ $t('transaction.mint') }}
+                    </td>
+                    <td class="text-theme text-end" style="cursor: pointer" @click="pubbleys(item.parsed.info.mint)">
+                      {{ titleUrl(item.parsed.info.mint) }}
+                    </td>
+                  </tr>
+                </template>
+                <template v-if="item.parsed">
+                  <tr v-if="item.parsed.info.destination">
+                    <td>{{ $t('transaction.to_address') }}</td>
+                    <td class="text-theme text-end" style="cursor: pointer"
+                      @click="pubbleys(item.parsed.info.destination)">
+                      {{ titleUrl(item.parsed.info.destination)
+                      }}
+                    </td>
+                  </tr>
+                </template>
+                <template v-if="item.parsed">
+                  <tr v-if="item.parsed.info.mintAuthority">
+                    <td>{{ $t('transaction.mintAuthority') }}</td>
+                    <td class="text-theme text-end" style="cursor: pointer"
+                      @click="pubbleys(item.parsed.info.mintAuthority)">
+                      {{ titleUrl(item.parsed.info.mintAuthority)
+                      }}
+                    </td>
+                  </tr>
+                </template>
+                <template v-if="item.parsed">
+                  <tr v-if="item.parsed.info.wallet">
+                    <td>{{ $t('transaction.wallet') }}</td>
+                    <td class="text-theme text-end" style="cursor: pointer"
+                      @click="pubbleys(item.parsed.info.wallet)">
+                      {{ titleUrl(item.parsed.info.wallet)
+                      }}
+                    </td>
+                  </tr>
+                </template>
+                <template v-if="item.parsed">
+                  <tr v-if="item.parsed.info.tokenProgram">
+                    <td>{{ $t('transaction.token_program') }}</td>
+                    <td class="text-theme text-end" style="cursor: pointer"
+                      @click="pubbleys(item.parsed.info.tokenProgram)">
+                      {{ titleUrl(item.parsed.info.tokenProgram)
+                      }}
+                    </td>
+                  </tr>
+                </template>
+                <template v-if="item.parsed">
+                  <tr v-if="item.parsed.info.systemProgram">
+                    <td>{{ $t('transaction.system_program') }}</td>
+                    <td class="text-theme text-end" style="cursor: pointer"
+                      @click="pubbleys(item.parsed.info.systemProgram)">
+                      {{ titleUrl(item.parsed.info.systemProgram)
+                      }}
+                    </td>
+                  </tr>
+                </template>
+                <template v-if="item.parsed">
+                  <tr v-if="item.parsed.info.tokenAmount">
+                    <td>{{ $t('transaction.transfer_amount') }}</td>
+                    <td class="text-theme text-end">
+                      {{ item.parsed.info.tokenAmount.uiAmount }}
+                    </td>
+                  </tr>
+                </template>
+                <template v-if="item.parsed">
+                  <tr v-if="item.parsed.info.lamports">
+                    <td>{{ $t('transaction.transfer_amount') }} (BTG)</td>
+                    <td class="text-theme text-end">
+                      {{ toFexedStake(item.parsed.info.lamports) }}
+                    </td>
+                  </tr>
+                </template>
+                <template v-if="item.parsed">
+                  <tr v-if="item.parsed.info.rentSysvar">
+                    <td>{{ $t('transaction.rentsysvar') }}</td>
+                    <td class="text-theme text-end">
+                      {{ toFexedStake(item.parsed.info.rentSysvar) }}
+                    </td>
+                  </tr>
+                </template>
+                <template v-if="item.parsed">
+                  <tr v-if="item.parsed.info.space">
+                    <td>
+                      {{ $t("transaction.allocated_data_size") }}
+                    </td>
+                    <td class="text-end">
+                      {{ item.parsed.info.space }}byts(s)
+                    </td>
+                  </tr>
+                </template>
 
-                  </td>
-                  <td class="text-theme" style="cursor: pointer" @click="pubbleys(instruction.parsed.info.destination ? instruction.parsed.info.destination : instruction.parsed.info.newAccount)">
-                    {{ titleUrl(instruction.parsed.info.destination ? instruction.parsed.info.destination : instruction.parsed.info.newAccount ) }}
-                  </td>
-                  <td></td>
-                </tr>
-                <tr v-if="instruction.parsed">
-                  <td>
-                    {{ $t("transaction.transfer_amount") }} (BTG)
-                  </td>
-                  <td class="text-theme">
-                    {{ toFexedStake(instruction.parsed.info.lamports ? instruction.parsed.info.lamports : 0) }}
-                  </td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </table>
-          </card-body>
-        </card>
-      </div>
-      <div class="marginTOP-50" v-if="initialize">
-        <card class="md-3">
-          <card-body class="card-bodys">
-            <table class=" w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
-              <tr>
-                <th>
-                  <span class="text-theme">
-                    #
-                  </span> {{ $t("transaction.Initialize") }}
-                </th>
-                <th>
-
-                </th>
-                <th>
-                </th>
-              </tr>
-              <tbody>
-                <tr>
-                  <td>
-                    {{ $t("transaction.Decimals") }}
-                  </td>
-                  <td class="text-theme" style="cursor: pointer">
-                    {{
-                      initialize.parsed.info.decimals
-                    }}
-                  </td>
-                  <td></td>
-                </tr>
-                <tr v-if="initialize.parsed">
-                  <td>
-                    {{ $t("transaction.mint") }}
-                  </td>
-                  <td class="text-theme" style="cursor: pointer" @click="pubbleys(initialize.parsed.info.mint)">
-                    {{ titleUrl(initialize.parsed.info.mint) }}
-                  </td>
-                  <td></td>
-                </tr>
-                <tr v-if="initialize.parsed">
-                  <td>
-                    {{ $t("transaction.mintAuthority") }}
-                  </td>
-                  <td class="text-theme" style="cursor: pointer"
-                    @click="pubbleys(initialize.parsed.info.mintAuthority)">
-                    {{ titleUrl(initialize.parsed.info.mintAuthority) }}
-                  </td>
-                  <td></td>
-                </tr>
-                <tr v-if="initialize.parsed">
-                  <td>
-                    {{ $t("transaction.rentsysvar") }} (BTG)
-                  </td>
-                  <td class="text-theme" style="cursor: pointer"
-                    @click="pubbleys(initialize.parsed.info.mintAuthority)">
-                    Sysvar: Rent
-                  </td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </table>
-          </card-body>
-        </card>
-      </div>
-      <div class="marginTOP-50" v-if="unitLimit">
-        <card class="md-3">
-          <card-body class="card-bodys">
-            <table class=" w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
-              <tr>
-                <th>
-                  <span class="text-theme">
-                    #
-                  </span> {{ $t("transaction.unitLimit") }}
-                </th>
-                <th>
-
-                </th>
-                <th>
-                </th>
-              </tr>
-              <tbody>
-                <tr>
-                  <td>
-                    {{ $t("transaction.program") }}
-                  </td>
-                  <td class="text-theme" style="cursor: pointer " @click="pubbleys(unitLimit.programId)">
-                    Compute Budget Program
-                  </td>
-                  <td></td>
-                </tr>
-                <tr v-if="unitLimit">
-                  <td>
-                    {{ $t("transaction.compute") }}
-                  </td>
-                  <td>
-                    {{ unitLimit.data }}
-                  </td>
-                  <td></td>
-                </tr>
               </tbody>
             </table>
           </card-body>
@@ -562,7 +553,8 @@ export default {
                       {{ come(toFexedStake(historyData.meta.postBalances[index])) }}
                     </td>
                     <td style="text-align: left;font-size: 12px;">
-                      <span v-if="item.signer ? (item.writable ? (index == 0 ? true : false) : false) : false" class="dage bg-info">
+                      <span v-if="item.signer ? (item.writable ? (index == 0 ? true : false) : false) : false"
+                        class="dage bg-info">
                         {{ $t("transaction.fee_payer") }}
                       </span>
                       <span v-if="item.signer" class="dage bg-info">{{ $t("transaction.signer") }}</span>
@@ -585,8 +577,8 @@ export default {
                   <td style="width:50%"> {{ $t("transaction.Instruction_Data") }} (JSON)</td>
                   <td style="width:50%">
                     <pre style="background-color: #18202C;border:none;color:#fff;line-height:15px">
-                            {{ historyData.transaction.message.instructions[0].parsed }}
-                        </pre>
+                {{ historyData.transaction.message.instructions[0].parsed }}
+              </pre>
                   </td>
                 </tr>
               </tbody>

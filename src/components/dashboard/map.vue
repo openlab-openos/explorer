@@ -287,7 +287,7 @@ const renderMap = async () => {
             } else {
                 lat += 1;
             }
-            lng += markers_data[i].count * 1.2; // 这可能是一个合理的经度偏移量
+            lng += markers_data[i].count * 1.1; // 这可能是一个合理的经度偏移量
 
             // 更新coords数组
             markers_data[i].coords[0] = lat;
@@ -302,7 +302,7 @@ const renderMap = async () => {
 
                     if (Math.abs(currentLat - compareLat) < 1) {
                         markers_data[j].coords[0] -= 1;
-                        markers_data[j].coords[1] += 1;
+                   // markers_data[j].coords[1] += 1;
                     }
                 }
             }
@@ -336,13 +336,11 @@ const getTrafficData = (data) => {
     let countryArray = [];
     let chartArray = [];
     let chartName = [];
-    console.log(data);
     
     if (data) {
         let arrayData = uniqueArrayByProperty(data, "try");
         let country = uniqueArrayByProperty(data, "code");
-        console.log(arrayData);
-        
+       
         for (let i = 0; i < 5; i++) {
             if (arrayData[i].value !=undefined) {
                 coun.push({
@@ -384,6 +382,8 @@ const getTrafficData = (data) => {
     appStore.getCountryData(chainArray[0]);
     series.value = chartArray.map(parseFloat);
     let array = series.value;
+    console.log(array);
+    
     for (let i in chainArray) {
         chartName.push(chainArray[i].timezone);
     }

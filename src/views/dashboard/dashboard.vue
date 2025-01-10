@@ -13,14 +13,13 @@ import { defineAsyncComponent, getCurrentInstance } from "vue";
 import { useAppStore } from "@/stores/index";
 import i18n from "@/i18n";
 import moment from "moment";
-import { solanapubbleys } from "../../components/method/solana"
+
 
 const appStore = useAppStore();
 const appVariable = useAppVariableStore();
 
 const apps = getCurrentInstance();
 
-const promaster = ref(apps?.proxy?.$progream);
 
 const slot = ref(1);
 const inepoch = ref(1);
@@ -29,8 +28,6 @@ const solttime = ref();
 
 const pubbley = ref(1);
 const stubly = ref(1);
-const countLog = ref();
-const ActivityLogData = ref([]);
 const server = ref([]);
 
 const activeVueref = ref(null);
@@ -68,6 +65,9 @@ const mapDeshboard = defineAsyncComponent(() =>
 );
 const orderVue = defineAsyncComponent(() =>
   import("../../components/transaction/list.vue")
+);
+const validatorsVue = defineAsyncComponent(() =>
+  import("../../components/validators/validators_list.vue")
 );
 
 // 语言
@@ -161,11 +161,6 @@ const getTime = (timestamp) => {
   return moment(JSON.parse(moment().format("x")) + timestamp * 400).fromNow();
 };
 
-const toFexedStake = (num) => {
-  if (num) {
-    return JSON.parse((num / 1000000000).toFixed(2));
-  }
-};
 
 const supplyRequest = async () => {
   await chainRequest({
@@ -284,7 +279,7 @@ const getServerData = () => {
           cssClass: "apexcharts-xaxis-label",
         },
       },
-      min: 1500,
+      min: 3000,
     },
   };
   return {
@@ -445,126 +440,6 @@ const getServerData = () => {
   };
 };
 
-const getActivityLogData = async () => {
-  let requestBody = {
-    id: "35a5860e-2564-4b92-890d-dc57e9c58d75",
-    jsonrpc: "2.0",
-    method: "getProgramAccounts",
-    params: [
-      "Config1111111111111111111111111111111111111",
-      {
-        commitment: "processed",
-        encoding: "jsonParsed",
-      },
-    ],
-  };
-  let ClusterNodes = {
-    id: "d9080c36-8a4d-494f-8a5e-1ba06815e912",
-    jsonrpc: "2.0",
-    method: "getClusterNodes",
-    params: [],
-  };
-  let VoteAccounts = {
-    id: "35a5860e-2564-4b92-890d-dc57e9c58d75",
-    jsonrpc: "2.0",
-    method: "getVoteAccounts",
-    params: [],
-  };
-
-  Promise.all([
-    chainRequest(requestBody),
-    chainRequest(ClusterNodes),
-    chainRequest(VoteAccounts),
-  ]).then((res) => {
-    let ClusterNodes_list = res[0].result;
-    let ProgramAccounts_list = res[1].result;
-    let VoteAccounts_list = res[2].result;
-    let list = [];
-
-    for (let i in ProgramAccounts_list) {
-      for (let j in ClusterNodes_list) {
-        if (ClusterNodes_list[j].account.data.parsed) {
-          for (let y in ClusterNodes_list[j].account.data.parsed.info.keys) {
-            if (
-              ClusterNodes_list[j].account.data.parsed.info.keys[y].signer ==
-              true
-            ) {
-              if (
-                ProgramAccounts_list[i].pubkey ==
-                ClusterNodes_list[j].account.data.parsed.info.keys[y].pubkey
-              ) {
-                list.push({
-                  ip: ProgramAccounts_list[i].gossip.split(":")[0],
-                  name: ClusterNodes_list[j].account.data.parsed.info.configData
-                    .name,
-                  pubkey: ProgramAccounts_list[i].pubkey,
-                  icon: ClusterNodes_list[j].account.data.parsed.info.configData
-                    .iconUrl,
-                  version: ProgramAccounts_list[i].version,
-
-                  activatedStake: "",
-                });
-              }
-            }
-          }
-        }
-      }
-    }
-    let listCount = 0;
-    for (let i in list) {
-      for (let h in VoteAccounts_list.current) {
-        if (VoteAccounts_list.current[h].nodePubkey == list[i].pubkey) {
-          list[i].activatedStake = VoteAccounts_list.current[h].activatedStake;
-        } else {
-        }
-      }
-      if (list[i].activatedStake) {
-        listCount += JSON.parse(list[i].activatedStake);
-      }
-    }
-    list.sort((a, b) => {
-      let nameA = a.name.toUpperCase();
-      let nameB = b.name.toUpperCase();
-      if (nameA < nameB) {
-        return -1;
-      }
-      if (nameA > nameB) {
-        return 1;
-      }
-      return 0;
-    });
-    countLog.value = listCount;
-
-    ActivityLogData.value = list;
-    appStore.setValidators(JSON.stringify(list));
-    appStore
-      .getPartData(
-        (JSON.parse(ClusterNodes_list.length) - JSON.parse(list.length)) /
-        JSON.parse(ClusterNodes_list.length)
-      )
-      .toFixed(2);
-    sessionStorage.setItem("accout", JSON.stringify(list));
-    // renderMap();
-  });
-};
-
-const countplount = (num) => {
-  return ((num / countLog.value) * 100).toFixed(2) + "%";
-};
-
-const stringcate = (str) => {
-  if (str.length < 10) {
-    return str;
-  } else {
-    return str.slice(0, 5) + "..." + str.slice(-5);
-  }
-};
-
-
-onMounted(() => {
-  getActivityLogData();
-});
-
 const epochSkip = (num) => {
   router.push({
     name: "epoch",
@@ -665,73 +540,10 @@ onBeforeUnmount(() => {
     <div class="col-xl-6">
       <orderVue :boolean="true" />
     </div>
-
-    <!-- BEGIN activity-log -->
     <div class="col-xl-6">
-      <card class="mb-3">
-        <card-body>
-          <div class="d-flex fw-bold small mb-3">
-            <span class="flex-grow-1"> {{ $t("dashboard.all_validators") }} </span>
-            <!-- <card-expand-toggler /> -->
-          </div>
-          <div class="table-responsive">
-            <table class="table table-striped table-borderless mb-2px small text-nowrap">
-              <tbody>
-                <tr>
-                  <th>{{ $t("validators.name") }}</th>
-                  <th style="text-align: left">{{ $t("validators.pubkey") }}</th>
-                  <th style="text-align: left">{{ $t("validators.activated_stake") }}</th>
-                  <th style="text-align: left">{{ $t("validators.gossip") }}</th>
-
-                  <th style="text-align: left">{{ $t("validators.status") }}</th>
-                </tr>
-                <tr v-if="ActivityLogData" v-for="(log, index) in ActivityLogData" :key="index">
-                  <td>
-                    <span class="d-flex align-items-center">
-                      <img :src="log.icon" alt="" width="20" style="margin: 0px 5px" />
-                      {{ log.name }}
-                    </span>
-                  </td>
-                  <td style="text-align: left">
-                    <span class="text-theme" style="cursor: pointer" @click="pubbleys(log.pubkey)">
-                      {{
-                        stringcate(
-                          promaster[log.pubkey]
-                            ? promaster[log.pubkey].name
-                            : log.pubkey
-                        )
-                      }}
-                    </span>
-                  </td>
-                  <td style="text-align: left; display: flex">
-                    <count-up :startVal="toFexedStake(log.activatedStake)" :end-val="toFexedStake(log.activatedStake)"
-                      duration="3"></count-up>
-                    &nbsp; BTG &nbsp; (
-                    {{ countplount(log.activatedStake) }}
-                    )
-                  </td>
-                  <td style="text-align: left">
-                    {{ log.ip }}
-                  </td>
-                  <td style="text-align: left">
-                    <span :style="{
-                      color: log.activatedStake !== '' ? 'green' : 'yellow',
-                    }" class="menu-icon">
-                      <font-awesome-icon icon="fas fa-lg fa-fw me-2 fa-check-circle" v-if="log.activatedStake !== ''" />
-                      <font-awesome-icon icon="fas fa-lg fa-fw me-2 fa-question-circle"
-                        v-if="log.activatedStake == ''" />
-                    </span>
-                  </td>
-                </tr>
-                <tr v-else>
-                  <td colspan="4">No records found</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </card-body>
-      </card>
+       <validatorsVue />
     </div>
+
     <!-- END activity-log -->
   </div>
   <!-- <div>Loading……</div> -->

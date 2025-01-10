@@ -110,6 +110,8 @@ const infoRender = () => {
     appStore.datarate.updated_at == null
       ? "a day ago"
       : appStore.datarate.updated_at;
+      console.log(appStore.datarate);
+      
   info.value = [
     {
       icon: "fas fa-lg fa-fw me-2 fa-hourglass",

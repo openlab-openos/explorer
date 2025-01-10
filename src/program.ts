@@ -8,7 +8,7 @@ export enum PROGRAM_NAMES {
     STAKE = 'Stake Program',
     SYSTEM = 'System Program',
     VOTE = 'Vote Program',
-    
+
 
     // native precompiles
     SECP256K1 = 'Secp256k1 SigVerify Precompile',
@@ -168,6 +168,10 @@ export const PROGRAM_INFO_BY_ID: { [address: string]: ProgramInfo } = {
     },
     // spl
     ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL: {
+        deployments: ALL_CLUSTERS,
+        name: PROGRAM_NAMES.ASSOCIATED_TOKEN,
+    },
+    AtokenhZ6AE34VMYRv1AqSv8q8QZJxxEaY1zKiXKwSWT: {
         deployments: ALL_CLUSTERS,
         name: PROGRAM_NAMES.ASSOCIATED_TOKEN,
     },
@@ -442,8 +446,8 @@ export const SYSVAR_IDS: { [key: string]: string } = {
 };
 
 export const TOKEN_IDS: { [key: string]: string } = {
-  TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA: 'Token Program',
-  Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c: 'Token-2022 Program',
+    TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA: 'Token Program',
+    Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c: 'Token-2022 Program',
 } as const;
 
 export type TokenProgram = 'open-token' | 'open-token-2022';
@@ -454,7 +458,7 @@ export function isTokenProgram(program: string): program is TokenProgram {
     try {
         assertIsTokenProgram(program);
         return true;
-    } catch(e) {
+    } catch (e) {
         return false;
     }
 }

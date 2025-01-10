@@ -159,7 +159,7 @@ export const ipAddresses = {
     },
     {
       ip: "109.123.229.192",
-      location: [35.6164, 139.7425],
+      location: [35.3164, 139.7425],
       try: "JP",
       code: "AS",
       timezone: "Asia/Tokyo",
@@ -417,7 +417,7 @@ export const ipAddresses = {
       "country_name": "United States"
     },{
       "ip": "5.104.87.77",
-      "location": [35.6164, 139.7425],
+      "location": [35.0164, 136.7425],
       "try": "JP",
       "code": "AS",
       "timezone": "Asia/Tokyo",
@@ -448,6 +448,20 @@ export const ipAddresses = {
       "location": [1.2805, 103.848],
       "country_code": "SG",
       "continent_code": "AS",
+      "timezone": "Asia/Singapore",
+      "country_name": "Singapore"
+    },{
+      "ip": "193.22.146.84",
+      "location": [48.9751, 8.4456],
+      "try": "DE", 
+      "code": "AS51167",
+      "timezone": "Europe/Berlin",
+      "country_name": "Germany"
+    },{
+      "ip": "194.233.82.186",
+      "location": [1.3552, 103.8859],
+      "try": "SG", 
+      "code": "AS141995",
       "timezone": "Asia/Singapore",
       "country_name": "Singapore"
     }

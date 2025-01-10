@@ -10,11 +10,11 @@
                     <tbody>
                         <tr>
                             <th style=" text-align: left"> {{ $t("transactions.signature") }} </th>
+                            <th style=" text-align: left"> {{ $t("transactions.type") }}</th>
                             <th style=" text-align: left"> {{ $t("transactions.source") }} </th>
                             <th style=" text-align: left"> {{ $t("transactions.destination") }} </th>
                             <th style=" text-align: left">{{ $t("transactions.btg") }}</th>
                             <th style=" text-align: left"> {{ $t("token") }} </th>
-                            <th style=" text-align: left"> {{ $t("transactions.type") }}</th>
                             <th style=" text-align: left"> {{ $t("transactions.time") }} </th>
                         </tr>
                         <tr v-for="(product, index) in arrayData" :key="index" style="height: 35px">
@@ -32,6 +32,7 @@
                                     )
                                 }}
                             </td>
+
                             <td v-else style=" text-align: left; cursor: pointer" class="text-theme" @click="
                                 pubbtx(
                                     product.signatures[0]
@@ -41,54 +42,6 @@
                                     promaster[product.signatures[0]] ?
                                         promaster[product.signatures[0]].name :
                                         product.signatures[0]
-                                }}
-                            </td>
-                            <td style=" text-align: left; cursor: pointer" class="text-theme" @click="
-                                pubbleys(
-                                    product.message.instructions[0].parsed
-                                        .info.source
-                                )
-                                ">
-                                {{ stringcate(
-                                    titleUrl(product.message.instructions[0].parsed.info.source)
-                                ) }}
-                            </td>
-                            <td style=" text-align: left; cursor: pointer" class="text-theme" @click="
-                                pubbleys(
-                                    product.message.instructions[0].parsed
-                                        .info.destination
-                                )
-                                ">
-                                {{
-                                    stringcate(
-                                        titleUrl(product.message.instructions[0]
-                                                    .parsed.info.destination)
-                                    )
-                                }}
-                            </td>
-                            <td style=" text-align: left">
-                                {{
-                                    product.message.instructions[0]
-                                        .parsed.info.mint ? product.message.instructions[0]
-                                            .parsed.info.tokenAmount.uiAmount : toFexedStake(
-                                                product.message.instructions[0].parsed
-                                                    .info.lamports
-                                            )
-
-                                }}
-                            </td>
-                            <td style=" text-align: left;" :style="product.message.instructions[0]
-                                .parsed.info.mint ? 'cursor: pointer' : ''" class="text-theme" @click="pubbleys(
-                                                product.message.instructions[0]
-                                                    .parsed.info.mint ? product.message.instructions[0]
-                                                        .parsed.info.mint : ''
-                                            )">
-                                {{
-                                    stringcate(
-                                        product.message.instructions[0]
-                                            .parsed.info.mint ? product.message.instructions[0]
-                                                .parsed.info.mint : "BTG"
-                                    )
                                 }}
                             </td>
                             <td style=" text-align: left">
@@ -111,6 +64,62 @@
                                     }}
                                 </button>
                             </td>
+                            <td style=" text-align: left; cursor: pointer" class="text-theme" @click="
+                                pubbleys(
+                                    product.message.instructions[0].parsed
+                                        .info.source
+                                )
+                                ">
+                                {{ stringcate(
+                                    titleUrl(product.message.instructions[0].parsed.info.source)
+                                ) }}
+                            </td>
+                            <td style=" text-align: left; cursor: pointer" class="text-theme" @click="
+                                pubbleys(
+                                    product.message.instructions[0].parsed
+                                        .info.destination
+                                )
+                                ">
+                                {{ product.message.instructions.length == 1 ?
+                                    stringcate(
+                                        titleUrl(product.message.instructions[0]
+                                            .parsed.info.destination)
+                                    ) : stringcate(
+                                        titleUrl(product.message.instructions[1]
+                                            .parsed.info.destination)
+                                    )
+                                }}
+                            </td>
+                            <td style=" text-align: left">
+                                {{ product.message.instructions.length == 1 ?
+                                    product.message.instructions[0]
+                                        .parsed.info.mint ? product.message.instructions[0]
+                                            .parsed.info.tokenAmount.uiAmount : toFexedStake(
+                                                product.message.instructions[0].parsed
+                                                    .info.lamports
+                                            ) : product.message.instructions[1]
+                                                .parsed.info.mint ? product.message.instructions[1]
+                                                    .parsed.info.tokenAmount.uiAmount : toFexedStake(
+                                                        product.message.instructions[1].parsed
+                                                            .info.lamports
+                                                    )
+                                }}
+                            </td>
+                            <td style=" text-align: left;" :style="product.message.instructions[0]
+                                .parsed.info.mint ? 'cursor: pointer' : ''" class="text-theme" @click="pubbleys(
+                                        product.message.instructions[0]
+                                            .parsed.info.mint ? product.message.instructions[0]
+                                                .parsed.info.mint : ''
+                                    )">
+                                {{
+                                    stringcate(
+                                        product.message.instructions[0]
+                                            .parsed.info.mint ? product.message.instructions[0]
+                                                .parsed.info.mint : "BTG"
+                                    )
+                                }}
+                            </td>
+
                             <td style=" text-align: left">
                                 {{ timeFormatter(orderData[index].result.blockTime * 1000) }} &nbsp;
                             </td>
@@ -130,7 +139,7 @@ import CountUp from "vue-countup-v3";
 import moment from "moment";
 import { useRouter } from "vue-router";
 import { solanapubbleys } from "../../components/method/solana"
-import {titleUrl} from "../../components/method/title_url";
+import { titleUrl } from "../../components/method/title_url";
 const props = defineProps({
     boolean: {
         type: Boolean,
@@ -155,8 +164,8 @@ const fetchOrderData = async () => {
     try {
         const res = await order("new_transactions");
         for (let i in res) {
-            if (res[i].result) {
-                arrayData.value.push(res[i].result.transaction)
+            if (res[i].result && res[i].result.transaction.message.instructions.length <3) {
+                    arrayData.value.push(res[i].result.transaction)
             }
         }
 
