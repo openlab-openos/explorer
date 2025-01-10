@@ -71,8 +71,9 @@
                                 )
                                 ">
                                 {{ stringcate(
-                                    titleUrl(product.message.instructions[0].parsed.info.source)
-                                ) }}
+                                    titleUrl(product.message.instructions[0].parsed.info.source).url
+                                ) }} <img v-if="titleUrl(product.message.instructions[0].parsed.info.source).type"
+                                    src="../../../src//assets//renzheng.png" width="20" alt="">
                             </td>
                             <td style=" text-align: left; cursor: pointer" class="text-theme" @click="
                                 pubbleys(
@@ -83,12 +84,15 @@
                                 {{ product.message.instructions.length == 1 ?
                                     stringcate(
                                         titleUrl(product.message.instructions[0]
-                                            .parsed.info.destination)
+                                            .parsed.info.destination).url
                                     ) : stringcate(
                                         titleUrl(product.message.instructions[1]
-                                            .parsed.info.destination)
+                                            .parsed.info.destination).url
                                     )
-                                }}
+                                }} <img v-if="titleUrl(product.message.instructions.length == 1 ? product.message.instructions[0]
+                                    .parsed.info.destination : product.message.instructions[1]
+                                        .parsed.info.destination).type" src="../../../src//assets//renzheng.png" width="20"
+                                    alt="">
                             </td>
                             <td style=" text-align: left">
                                 {{ product.message.instructions.length == 1 ?
@@ -107,10 +111,10 @@
                             </td>
                             <td style=" text-align: left;" :style="product.message.instructions[0]
                                 .parsed.info.mint ? 'cursor: pointer' : ''" class="text-theme" @click="pubbleys(
-                                        product.message.instructions[0]
-                                            .parsed.info.mint ? product.message.instructions[0]
-                                                .parsed.info.mint : ''
-                                    )">
+                                    product.message.instructions[0]
+                                        .parsed.info.mint ? product.message.instructions[0]
+                                            .parsed.info.mint : ''
+                                )">
                                 {{
                                     stringcate(
                                         product.message.instructions[0]
@@ -164,8 +168,8 @@ const fetchOrderData = async () => {
     try {
         const res = await order("new_transactions");
         for (let i in res) {
-            if (res[i].result && res[i].result.transaction.message.instructions.length <3) {
-                    arrayData.value.push(res[i].result.transaction)
+            if (res[i].result && res[i].result.transaction.message.instructions.length < 3) {
+                arrayData.value.push(res[i].result.transaction)
             }
         }
 

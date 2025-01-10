@@ -63,7 +63,18 @@
                     </td>
                     <td style=" text-align: left; cursor: pointer" class="text-theme"
                         @click="slot(item.result.transaction.message.instructions[0].parsed.info.destination)">
-                        {{ item.result.transaction.message.instructions[0].parsed.info.destination }}
+                        {{ item.result.transaction.message.instructions.length == 1 ?
+                            stringcate(
+                                titleUrl(item.result.transaction.message.instructions[0]
+                                    .parsed.info.destination).url
+                            ) : stringcate(
+                                titleUrl(item.result.transaction.message.instructions[1]
+                                    .parsed.info.destination).url
+                            )
+                        }} <img v-if="titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
+                            .parsed.info.destination : item.result.transaction.message.instructions[1]
+                                .parsed.info.destination).type" src="../../../src//assets//renzheng.png" width="20"
+                            alt="">
                     </td>
                     <td style=" text-align: left; cursor: pointer" class="text-theme" @click="slot(
                         item.result.transaction.message.instructions[0]
@@ -74,35 +85,42 @@
 
                             item.result.transaction.message.instructions[0]
                                 .programId ? titleUrl(item.result.transaction.message.instructions[0]
-                                    .programId) : "BTG"
+                                    .programId).url : "BTG"
 
-                        }}
+                        }} <img v-if="titleUrl(item.result.transaction.message.instructions[0]
+                            .programId).type" src="../../../src//assets//renzheng.png" width="20" alt="">
                     </td>
                     <td>
-                        {{
+                        {{ item.result.transaction.message.instructions.length == 1 ?
                             item.result.transaction.message.instructions[0]
                                 .parsed.info.mint ? item.result.transaction.message.instructions[0]
                                     .parsed.info.tokenAmount.uiAmount : toFexedStake(
                                         item.result.transaction.message.instructions[0].parsed
                                             .info.lamports
-                                    )
+                                    ) : item.result.transaction.message.instructions[1]
+                                        .parsed.info.mint ? item.result.transaction.message.instructions[1]
+                                            .parsed.info.tokenAmount.uiAmount : toFexedStake(
+                                                item.result.transaction.message.instructions[1].parsed
+                                                    .info.lamports
+                                            )
                         }}
                     </td>
                     <td style=" text-align: left; " :style="item.result.transaction.message.instructions[0]
                         .parsed.info.mint ? 'cursor: pointer' : ''" class="text-theme" @click="slot(
-                                item.result.transaction.message.instructions[0]
-                                    .parsed.info.mint ? item.result.transaction.message.instructions[0]
-                                        .parsed.info.mint : ''
-                            )">
+                            item.result.transaction.message.instructions[0]
+                                .parsed.info.mint ? item.result.transaction.message.instructions[0]
+                                    .parsed.info.mint : ''
+                        )">
                         {{
 
                             item.result.transaction.message.instructions[0]
                                 .parsed.info.mint ? titleUrl(item.result.transaction.message.instructions[0]
-                                    .parsed.info.mint) : "BTG"
+                                    .parsed.info.mint).url : "BTG"
 
-                        }}
+                        }} <img v-if="titleUrl(item.result.transaction.message.instructions[0]
+                            .parsed.info.mint).type" src="../../../src//assets//renzheng.png" width="20" alt="">
                     </td>
-                    
+
                     <td class="text-theme" style="cursor: pointer">
                         {{ timeSome(item.result.blockTime) }}
                     </td>
@@ -210,7 +228,7 @@ const stringcate = (str) => {
     if (str.length < 10) {
         return str;
     } else {
-        return str.slice(0, 15) + "...";
+        return str.slice(0, 5) + "..." + str.slice(-5);
     }
 };
 const come = (num) => {

@@ -80,7 +80,12 @@ import { ref, onMounted, computed } from "vue";
 import { useAppStore } from "@/stores/index";
 import { chainRequest } from "../../request/chain";
 import { useRouter } from "vue-router";
-
+const props = defineProps({
+    type:{
+        type: Boolean,
+        default: false
+    }
+});
 const router = useRouter();
 
 const countLog = ref();
@@ -91,7 +96,7 @@ const appStore = useAppStore();
 const totalItems = ref(0);
 
 const currentPage = ref(1);
-const pageSize = ref(30);
+const pageSize = ref(props.type ? 30 : 10000);
 const paginatedHistoryData = computed(() => {
     const start = (currentPage.value - 1) * pageSize.value;
     const end = start + pageSize.value;

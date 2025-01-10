@@ -105,6 +105,11 @@ export type ProgramInfo = {
     deployments: Cluster[];
 };
 
+export interface TokenProgramInfo {
+    program: TokenProgram;
+    authentication: boolean;
+}
+
 export const PROGRAM_INFO_BY_ID: { [address: string]: ProgramInfo } = {
     '11111111111111111111111111111111': {
         deployments: ALL_CLUSTERS,
@@ -449,6 +454,13 @@ export const TOKEN_IDS: { [key: string]: string } = {
     TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA: 'Token Program',
     Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c: 'Token-2022 Program',
 } as const;
+
+export const Authentication: { [key: string]: TokenProgramInfo } = {
+    TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA:{
+        authentication: true,
+        program: 'open-token'
+    },
+};
 
 export type TokenProgram = 'open-token' | 'open-token-2022';
 export function assertIsTokenProgram(program: string): asserts program is TokenProgram {

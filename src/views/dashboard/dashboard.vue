@@ -541,7 +541,7 @@ onBeforeUnmount(() => {
       <orderVue :boolean="true" />
     </div>
     <div class="col-xl-6">
-       <validatorsVue />
+       <validatorsVue :type="true" />
     </div>
 
     <!-- END activity-log -->

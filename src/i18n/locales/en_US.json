@@ -81,7 +81,7 @@
         "nominal_staking_apy": "Nominal Staking APY",
         "node_versions": "Node Versions",
         "name": "Name",
-        "pubkey": "Pubkey",
+        "pubkey": "VotePubkey",
         "activated_stake": "Activated Stake",
         "gossip": "Gossip",
         "status": "Status"
@@ -136,7 +136,7 @@
         "program": "Program",
         "from_address": "From Address",
         "to_address": "To Address",
-        "transfer_amount": "24H Transfer Amount",
+        "transfer_amount": " Transfer Amount",
         "account_input(s)": "Account Input(s)",
         "address": "Address",
         "guange": "Change",
@@ -164,7 +164,7 @@
         "token_program":"Token Program"
     },
     "account": {
-        "title": "Account",
+        "title": "System Account",
         "overview": "Overview",
         "address": "Address",
         "balance": "Balance",
@@ -190,7 +190,7 @@
         "movement":"Type",
         "primary":"From",
         "destination":"Amount",
-        "quantity":"to",
+        "quantity":"To",
         "Political":"Token",
         "value":"Value",
         "account":"User Account",

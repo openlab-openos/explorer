@@ -37,7 +37,7 @@
         </div>
         <div class="small text-inverse text-opacity-50 text-truncate" v-if="type">
           <template v-for="statInfo in info">
-            <div><font-awesome-icon :icon="statInfo.icon" /> {{ $t(statInfo.language) }}  {{ statInfo.text }} </div>
+            <div><font-awesome-icon :icon="statInfo.icon" /> {{ $t(statInfo.language) }} {{ statInfo.text }} </div>
           </template>
         </div>
       </card-body>
@@ -64,12 +64,12 @@ const dataRequest = async () => {
 };
 dataRequest();
 // 语言
-function selectLanguage(indexValue){
-  
-  
+function selectLanguage(indexValue) {
+
+
   i18n.global.locale = indexValue;
 }
-watchEffect(()=>{
+watchEffect(() => {
   selectLanguage(appStore.$state.language);
 })
 
@@ -103,23 +103,26 @@ const info = ref();
 const type = ref(false);
 
 const rendered = (data) => {
-  if(data.length !== 0){
-      for (let i in data) {
-    if (data[i].result.blockTime * 1000 > dataTime.value) {
-      data.push(data[i]);
+
+  if (data.length !== 0) {
+    for (let i in data) {
+      if (data[i].result.blockTime * 1000 > dataTime.value) {
+        data.push(data[i]);
+      }
+      if (data[i].result.transaction.message.instructions[0].parsed.info.lamports) {
+        priceTrans.value +=
+          data[
+            i
+          ].result.transaction.message.instructions[0].parsed.info.lamports;
+      }
     }
-    priceTrans.value +=
-      data[
-        i
-      ].result.transaction.message.instructions[0].parsed.info.lamports;
-  }
   }
 
   info.value = [
     {
       icon: "fas fa-lg fa-fw me-2 fa-euro-sign",
-      text: timeout() + " " ,
-      language:"dashboard.transactions"
+      text: timeout() + " ",
+      language: "dashboard.transactions"
     },
     {
       icon: "fas fa-lg fa-fw me-2 fa-won-sign",
@@ -127,8 +130,8 @@ const rendered = (data) => {
         toFexedStake(priceTrans.value / data.length) +
         " " +
         "BTG" +
-        " " ,
-      language:"dashboard.per_transaction"
+        " ",
+      language: "dashboard.per_transaction"
 
     },
     {
@@ -139,7 +142,7 @@ const rendered = (data) => {
           appStore.rate
         ).toFixed(2) +
         " USD",
-      language:"dashboard.per_transactions"
+      language: "dashboard.per_transactions"
     },
   ];
   type.value = true;
@@ -154,10 +157,14 @@ onMounted(() => {
         )
       }
       let data = JSON.parse(appStore.Transaction);
-
-
-      if (data.length != 0) {
-        rendered(data);
+      let dataArray = [];
+      for (let i in data) {
+        if (data[i].result.transaction.message.instructions.length < 3) {
+          dataArray.push(data[i])
+        }
+      }
+      if (dataArray.length != 0) {
+        rendered(dataArray);
       }
     }
 

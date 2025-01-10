@@ -19,7 +19,7 @@
       </div>
 
       <div class="col-xl-6" style="width: 100%">
-        <validatorsVue />
+        <validatorsVue  :type="false" />
       </div>
     </div>
     <div v-show="!shoeType">{{ $t("loading") }}</div>

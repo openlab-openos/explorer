@@ -29,6 +29,7 @@ const loading = ref(false);
 const endUrl = ref(route.params.url);
 const token_name = ref(null);
 const token_img = ref(null);
+const token_symbol = ref(null);
 
 const typeAddress = ref();
 const loadTypeAddress = async () => {
@@ -196,11 +197,12 @@ const tokenName = async (url, params) => {
     if (res) {
       token_name.value = res.name ? res.name : "";
       token_img.value = res.uri ? res.uri : "";
+      token_symbol.value = res.symbol ? res.symbol : "";
     } else {
 
     }
     if (url == "B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz") {
-      token_name.value = "netive";
+      token_name.value = "Native";
       token_img.value = "https://cdn.openverse.network/brands/openverse/icon_128.png";
     }
   } catch (error) {
@@ -243,12 +245,19 @@ watch(route, (to, from) => {
       <!-- 普通账户或非openverse账户 -->
       <h3 v-if="typeAddress == 'mint'" class="align-center">
         <!-- acquiesce -->
-        <img :src="token_img ? token_img : acquiesceIcon" style="width: 25px;"  :style="token_img ? '' : 'opacity: 0.4' " alt="">
-        <text class="marginLeft10"> {{ token_name ? token_name : '' }} {{ $t("account.token") }}</text>
+        <img :src="token_img ? token_img : acquiesceIcon" style="width: 25px;" :style="token_img ? '' : 'opacity: 0.4'"
+          alt="">
+        <text class="marginLeft10"> {{ token_name ? token_name : '' }} {{ $t("account.token") }}
+          <text v-if="url == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'">(WBTG)</text> &nbsp;
+          <text v-if="token_symbol">({{ token_symbol }})</text> &nbsp;
+          <img v-if="url == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'" src="../../../src//assets//renzheng.png"
+            width="20" alt="">
+        </text>
       </h3>
       <!-- 通政 -->
       <h3 v-if="typeAddress == 'integration'" class="align-center">
-        <img :src="token_img ? token_img : acquiesceIcon" style="width: 25px;" :style="token_img ? '' : 'opacity: 0.4' " alt="">
+        <img :src="token_img ? token_img : acquiesceIcon" style="width: 25px;" :style="token_img ? '' : 'opacity: 0.4'"
+          alt="">
         <text class="marginLeft10">{{ $t("account.tokenAccount") }}</text>
       </h3>
       <!-- 通证账户 -->
@@ -281,7 +290,8 @@ watch(route, (to, from) => {
                 <tr>
                   <td>{{ $t("account.assigned_program_id") }} </td>
                   <td class="text-end text-theme" style="cursor: pointer" @click="exexutable(item.owner)">
-                    {{ titleUrl(item.owner) }}
+                    {{ titleUrl(item.owner).url }} <img v-if="titleUrl(item.owner).type"
+                      src="../../../src//assets//renzheng.png" width="20" alt="">
                   </td>
                 </tr>
                 <tr>
@@ -298,7 +308,7 @@ watch(route, (to, from) => {
         <token-account-view v-if="typeAddress == 'integration'" :url="url"
           :paramsId="card_data[0].owner"></token-account-view>
         <!-- <token-account-view/> -->
-         <!-- <pledgeView></pledgeView> -->
+        <!-- <pledgeView></pledgeView> -->
       </div>
 
       <div v-else>
