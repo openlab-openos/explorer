@@ -26,17 +26,17 @@
                         <tr v-for="(item, index) in paginatedHistoryData" :key="index">
                             <td class="text-theme" style="cursor: pointer"
                                 @click="pubbtx(item.account.data.parsed.info.mint)">
-                                {{ titleUrl(item.account.data.parsed.info.mint).url }}  <img v-if="titleUrl(item.account.data.parsed.info.mint).type" src="../../../src//assets//renzheng.png" width="20" alt="">
+                                {{ titleUrl(item.account.data.parsed.info.mint).url }}  <img v-if="titleUrl(item.account.data.parsed.info.mint).type" src="../../../src//assets//renzheng.png" width="15" alt="">
                             </td>
                             <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.pubkey)">
-                                {{ titleUrl(item.pubkey).url }}   <img v-if="titleUrl(item.pubkey).type" src="../../../src//assets//renzheng.png" width="20" alt="">
+                                {{ titleUrl(item.pubkey).url }}   <img v-if="titleUrl(item.pubkey).type" src="../../../src//assets//renzheng.png" width="15" alt="">
                             </td>
 
                             <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.account.owner)">
-                                {{ titleUrl(item.account.owner).url }} <img v-if="titleUrl(item.account.owner).type" src="../../../src//assets//renzheng.png" width="20" alt="">
+                                {{ titleUrl(item.account.owner).url }} <img v-if="titleUrl(item.account.owner).type" src="../../../src//assets//renzheng.png" width="15" alt="">
                             </td>
                             <td>
-                                {{ titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).url }} <img v-if="titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).type" src="../../../src//assets//renzheng.png" width="20" alt="">
+                                {{ titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).url }} <img v-if="titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).type" src="../../../src//assets//renzheng.png" width="15" alt="">
                             </td>
                         </tr>
                     </template>

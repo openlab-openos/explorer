@@ -456,7 +456,7 @@ export const TOKEN_IDS: { [key: string]: string } = {
 } as const;
 
 export const Authentication: { [key: string]: TokenProgramInfo } = {
-    TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA:{
+    B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz:{
         authentication: true,
         program: 'open-token'
     },

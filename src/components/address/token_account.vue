@@ -23,7 +23,7 @@
                         </tr>
                         <tr>
                             <td>{{ $t("account.owning_token") }}</td>
-                            <td class="text-end text-theme"  @click="pubbtx(getMint)" style="cursor: pointer" > {{ titleUrl(getMint).url }} <img v-if="titleUrl(getMint).type" src="../../../src//assets//renzheng.png" width="20" alt=""> </td>
+                            <td class="text-end text-theme"  @click="pubbtx(getMint)" style="cursor: pointer" > {{ titleUrl(getMint).url }}  <img v-if="titleUrl(getMint).type" src="../../../src//assets//renzheng.png" width="15" alt=""> </td>
                         </tr>
                         <tr>
                             <td>{{ $t("account.state") }} </td>
@@ -35,11 +35,11 @@
                         </tr> -->
                         <tr>
                             <td>{{ $t("account.Owner") }} </td>
-                            <td class="text-end text-theme"  @click="pubbtx(owners)" style="cursor: pointer" > {{ titleUrl(owners).url }}  <img v-if="titleUrl(owners).type" src="../../../src//assets//renzheng.png" width="20" alt=""> </td>
+                            <td class="text-end text-theme"  @click="pubbtx(owners)" style="cursor: pointer" > {{ titleUrl(owners).url }}  <img v-if="titleUrl(owners).type" src="../../../src//assets//renzheng.png" width="15" alt=""> </td>
                         </tr>
                         <tr>
                             <td>{{ $t("transaction.program") }} </td>
-                            <td class="text-end text-theme"  @click="pubbtx(owners)" style="cursor: pointer" > {{ titleUrl(program).url }}  <img v-if="titleUrl(program).type" src="../../../src//assets//renzheng.png" width="20" alt=""> </td>
+                            <td class="text-end text-theme"  @click="pubbtx(owners)" style="cursor: pointer" > {{ titleUrl(program).url }}  <img v-if="titleUrl(program).type" src="../../../src//assets//renzheng.png" width="15" alt=""> </td>
                         </tr> 
                     </tbody>
                 </table>

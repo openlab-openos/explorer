@@ -73,7 +73,7 @@
                                 {{ stringcate(
                                     titleUrl(product.message.instructions[0].parsed.info.source).url
                                 ) }} <img v-if="titleUrl(product.message.instructions[0].parsed.info.source).type"
-                                    src="../../../src//assets//renzheng.png" width="20" alt="">
+                                    src="../../../src//assets//renzheng.png" width="15" alt="">
                             </td>
                             <td style=" text-align: left; cursor: pointer" class="text-theme" @click="
                                 pubbleys(
@@ -91,7 +91,7 @@
                                     )
                                 }} <img v-if="titleUrl(product.message.instructions.length == 1 ? product.message.instructions[0]
                                     .parsed.info.destination : product.message.instructions[1]
-                                        .parsed.info.destination).type" src="../../../src//assets//renzheng.png" width="20"
+                                        .parsed.info.destination).type" src="../../../src//assets//renzheng.png" width="15"
                                     alt="">
                             </td>
                             <td style=" text-align: left">

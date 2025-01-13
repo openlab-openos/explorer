@@ -26,7 +26,7 @@
                         {{ item.pubkey }}
                     </td>
                     <td>
-                        {{ proportion_amount != 0 ? item.account.data.parsed.info.tokenAmount.uiAmount :0 }}
+                        {{  (item.account.data.parsed.info.tokenAmount.uiAmount).toFixed(2)}}
                     </td>
                     <td>
                         {{ percent(item.account.data.parsed.info.tokenAmount.uiAmount, proportion_amount) }} %
@@ -128,6 +128,8 @@ onMounted(async () => {
     console.log(historyData.value);
 
     proportion_amount.value = await chainRequest(method).then(res => {
+        console.log(res);
+        
         return res.result.value.uiAmount;
     }).catch(err => {
         console.log(err);

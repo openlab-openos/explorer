@@ -57,38 +57,80 @@
                             }}
                         </button>
                     </td>
-                    <td style=" text-align: left; cursor: pointer" class="text-theme"
-                        @click="slot(item.result.transaction.message.instructions[0].parsed.info.source)">
-                        {{ item.result.transaction.message.instructions[0].parsed.info.source }}
-                    </td>
-                    <td style=" text-align: left; cursor: pointer" class="text-theme"
-                        @click="slot(item.result.transaction.message.instructions[0].parsed.info.destination)">
+                    <!-- color0-255-179-1 -->
+                    <!-- text-theme -->
+                    <td style=" text-align: left; cursor: pointer" :class="item.result.transaction.message.instructions.length == 1 ?
+                        (item.result.transaction.message.instructions[0]
+                            .parsed.info.source == props.url ? 'color0-255-179-1' : 'text-theme') : (item.result.transaction.message.instructions[1]
+                                .parsed.info.source == props.url ? 'color0-255-179-1' : 'text-theme')
+                        " @click="slot(
+                        item.result.transaction.message.instructions.length == 1 ?
+                            item.result.transaction.message.instructions[0]
+                                .parsed.info.source
+                            :
+                            item.result.transaction.message.instructions[1]
+                                .parsed.info.source
+                    )">
+
                         {{ item.result.transaction.message.instructions.length == 1 ?
-                            stringcate(
-                                titleUrl(item.result.transaction.message.instructions[0]
-                                    .parsed.info.destination).url
-                            ) : stringcate(
-                                titleUrl(item.result.transaction.message.instructions[1]
-                                    .parsed.info.destination).url
-                            )
+
+                            titleUrl(item.result.transaction.message.instructions[0]
+                                .parsed.info.source).url
+                            :
+                            titleUrl(item.result.transaction.message.instructions[1]
+                                .parsed.info.source).url
+
                         }} <img v-if="titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
                             .parsed.info.destination : item.result.transaction.message.instructions[1]
-                                .parsed.info.destination).type" src="../../../src//assets//renzheng.png" width="20"
+                                .parsed.info.destination).type" src="../../../src//assets//renzheng.png" width="15"
+                            alt="">
+                    </td>
+                    <td style=" text-align: left; cursor: pointer" :class="item.result.transaction.message.instructions.length == 1 ?
+                        (item.result.transaction.message.instructions[0]
+                            .parsed.info.destination == props.url ? 'color0-255-179-1' : 'text-theme') : (item.result.transaction.message.instructions[1]
+                                .parsed.info.destination == props.url ? 'color0-255-179-1' : 'text-theme')
+                        " @click="slot(
+                        item.result.transaction.message.instructions.length == 1 ?
+
+                            item.result.transaction.message.instructions[0]
+                                .parsed.info.destination
+                            :
+                            item.result.transaction.message.instructions[1]
+                                .parsed.info.destination
+                    )">
+                        {{ item.result.transaction.message.instructions.length == 1 ?
+
+                            titleUrl(item.result.transaction.message.instructions[0]
+                                .parsed.info.destination).url
+                            :
+                            titleUrl(item.result.transaction.message.instructions[1]
+                                .parsed.info.destination).url
+
+                        }} <img v-if="titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
+                            .parsed.info.destination : item.result.transaction.message.instructions[1]
+                                .parsed.info.destination).type" src="../../../src//assets//renzheng.png" width="15"
                             alt="">
                     </td>
                     <td style=" text-align: left; cursor: pointer" class="text-theme" @click="slot(
-                        item.result.transaction.message.instructions[0]
-                            .programId ? item.result.transaction.message.instructions[0]
-                            .programId : ''
+
+                        item.result.transaction.message.instructions.length == 1 ?
+                            (item.result.transaction.message.instructions[1]
+                                .programId ? item.result.transaction.message.instructions[1]
+                                .programId : '') : (item.result.transaction.message.instructions[0]
+                                    .programId ? item.result.transaction.message.instructions[0]
+                                    .programId : '')
                     )">
                         {{
 
-                            item.result.transaction.message.instructions[0]
-                                .programId ? titleUrl(item.result.transaction.message.instructions[0]
-                                    .programId).url : "BTG"
+                            item.result.transaction.message.instructions.length == 1 ?
+                                titleUrl(item.result.transaction.message.instructions[0]
+                                    .programId).url : titleUrl(item.result.transaction.message.instructions[1]
+                                        .programId).url
 
-                        }} <img v-if="titleUrl(item.result.transaction.message.instructions[0]
-                            .programId).type" src="../../../src//assets//renzheng.png" width="20" alt="">
+                        }} <img v-if="item.result.transaction.message.instructions.length == 1 ?
+                            titleUrl(item.result.transaction.message.instructions[0]
+                                .programId).type : titleUrl(item.result.transaction.message.instructions[1]
+                                    .programId).type" src="../../../src//assets//renzheng.png" width="15" alt="">
                     </td>
                     <td>
                         {{ item.result.transaction.message.instructions.length == 1 ?
@@ -118,7 +160,7 @@
                                     .parsed.info.mint).url : "BTG"
 
                         }} <img v-if="titleUrl(item.result.transaction.message.instructions[0]
-                            .parsed.info.mint).type" src="../../../src//assets//renzheng.png" width="20" alt="">
+                            .parsed.info.mint).type" src="../../../src//assets//renzheng.png" width="15" alt="">
                     </td>
 
                     <td class="text-theme" style="cursor: pointer">
@@ -214,6 +256,8 @@ const pubbtx = (item) => {
 };
 
 const slot = (url) => {
+    console.log(url);
+    
     if (url) {
         router.push({
             name: "address",

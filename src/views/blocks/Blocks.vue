@@ -1,5 +1,5 @@
 <template>
-  <div class="blocks">
+  <div class="blocks" v-cloak>
     <div class="blocks-left">
       <div>
         <h4> {{ $t("blocks.title") }} </h4>
@@ -59,7 +59,7 @@
                 </tr>
                 <tr>
                   <td>{{$t('epoch_time_remaining')}}(approx.)</td>
-                  <td style="text-align: right">
+                  <td style="text-align: right" v-if="time">
                     {{ time }}
                   </td>
                 </tr>
@@ -71,182 +71,6 @@
     </div>
   </div>
 </template>
-
-<!-- <script setup> -->
-<!-- <script>
-import { chainRequest } from "../../request/chain";
-import CountUp from "vue-countup-v3";
-import moment from "moment";
-import numberAnimar from "../../components/CountFlop.vue";
-import { ref, onMounted } from "vue";
-import i18n from "@/i18n";
-
-// const block = ref([
-//           {
-//           name: "Slot",
-//           value: 0,
-//           type: false,
-//         },
-//         {
-//           name: "Block height",
-//           value: 0,
-//           type: false,
-//         },
-//         {
-//           name: "Slot time",
-//           value: 400,
-//           type: false,
-//         },
-//         {
-//           name: "Epoch progress",
-//           value: 0,
-//           type: true,
-//         },
-// ])
-
-// const initial = ref([
-//           {
-//           name: "Slot",
-//           value: 0,
-//         },
-//         {
-//           name: "Block height",
-//           value: 0,
-//         },
-//         {
-//           name: "Slot time",
-//           value: 0,
-//         },
-//         {
-//           name: "Epoch progress",
-//           value: 0,
-//         },
-// ])
-
-
-
-export default {
-  components: {
-    CountUp: CountUp,
-    numberAnimar,
-  },
-  data() {
-    return {
-      block: [
-        {
-          name: "Slot",
-          value: 0,
-          type: false,
-        },
-        {
-          name: "Block height",
-          value: 0,
-          type: false,
-        },
-        {
-          name: "Slot time",
-          value: 400,
-          type: false,
-        },
-        {
-          name: "Epoch progress",
-          value: 0,
-          type: true,
-        },
-      ],
-      initial: [
-        {
-          name: "Slot",
-          value: 0,
-        },
-        {
-          name: "Block height",
-          value: 0,
-        },
-        {
-          name: "Slot time",
-          value: 0,
-        },
-        {
-          name: "Epoch progress",
-          value: 0,
-        },
-      ],
-      cards: [],
-      setInter: null,
-      epoch: 0,
-      time: {
-        day: 0,
-        hours: 0,
-        minutes: 0,
-        remainingSeconds: 0,
-      },
-      progress: "0%",
-      cluster: null
-    };
-  },
-  async mounted() {
-    let request = {
-      id: 2,
-      jsonrpc: "2.0",
-      method: "getEpochInfo",
-      params: [],
-    };
-    await this.getBlock(request);
-    this.setInter = setInterval(() => {
-      this.getBlock(request);
-    }, 2000);
-  },
-  unmounted() {
-    clearInterval(this.setInter);
-  },
-  methods: {
-    async getBlock(requestBody) {
-      await chainRequest(requestBody)
-        .then((result) => {
-          this.initial[0].value = this.block[0].value;
-          this.initial[1].value = this.block[1].value;
-          this.block[1].value = result.result.blockHeight;
-          this.block[0].value = result.result.absoluteSlot;
-          this.cards = [];
-          this.epoch = result.result.epoch;
-          this.time = this.getTime(
-            result.result.slotsInEpoch - result.result.slotIndex
-          );
-          let d = new Date();
-          this.cluster = moment(d).utc().format();
-          this.progress = (
-            (result.result.slotIndex / result.result.slotsInEpoch) *
-            100
-          ).toFixed(1);
-          this.block[3].value = this.progress;
-          for (let i = 0; i < 5; i++) {
-            let count = JSON.parse(this.block[0].value) - i;
-            this.cards.push({
-              number: count,
-            });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    getTime(timestamp) {
-      return moment(
-        JSON.parse(moment().format("x")) + timestamp * 400
-      ).fromNow();
-    },
-    epochSkip(num) {
-      this.$router.push({
-        name: "epoch",
-        params: {
-          num: num,
-        },
-      });
-    }
-  },
-};
-</script> -->
 
 <script setup>
 import { useAppStore } from "../../stores/index";

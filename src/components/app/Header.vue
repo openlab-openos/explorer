@@ -213,7 +213,7 @@ const selectLanguage = (language: any, abbreviation: any) => {
       <!-- 节点切换 -->
       <div class="menu-item dropdown dropdown-mobile-full" style="min-width: 10%;" >
         <a href="#" data-bs-toggle="dropdown" data-bs-display="static" class="menu-link scales">
-          Openverse Mainnet
+          <img src="https://cdn.openverse.network/brands/openverse/icon_128.png" width="25" alt="">
           <i class="bi bi-chevron-down" style="margin: 5px;"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-end me-lg-3 fs-11px mt-1">

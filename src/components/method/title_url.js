@@ -35,7 +35,7 @@ export const titleUrl = (url) => {
     if (Authentication[url]) {
         return {
             url: url,
-            type: Authentication.type
+            type: Authentication[url].authentication
         };
     }
     return {
