@@ -26,7 +26,7 @@
                         {{ item.pubkey }}
                     </td>
                     <td>
-                        {{  (item.account.data.parsed.info.tokenAmount.uiAmount).toFixed(2)}}
+                        {{  (item.account.data.parsed.info.tokenAmount.uiAmount).toFixed(5)}}
                     </td>
                     <td>
                         {{ percent(item.account.data.parsed.info.tokenAmount.uiAmount, proportion_amount) }} %
@@ -155,7 +155,7 @@ const percent = (lod, nem) => {
     if(nem == 0){
         return 0;
     }
-    return (lod / nem * 100).toFixed(2);
+    return (lod / nem * 100).toFixed(5);
 }
 const pubbtx = (url) => {
     router.push({

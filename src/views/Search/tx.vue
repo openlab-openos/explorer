@@ -105,7 +105,7 @@ export default {
     },
     toFexedStake(num) {
       if (num) {
-        return (num / 1000000000).toFixed(2);
+        return (num / 1000000000).toFixed(5);
       }
     },
     come(num) {
@@ -226,7 +226,7 @@ export default {
       }
     }
     this.laoding = true
-    console.log(this.innerInstructions);
+    
     
   },
   watch: {
@@ -391,7 +391,7 @@ export default {
                     <td class="text-theme" style="cursor: pointer" @click="pubbleys(item.pubkey)">
                       {{ titleUrl(item.pubkey).url }}
                     </td>
-                    <td v-if="historyData.meta.postBalances[index]">
+                    <td v-if="historyData.meta.postBalances">
                       <span class="symboldata" :style="styleSysmle(
                         symbolNum(come(toFexedStake(historyData.meta.postBalances[index] -
                           historyData.meta.preBalances[index])))
@@ -402,9 +402,11 @@ export default {
                         }}
                       </span>
                     </td>
-                    <td v-if="historyData.meta.postBalances[index]">
-                      {{ come(toFexedStake(historyData.meta.postBalances[index]))?come(toFexedStake(historyData.meta.postBalances[index])):'' }}
+                    <td v-else></td>
+                    <td v-if="historyData.meta.postBalances">
+                      {{ come(toFexedStake(historyData.meta.postBalances[index])) }}
                     </td>
+                    <td v-else></td>
                     <td style="text-align: left;font-size: 12px;">
                       <span v-if="item.signer ? (item.writable ? (index == 0 ? true : false) : false) : false"
                         class="dage bg-info">

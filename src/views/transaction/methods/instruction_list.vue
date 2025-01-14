@@ -2,22 +2,19 @@
     <ul>
         <li v-for="(item, index) in liList(props.data, props.programId, props.index, props.instructions)" :key="index"
             :class="[dataDeal(item.log).type == 'success' ? 'text-theme' : ''
-                ,item.children.length !=0 ? 'color27-181-197' :'colord1']">
-            {{ dataDeal(item.log).name }}
-            &nbsp;
-            {{ dataDeal(item.log).type == 'success' ? 'returned' : titleUrl(dataDeal(item.log).value).url
-            }}
-            &nbsp;{{ dataDeal(item.log).type == "invoke" ? '' : dataDeal(item.log).type
-            }}
+                , item.children.length != 0 ? 'color27-181-197' : 'colord1']">
+
+            {{ dataDeal(item.log).type == "invoke" ? dataDeal(item.log).name + ' ' +
+                titleUrl(dataDeal(item.log).value).url : (dataDeal(item.log).type == "success" ? dataDeal(item.log).name
+                    + ' ' +
+                    'returned' + ' ' + dataDeal(item.log).type : item.log) }}
             <ul>
                 <li v-for="(items, indexs) in item.children" :key="indexs" :class="dataDeal(items.log).type == 'success' ? 'text-theme' : 'colord1'
                     ">
-                    {{ dataDeal(items.log).name }}
-                    &nbsp;
-                    {{ dataDeal(items.log).type == 'success' ? 'returned' : titleUrl(dataDeal(items.log).value).url
-                    }}
-                    &nbsp;{{ dataDeal(items.log).type == "invoke" ? '' : dataDeal(items.log).type
-                    }}
+                    {{ dataDeal(items.log).type == "invoke" ? dataDeal(items.log).name + ' ' +
+                        titleUrl(dataDeal(items.log).value).url : (dataDeal(items.log).type == "success" ?
+                            dataDeal(items.log).name + ' ' +
+                            'returned' + ' ' + dataDeal(items.log).type  : items.log)}}
                 </li>
             </ul>
         </li>
@@ -52,7 +49,7 @@ const dataDeal = (item) => {
     return {
         name: item.split(" ")[0],
         value: item.split(" ")[1],
-        type: item.split(" ")[1] == 'log:' ? "“" + item.split(" ")[2] + item.split(" ")[3] + "”" : (item.split(" ")[2])
+        type: item.split(" ")[2],
     };
 };
 const extractLogsBetweenFirstAndLast = (data, item, index, lastprogramId) => {
@@ -67,34 +64,47 @@ const extractLogsBetweenFirstAndLast = (data, item, index, lastprogramId) => {
                 break; // 找到第一个匹配项后退出循环
             }
         }
-        for (let i = data.length - 1; i >= 0; i--) {
+        console.log(startIndex);
+
+        for (let i = 1; i < data.length; i++) {
+            // console.log(data);
+
             const parts = data[i].split(' ');
-            if (parts.length > 1 && parts[1] === item) {
+
+
+            if (parts.length > 1 && parts[1] === item && parts[2] == 'success') {
                 endIndex = i;
                 break; // 找到最后一个匹配项后退出循环
             }
         }
         // lastindex.value = endIndex;
+        // console.log(endIndex);
 
         const matchedLogs = data.slice(startIndex + index + 1, endIndex + 1);
         // 如果没有找到任何匹配项，返回空数组
         return matchedLogs;
     } else {
-        for (let i = data.length - 1; i >= 0; i--) {
+        // console.log(lastprogramId);
+
+        for (let i = 0; i < data.length; i++) {
             const parts = data[i].split(' ');
-            if (parts.length > 1 && parts[1] === lastprogramId) {
+            if (parts.length > 1 && parts[1] === lastprogramId && parts[2] == 'success') {
                 startIndex = i;
-                break; // 找到最后一个匹配项后退出循环
+                break;
             }
         }
-        for (let i = data.length - 1; i >= startIndex; i--) {
+        // console.log(startIndex);
+
+        for (let i = startIndex; i < data.length; i++) {
             const parts = data[i].split(' ');
-            if (parts.length > 1 && parts[1] === item) {
+            if (parts.length > 1 && parts[1] === item && parts[2] == 'success') {
                 endIndex = i;
                 break; // 找到最后一个匹配项后退出循环
             }
         }
-        const matchedLogs = data.slice(startIndex + index + 1, endIndex + 1);
+        // console.log(endIndex);
+
+        const matchedLogs = data.slice(startIndex + index, endIndex + 1);
         return matchedLogs;
     }
 
@@ -102,7 +112,10 @@ const extractLogsBetweenFirstAndLast = (data, item, index, lastprogramId) => {
 
 // 使用 liList 函数来展示如何调用 extractLogsBetweenFirstAndLast
 const liList = (data, item, index, lastprogramId) => {
+    // console.log(data, item, index, lastprogramId);
+
     const listData = extractLogsBetweenFirstAndLast(data, item, index, lastprogramId);
+    // console.log(listData);
 
     const parsedData = buildLogTree(listData);
 

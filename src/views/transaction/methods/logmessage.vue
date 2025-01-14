@@ -11,7 +11,7 @@
                 <div v-if="raw">
                     <div class="marginTOP-20" v-for="(item, index) in (data.transaction.message.instructions)"
                         :key="index">
-                        <div style="display:flex;" class="colord1">
+                        <div style="display:flex;" class="">
                             <span style="color:#26E97E;background-color:#116939;" class="dage">
                                 # {{ index + 1 }}
                             </span>

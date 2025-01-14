@@ -16,6 +16,10 @@ import { metaRequest } from "../../request/tokenMeta"
 import TokensView from "../../components/address/tokens.vue"
 import acquiesceIcon from "../../assets/icon-acquiesce.png"
 import pledgeView from "../../components/address/pledge.vue"
+import { solanagetAccount } from "../../request/solanaGetaccount";
+import { PublicKey } from "@solana/web3.js";
+
+
 const activeName = ref('first')
 const router = useRouter();
 const route = useRoute();
@@ -79,7 +83,7 @@ watchEffect(() => {
 
 const toFexedStake = (num) => {
   if (num) {
-    return (num / 1000000000).toFixed(2);
+    return (num / 1000000000).toFixed(5);
   }
 }
 
@@ -115,17 +119,14 @@ const pubbleys = async (url) => {
       },
     ],
   });
-  console.log(cardData.value);
-  
+
   if (cardData.value[0] != null) {
     card_data.value = cardData.value;
     type.value = true
   } else {
     type.value = false
   }
-  console.log(card_data.value);
-  console.log(type.value);
-  
+
   token.value = await requestList({
     jsonrpc: "2.0",
     id: "",
@@ -191,26 +192,28 @@ const exexutable = async (url) => {
   }
 };
 
-const tokenName = async (url, params) => {
-  try {
-    const res = await metaRequest(url, params);
-    console.log(res);
-    if (res) {
-      token_name.value = res.name ? res.name : "";
-      token_img.value = res.uri ? res.uri : "";
-      token_symbol.value = res.symbol ? res.symbol : "";
-    } else {
+// const tokenName = async (url, params) => {
+//   console.log(url, params);
 
-    }
-    if (url == "B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz") {
-      token_name.value = "Native";
-      token_img.value = "https://cdn.openverse.network/brands/openverse/icon_128.png";
-    }
-  } catch (error) {
-    token_name.value = '';
-    console.error("Error fetching token info:", error);
-  }
-}
+//   try {
+//     const res = await metaRequest(url, params);
+//     console.log(res);
+//     if (res) {
+//       token_name.value = res.name ? res.name : "";
+//       token_img.value = res.uri ? res.uri : "";
+//       token_symbol.value = res.symbol ? res.symbol : "";
+//     } else {
+
+//     }
+//     if (url == "B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz") {
+//       token_name.value = "Native";
+//       token_img.value = "https://cdn.openverse.network/brands/openverse/icon_128.png";
+//     }
+//   } catch (error) {
+//     token_name.value = '';
+//     console.error("Error fetching token info:", error);
+//   }
+// }
 
 onMounted(async () => {
   await loadTypeAddress();
@@ -218,8 +221,81 @@ onMounted(async () => {
   await menufunction(url.value);
   await pubbleys(url.value);
   loading.value = true;
-  await tokenName(url.value, card_data.value[0].owner)
+  // await tokenName(url.value, card_data.value[0].owner)
+  tokenRwquest(url.value);
 })
+
+
+const tokenRwquest = async (url) => {
+  let method = {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "getAccountInfo",
+    "params": [
+      url,
+      {
+        "encoding": "jsonParsed"
+      }
+    ]
+  };
+  // try {
+  const res = await chainRequest(method);
+  console.log(res);
+  console.log('11111------1111');
+
+
+  const res2 = await solanagetAccount(url, res.result.value.owner
+  );
+  console.log(res2);
+
+  if (res2.mint) {
+    let mint = BigInt(res2.mint._bn.toString());
+    let getMint = new PublicKey(mint).toString();
+    console.log(getMint);
+
+
+    await mintReauest(getMint); // Ensure this is awaited
+  }
+
+
+  // } catch (err) {
+  //     console.error(err); // Use console.error for errors
+  // }
+};
+
+const mintReauest = async (url) => {
+  console.log(url);
+
+  await chainRequest(
+    {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "method": "getAccountInfo",
+      "params": [
+        url,
+        {
+          "encoding": "jsonParsed"
+        }
+      ]
+    }
+  ).then(async resd => {
+    console.log(resd.result.value.owner);
+    try {
+      await metaRequest(url, resd.result.value.owner).then(res => {
+        console.log(res);
+        token_name.value = res.name ? res.name : "";
+        token_img.value = res.uri ? res.uri : "";
+        token_symbol.value = res.symbol ? res.symbol : "";
+      });
+    } catch (err) {
+      console.log(err);
+            token_name.value =  "";
+      token_img.value = "";
+      token_symbol.value = "";
+    }
+  });
+};
+
 watch(
   () => route.fullPath, // 监听整个路由的 fullPath 变化
   (toFullPath, fromFullPath) => {
@@ -246,8 +322,7 @@ watch(route, (to, from) => {
       <!-- 普通账户或非openverse账户 -->
       <h3 v-if="typeAddress == 'mint'" class="align-center">
         <!-- acquiesce -->
-        <img :src="token_img ? token_img : ''" style="width: 25px;"
-          alt="">
+        <img :src="token_img ? token_img : ''" style="width: 25px;" alt="">
         <text class="marginLeft10"> {{ token_name ? token_name : '' }} {{ $t("account.token") }}
           <text v-if="url == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'">(WBTG)</text> &nbsp;
           <text v-if="token_symbol">({{ token_symbol }})</text> &nbsp;
@@ -257,8 +332,7 @@ watch(route, (to, from) => {
       </h3>
       <!-- 通政 -->
       <h3 v-if="typeAddress == 'integration'" class="align-center">
-        <img :src="token_img ? token_img : ''" style="width: 25px;"
-          alt="">
+        <img :src="token_img ? token_img : ''" style="width: 25px;" alt="">
         <text class="marginLeft10"> {{ token_name ? token_name : '' }} {{ $t("account.tokenAccount") }}
           <text v-if="url == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'">(WBTG)</text> &nbsp;
           <text v-if="token_symbol">({{ token_symbol }})</text> &nbsp;
@@ -370,8 +444,7 @@ watch(route, (to, from) => {
               <el-tab-pane v-if="typeAddress == 'mint'" :label="$t('account.holder')" name="third">
                 <holder-view :url="url" :paramsId="card_data[0].owner"></holder-view>
               </el-tab-pane>
-              <el-tab-pane v-if="typeAddress == 'address'"
-                :label="$t('pledge')" name="fourth">
+              <el-tab-pane v-if="typeAddress == 'address'" :label="$t('pledge')" name="fourth">
                 <pledgeView :url="url" :owner="card_data[0].owner" />
               </el-tab-pane>
             </el-tabs>

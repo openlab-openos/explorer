@@ -13,8 +13,8 @@ export function metaRequest(AccountPublicKey, Program) {
         const mintProgram = new PublicKey(
             Program
         )
+  
         let mintAccount = await getTokenMetadata(connection, mintAccountPublicKey, undefined, mintProgram);
-        console.log(mintAccount);
 
         return mintAccount;
     })();

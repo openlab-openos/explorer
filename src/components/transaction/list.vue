@@ -195,7 +195,7 @@ const stringcate = (str) => {
 
 const toFexedStake = (num) => {
     if (num) {
-        return JSON.parse((num / 1000000000).toFixed(2));
+        return JSON.parse((num / 1000000000).toFixed(5));
     }
 };
 

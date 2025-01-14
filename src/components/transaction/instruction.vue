@@ -6,7 +6,7 @@
                     <th>
                         <span class="text-theme">
                             #{{ index + 1 }}
-                        </span> {{ titleUrl(item.programId).url ? titleUrl(item.programId).url : 'Associated Token Program' }}
+                        </span> {{ titleUrl(item.programId).url ? titleUrl(item.programId).url : 'Associated Token Program' }} : {{ item.parsed ? item.parsed.type : '' }}
                     </th>
                     <th>
                     </th>
@@ -15,144 +15,40 @@
                 </tr>
                 <tbody>
                     <template v-if="item.parsed">
-                        <tr v-if="item.parsed.info.decimals">
-                            <td>
-                                {{ $t("transaction.Decimals") }}
+                        <tr v-if="item.programId">
+                            <td>ProgramId</td>
+                            <td class="text-end text-theme " style="cursor: pointer" @click="item.programId">{{
+                                titleUrl(item.programId).url }}
                             </td>
-                            <td class="text-end">
-                                {{ item.parsed.info.decimals }}
+                        </tr>
+                        <tr v-for="[key, value] in Object.entries(item.parsed.info)" :key="key">
+                            <td>{{ capitalize(key) }}</td>
+                            <td class="text-end" :class="typeof titleUrl(value).url == 'string' ? 'text-theme' : ''"
+                                :style="typeof titleUrl(value).url == 'string' ? 'cursor: pointer' : ''" @click="pubbleys(
+                                    key == 'extensionTypes' ? '' : (key == 'lamports' ? '' : (key == 'space' ? '' : (key == 'decimals' ? '' : (key == 'tokenAmount' ?  '' :value ) )))
+                                )">
+                                
+                                {{ key == 'extensionTypes' ? value[0] :(key == 'lamports' ? toFexedStake(value) : (key == 'tokenAmount' ? value.uiAmount : titleUrl(value).url) ) }} {{ key == 'space' ?
+                                    'byts(s)' : '' }}
                             </td>
                         </tr>
                     </template>
-                    <template v-if="item.parsed">
-                        <tr v-if="item.parsed.info.authority">
-                            <td>{{ $t("transaction.authority") }}</td>
-                            <td class="text-theme text-end" style="cursor: pointer"
-                                @click="pubbleys(item.parsed.info.authority)">{{
-                                    titleUrl(item.parsed.info.authority).url }}</td>
-                        </tr>
-                    </template>
-                    <template v-if="item.programId">
-                        <tr>
-                            <td>
-                                {{ $t("transaction.program") }}
-                            </td>
-                            <td class="text-theme text-end" style="cursor: pointer" @click="pubbleys(item.programId)">
-                                {{ titleUrl(item.programId).url }}
+                    <template v-if="item.accounts">
+                        <tr v-if="item.programId">
+                            <td>ProgramId</td>
+                            <td class="text-end text-theme " style="cursor: pointer" @click="item.programId">{{
+                                titleUrl(item.programId).url }}
                             </td>
                         </tr>
-                    </template>
-                    <template v-if="item.parsed">
-                        <tr v-if="item.parsed.info.source">
-                            <td>
-                                {{ item.parsed.info.source ? $t('transaction.from_address') : $t('transaction.mint') }}
-                            </td>
-                            <td class="text-theme text-end" style="cursor: pointer"
-                                @click="pubbleys(item.parsed.info.source)">
-                                {{ titleUrl(item.parsed.info.source).url }}
-                            </td>
+                        <tr v-if="item.data">
+                            <td>Data</td>
+                            <td class="text-end">{{ titleUrl(item.data).url }}</td>
                         </tr>
                     </template>
-                    <template v-if="item.parsed">
-                        <tr v-if="item.parsed.info.mint">
-                            <td>
-                                {{ $t('transaction.mint') }}
-                            </td>
-                            <td class="text-theme text-end" style="cursor: pointer"
-                                @click="pubbleys(item.parsed.info.mint)">
-                                {{ titleUrl(item.parsed.info.mint).url }}
-                            </td>
-                        </tr>
-                    </template>
-                    <template v-if="item.parsed">
-                        <tr v-if="item.parsed.info.destination">
-                            <td>{{ $t('transaction.to_address') }}</td>
-                            <td class="text-theme text-end" style="cursor: pointer"
-                                @click="pubbleys(item.parsed.info.destination)">
-                                {{ titleUrl(item.parsed.info.destination).url
-                                }}
-                            </td>
-                        </tr>
-                    </template>
-                    <template v-if="item.parsed">
-                        <tr v-if="item.parsed.info.mintAuthority">
-                            <td>{{ $t('transaction.mintAuthority') }}</td>
-                            <td class="text-theme text-end" style="cursor: pointer"
-                                @click="pubbleys(item.parsed.info.mintAuthority)">
-                                {{ titleUrl(item.parsed.info.mintAuthority).url
-                                }}
-                            </td>
-                        </tr>
-                    </template>
-                    <template v-if="item.parsed">
-                        <tr v-if="item.parsed.info.wallet">
-                            <td>{{ $t('transaction.wallet') }}</td>
-                            <td class="text-theme text-end" style="cursor: pointer"
-                                @click="pubbleys(item.parsed.info.wallet)">
-                                {{ titleUrl(item.parsed.info.wallet).url
-                                }}
-                            </td>
-                        </tr>
-                    </template>
-                    <template v-if="item.parsed">
-                        <tr v-if="item.parsed.info.tokenProgram">
-                            <td>{{ $t('transaction.token_program') }}</td>
-                            <td class="text-theme text-end" style="cursor: pointer"
-                                @click="pubbleys(item.parsed.info.tokenProgram)">
-                                {{ titleUrl(item.parsed.info.tokenProgram).url
-                                }}
-                            </td>
-                        </tr>
-                    </template>
-                    <template v-if="item.parsed">
-                        <tr v-if="item.parsed.info.systemProgram">
-                            <td>{{ $t('transaction.system_program') }}</td>
-                            <td class="text-theme text-end" style="cursor: pointer"
-                                @click="pubbleys(item.parsed.info.systemProgram)">
-                                {{ titleUrl(item.parsed.info.systemProgram).url
-                                }}
-                            </td>
-                        </tr>
-                    </template>
-                    <template v-if="item.parsed">
-                        <tr v-if="item.parsed.info.tokenAmount">
-                            <td>{{ $t('transaction.transfer_amount') }}</td>
-                            <td class="text-theme text-end">
-                                {{ item.parsed.info.tokenAmount.uiAmount }}
-                            </td>
-                        </tr>
-                    </template>
-                    <template v-if="item.parsed">
-                        <tr v-if="item.parsed.info.lamports">
-                            <td>{{ $t('transaction.transfer_amount') }} (BTG)</td>
-                            <td class="text-theme text-end">
-                                {{ toFexedStake(item.parsed.info.lamports) }}
-                            </td>
-                        </tr>
-                    </template>
-                    <template v-if="item.parsed">
-                        <tr v-if="item.parsed.info.rentSysvar">
-                            <td>{{ $t('transaction.rentsysvar') }}</td>
-                            <td class="text-theme text-end">
-                                {{ toFexedStake(item.parsed.info.rentSysvar) }}
-                            </td>
-                        </tr>
-                    </template>
-                    <template v-if="item.parsed">
-                        <tr v-if="item.parsed.info.space">
-                            <td>
-                                {{ $t("transaction.allocated_data_size") }}
-                            </td>
-                            <td class="text-end">
-                                {{ item.parsed.info.space }}byts(s)
-                            </td>
-                        </tr>
-                    </template>
-
                 </tbody>
             </table>
-            <template v-for="(child_item,child_index) in  innerInstructions" :key="child_index">
-                    <innerInster-view  v-if="index == child_index" :data="child_item.instructions" :index="index+1"/>
+            <template v-for="(child_item, child_index) in innerInstructions" :key="child_index">
+                <innerInster-view v-if="index == child_item.index" :data="child_item.instructions" :index="index + 1" />
             </template>
         </card-body>
     </card>
@@ -175,21 +71,34 @@ const props = defineProps({
 })
 const instruction = ref(props.data);
 const innerInstructions = ref(props.child)
-console.log(instruction.value);
-console.log(innerInstructions.value);
 
 
 const toFexedStake = (num) => {
-    if (num) {
-        return (num / 1000000000).toFixed(2);
+    if (num === undefined || num === null) {
+        return null; // 或者您可以选择返回其他默认值
+    }
+
+    const value = num / 1000000000;
+    const integerPart = Math.trunc(value);
+
+    if (integerPart > 0) {
+        return value.toFixed(2);
+    } else {
+        return value.toFixed(5);
     }
 };
 const pubbleys = (url) => {
-    router.push({
-        name: "address",
-        params: {
-            url: url,
-        },
-    })
+    if (url) {
+        router.push({
+            name: "address",
+            params: {
+                url: url,
+            },
+        })
+    }
+
 };
+const capitalize = ([first, ...rest]) => {
+    return first.toUpperCase() + rest.join('')
+}
 </script>

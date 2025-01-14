@@ -11,23 +11,28 @@
                             <td>{{ $t("account.token_account") }} </td>
                             <td class="text-end"> {{ url }} </td>
                         </tr>
-                        <tr v-if="mintData.supply">
-                            <td>{{ $t("account.balance") }} </td>
-                            <td class="text-end">
-                                {{ come(mintData.supply ?
-                                    toFexedStake(mintData.supply, mintData.decimals) : 0) }} 
-                                <span v-if="price">
-                                    {{ price.symbol != '' ? "(" + price.symbol + ")" : "" }}
-                                </span>    
-                            </td>
-                        </tr>
+                        <template v-if="mintData">
+                            <tr v-if="mintData.supply">
+                                <td>{{ $t("account.balance") }} </td>
+                                <td class="text-end">
+                                    {{ come(mintData.supply ?
+                                        toFexedStake(mintData.supply, mintData.decimals) : 0) }}
+                                    <span v-if="price">
+                                        {{ price.symbol != '' ? "(" + price.symbol + ")" : "" }}
+                                    </span>
+                                </td>
+                            </tr>
+                        </template>
                         <tr>
                             <td>{{ $t("account.owning_token") }}</td>
-                            <td class="text-end text-theme"  @click="pubbtx(getMint)" style="cursor: pointer" > {{ titleUrl(getMint).url }}  <img v-if="titleUrl(getMint).type" src="../../../src//assets//renzheng.png" width="15" alt=""> </td>
+                            <td class="text-end text-theme" @click="pubbtx(getMint)" style="cursor: pointer"> {{
+                                titleUrl(getMint).url }} <img v-if="titleUrl(getMint).type"
+                                    src="../../../src//assets//renzheng.png" width="15" alt=""> </td>
                         </tr>
                         <tr>
                             <td>{{ $t("account.state") }} </td>
-                            <td class="text-end">{{ tokenData.isFrozen ? $t("account.frozen") : $t("account.initialize") }} </td>
+                            <td class="text-end">{{ tokenData.isFrozen ? $t("account.frozen") : $t("account.initialize")
+                                }} </td>
                         </tr>
                         <!-- <tr v-if="price">
                             <td>{{ $t("account.symbol") }} </td>
@@ -35,12 +40,16 @@
                         </tr> -->
                         <tr>
                             <td>{{ $t("account.Owner") }} </td>
-                            <td class="text-end text-theme"  @click="pubbtx(owners)" style="cursor: pointer" > {{ titleUrl(owners).url }}  <img v-if="titleUrl(owners).type" src="../../../src//assets//renzheng.png" width="15" alt=""> </td>
+                            <td class="text-end text-theme" @click="pubbtx(owners)" style="cursor: pointer"> {{
+                                titleUrl(owners).url }} <img v-if="titleUrl(owners).type"
+                                    src="../../../src//assets//renzheng.png" width="15" alt=""> </td>
                         </tr>
                         <tr>
                             <td>{{ $t("transaction.program") }} </td>
-                            <td class="text-end text-theme"  @click="pubbtx(owners)" style="cursor: pointer" > {{ titleUrl(program).url }}  <img v-if="titleUrl(program).type" src="../../../src//assets//renzheng.png" width="15" alt=""> </td>
-                        </tr> 
+                            <td class="text-end text-theme" @click="pubbtx(owners)" style="cursor: pointer"> {{
+                                titleUrl(program).url }} <img v-if="titleUrl(program).type"
+                                    src="../../../src//assets//renzheng.png" width="15" alt=""> </td>
+                        </tr>
                     </tbody>
                 </table>
             </card-body>
@@ -57,15 +66,15 @@ import { PublicKey, Connection } from "@solana/web3.js";
 import { solanaRequest } from "../../request/solanaReques";
 import { getExtensionData, ExtensionType } from "open-token-web3";
 import { metaRequest } from "../../request/tokenMeta";
-import {titleUrl} from "../method/title_url"
-import {useRouter} from "vue-router";
+import { titleUrl } from "../method/title_url"
+import { useRouter } from "vue-router";
 const router = useRouter();
 const tokenData = ref();
 const pubbleys = ref();
 const getMint = ref();
 const mintData = ref();
 const price = ref();
-const owners= ref();
+const owners = ref();
 const program = ref();
 const data = ref();
 
@@ -102,7 +111,7 @@ const tokenRwquest = async () => {
 
         const res2 = await solanagetAccount(url.value, owner.value);
         console.log(res2);
-        
+
         tokenData.value = res2;
         data.value = res2;
 
@@ -119,10 +128,9 @@ const tokenRwquest = async () => {
 
         if (res2.owner) {
             owners.value = new PublicKey(BigInt(res2.owner._bn.toString())).toString();
-            console.log(owners.value);
+
         }
 
-        console.log(tokenData.value);
     } catch (err) {
         console.error(err); // Use console.error for errors
     }
@@ -144,28 +152,25 @@ const mintReauest = async (url) => {
             ]
         }
     ).then(async resd => {
-            console.log(resd.result.value.owner);
-            program.value = resd.result.value.owner;
-            try {
-                await solanaRequest(url, resd.result.value.owner).then(res => {
-                  
-                    mintData.value = res;
-                });
-                await metaRequest(url, resd.result.value.owner).then(res => {
-                  console.log(res);
-                  
-                    price.value = res;
-                });
-            } catch (err) {
-                console.log(err);
-            }
-        });
+        console.log(resd.result.value.owner);
+        program.value = resd.result.value.owner;
+        try {
+            await solanaRequest(url, resd.result.value.owner).then(res => {
+
+                mintData.value = res;
+            });
+            await metaRequest(url, resd.result.value.owner).then(res => {
+                price.value = res;
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    });
 };
 
 onMounted(async () => {
     await tokenRwquest();
-    console.log(mintData.value);
-    
+
 });
 const come = (num) => {
     let reg =
@@ -181,7 +186,7 @@ const toFexedStake = (num, decimals) => {
         return 0;
     }
     const divisor = Math.pow(10, JSON.parse(decimals));
-    console.log(divisor);
+
     return (JSON.parse(num) / divisor).toFixed(2);;
 
 };

@@ -120,7 +120,6 @@ onMounted(async () => {
         historyData.value[i].state = await stateFunction(historyData.value[i].pubkey);
         historyData.value[i].time = await fetchData();
     }
-    console.log(historyData.value);
 
     totalItems.value = historyData.value.length;
 });
@@ -172,7 +171,7 @@ const timeSome = (time) => {
 
 const percent = (lod) => {
 
-    return (lod / 1000000000).toFixed(2);
+    return (lod / 1000000000).toFixed(5);
 }
 const pubbtx = (url) => {
     router.push({
