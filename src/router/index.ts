@@ -7,6 +7,7 @@ import Block from "../views/Search/block.vue"
 import Tx from "../views/Search/tx.vue"
 import Transition from "../views/transaction/transactions.vue"
 import Epoch from "../views/Search/epoch.vue"
+import Tokens from "../views/asset/asset_list.vue"
 
 const router = createRouter({
   history: createWebHistory(),
@@ -50,6 +51,11 @@ const router = createRouter({
       path: "/epoch/:num?",
       name: "epoch",
       component: Epoch,
+    },
+    {
+      path:"/tokens",
+      name:"tokens",
+      component:Tokens,
     }
   ],
 });

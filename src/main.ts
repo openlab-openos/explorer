@@ -20,6 +20,7 @@ import piniaPersist from "pinia-plugin-persist";
 import vueMatomo from "vue-matomo";
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+import axios from 'axios';
 import { PROGRAM_NAMES, LOADER_IDS, PROGRAM_INFO_BY_ID } from "../src/program";
 
 
@@ -37,6 +38,8 @@ import CardGroup from '@/components/bootstrap/CardGroup.vue';
 import CardImgOverlay from '@/components/bootstrap/CardImgOverlay.vue';
 import CardExpandToggler from '@/components/bootstrap/CardExpandToggler.vue';
 import * as buffer from "buffer"; //引入buffer
+import { useAppStore } from "@/stores/index";
+
  
 if (typeof (window as any).Buffer === "undefined") { // 判断当前环境是否有Buffer对象
 
@@ -46,7 +49,7 @@ if (typeof (window as any).Buffer === "undefined") { // 判断当前环境是否
 }
 
 const emitter = mitt();
-
+const appStore = useAppStore();
 let paini = createPinia();
 paini.use(piniaPersist);
 

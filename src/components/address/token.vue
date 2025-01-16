@@ -14,6 +14,14 @@
                             <td class="text-end"> {{ address == "" ? "" : address }} </td>
                         </tr>
                         <tr>
+                            <td>{{ $t("account.name") }} </td>
+                            <td class="text-end">  {{ mintToken.name ? mintToken.name  :'N/A' }} </td>
+                        </tr>
+                        <tr>
+                            <td>{{ $t("account.symbol") }} </td>
+                            <td class="text-end">  {{ mintToken.symbol ? mintToken.symbol  :'N/A' }} </td>
+                        </tr>
+                        <tr>
                             <td>{{ $t("transaction.Decimals") }} </td>
                             <td class="text-end"> {{ tokenData.decimals }} </td>
                         </tr>
@@ -36,7 +44,9 @@
                         <tr>
                             <td>{{ $t("account.owner") }} </td>
                             <td class="text-end text-theme" style="cursor: pointer" @click="pubbleys(paramsId)"> {{
-                                titleUrl(paramsId).url }}  <img v-if="titleUrl(paramsId).type" src="../../../src//assets//renzheng.png" width="15" alt=""> </td>
+                                titleUrl(paramsId).url }} 
+                                 <img v-if="titleUrl(paramsId).type" v-for="(datas,indexs) in titleUrl(paramsId).certificates" :key="indexs" :src="datas.img" width="16" class="marginRight8" alt="">
+                                </td>
                         </tr>
                     </tbody>
                 </table>
@@ -54,12 +64,17 @@
                             <td>{{ $t("account.foundry_license") }} </td>
                             <td class="text-end text-theme" :style="pubbleys ? 'cursor: pointer' : ''"
                                 @click="pubbtx(pubbleys)"> {{
-                                    !pubbleys ? "N/A" : titleUrl(pubbleys).url }}  <img v-if="titleUrl(pubbleys).type" src="../../../src//assets//renzheng.png" width="15" alt="">  </td>
+                                    !pubbleys ? "N/A" : titleUrl(pubbleys).url }}  
+                                 <img v-if="titleUrl(pubbleys).type" v-for="(datas,indexs) in titleUrl(pubbleys).certificates" :key="indexs" :src="datas.img" width="16" class="marginRight8" alt="">
+
+                                </td>
                         </tr>
                         <tr>
                             <td>{{ $t("account.freeze_authorization") }} </td>
                             <td class="text-end"> {{ tokenData.freezeAuthority == null ? "N/A" :
-                                titleUrl(tokenData.freezeAuthority).url }}   <img v-if="titleUrl(tokenData.freezeAuthority).type" src="../../../src//assets//renzheng.png" width="15" alt="">  </td>
+                                titleUrl(tokenData.freezeAuthority).url }}   
+                                <img v-if="titleUrl(tokenData.freezeAuthority).type" v-for="(datas,indexs) in titleUrl(tokenData.freezeAuthority).certificates" :key="indexs" :src="datas.img" width="16" class="marginRight8" alt="">
+                             </td>
                         </tr>
                     </tbody>
                 </table>
@@ -146,7 +161,7 @@ const tokenRwquest = async () => {
 }
 console.log(url.value);
 
-
+// defineEmits({ mintToken });
 const numberHeld = async () => {
 
     let method = {

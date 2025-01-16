@@ -26,17 +26,35 @@
                         <tr v-for="(item, index) in paginatedHistoryData" :key="index">
                             <td class="text-theme" style="cursor: pointer"
                                 @click="pubbtx(item.account.data.parsed.info.mint)">
-                                {{ titleUrl(item.account.data.parsed.info.mint).url }}  <img v-if="titleUrl(item.account.data.parsed.info.mint).type" src="../../../src//assets//renzheng.png" width="15" alt="">
+                                <img v-if="item.img" :src="item.img" width="32" alt="">
+                                <img v-if="item.account.data.parsed.info.mint == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'"
+                                    src="https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png" width="32" alt="">
+                                {{ titleUrl(item.account.data.parsed.info.mint).url }}
+                                <text v-if="item.name">{{ '(' + item.name + ')' }}</text>
+                                <text
+                                    v-if="item.account.data.parsed.info.mint == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'">(Native)</text>
+                                &nbsp;
+
+                                <img v-if="titleUrl(item.account.data.parsed.info.mint).type" v-for="(datas,indexs) in titleUrl(item.account.data.parsed.info.mint).certificates" :key="indexs" :src="datas.img" width="16" class="marginRight8" alt="">
+
                             </td>
                             <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.pubkey)">
-                                {{ titleUrl(item.pubkey).url }}   <img v-if="titleUrl(item.pubkey).type" src="../../../src//assets//renzheng.png" width="15" alt="">
+                                {{ titleUrl(item.pubkey).url }} 
+                                <img v-if="titleUrl(item.pubkey).type" v-for="(datas,indexs) in titleUrl(item.pubkey).certificates" :key="indexs" :src="datas.img" width="16" class="marginRight8" alt="">
+
                             </td>
 
                             <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.account.owner)">
-                                {{ titleUrl(item.account.owner).url }} <img v-if="titleUrl(item.account.owner).type" src="../../../src//assets//renzheng.png" width="15" alt="">
+                                {{ titleUrl(item.account.owner).url }} 
+                                <img v-if="titleUrl(item.account.owner).type" v-for="(datas,indexs) in titleUrl(item.account.owner).certificates" :key="indexs" :src="datas.img" width="16" class="marginRight8" alt="">
+                                
                             </td>
                             <td>
-                                {{ titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).url }} <img v-if="titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).type" src="../../../src//assets//renzheng.png" width="15" alt="">
+                                {{ titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).url }} 
+                                <img v-if="titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).type" v-for="(datas,indexs) in titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).certificates" :key="indexs" :src="datas.img" width="16" class="marginRight8" alt="">
+                                    <text v-if="item.symbol"> {{ '(' + item.symbol + ')' }}</text>
+                                    <text
+                                    v-if="titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).symbol">({{ titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).symbol }})</text>
                             </td>
                         </tr>
                     </template>
@@ -55,22 +73,90 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { titleUrl } from "../../components/method/title_url"
-import { useRouter } from "vue-router"
+import { useRouter } from "vue-router";
+import { chainRequest } from "../../request/chain";
+
 const router = useRouter();
 const props = defineProps({
     tokens: Array,
 });
-
+console.log(props.tokens);
+const data = ref(props.tokens);
 const currentPage = ref(1);
 const pageSize = ref(20);
-
+const tokenData = ref();
 const paginatedHistoryData = computed(() => {
     const start = (currentPage.value - 1) * pageSize.value;
     const end = start + pageSize.value;
     return props.tokens.slice(start, end);
 });
+const tokenList = async () => {
+    let method = {
+        jsonrpc: "2.0",
+        id: 1,
+        method: "getProgramAccounts",
+        params: [
+            "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c",
+            {
+                encoding: "jsonParsed",
+                filters: [
+                    {
+                        "memcmp": {
+                            "offset": 1,
+                            "bytes": "1"
+                        },
+                    }
+                ]
+            }
+        ]
+    };
+    try {
+        const res = await chainRequest(method);
+        console.log(res);
+        tokenData.value = res.result;
+        return res.result;
+    } catch (err) {
+        console.error(`Error fetching accounts for ${token}:`, err);
+        return [];
+    }
+}
+onMounted(async () => {
+    await tokenList();
+    console.log(data.value);
+
+    console.log(tokenData.value);
+    if (tokenData.value) {
+        for (let i in tokenData.value) {
+            console.log(11);
+            for (let j in data.value) {
+                if (tokenData.value[i].pubkey == data.value[j].account.data.parsed.info.mint) {
+                    console.log(j);
+                    console.log(i);
+                    console.log(tokenData.value[i].account.data.parsed.info.extensions);
+
+                    if (tokenData.value[i].account.data.parsed.info.extensions) {
+                        console.log('11111');
+
+                        for (let a in tokenData.value[i].account.data.parsed.info.extensions) {
+                            if (tokenData.value[i].account.data.parsed.info.extensions[a].extension == "tokenMetadata") {
+                                console.log(a);
+                                console.log(5555);
+                                console.log(tokenData.value[i].account.data.parsed.info.extensions[a].state.uri);
+
+                                data.value[j].img = tokenData.value[i].account.data.parsed.info.extensions[a].state.uri;
+                                data.value[j].name = tokenData.value[i].account.data.parsed.info.extensions[a].state.name;
+                                data.value[j].symbol = tokenData.value[i].account.data.parsed.info.extensions[a].state.symbol;
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+})
 const pubbtx = (item) => {
     router.push({
         name: "address",

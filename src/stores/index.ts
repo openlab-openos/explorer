@@ -15,6 +15,7 @@ export const useAppStore = defineStore('app', {
         country: {},//country
         network: 0,//network
         language: "en-US",//language
+        programs:[],//programs
     }),
     getters: {
         rateData: (state) => {
@@ -56,6 +57,9 @@ export const useAppStore = defineStore('app', {
         getLanguage : (state) => {
             return state.language
         },
+        getPrograms:(state)=>{
+            return state.programs
+        }
     },
     actions: {
         setRate(newRate: any) {
@@ -96,6 +100,9 @@ export const useAppStore = defineStore('app', {
         },
         setLanguage(data: any){
             return this.language = data
+        },
+        setPrograms(data:any){
+            return this.programs = data
         }
     },
     persist: {

@@ -28,6 +28,9 @@
     "programAccount":"Program Account",
     "programDataAccount":"Program Data Account",
     "rentSysvar":"RentSysvar",
+    "certificates":"Certificates",
+    "protocol":"Protocol",
+    "rate":"Rate",
     "navigation": {
         "title": "Navigation",
         "dashboard": "Dashboard",
@@ -37,7 +40,8 @@
         "links": "Links",
         "document": "Document",
         "wallet": "Wallet",
-        "website": "Website"
+        "website": "Website",
+        "tokens":"Assets"
     },
     "dashboard": {
         "title": "Dashboard",
@@ -70,8 +74,8 @@
         "monthly_output": "Monthly Output",
         "annual_output": "Annual Output",
         "exchange_rate": "Exchange Rate",
-        "update_at_a_day": "Update at",
-        "reason_words_ido_stage": "Reason words for",
+        "update_at_a_day": "Updated at",
+        "reason_words_ido_stage": "Reason : ",
         "when_listing": "5 USD When Listing",
         "history": "History",
         "node_analytics": "Node Analytics",
@@ -140,7 +144,7 @@
         "fee": "Fee",
         "compute_units_consumed": "Compute Units Consumed",
         "transaction_version": "Transaction Version",
-        "instruction": "Instruction",
+        "instruction": "Instructions",
         "system_program": " System Program",
         "program": "Program",
         "from_address": "From Address",
@@ -210,13 +214,14 @@
         "holder": "Holders",
         "token": "Token",
         "tokens": "Tokens",
+        "tokensdetail": "TokenDetail",
         "tokenAccount": "Token Account",
         "token_account": "Address",
         "mint_account": "Mint account",
         "status": "Status",
         "amount": "Amount",
         "freezeAuthority": "Freeze Authority",
-        "account_authorization": "Account authorization",
+        "account_authorization": "Account Authorization",
         "foundry_license": "Mint Authority",
         "freeze_authorization": "Freeze Authority",
         "no": "No",
@@ -237,7 +242,8 @@
         "initialize": "Initialize",
         "uiamount": "Amount",
         "program": "Program",
-        "accounts":"Account"
+        "accounts":"Account",
+        "name":"Name"
     },
     "nede": {
         "openverse_mainnet": "Openverse Mainnet",
@@ -252,5 +258,17 @@
         "first_block_timestamp": "First Block Timestamp",
         "first_block": "First Block",
         "last_block": "Last Block Timestamp"
+    },
+    "tokens":{
+        "title":"Token",
+        "type":"Type",
+        "owner":"Owner",
+        "lamports":"Lamports",
+        "space":"Space",
+        "decimals":"Decimals",
+        "name":"Name",
+        "symbol":"Symbol",
+        "supply":"Supply"
+
     }
 }

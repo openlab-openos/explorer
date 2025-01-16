@@ -44,6 +44,7 @@ import { useAppStore } from "../../stores/index";
 import { onMounted, ref, watchEffect } from "vue";
 import i18n from "@/i18n"
 const appStore = useAppStore();
+console.log(appStore);
 
 const appVariable = useAppVariableStore();
 

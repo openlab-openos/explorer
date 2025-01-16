@@ -41,3 +41,15 @@
 .color0-255-179-1{
     color: rgba(0, 255, 136, 1) !important;
 }
+
+.marginRight8{
+    margin-right: 8px;
+}
+
+.marginRight10{
+    margin-right: 10px;
+}
+
+.imgWigth25{
+    width: 25px;
+}

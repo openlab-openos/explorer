@@ -353,12 +353,7 @@ export default {
               </tbody>
             </table>
           </card-body>
-
         </card>
-      </div>
-      <div>
-        <h4 class="marginTOP-50">{{ $t("transaction.instruction") }}</h4>
-        <instruction-view :data="instruction" :child="innerInstructions" />
       </div>
       <div style="margin-top:50px" v-if="historyData">
         <div v-if="historyData.transaction.message.accountKeys">
@@ -389,7 +384,9 @@ export default {
                       {{ index + 1 }}
                     </td>
                     <td class="text-theme" style="cursor: pointer" @click="pubbleys(item.pubkey)">
-                      {{ titleUrl(item.pubkey).url }}
+                      {{ titleUrl(item.pubkey).url }} 
+                      <img v-if="titleUrl(item.pubkey).type" v-for="(datas,indexs) in titleUrl(item.pubkey).certificates" :key="indexs" :src="datas.img" width="16" class="marginRight8" alt="">
+
                     </td>
                     <td v-if="historyData.meta.postBalances">
                       <span class="symboldata" :style="styleSysmle(
@@ -422,6 +419,11 @@ export default {
           </card>
         </div>
       </div>
+      <div>
+        <h4 class="marginTOP-50">{{ $t("transaction.instruction") }}</h4>
+        <instruction-view :data="instruction" :child="innerInstructions" />
+      </div>
+     
       <div style="margin-top:50px" v-if="preType">
         <h4>{{ $t("transaction.instruction") }}</h4>
         <card class="md-3 ">

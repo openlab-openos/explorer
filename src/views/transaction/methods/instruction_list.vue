@@ -21,6 +21,7 @@
     </ul>
 </template>
 <script setup>
+import { end } from "@popperjs/core";
 import { titleUrl } from "../../../components/method/title_url";
 const props = defineProps({
     data: {
@@ -64,7 +65,6 @@ const extractLogsBetweenFirstAndLast = (data, item, index, lastprogramId) => {
                 break; // 找到第一个匹配项后退出循环
             }
         }
-        console.log(startIndex);
 
         for (let i = 1; i < data.length; i++) {
             // console.log(data);
@@ -77,19 +77,15 @@ const extractLogsBetweenFirstAndLast = (data, item, index, lastprogramId) => {
                 break; // 找到最后一个匹配项后退出循环
             }
         }
-        // lastindex.value = endIndex;
-        // console.log(endIndex);
 
-        const matchedLogs = data.slice(startIndex + index + 1, endIndex + 1);
+        const matchedLogs = data.slice(startIndex+1, endIndex + 1);
         // 如果没有找到任何匹配项，返回空数组
         return matchedLogs;
     } else {
-        // console.log(lastprogramId);
-
         for (let i = 0; i < data.length; i++) {
             const parts = data[i].split(' ');
             if (parts.length > 1 && parts[1] === lastprogramId && parts[2] == 'success') {
-                startIndex = i;
+                startIndex = i+1;
                 break;
             }
         }
@@ -102,9 +98,8 @@ const extractLogsBetweenFirstAndLast = (data, item, index, lastprogramId) => {
                 break; // 找到最后一个匹配项后退出循环
             }
         }
-        // console.log(endIndex);
-
-        const matchedLogs = data.slice(startIndex + index, endIndex + 1);
+  
+        const matchedLogs = data.slice(startIndex +1, endIndex + 1);
         return matchedLogs;
     }
 
@@ -115,7 +110,6 @@ const liList = (data, item, index, lastprogramId) => {
     // console.log(data, item, index, lastprogramId);
 
     const listData = extractLogsBetweenFirstAndLast(data, item, index, lastprogramId);
-    // console.log(listData);
 
     const parsedData = buildLogTree(listData);
 

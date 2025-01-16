@@ -26,29 +26,24 @@
                         <tr>
                             <td>{{ $t("account.owning_token") }}</td>
                             <td class="text-end text-theme" @click="pubbtx(getMint)" style="cursor: pointer"> {{
-                                titleUrl(getMint).url }} <img v-if="titleUrl(getMint).type"
-                                    src="../../../src//assets//renzheng.png" width="15" alt=""> </td>
+                                titleUrl(getMint).url }} 
+                                <img v-if="titleUrl(getMint).type" v-for="(datas,indexs) in titleUrl(getMint).certificates" :src="datas.img" :key="indexs" width="16" class="marginRight8" alt=""> 
+                            </td>
                         </tr>
                         <tr>
                             <td>{{ $t("account.state") }} </td>
                             <td class="text-end">{{ tokenData.isFrozen ? $t("account.frozen") : $t("account.initialize")
                                 }} </td>
                         </tr>
-                        <!-- <tr v-if="price">
-                            <td>{{ $t("account.symbol") }} </td>
-                            <td class="text-end">{{ price.symbol }} </td>
-                        </tr> -->
                         <tr>
                             <td>{{ $t("account.Owner") }} </td>
                             <td class="text-end text-theme" @click="pubbtx(owners)" style="cursor: pointer"> {{
-                                titleUrl(owners).url }} <img v-if="titleUrl(owners).type"
-                                    src="../../../src//assets//renzheng.png" width="15" alt=""> </td>
+                                titleUrl(owners).url }} <img v-if="titleUrl(owners).type" v-for="(datas,indexs) in titleUrl(owners).certificates" :key="indexs" :src="datas.img" width="16" class="marginRight8" alt=""> </td>
                         </tr>
                         <tr>
                             <td>{{ $t("transaction.program") }} </td>
                             <td class="text-end text-theme" @click="pubbtx(owners)" style="cursor: pointer"> {{
-                                titleUrl(program).url }} <img v-if="titleUrl(program).type"
-                                    src="../../../src//assets//renzheng.png" width="15" alt=""> </td>
+                                titleUrl(program).url }} <img v-if="titleUrl(program).type" v-for="(datas,indexs) in titleUrl(program).certificates" :key="indexs" :src="datas.img" width="16" class="marginRight8" alt=""></td>
                         </tr>
                     </tbody>
                 </table>
@@ -198,4 +193,5 @@ const pubbtx = (url) => {
         },
     })
 }
+
 </script>

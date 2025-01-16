@@ -1,4 +1,10 @@
 import { Cluster } from '../src/cluster';
+import axios from 'axios';
+import { onMounted, ref } from 'vue';
+// import { useAppStore } from "@/stores/index";
+// const appStore = useAppStore();
+// console.log(appStore);
+const imgUrl = ref('https://open.openverse.live/storage');
 
 export enum PROGRAM_NAMES {
     // native built-ins
@@ -454,13 +460,56 @@ export const TOKEN_IDS: { [key: string]: string } = {
     TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA: 'Token Program',
     Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c: 'Token-2022 Program',
 } as const;
+const datas = ref();
+const Authentication = async () => {
+    await axios.get("https://open.openverse.live/api/token/some", {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then(res => {
+        console.log(res.data.data);
+        let data = Cretifucate(res.data.data);
+        console.log(Cretifucate(res.data.data));
+        const transformedObject = data.reduce((acc, item) => {
+            acc[item.address] = item;
+            return acc;
+        }, {} as { [key: string]: any });
+        console.log(transformedObject);
+        datas.value = transformedObject
+        return transformedObject;
+    }).catch(err => {
+        console.log(err);
+    })
+}
 
-export const Authentication: { [key: string]: TokenProgramInfo } = {
-    B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz:{
-        authentication: true,
-        program: 'open-token'
-    },
-};
+const Cretifucate = (data: Array<any>) => {
+    let CretifucateArray = [];
+    for (let i in data) {
+        CretifucateArray.push({
+            'address': data[i].address,
+            'img': imgUrl.value + '/' + data[i].image_url,
+            'name': data[i].name,
+            'code': data[i].protocol_code,
+            'symbol': data[i].symbol,
+            'certificates': [
+
+            ]
+        })
+        for (let j in data[i].certificates) {
+            CretifucateArray[i].certificates.push({
+                'img': imgUrl.value + '/' + data[i].certificates[j].image_url,
+                'code': data[i].certificates[j].certificate_code,
+            })
+
+        }
+    }
+    return CretifucateArray;
+}
+await Authentication()
+console.log(datas.value);
+
+
+export const Authentications: { [key: string]: TokenProgramInfo } = datas.value;
 
 export type TokenProgram = 'open-token' | 'open-token-2022';
 export function assertIsTokenProgram(program: string): asserts program is TokenProgram {

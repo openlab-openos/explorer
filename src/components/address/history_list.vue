@@ -2,31 +2,31 @@
     <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
         <tbody>
             <tr>
-                <th style="width: 70%;">
+                <th>
                     {{ $t("account.transaction_signature") }}
                 </th>
-                <th style="width: 10%;">
+                <th>
                     {{ $t("blocks.title") }}
                 </th>
-                <th style="width: 10%;">
+                <th>
                     {{ $t("account.age") }}
                 </th>
-                <th style="width: 10%;">
+                <th>
                     {{ $t("account.result") }}
                 </th>
             </tr>
             <template v-if="historyData.length != 0">
                 <tr v-for="(item, index) in paginatedHistoryData" :key="index">
-                    <td class="text-theme" style="width: 70%;cursor: pointer" @click="pubbtx(item.signature)">
+                    <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.signature)">
                         {{ item.signature }}
                     </td>
-                    <td class="text-theme" style="width: 10%;cursor: pointer" @click="slot(item.slot)">
+                    <td class="text-theme" style="cursor: pointer" @click="slot(item.slot)">
                         {{ come(item.slot) }}
                     </td>
-                    <td style="width: 10%;">
+                    <td>
                         {{ timeSome(item.blockTime) }}
                     </td>
-                    <td style="width: 10%;">
+                    <td>
                         {{ item.err == null ? 'Success' : 'Failed' }}
                     </td>
                 </tr>
@@ -65,6 +65,8 @@ const pageSize = ref(20);
 const paginatedHistoryData = computed(() => {
     const start = (currentPage.value - 1) * pageSize.value;
     const end = start + pageSize.value;
+    console.log(historyData);
+    
     return historyData.value.slice(start, end);
 });
 const requestType = ref("false")
@@ -93,7 +95,12 @@ onMounted(async () => {
         method: "getConfirmedSignaturesForAddress2",
         params: [props.url, { limit: 200 }],
     });
+    console.log(historyData.value);
+    if(historyData.value){
     totalItems.value = historyData.value.length;
+    } else {
+        historyData.value = [];
+    }
 });
 
 const come = (num) => {

@@ -119,29 +119,34 @@ const pubbleys = async (url) => {
       },
     ],
   });
+  console.log(cardData);
 
-  if (cardData.value[0] != null) {
-    card_data.value = cardData.value;
-    type.value = true
+  if (cardData) {
+    if (cardData.value[0] != null) {
+      card_data.value = cardData.value;
+      type.value = true
+    } else {
+      type.value = false
+    }
   } else {
     type.value = false
   }
 
-  token.value = await requestList({
-    jsonrpc: "2.0",
-    id: "",
-    method: "getTokenAccountsByOwner",
-    params: [
-      url,
-      {
-        programId: "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
-      },
-      {
-        commitment: "confirmed",
-        encoding: "jsonParsed",
-      },
-    ],
-  });
+  // token.value = await requestList({
+  //   jsonrpc: "2.0",
+  //   id: "",
+  //   method: "getTokenAccountsByOwner",
+  //   params: [
+  //     url,
+  //     {
+  //       programId: "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+  //     },
+  //     {
+  //       commitment: "confirmed",
+  //       encoding: "jsonParsed",
+  //     },
+  //   ],
+  // });
 
 };
 
@@ -164,6 +169,7 @@ const menufunction = async (url) => {
     }
 
     let datas = await requestList(methods);
+    console.log(datas);
 
 
     if (datas) {
@@ -192,28 +198,27 @@ const exexutable = async (url) => {
   }
 };
 
-// const tokenName = async (url, params) => {
-//   console.log(url, params);
+const tokenName = async (url, params) => {
 
-//   try {
-//     const res = await metaRequest(url, params);
-//     console.log(res);
-//     if (res) {
-//       token_name.value = res.name ? res.name : "";
-//       token_img.value = res.uri ? res.uri : "";
-//       token_symbol.value = res.symbol ? res.symbol : "";
-//     } else {
+  try {
+    const res = await metaRequest(url, params);
+    if (res) {
+      token_name.value = res.name ? res.name : '';
+      token_img.value = res.uri ? res.uri : "";
+      token_symbol.value = res.symbol ? res.symbol : "";
+    } else {
 
-//     }
-//     if (url == "B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz") {
-//       token_name.value = "Native";
-//       token_img.value = "https://cdn.openverse.network/brands/openverse/icon_128.png";
-//     }
-//   } catch (error) {
-//     token_name.value = '';
-//     console.error("Error fetching token info:", error);
-//   }
-// }
+    }
+    if (url == "B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz") {
+      token_name.value = "Native";
+      token_img.value = "https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png";
+    }
+  } catch (error) {
+
+    token_name.value = '';
+    console.error("Error fetching token info:", error);
+  }
+}
 
 onMounted(async () => {
   await loadTypeAddress();
@@ -221,8 +226,12 @@ onMounted(async () => {
   await menufunction(url.value);
   await pubbleys(url.value);
   loading.value = true;
-  // await tokenName(url.value, card_data.value[0].owner)
-  tokenRwquest(url.value);
+  console.log(typeAddress.value);
+  if (typeAddress.value == 'mint') {
+    await tokenName(url.value, card_data.value[0].owner)
+  } else if (typeAddress.value == 'integration') {
+    await tokenRwquest(url.value);
+  }
 })
 
 
@@ -279,19 +288,15 @@ const mintReauest = async (url) => {
       ]
     }
   ).then(async resd => {
-    console.log(resd.result.value.owner);
     try {
       await metaRequest(url, resd.result.value.owner).then(res => {
-        console.log(res);
-        token_name.value = res.name ? res.name : "";
+        token_name.value = res.name ? res.name : '';
         token_img.value = res.uri ? res.uri : "";
         token_symbol.value = res.symbol ? res.symbol : "";
       });
     } catch (err) {
-      console.log(err);
-            token_name.value =  "";
-      token_img.value = "";
-      token_symbol.value = "";
+      url == "B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz" ? token_name.value = "Native" : token_name.value = "";
+      url == "B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz" ? token_img.value = "https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png" : token_img.value = "";
     }
   });
 };
@@ -318,22 +323,21 @@ watch(route, (to, from) => {
 <template>
   <div style="width: 100%" v-if="loading">
     <div>
-      <h3 v-if="typeAddress == 'address'"> {{ $t("account.title") }} </h3>
+
+      <h3 v-if="typeAddress == 'address' || !typeAddress"> {{ $t("account.title") }} </h3>
       <!-- 普通账户或非openverse账户 -->
       <h3 v-if="typeAddress == 'mint'" class="align-center">
         <!-- acquiesce -->
-        <img :src="token_img ? token_img : ''" style="width: 25px;" alt="">
-        <text class="marginLeft10"> {{ token_name ? token_name : '' }} {{ $t("account.token") }}
-          <text v-if="url == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'">(WBTG)</text> &nbsp;
-          <text v-if="token_symbol">({{ token_symbol }})</text> &nbsp;
+        <img :src="token_img ? token_img : ''"  alt="" class="marginRight10 imgWigth25" v-if="token_img">
+        <text> {{ $t("account.token") }} : {{ token_name ? token_name : url }}
           <img v-if="url == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'" src="../../../src//assets//renzheng.png"
             width="20" alt="">
         </text>
       </h3>
       <!-- 通政 -->
       <h3 v-if="typeAddress == 'integration'" class="align-center">
-        <img :src="token_img ? token_img : ''" style="width: 25px;" alt="">
-        <text class="marginLeft10"> {{ token_name ? token_name : '' }} {{ $t("account.tokenAccount") }}
+        <img :src="token_img ? token_img : ''"  alt="" class="marginRight10 imgWigth25" v-if="token_img">
+        <text> {{ token_name ? token_name : '' }} {{ $t("account.tokenAccount") }}
           <text v-if="url == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'">(WBTG)</text> &nbsp;
           <text v-if="token_symbol">({{ token_symbol }})</text> &nbsp;
           <img v-if="url == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'" src="../../../src//assets//renzheng.png"
@@ -370,8 +374,11 @@ watch(route, (to, from) => {
                 <tr>
                   <td>{{ $t("account.assigned_program_id") }} </td>
                   <td class="text-end text-theme" style="cursor: pointer" @click="exexutable(item.owner)">
-                    {{ titleUrl(item.owner).url }} <img v-if="titleUrl(item.owner).type"
-                      src="../../../src//assets//renzheng.png" width="15" alt="">
+                    {{ titleUrl(item.owner).url }} 
+                    <!-- <img v-if="titleUrl(item.owner).type"
+                      src="../../../src//assets//renzheng.png" width="16" alt=""> -->
+                      <img v-if="titleUrl(item.owner).type" v-for="(datas,indexs) in titleUrl(item.owner).certificates" :key="indexs" :src="datas.img" width="16" class="marginRight8" alt="">
+
                   </td>
                 </tr>
                 <tr>
@@ -426,27 +433,32 @@ watch(route, (to, from) => {
           </card-body>
         </card>
       </div>
-      <div class="tab-content marginTOP-50"
-        v-if="typeAddress == 'address' && (card_data[0] == null ? true : (card_data[0].executable ? false : true))">
+      <div class="tab-content marginTOP-50" v-if="menu.length != 0">
         <Tokens-View :tokens="menu" />
       </div>
-      <div class="tab-content marginTOP-50" v-if="card_data">
+      <div class="tab-content marginTOP-50">
         <card class="md-3">
           <card-body class="card-bodys">
             <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
               <el-tab-pane :label="$t('navigation.transactions')" name="first">
                 <history-view :url="url"></history-view>
               </el-tab-pane>
-              <el-tab-pane v-if="card_data[0] == null ? true : (card_data[0].executable ? false : true)"
-                :label="$t('transfer')" name="second">
-                <transfer-view :url="url" :owner="card_data[0].owner"></transfer-view>
-              </el-tab-pane>
-              <el-tab-pane v-if="typeAddress == 'mint'" :label="$t('account.holder')" name="third">
-                <holder-view :url="url" :paramsId="card_data[0].owner"></holder-view>
-              </el-tab-pane>
-              <el-tab-pane v-if="typeAddress == 'address'" :label="$t('pledge')" name="fourth">
-                <pledgeView :url="url" :owner="card_data[0].owner" />
-              </el-tab-pane>
+              <template>
+                <el-tab-pane :label="$t('transfer')" name="second">
+                  <transfer-view :url="url"></transfer-view>
+                </el-tab-pane>
+              </template>
+              <template v-if="card_data">
+                <el-tab-pane v-if="typeAddress == 'mint'" :label="$t('account.holder')" name="third">
+                  <holder-view :url="url" :paramsId="card_data[0].owner"></holder-view>
+                </el-tab-pane>
+              </template>
+              <template v-if="card_data">
+                <el-tab-pane v-if="typeAddress == 'address'" :label="$t('pledge')" name="fourth">
+                  <pledgeView :url="url" :owner="card_data[0].owner" />
+                </el-tab-pane>
+              </template>
+
             </el-tabs>
           </card-body>
         </card>
