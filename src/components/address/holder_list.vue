@@ -18,15 +18,18 @@
             </tr>
             <template v-if="historyData.length != 0">
                 <tr v-for="(item, index) in paginatedHistoryData" :key="index">
-
                     <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.account.data.parsed.info.owner)">
-                        {{ item.account.data.parsed.info.owner }}
+                        {{ titleUrl(item.account.data.parsed.info.owner).url }}
+                        <img v-if="titleUrl(item.account.data.parsed.info.owner).type" v-for="item, index in titleUrl(item.account.data.parsed.info.owner).certificates"
+                            :src="item.img" :key="index" width="20" alt="" class="marginRight10">
                     </td>
                     <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.pubkey)">
-                        {{ item.pubkey }}
+                        {{ titleUrl(item.pubkey).url }}
+                        <img v-if="titleUrl(item.pubkey).type" v-for="item, index in titleUrl(item.pubkey).certificates"
+                            :src="item.img" :key="index" width="20" alt="" class="marginRight10">
                     </td>
                     <td>
-                        {{  (item.account.data.parsed.info.tokenAmount.uiAmount).toFixed(5)}}
+                        {{ (item.account.data.parsed.info.tokenAmount.uiAmount).toFixed(5) }}
                     </td>
                     <td>
                         {{ percent(item.account.data.parsed.info.tokenAmount.uiAmount, proportion_amount) }} %
@@ -52,6 +55,8 @@ import { order } from "../../request/order";
 import { chainRequest } from "../../request/chain";
 import { proportionAmount } from "../method/proportion_account"
 import { useRouter } from "vue-router"
+import { titleUrl } from "../../components/method/title_url"
+
 const router = useRouter();
 const props = defineProps({
     url: {
@@ -129,7 +134,7 @@ onMounted(async () => {
 
     proportion_amount.value = await chainRequest(method).then(res => {
         console.log(res);
-        
+
         return res.result.value.uiAmount;
     }).catch(err => {
         console.log(err);
@@ -152,7 +157,7 @@ const timeSome = (time) => {
 
 const percent = (lod, nem) => {
     console.log(lod, nem);
-    if(nem == 0){
+    if (nem == 0) {
         return 0;
     }
     return (lod / nem * 100).toFixed(5);

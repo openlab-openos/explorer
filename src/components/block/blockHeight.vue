@@ -76,6 +76,7 @@ const fetchData = async () => {
   };
   await chainRequest(requestBody).then((res) => {
     data.value = res.result;
+    appStore.setEpochInfo(res.result)
     appStore.getNetwork(res.result.transactionCount)
     info.value = [
       {

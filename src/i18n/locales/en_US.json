@@ -179,6 +179,7 @@
     },
     "account": {
         "title": "System Account",
+        "program_title": "Program Account",
         "overview": "Overview",
         "address": "Address",
         "balance": "Balance",
@@ -243,7 +244,9 @@
         "uiamount": "Amount",
         "program": "Program",
         "accounts":"Account",
-        "name":"Name"
+        "name":"Name",
+        "pubkey": "Pubkey",
+        "timeRemaining":"Time Remaining"
     },
     "nede": {
         "openverse_mainnet": "Openverse Mainnet",

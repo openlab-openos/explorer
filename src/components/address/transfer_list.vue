@@ -57,8 +57,10 @@
                         </td>
                         <td style=" text-align: left; cursor: pointer" :class="item.result.transaction.message.instructions.length == 1 ?
                             (item.result.transaction.message.instructions[0]
-                                .parsed.info.source == props.url ? 'color0-255-179-1' : 'text-theme') : (item.result.transaction.message.instructions[1]
-                                    .parsed.info.source == props.url ? 'color0-255-179-1' : 'text-theme')
+                                .parsed.info.source == props.url ? 'color0-255-179-1' : (item.result.transaction.message.instructions[0]
+                                .parsed.info.authority == props.url ? 'color0-255-179-1' : 'text-theme') ) : (item.result.transaction.message.instructions[1]
+                                    .parsed.info.source == props.url ? 'color0-255-179-1' : (item.result.transaction.message.instructions[1]
+                                    .parsed.info.authority == props.url ? 'color0-255-179-1' : 'text-theme') )
                             " @click="slot(
                             item.result.transaction.message.instructions.length == 1 ?
                                 item.result.transaction.message.instructions[0]

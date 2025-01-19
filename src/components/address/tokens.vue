@@ -26,9 +26,9 @@
                         <tr v-for="(item, index) in paginatedHistoryData" :key="index">
                             <td class="text-theme" style="cursor: pointer"
                                 @click="pubbtx(item.account.data.parsed.info.mint)">
-                                <img v-if="item.img" :src="item.img" width="32" alt="">
+                                <img v-if="item.img" :src="item.img" width="28" alt="">
                                 <img v-if="item.account.data.parsed.info.mint == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'"
-                                    src="https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png" width="32" alt="">
+                                    src="https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png" width="28" alt="">
                                 {{ titleUrl(item.account.data.parsed.info.mint).url }}
                                 <text v-if="item.name">{{ '(' + item.name + ')' }}</text>
                                 <text

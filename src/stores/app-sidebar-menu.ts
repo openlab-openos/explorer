@@ -12,7 +12,7 @@ export const useAppSidebarMenuStore = defineStore({
       'text': 'navigation.dashboard',
       'type': false
     }, {
-      'url': "tokens",
+      'url': "assets",
       'icon': 'bi bi-x-diamond',
       'text': 'navigation.tokens',
       'type': false

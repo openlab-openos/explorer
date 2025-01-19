@@ -87,6 +87,7 @@ const performanceSamples = () => {
   };
   chainRequest(requestBody)
     .then((response) => {
+      appStore.setRecentPerformanceSamples(response.result)
       for (let i in response.result) {
         unnumTranstions.value.push(
           JSON.parse(response.result[i].numTransactions) +

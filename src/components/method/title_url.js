@@ -40,7 +40,7 @@ export const titleUrl = (url) => {
 
     if (Authentications[url]) {
         return {
-            url: Authentications[url].address,
+            url: Authentications[url].name,
             type: true,
             find:true,
             certificates:Authentications[url].certificates,

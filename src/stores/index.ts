@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { set } from 'vue-demi';
 
 export const useAppStore = defineStore('app', {
     state: () => ({
@@ -16,6 +17,11 @@ export const useAppStore = defineStore('app', {
         network: 0,//network
         language: "en-US",//language
         programs:[],//programs
+        epochTime:"",
+        vaildators:[],
+        epochIfo:{},
+        RecentPerformanceSamples:{},
+        markersdata:[],
     }),
     getters: {
         rateData: (state) => {
@@ -59,6 +65,22 @@ export const useAppStore = defineStore('app', {
         },
         getPrograms:(state)=>{
             return state.programs
+        },
+        getepochTime:(state)=>{
+            return state.epochTime
+        },
+        getvaildators:(state)=>{
+            return state.vaildators
+        },
+        getepochInfo:(state)=>{
+            return state.epochIfo
+        },
+        getRecentPerformanceSamples:(state)=>{
+            return state.RecentPerformanceSamples
+        },
+        getmarkersdata:(state)=>{
+            return state.markersdata
+
         }
     },
     actions: {
@@ -103,6 +125,21 @@ export const useAppStore = defineStore('app', {
         },
         setPrograms(data:any){
             return this.programs = data
+        },
+        setEposhTome(data:any){
+            return this.epochTime = data
+        },
+        setVaildators(data:any){
+            return this.vaildators = data
+        },
+        setEpochInfo(data:any){
+            return this.epochIfo = data
+        },
+        setRecentPerformanceSamples(data:any){
+            return this.RecentPerformanceSamples = data
+        },
+        setMarkersData(data:any){
+            return this.markersdata = data
         }
     },
     persist: {

@@ -107,36 +107,7 @@ const handlePageChange = (newPage) => {
 };
 
 const getActivityLogData = async () => {
-    let requestBody = {
-        id: "35a5860e-2564-4b92-890d-dc57e9c58d75",
-        jsonrpc: "2.0",
-        method: "getProgramAccounts",
-        params: [
-            "Config1111111111111111111111111111111111111",
-            {
-                commitment: "processed",
-                encoding: "jsonParsed",
-            },
-        ],
-    };
-    let ClusterNodes = {
-        id: "d9080c36-8a4d-494f-8a5e-1ba06815e912",
-        jsonrpc: "2.0",
-        method: "getClusterNodes",
-        params: [],
-    };
-    let VoteAccounts = {
-        id: "35a5860e-2564-4b92-890d-dc57e9c58d75",
-        jsonrpc: "2.0",
-        method: "getVoteAccounts",
-        params: [],
-    };
-
-    Promise.all([
-        chainRequest(requestBody),
-        chainRequest(ClusterNodes),
-        chainRequest(VoteAccounts),
-    ]).then((res) => {
+    let res = appStore.getvaildators;
         let ClusterNodes_list = res[0].result;
         let ProgramAccounts_list = res[1].result;
         let VoteAccounts_list = res[2].result;
@@ -212,8 +183,6 @@ const getActivityLogData = async () => {
             )
             .toFixed(2);
         sessionStorage.setItem("accout", JSON.stringify(list));
-        // renderMap();
-    });
 };
 const countplount = (num) => {
     return ((num / countLog.value) * 100).toFixed(2) + "%";

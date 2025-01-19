@@ -3,21 +3,26 @@
         <tbody>
             <tr>
                 <th>
-                    VoterPubkey
+                    {{$t("account.pubkey")}}
+                </th>
+                <th>
+                    {{$t("validators.pubkey")}}
                 </th>
                 <th>
                     Amount&nbsp;(BTG)
                 </th>
                 <th>
-                    State
+                    {{$t("transactions.btg")}}
                 </th>
                 <th>
-                    Time Remaining
+                    {{$t("timeRemaining")}}
                 </th>
             </tr>
             <template v-if="historyData.length != 0">
                 <tr v-for="(item, index) in paginatedHistoryData" :key="index">
-
+                    <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.pubkey)">
+                        {{ item.pubkey }}
+                    </td>
                     <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.account.data.parsed.info.stake.delegation.voter)">
                         {{ item.account.data.parsed.info.stake.delegation.voter }}
                     </td>
@@ -54,9 +59,11 @@ import { chainRequest } from "../../request/chain";
 import { proportionAmount } from "../method/proportion_account"
 import { useRouter } from "vue-router"
 import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
+import { useAppStore } from "@/stores/index";
 
 
 const connection = new Connection("https://us-seattle.openverse.network/api", "confirmed");
+const appStore = useAppStore();
 
 const router = useRouter();
 const props = defineProps({
@@ -64,7 +71,9 @@ const props = defineProps({
         type: String,
         default: ""
     },
-})
+
+});
+console.log(props)
 const historyData = ref([]);
 const proportion_amount = ref(0);
 const currentPage = ref(1);
@@ -95,7 +104,6 @@ const requestList = async (object) => {
     }
 }
 
-
 onMounted(async () => {
     historyData.value = await requestList({
         "jsonrpc": "2.0",
@@ -119,8 +127,9 @@ onMounted(async () => {
     for (let i in historyData.value) {
         historyData.value[i].state = await stateFunction(historyData.value[i].pubkey);
         historyData.value[i].time = await fetchData();
+        
     }
-
+    console.log(historyData.value)
     totalItems.value = historyData.value.length;
 });
 
@@ -133,20 +142,10 @@ const stateFunction = async (url) => {
     } catch (err) {
         console.log(err);
     }
-
 }
 const fetchData = async () => {
     try {
-        const requestBody = {
-            jsonrpc: "2.0",
-            id: 1,
-            method: "getEpochInfo",
-            params: [],
-        };
-        const response = await chainRequest(requestBody);
-        solttime.value = getTime(
-            response.result.slotsInEpoch - response.result.slotIndex
-        );
+        solttime.value = appStore.getepochTime;
         console.log(solttime.value);
         return solttime.value;
     } catch (error) {

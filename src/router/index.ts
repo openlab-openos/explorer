@@ -53,8 +53,8 @@ const router = createRouter({
       component: Epoch,
     },
     {
-      path:"/tokens",
-      name:"tokens",
+      path:"/assets",
+      name:"assets",
       component:Tokens,
     }
   ],

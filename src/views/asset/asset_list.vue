@@ -10,10 +10,10 @@
                     <tbody>
                         <tr>
                             <th style=" text-align: left"> {{ $t("tokens.title") }} </th>
-                            <th style=" text-align: left">{{ $t('Certificates') }}</th>
+                            <th style=" text-align: left">{{ $t('certificates') }}</th>
                             <th style=" text-align: left"> {{ $t("tokens.name") }} </th>
                             <th style=" text-align: left"> {{ $t("tokens.symbol") }} </th>
-                            <th style=" text-align: left"> {{ $t("Protocol") }}</th>
+                            <th style=" text-align: left"> {{ $t("protocol") }}</th>
                             <th style=" text-align: left"> {{ $t("rate") }}</th>
                         </tr>
                         <tr v-for="item, index in paginatedHistoryData" :key="index">

@@ -93,7 +93,7 @@ const mapData = ref([]);
 const appVariable = useAppVariableStore();
 const countLog = ref();
 const appStore = useAppStore();
-
+const mapArray = ref(appStore.getmarkersdata);
 const mapCreate = () => {
     map.value = new jsVectorMap({
         selector: "#map",
@@ -154,6 +154,7 @@ const getActivityLogData = async () => {
         chainRequest(ClusterNodes),
         chainRequest(VoteAccounts),
     ]).then((res) => {
+        appStore.setVaildators(res);
         let ClusterNodes_list = res[0].result;
         let ProgramAccounts_list = res[1].result;
         let VoteAccounts_list = res[2].result;
@@ -221,7 +222,15 @@ const getActivityLogData = async () => {
             )
             .toFixed(2);
         sessionStorage.setItem("accout", JSON.stringify(list));
-        renderMap();
+        if (mapArray.value.length == 0) {
+            renderMap();
+        } else {
+            map.value.addMarkers(mapArray.value);
+
+
+            mapData.value = mapArray.value;
+            traffic.value = getTrafficData(mapArray.value);
+        }
     });
 };
 
@@ -302,13 +311,18 @@ const renderMap = async () => {
 
                     if (Math.abs(currentLat - compareLat) < 1) {
                         markers_data[j].coords[0] -= 1;
-                   // markers_data[j].coords[1] += 1;
+                        // markers_data[j].coords[1] += 1;
                     }
                 }
             }
         }
     }
+    appStore.setMarkersData(markers_data);
     map.value.addMarkers(markers_data);
+    for (let i in markers_data) {
+        console.log(markers_data[i].coords);
+
+    }
 
     mapData.value = markers_data;
     traffic.value = getTrafficData(markers_data);
@@ -316,33 +330,33 @@ const renderMap = async () => {
 };
 
 const getIPLocation = async (ip) => {
-  const url = `https://ipapi.co/${ip}/json`; // 使用你的访问令牌
+    const url = `https://ipapi.co/${ip}/json`; // 使用你的访问令牌
 
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        localStorage.setItem(ip, JSON.stringify(data));
+        return data; // 返回包含地理位置信息的对象
+    } catch (error) {
+        console.error("Error fetching location:", error);
+        return error; // 或抛出错误
     }
-    const data = await response.json();
-    localStorage.setItem(ip, JSON.stringify(data));
-    return data; // 返回包含地理位置信息的对象
-  } catch (error) {
-    console.error("Error fetching location:", error);
-    return error; // 或抛出错误
-  }
 };
 const getTrafficData = (data) => {
     let coun = [];
     let countryArray = [];
     let chartArray = [];
     let chartName = [];
-    
+
     if (data) {
         let arrayData = uniqueArrayByProperty(data, "try");
         let country = uniqueArrayByProperty(data, "code");
-       
+
         for (let i = 0; i < 5; i++) {
-            if (arrayData[i].value !=undefined) {
+            if (arrayData[i].value != undefined) {
                 coun.push({
                     name: arrayData[i].value,
                     visits: arrayData[i].count,
@@ -383,7 +397,7 @@ const getTrafficData = (data) => {
     series.value = chartArray.map(parseFloat);
     let array = series.value;
     console.log(array);
-    
+
     for (let i in chainArray) {
         chartName.push(chainArray[i].timezone);
     }

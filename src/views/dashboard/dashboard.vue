@@ -99,54 +99,50 @@ const cote = ref([]);
 const trueTramsatiom = ref([]);
 
 const performanceSamples = async () => {
-  let requestBody = {
-    jsonrpc: "2.0",
-    id: 1,
-    method: "getRecentPerformanceSamples",
-    params: [24],
-  };
-  await chainRequest(requestBody)
-    .then((response) => {
-      let res = response.result;
-      for (let i in response.result) {
+  // let requestBody = {
+  //   jsonrpc: "2.0",
+  //   id: 1,
+  //   method: "getRecentPerformanceSamples",
+  //   params: [24],
+  // };
+  // await chainRequest(requestBody)
+  //   .then((response) => {
+      let res = appStore.getRecentPerformanceSamples;
+      for (let i in res) {
         timeName.value.unshift(
           JSON.parse(i) + 1 == 1
             ? "a" + "minutes ago "
             : JSON.parse(i) + 1 + "minutes ago "
         );
-        cote.value.push(JSON.parse(response.result[i].numTransactions));
+        cote.value.push(JSON.parse(res[i].numTransactions));
         trueTramsatiom.value.push(
-          JSON.parse(response.result[i].numNonVoteTransactions)
+          JSON.parse(res[i].numNonVoteTransactions)
         );
         unnumTranstions.value.push(
-          JSON.parse(response.result[i].numTransactions) +
-          JSON.parse(response.result[i].numNonVoteTransactions)
+          JSON.parse(res[i].numTransactions) +
+          JSON.parse(res[i].numNonVoteTransactions)
         );
       }
-    })
-    .catch((error) => {
-      console.error("Error fetching epoch info:", error);
-    });
+    // })
+    // .catch((error) => {
+    //   console.error("Error fetching epoch info:", error);
+    // });
 };
 
 performanceSamples();
 
 const fetchData = async () => {
   try {
-    const requestBody = {
-      jsonrpc: "2.0",
-      id: 1,
-      method: "getEpochInfo",
-      params: [],
-    };
-    const response = await chainRequest(requestBody);
+
+    const response = appStore.getepochInfo;
     solttime.value = getTime(
-      response.result.slotsInEpoch - response.result.slotIndex
+      response.slotsInEpoch - response.slotIndex
     );
+    appStore.setEposhTome(solttime.value);
     if (slot.value === 1) {
-      slot.value = response.result.slotIndex;
-      inepoch.value = response.result.slotsInEpoch;
-      epoch.value = response.result.epoch;
+      slot.value = response.slotIndex;
+      inepoch.value = response.slotsInEpoch;
+      epoch.value = response.epoch;
     }
   } catch (error) {
     console.error("Error fetching epoch info:", error);
@@ -172,22 +168,26 @@ const supplyRequest = async () => {
       stubly.value = (
         JSON.parse(JSON.stringify(res.result.value.total).slice(0, 9)) / 1000000
       ).toFixed(1);
+      console.log(stubly.value);
+      
       appStore.setStubly(stubly.value);
       appStore.setStuBlys(res.result.value.total);
     })
     .catch((err) => {
       console.log(err);
     });
-  await chainRequest({
-    jsonrpc: "2.0",
-    id: 1,
-    method: "getVoteAccounts",
-    params: [],
-  })
-    .then((res) => {
-      let btg = res.result;
+  // await chainRequest({
+  //   jsonrpc: "2.0",
+  //   id: 1,
+  //   method: "getVoteAccounts",
+  //   params: [],
+  // })
+  //   .then((res) => {
+      let btg = appStore.getvaildators[2].result;
       let btgcont = 0;
       let btgcount = 0;
+      console.log(btg);
+      
       if (btg) {
         for (let i in btg.current) {
           btgcont += JSON.parse(JSON.stringify(btg.current[i].activatedStake));
@@ -197,12 +197,14 @@ const supplyRequest = async () => {
         btgcont = (num / 1000000).toFixed(1);
       }
       pubbley.value = btgcont;
+      console.log(pubbley.value);
+      
       appStore.setBtgcount(btgcount);
       appStore.setPubbley(pubbley.value);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+    // })
+    // .catch((err) => {
+    //   console.log(err);
+    // });
 
   server.value = getServerData();
 };
