@@ -15,7 +15,6 @@
             ">
             <h5 style="display: flex; height: 30px; font-size:0.9rem;line-height: 30px;">
               {{ data }}M / {{ stubly }}M
-              <!-- {{ data.blockHeight }} -->
             </h5>
           </div>
           <div style="width: 40%; height: 30px">

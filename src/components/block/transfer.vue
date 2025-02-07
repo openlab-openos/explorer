@@ -164,14 +164,12 @@ onMounted(() => {
         let dataArray = [];
         for (let i in data) {
           let etach = data[i];
-          console.log(etach);
-          
+
           // return;
           if (etach.type == "transfer") {
              dataArray.push(data[i])
 
           }
-          console.log(dataArray);
 
           
         }

@@ -224,9 +224,7 @@ const stringcate = (str) => {
 };
 
 const toFexedStake = (num) => {
-    console.log(num);
-    console.log(typeof num);
-    
+
     if (typeof num !== 'number') {
 
         return num;

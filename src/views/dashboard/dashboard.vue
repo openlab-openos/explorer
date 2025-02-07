@@ -33,17 +33,7 @@ const server = ref([]);
 const activeVueref = ref(null);
 const networkref = ref(null);
 const router = useRouter();
-// watchEffect(() => {
-//   solttime.value = getTime(
-//     response.slotsInEpoch - response.slotIndex
-//   );
-//   appStore.setEposhTome(solttime.value);
-//   console.log(response);
-
-//   slot.value = response.slotIndex;
-//   inepoch.value = response.slotsInEpoch;
-//   epoch.value = response.epoch;
-// });
+const renderType = ref(false);
 
 const BlockHeightVue = defineAsyncComponent(() =>
   import("../../components/block/blockHeight.vue")
@@ -88,14 +78,6 @@ watchEffect(() => {
   selectLanguage(appStore.$state.language);
 })
 const requestType = ref(true);
-const pubbleys = (url) => {
-  router.push({
-    name: "address",
-    params: {
-      url: url,
-    },
-  })
-};
 
 ustdData().then((data) => {
   appStore.setRate(data.data.rate);
@@ -143,8 +125,6 @@ const supplyRequest = async (epoch, slot, inepoch, solttime) => {
       stubly.value = (
         JSON.parse(JSON.stringify(res.result.value.total).slice(0, 9)) / 1000000
       ).toFixed(1);
-      console.log(stubly.value);
-
       appStore.setStubly(stubly.value);
       appStore.setStuBlys(res.result.value.total);
     })
@@ -154,13 +134,12 @@ const supplyRequest = async (epoch, slot, inepoch, solttime) => {
   pubbley.value = appStore.pubbley;
 
   server.value = getServerData(epoch, slot, inepoch, solttime);
+  requestType.value = false;
 
 };
 
 
 const getServerData = (epoch, slot, inepoch, solttime) => {
-  console.log(unnumTranstions.value);
-  console.log(epoch, slot, inepoch, solttime);
 
   Apex = {
     title: {
@@ -234,8 +213,6 @@ const getServerData = (epoch, slot, inepoch, solttime) => {
       min: 3000,
     },
   };
-  requestType.value = false;
-
   return {
     chart: {
       series: [

@@ -16,6 +16,8 @@ import i18n from './i18n';
 import { FontAwesomeIcon } from './fontawesome';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import piniaPersist from "pinia-plugin-persist";
+import VueApexCharts from "vue3-apexcharts";
+
 // import { createApp } from 'vue';
 import vueMatomo from "vue-matomo";
 import ElementPlus from 'element-plus'
@@ -56,7 +58,8 @@ paini.use(piniaPersist);
 const app = createApp(App);
 
 app.config.globalProperties.$progream = PROGRAM_INFO_BY_ID;
-
+app.use(VueApexCharts);
+app.component('apexchart', VueApexCharts)
 
 app.component('Card', Card);
 app.component('CardBody', CardBody);
@@ -72,6 +75,7 @@ app.use(i18n);
 app.use(ElementPlus);
 app.use(Vue3ProgressPlugin);
 app.use(PerfectScrollbar);
+
 
 app.config.globalProperties.emitter = emitter;
 app.use(vueMatomo, {

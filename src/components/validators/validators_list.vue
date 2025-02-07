@@ -108,14 +108,11 @@ const handlePageChange = (newPage) => {
 
 const getActivityLogData = async () => {
     let res = appStore.getvaildators;
-    console.log(res);
-    
+
     let ClusterNodes_list = res[0].result;
     let ProgramAccounts_list = res[1].result;
     let VoteAccounts_list = appStore.getvoteAccount.result;
     let list = [];
-    console.log(ClusterNodes_list);
-    console.log(VoteAccounts_list);
 
     for (let i in ProgramAccounts_list) {
         for (let j in ClusterNodes_list) {
@@ -174,7 +171,6 @@ const getActivityLogData = async () => {
     countLog.value = listCount;
 
     ActivityLogData.value = list;
-    console.log(list);
 
     totalItems.value = list.length;
     appStore.setValidators(JSON.stringify(list));
