@@ -28,33 +28,42 @@
                                 @click="pubbtx(item.account.data.parsed.info.mint)">
                                 <img v-if="item.img" :src="item.img" width="28" alt="">
                                 <img v-if="item.account.data.parsed.info.mint == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'"
-                                    src="https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png" width="28" alt="">
+                                    src="https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png"
+                                    width="28" alt="">
                                 {{ titleUrl(item.account.data.parsed.info.mint).url }}
                                 <text v-if="item.name">{{ '(' + item.name + ')' }}</text>
                                 <text
                                     v-if="item.account.data.parsed.info.mint == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'">(Native)</text>
                                 &nbsp;
 
-                                <img v-if="titleUrl(item.account.data.parsed.info.mint).type" v-for="(datas,indexs) in titleUrl(item.account.data.parsed.info.mint).certificates" :key="indexs" :src="datas.img" width="16" class="marginRight8" alt="">
+                                <img v-if="titleUrl(item.account.data.parsed.info.mint).type"
+                                    v-for="(datas, indexs) in titleUrl(item.account.data.parsed.info.mint).certificates"
+                                    :key="indexs" :src="datas.img" width="16" class="marginRight8" alt="">
 
                             </td>
                             <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.pubkey)">
-                                {{ titleUrl(item.pubkey).url }} 
-                                <img v-if="titleUrl(item.pubkey).type" v-for="(datas,indexs) in titleUrl(item.pubkey).certificates" :key="indexs" :src="datas.img" width="16" class="marginRight8" alt="">
+                                {{ titleUrl(item.pubkey).url }}
+                                <img v-if="titleUrl(item.pubkey).type"
+                                    v-for="(datas, indexs) in titleUrl(item.pubkey).certificates" :key="indexs"
+                                    :src="datas.img" width="16" class="marginRight8" alt="">
 
                             </td>
 
                             <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.account.owner)">
-                                {{ titleUrl(item.account.owner).url }} 
-                                <img v-if="titleUrl(item.account.owner).type" v-for="(datas,indexs) in titleUrl(item.account.owner).certificates" :key="indexs" :src="datas.img" width="16" class="marginRight8" alt="">
-                                
+                                {{ titleUrl(item.account.owner).url }}
+                                <img v-if="titleUrl(item.account.owner).type"
+                                    v-for="(datas, indexs) in titleUrl(item.account.owner).certificates" :key="indexs"
+                                    :src="datas.img" width="16" class="marginRight8" alt="">
+
                             </td>
                             <td>
-                                {{ titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).url }} 
-                                <img v-if="titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).type" v-for="(datas,indexs) in titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).certificates" :key="indexs" :src="datas.img" width="16" class="marginRight8" alt="">
-                                    <text v-if="item.symbol"> {{ '(' + item.symbol + ')' }}</text>
-                                    <text
-                                    v-if="titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).symbol">({{ titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).symbol }})</text>
+                                {{ tokenNumber(item.account.data.parsed.info.tokenAmount.uiAmount) }}
+                                <img v-if="titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).type"
+                                    v-for="(datas, indexs) in titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).certificates"
+                                    :key="indexs" :src="datas.img" width="16" class="marginRight8" alt="">
+                                <text v-if="item.symbol"> {{ '(' + item.symbol + ')' }}</text>
+                                <text v-if="titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).symbol">({{
+                                    titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).symbol }})</text>
                             </td>
                         </tr>
                     </template>
@@ -157,6 +166,22 @@ onMounted(async () => {
         }
     }
 })
+const tokenNumber = (num) => {
+    if (typeof num !== 'number') {
+        throw new TypeError('The input must be a number.');
+    }
+
+    // 检查整数部分是否大于1
+    if (Math.floor(Math.abs(num)) > 1) {
+        return Number(num).toFixed(2);
+    } else if (Math.abs(num) < 1 && num !== 0) {
+        // 对于绝对值小于1且非零的数，保留5位小数
+        return Number(num).toFixed(5);
+    } else {
+        // 如果是0或者整数部分等于1，则不做特殊处理，直接返回原值
+        return num.toString();
+    }
+};
 const pubbtx = (item) => {
     router.push({
         name: "address",

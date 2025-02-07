@@ -1,5 +1,5 @@
 export function ustdData(url) {
-    let asioxUrl = "https://www.openverse.network/api/coinprice/getLatest";
+    let asioxUrl = "https://open.openverse.live/api/coinprice/getLatest";
     return new Promise((resolve, reject) => {
         fetch(asioxUrl, {
             method: "GET",

@@ -64,11 +64,44 @@ watchEffect(() => {
 const randomNo = () => {
   return Math.floor(Math.random() * 60) + 30;
 };
-
+const requestType = ref(true);
 onMounted(() => {
-  watchEffect(() => {
-    epoch.value = appStore.network
-    data.value = appStore.pubbley;
+  watchEffect(async () => {
+    if (requestType.value) {
+      requestType.value = false;
+      epoch.value = appStore.network
+      await chainRequest({
+        jsonrpc: "2.0",
+        id: 1,
+        method: "getVoteAccounts",
+        params: [],
+      }).then((res) => {
+        let btg = res.result;
+        let btgcont = 0;
+        let btgcount = 0;
+
+        if (btg) {
+          for (let i in btg.current) {
+            btgcont += JSON.parse(JSON.stringify(btg.current[i].activatedStake));
+          }
+          btgcount = btgcont;
+          let num = (btgcont / 1000000000).toFixed(0);
+          btgcont = (num / 1000000).toFixed(1);
+        }
+        data.value = btgcont;
+        appStore.setPubbley(data.value);
+        appStore.setBtgcount(btgcount);
+        appStore.setVoteAccount(res);
+      }).catch((err) => {
+        console.log(err);
+        data.value = 0;
+      });
+
+
+      // data.value = appStore.pubbley;
+
+    }
+    console.log(data.value);
 
     stubly.value = appStore.stubly;
     info.value = [

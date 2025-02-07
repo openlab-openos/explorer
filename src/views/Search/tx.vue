@@ -51,7 +51,7 @@ export default {
       instruction: null,
       initialize: null,
       unitLimit: null,
-      innerInstructions:null,
+      innerInstructions: null,
     };
   },
   mounted() {
@@ -104,8 +104,19 @@ export default {
       return moment.unix(time).format("YYYY-MM-DD HH:mm:ss");
     },
     toFexedStake(num) {
-      if (num) {
-        return (num / 1000000000).toFixed(5);
+      if (typeof num !== 'number') {
+        throw new TypeError('The input must be a number.');
+      }
+
+      // 检查整数部分是否大于1
+      if (Math.floor(Math.abs(num)) > 1) {
+        return Number(num).toFixed(2);
+      } else if (Math.abs(num) < 1 && num !== 0) {
+        // 对于绝对值小于1且非零的数，保留5位小数
+        return Number(num).toFixed(6);
+      } else {
+        // 如果是0或者整数部分等于1，则不做特殊处理，直接返回原值
+        return num.toString();
       }
     },
     come(num) {
@@ -226,8 +237,8 @@ export default {
       }
     }
     this.laoding = true
-    
-    
+
+
   },
   watch: {
     async $route(to, from) {
@@ -328,7 +339,7 @@ export default {
                 </tr>
                 <tr>
                   <td>{{ $t("transaction.fee") }} (BTG)</td>
-                  <td class="text-end"> {{ toFexedStake(historyData.meta.fee) }} </td>
+                  <td class="text-end"> {{ toFexedStake(historyData.meta.fee/1000000000) }} </td>
                 </tr>
                 <tr>
                   <td>{{ $t("transaction.compute_units_consumed") }} </td>
@@ -384,24 +395,26 @@ export default {
                       {{ index + 1 }}
                     </td>
                     <td class="text-theme" style="cursor: pointer" @click="pubbleys(item.pubkey)">
-                      {{ titleUrl(item.pubkey).url }} 
-                      <img v-if="titleUrl(item.pubkey).type" v-for="(datas,indexs) in titleUrl(item.pubkey).certificates" :key="indexs" :src="datas.img" width="16" class="marginRight8" alt="">
+                      {{ titleUrl(item.pubkey).url }}
+                      <img v-if="titleUrl(item.pubkey).type"
+                        v-for="(datas, indexs) in titleUrl(item.pubkey).certificates" :key="indexs" :src="datas.img"
+                        width="16" class="marginRight8" alt="">
 
                     </td>
                     <td v-if="historyData.meta.postBalances">
                       <span class="symboldata" :style="styleSysmle(
-                        symbolNum(come(toFexedStake(historyData.meta.postBalances[index] -
-                          historyData.meta.preBalances[index])))
+                        symbolNum(come(toFexedStake((historyData.meta.postBalances[index] -
+                          historyData.meta.preBalances[index])/1000000000)))
                       )
                         ">
-                        {{ symbolNum(come(toFexedStake(historyData.meta.postBalances[index] -
-                          historyData.meta.preBalances[index]))).value
+                        {{ symbolNum(come(toFexedStake((historyData.meta.postBalances[index] -
+                          historyData.meta.preBalances[index])/1000000000))).value
                         }}
                       </span>
                     </td>
                     <td v-else></td>
                     <td v-if="historyData.meta.postBalances">
-                      {{ come(toFexedStake(historyData.meta.postBalances[index])) }}
+                      {{ come(toFexedStake(historyData.meta.postBalances[index]/1000000000)) }}
                     </td>
                     <td v-else></td>
                     <td style="text-align: left;font-size: 12px;">
@@ -423,7 +436,7 @@ export default {
         <h4 class="marginTOP-50">{{ $t("transaction.instruction") }}</h4>
         <instruction-view :data="instruction" :child="innerInstructions" />
       </div>
-     
+
       <div style="margin-top:50px" v-if="preType">
         <h4>{{ $t("transaction.instruction") }}</h4>
         <card class="md-3 ">

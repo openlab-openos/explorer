@@ -464,6 +464,34 @@ export const ipAddresses = {
       "code": "AS141995",
       "timezone": "Asia/Singapore",
       "country_name": "Singapore"
+    },{
+      ip: "144.126.155.214",
+      location: [-90.1985, 38.6364], // 注意：经纬度顺序为 [latitude, longitude]
+      try: "US", // 使用国家代码作为 try 字段
+      code: "NA", // 使用洲代码作为 code 字段
+      timezone: "America/Chicago",
+      country_name: "United States"
+    },{
+      ip: "38.242.223.80",
+      location: [6.7897, 51.2216], // 经度在前，纬度在后
+      try: "DE", // 使用国家代码作为 try 字段
+      code: "EU", // 使用洲代码作为 code 字段
+      timezone: "Europe/Berlin",
+      country_name: "Germany"
+    },{
+      ip: "84.247.161.146",
+      location: [6.8607, 51.1878], // 经度在前，纬度在后
+      try: "DE", // 使用国家代码作为 try 字段
+      code: "EU", // 使用洲代码作为 code 字段
+      timezone: "Europe/Berlin",
+      country_name: "Germany"
+    },{
+      ip: "89.117.144.192",
+      location: [-90.1913, 38.6346], // 经度在前，纬度在后
+      try: "US", // 使用国家代码作为 try 字段
+      code: "NA", // 使用洲代码作为 code 字段
+      timezone: "America/Chicago",
+      country_name: "United States"
     }
   ]
 };

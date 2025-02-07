@@ -29,7 +29,7 @@
                             <tr>
                                 <td>{{ $t("account.balance") }} (BTG)</td>
                                 <td class="text-end"> {{ card_data[index] == null ? 'Account does not exist' :
-                                    come(toFexedStake(item.lamports)) }} </td>
+                                    come(toFexedStake(item.lamports/1000000000)) }} </td>
                             </tr>
                             <tr>
                                 <td>{{ $t("account.allocated_data_size") }} </td>
@@ -186,9 +186,20 @@ const requestList = async (object) => {
     }
 }
 const toFexedStake = (num) => {
-    if (num) {
-        return (num / 1000000000).toFixed(5);
-    }
+    if (typeof num !== 'number') {
+    throw new TypeError('The input must be a number.');
+  }
+
+  // 检查整数部分是否大于1
+  if (Math.floor(Math.abs(num)) > 1) {
+    return Number(num).toFixed(2);
+  } else if (Math.abs(num) < 1 && num !== 0) {
+    // 对于绝对值小于1且非零的数，保留5位小数
+    return Number(num).toFixed(5);
+  } else {
+    // 如果是0或者整数部分等于1，则不做特殊处理，直接返回原值
+    return num.toString();
+  }
 }
 const come = (num) => {
     let reg =

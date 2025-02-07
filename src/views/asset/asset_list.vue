@@ -1,5 +1,5 @@
 <template>
-    <div v-if="loadingType" >
+    <div v-if="loadingType">
         <card class="md-3">
             <card-body class="card-bodys">
                 <div class="d-flex fw-bold small mb-3">
@@ -26,7 +26,9 @@
                                 {{ titleUrl(item.address).url }}
                                 <!-- <img v-if="titleUrl(item.pubkey).type" src="../../../src//assets//renzheng.png"
                                     width="16" alt=""> -->
-                                    <img v-if="titleUrl(item.pubkey).type" v-for="(datas,indexs) in titleUrl(item.pubkey).certificates" :key="indexs" :src="datas.img" width="16" class="marginRight8" alt="">
+                                <img v-if="titleUrl(item.pubkey).type"
+                                    v-for="(datas, indexs) in titleUrl(item.pubkey).certificates" :key="indexs"
+                                    :src="datas.img" width="16" class="marginRight8" alt="">
                             </td>
                             <template v-if="item.certificates.length == 0">
                                 <td>N/A</td>
@@ -53,7 +55,10 @@
                         </tr>
                     </tbody>
                 </table>
-                <div v-if="historyData.length == 0" class="text-center">
+                <div v-if="!loading" class="text-center">
+                    <loading-vue v-if="true" />
+                </div>
+                <div v-if="historyData.length == 0 && loading" class="text-center">
                     {{ $t("account.available") }}
                 </div>
                 <template v-if="historyData.length > 10">
@@ -67,11 +72,11 @@
         </card>
     </div>
     <div v-else>
-        <loading-vue/>
+        <loading-vue />
     </div>
 </template>
 <script setup>
-import { ref, computed } from 'vue'; // 假设这是在一个Vue组件中
+import { ref, computed, defineAsyncComponent } from 'vue'; // 假设这是在一个Vue组件中
 import { tokenList } from "./asset";
 import { titleUrl } from "../../components/method/title_url"
 import { useRouter } from "vue-router";
@@ -84,6 +89,7 @@ const historyData = ref([]);
 const currentPage = ref(1);
 const pageSize = ref(30);
 const totalItems = ref(0);
+const loading = ref(false);
 const paginatedHistoryData = computed(() => {
     const start = (currentPage.value - 1) * pageSize.value;
     const end = start + pageSize.value;
@@ -94,6 +100,7 @@ tokenList().then((res) => {
     dataArray.value = showData;
     historyData.value = showData;
     totalItems.value = showData.length;
+    loading.value = true;
 }).catch(error => {
     console.error('Failed to fetch token list:', error);
 });

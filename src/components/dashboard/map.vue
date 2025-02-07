@@ -142,22 +142,22 @@ const getActivityLogData = async () => {
         method: "getClusterNodes",
         params: [],
     };
-    let VoteAccounts = {
-        id: "35a5860e-2564-4b92-890d-dc57e9c58d75",
-        jsonrpc: "2.0",
-        method: "getVoteAccounts",
-        params: [],
-    };
+    // let VoteAccounts = {
+    //     id: "35a5860e-2564-4b92-890d-dc57e9c58d75",
+    //     jsonrpc: "2.0",
+    //     method: "getVoteAccounts",
+    //     params: [],
+    // };
 
     Promise.all([
         chainRequest(requestBody),
         chainRequest(ClusterNodes),
-        chainRequest(VoteAccounts),
+        // chainRequest(VoteAccounts),
     ]).then((res) => {
         appStore.setVaildators(res);
         let ClusterNodes_list = res[0].result;
         let ProgramAccounts_list = res[1].result;
-        let VoteAccounts_list = res[2].result;
+        let VoteAccounts_list = appStore.getvoteAccount;
         let list = [];
 
         for (let i in ProgramAccounts_list) {
@@ -319,10 +319,6 @@ const renderMap = async () => {
     }
     appStore.setMarkersData(markers_data);
     map.value.addMarkers(markers_data);
-    for (let i in markers_data) {
-        console.log(markers_data[i].coords);
-
-    }
 
     mapData.value = markers_data;
     traffic.value = getTrafficData(markers_data);

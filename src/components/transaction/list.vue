@@ -17,31 +17,24 @@
                             <th style=" text-align: left"> {{ $t("token") }} </th>
                             <th style=" text-align: left"> {{ $t("transactions.time") }} </th>
                         </tr>
-                        <tr v-for="(product, index) in arrayData" :key="index" style="height: 35px">
-                            <td v-if="props.boolean" style=" text-align: left; cursor: pointer" class="text-theme"
+                        <tr v-for="(item, index) in arrayData" :key="index" style="height: 35px">
+                            <td v-if="!props.boolean" style=" text-align: left; cursor: pointer" class="text-theme"
                                 @click="
                                     pubbtx(
-                                        product.signatures[0]
+                                        item.signature
                                     )
                                     ">
                                 {{
-                                    stringcate(
-                                        promaster[product.signatures[0]] ?
-                                            promaster[product.signatures[0]].name :
-                                            product.signatures[0]
-                                    )
+                                    item.signature
                                 }}
                             </td>
-
                             <td v-else style=" text-align: left; cursor: pointer" class="text-theme" @click="
                                 pubbtx(
-                                    product.signatures[0]
+                                    item.signature
                                 )
                                 ">
                                 {{
-                                    promaster[product.signatures[0]] ?
-                                        promaster[product.signatures[0]].name :
-                                        product.signatures[0]
+                                    stringcate(item.signature)
                                 }}
                             </td>
                             <td style=" text-align: left">
@@ -56,85 +49,51 @@
                       line-height: 18px;
                       text-align: center;
                       cursor: auto;">
-                                    {{
-                                        textValue(
-                                            product.message.instructions[0]
-                                                .parsed.type == "transfer" ? "Transfer" : "token_transfer"
-                                        )
-                                    }}
+                                    {{ textValue(item.type) }}
                                 </button>
                             </td>
                             <td style=" text-align: left; cursor: pointer" class="text-theme" @click="
                                 pubbleys(
-                                    product.message.instructions[0].parsed
-                                        .info.source
+                                    item.source
                                 )
                                 ">
                                 {{ stringcate(
-                                    titleUrl(product.message.instructions[0].parsed.info.source).url
-                                ) }} 
-                                <img v-if="titleUrl(product.message.instructions[0].parsed.info.source).type" v-for="(datas,indexs) in titleUrl(product.message.instructions[0].parsed.info.source).certificates" :key="indexs" :src="datas.img" width="16" class="marginRight8" alt="">
-                                <!-- <img v-if="titleUrl(product.message.instructions[0].parsed.info.source).type"
-                                    src="../../../src//assets//renzheng.png" width="16" alt=""> -->
+                                    titleUrl(item.source).url
+                                ) }}
+                                <img v-if="titleUrl(item.source).type"
+                                    v-for="(datas, indexs) in titleUrl(item.source).certificates" :key="indexs"
+                                    :src="datas.img" width="16" class="marginRight8" alt="">
                             </td>
                             <td style=" text-align: left; cursor: pointer" class="text-theme" @click="
                                 pubbleys(
-                                    product.message.instructions[0].parsed
-                                        .info.destination
+                                    item.destination
                                 )
                                 ">
-                                {{ product.message.instructions.length == 1 ?
-                                    stringcate(
-                                        titleUrl(product.message.instructions[0]
-                                            .parsed.info.destination).url
-                                    ) : stringcate(
-                                        titleUrl(product.message.instructions[1]
-                                            .parsed.info.destination).url
-                                    )
+                                {{ stringcate(
+                                    titleUrl(item.destination).url
+                                )
                                 }}
-                                 <!-- <img v-if="titleUrl(product.message.instructions.length == 1 ? product.message.instructions[0]
-                                    .parsed.info.destination : product.message.instructions[1]
-                                        .parsed.info.destination).type" src="../../../src//assets//renzheng.png" width="16"
-                                    alt=""> -->
-                                <img v-if="titleUrl(product.message.instructions.length == 1 ? product.message.instructions[0]
-                                    .parsed.info.destination : product.message.instructions[1]
-                                        .parsed.info.destination).type" v-for="(datas,indexs) in titleUrl(product.message.instructions.length == 1 ? product.message.instructions[0]
-                                    .parsed.info.destination : product.message.instructions[1]
-                                        .parsed.info.destination).certificates" :key="indexs" :src="datas.img" width="16" class="marginRight8" alt="">
+                                <img v-if="titleUrl(item.destination).type"
+                                    v-for="(datas, indexs) in titleUrl(item.destination).certificates" :key="indexs"
+                                    :src="datas.img" width="16" class="marginRight8" alt="">
 
                             </td>
                             <td style=" text-align: left">
-                                {{ product.message.instructions.length == 1 ?
-                                    product.message.instructions[0]
-                                        .parsed.info.mint ? product.message.instructions[0]
-                                            .parsed.info.tokenAmount.uiAmount : toFexedStake(
-                                                product.message.instructions[0].parsed
-                                                    .info.lamports
-                                            ) : product.message.instructions[1]
-                                                .parsed.info.mint ? product.message.instructions[1]
-                                                    .parsed.info.tokenAmount.uiAmount : toFexedStake(
-                                                        product.message.instructions[1].parsed
-                                                            .info.lamports
-                                                    )
-                                }}
+                                {{ item.type == 'token_transfer' ? item.uiAmount :
+                                    (typeof item.uiAmount == 'number' ? toFexedStake( item.uiAmount /1000000000) : item.uiAmount) }}
                             </td>
-                            <td style=" text-align: left;" :style="product.message.instructions[0]
-                                .parsed.info.mint ? 'cursor: pointer' : ''" class="text-theme" @click="pubbleys(
-                                    product.message.instructions[0]
-                                        .parsed.info.mint ? product.message.instructions[0]
-                                            .parsed.info.mint : ''
-                                )">
+                            <td style=" text-align: left;" @click="pubbleys(
+                                item.type == 'token_transfer' ? item.mint : ''
+                            )" :class="item.type == 'token_transfer' ? 'text-theme' : ''"
+                                :style="item.type == 'token_transfer' ? 'cursor: pointer' : ''">
                                 {{
                                     stringcate(
-                                        product.message.instructions[0]
-                                            .parsed.info.mint ? product.message.instructions[0]
-                                                .parsed.info.mint : "BTG"
+                                        item.mint
                                     )
                                 }}
                             </td>
-
                             <td style=" text-align: left">
-                                {{ timeFormatter(orderData[index].result.blockTime * 1000) }} &nbsp;
+                                {{ timeFormatter(item.blockTime * 1000) }} &nbsp;
                             </td>
                         </tr>
                     </tbody>
@@ -176,15 +135,73 @@ const arrayData = ref([]);
 const fetchOrderData = async () => {
     try {
         const res = await order("new_transactions");
+
         for (let i in res) {
-            if (res[i].result && res[i].result.transaction.message.instructions.length < 3) {
-                arrayData.value.push(res[i].result.transaction)
+            // if (res[i].result && res[i].result.transaction.message.instructions.length < 3) {
+            // arrayData.value.push(res[i].result.transaction);
+            let etach = res[i].result.transaction.message.instructions;
+
+            if (etach[etach.length - 1].parsed.type == "transfer" && etach[etach.length - 1].programId == "11111111111111111111111111111111") {
+                let data = {
+                    type: "transfer",
+                    signature: res[i].result.transaction.signatures[0],
+                    source: etach[0].parsed.info.source,
+                    destination: etach[0].parsed.info.destination,
+                    uiAmount: etach[0].parsed.info.lamports,
+                    mint: 'BTG',
+                    blockTime: res[i].result.blockTime,
+                }
+                arrayData.value.push(data);
+            } else if (etach[etach.length - 1].parsed.type == "transferChecked" && etach[etach.length - 1].programId == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" || etach[etach.length - 1].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c") {
+                let data = {
+                    type: "token_transfer",
+                    signature: res[i].result.transaction.signatures[0],
+                    source: etach[etach.length - 1].parsed.info.source,
+                    destination: etach[etach.length - 1].parsed.info.destination,
+                    uiAmount: etach[0].parsed.info.tokenAmount.uiAmount,
+                    mint: etach[0].parsed.info.mint,
+                    blockTime: res[i].result.blockTime,
+                }
+                arrayData.value.push(data);
+            } else if (etach[etach.length - 1].parsed.type == "delegate" && etach[etach.length - 1].programId == "Stake11111111111111111111111111111111111111") {
+                let data = {
+                    type: "stake",
+                    signature: res[i].result.transaction.signatures[0],
+                    source: etach[etach.length - 1].parsed.info.stakeAuthority,
+                    destination: etach[etach.length - 1].parsed.info.stakeAccount,
+                    uiAmount: etach[0].parsed.info.lamports ? etach[0].parsed.info.lamports : 'N/A',
+                    mint: 'BTG',
+                    blockTime: res[i].result.blockTime,
+                }
+                arrayData.value.push(data);
+            } if (etach[etach.length - 1].parsed.type == "deactivate") {
+                let data = {
+                    type: "unstake",
+                    signature: res[i].result.transaction.signatures[0],
+                    source: etach[etach.length - 1].parsed.info.stakeAuthority,
+                    destination: etach[etach.length - 1].parsed.info.stakeAccount,
+                    uiAmount: "N/A",
+                    mint: 'BTG',
+                    blockTime: res[i].result.blockTime,
+                }
+                arrayData.value.push(data);
+            } else if (etach[etach.length - 1].parsed.type == "withdraw") {
+                let data = {
+                    type: "withdraw",
+                    signature: res[i].result.transaction.signatures[0],
+                    source: etach[etach.length - 1].parsed.info.withdrawAuthority,
+                    destination: etach[etach.length - 1].parsed.info.destination,
+                    uiAmount: (etach[etach.length - 1].parsed.info.lamports),
+                    mint: 'BTG',
+                    blockTime: res[i].result.blockTime,
+                }
+                arrayData.value.push(data);
             }
+            // }
         }
+        console.log();
 
-        orderData.value = res.filter(item => item.result != null);
-
-        appStore.setTransaction(JSON.stringify(orderData.value));
+        appStore.setTransaction(JSON.stringify(arrayData.value));
     } catch (err) {
         console.error("Error fetching order data:", err);
     }
@@ -195,16 +212,35 @@ const timeFormatter = (time) => {
 };
 
 const stringcate = (str) => {
-    if (str.length < 10) {
-        return str;
+    if (str) {
+        if (str.length < 10) {
+            return str;
+        } else {
+            return str.slice(0, 5) + "..." + str.slice(-5);
+        }
     } else {
-        return str.slice(0, 5) + "..." + str.slice(-5);
+        return 'N/A'
     }
 };
 
 const toFexedStake = (num) => {
-    if (num) {
-        return JSON.parse((num / 1000000000).toFixed(5));
+    console.log(num);
+    console.log(typeof num);
+    
+    if (typeof num !== 'number') {
+
+        return num;
+    }
+
+    // 检查整数部分是否大于1
+    if (Math.floor(Math.abs(num)) > 1) {
+        return Number(num).toFixed(2);
+    } else if (Math.abs(num) < 1 && num !== 0) {
+        // 对于绝对值小于1且非零的数，保留5位小数
+        return Number(num).toFixed(6);
+    } else {
+        // 如果是0或者整数部分等于1，则不做特殊处理，直接返回原值
+        return num.toString();
     }
 };
 
@@ -223,12 +259,16 @@ const soltResult = (solt) => {
 
 
 const pubbleys = (url) => {
-    router.push({
-        name: "address",
-        params: {
-            url: url,
-        },
-    })
+    console.log(url);
+
+    if (url) {
+        router.push({
+            name: "address",
+            params: {
+                url: url,
+            },
+        })
+    }
 };
 
 const pubbtx = (item) => {

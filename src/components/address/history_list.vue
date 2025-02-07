@@ -9,13 +9,14 @@
                     {{ $t("blocks.title") }}
                 </th>
                 <th>
-                    {{ $t("account.age") }}
-                </th>
-                <th>
                     {{ $t("account.result") }}
                 </th>
+                <th>
+                    {{ $t("account.age") }}
+                </th>
+
             </tr>
-            <template v-if="historyData.length != 0">
+            <template v-if="loading">
                 <tr v-for="(item, index) in paginatedHistoryData" :key="index">
                     <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.signature)">
                         {{ item.signature }}
@@ -23,18 +24,22 @@
                     <td class="text-theme" style="cursor: pointer" @click="slot(item.slot)">
                         {{ come(item.slot) }}
                     </td>
+                    <td :class="item.err == null ? 'color0-255-179-1' : ''" >
+                        {{ item.err == null ? 'Success' : 'Failed' }}
+                    </td>
                     <td>
                         {{ timeSome(item.blockTime) }}
                     </td>
-                    <td>
-                        {{ item.err == null ? 'Success' : 'Failed' }}
-                    </td>
+                    
                 </tr>
             </template>
             <div></div>
         </tbody>
     </table>
-    <div v-if="historyData.length == 0"  class="text-center">
+    <div v-if="!loading" class="text-center">
+        <loading-vue /> 
+    </div>
+    <div v-if="historyData.length == 0 && loading" class="text-center">
         {{ $t("account.available") }}
     </div>
     <div class="justify-end padding-10" v-if="historyData.length != 0">
@@ -50,6 +55,8 @@ import moment from "moment";
 import { order } from "../../request/order";
 import { chainRequest } from "../../request/chain";
 import { useRouter } from "vue-router";
+import LoadingVue from "../../components/block/loading.vue"
+
 const router = useRouter();
 const props = defineProps({
     url: {
@@ -57,6 +64,7 @@ const props = defineProps({
         default: ""
     }
 })
+const loading = ref(false);
 const historyData = ref([]);
 
 const currentPage = ref(1);
@@ -101,6 +109,7 @@ onMounted(async () => {
     } else {
         historyData.value = [];
     }
+    loading.value = true;
 });
 
 const come = (num) => {

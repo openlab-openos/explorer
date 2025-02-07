@@ -30,7 +30,8 @@
     "rentSysvar": "租金系统变量",
     "certificates": "证书",
     "protocol": "协议",
-    "rate": "利率",
+    "rate": "价格",
+    "timeRemaining":"生效时间",
     "navigation": {
         "title": "导航",
         "dashboard": "仪表盘",
@@ -73,7 +74,7 @@
         "daily_output": "每日产出",
         "monthly_output": "每月产出",
         "annual_output": "每年产出",
-        "exchange_rate": "汇率",
+        "exchange_rate": "价格",
         "update_at_a_day": "更新于",
         "reason_words_ido_stage": "原因：",
         "when_listing": "上市价格 5 USD",
@@ -94,9 +95,9 @@
         "nominal_staking_apy": "名义质押年化收益率",
         "node_versions": "节点版本",
         "name": "名称",
-        "pubkey": "投票公钥",
+        "pubkey": "投票地址",
         "activated_stake": "激活质押",
-        "gossip": "八卦",
+        "gossip": "IP",
         "status": "状态"
     },
     "blocks": {
@@ -149,7 +150,7 @@
         "program": "程序",
         "from_address": "来源地址",
         "to_address": "目标地址",
-        "transfer_amount": "转账金额",
+        "transfer_amount": " 24小时转账量",
         "account_input(s)": "账户输入",
         "address": "地址",
         "guange": "变化",
@@ -244,7 +245,10 @@
         "uiamount": "金额",
         "program": "程序",
         "accounts": "账户",
-        "name": "名称"
+        "name": "名称",
+        "pubkey":"质押地址",
+        "Amount":"数量",
+        "type":"状态"
     },
     "nede": {
         "openverse_mainnet": "Openverse 主网",

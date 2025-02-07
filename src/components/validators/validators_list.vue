@@ -25,7 +25,7 @@
                                     </span>
                                 </td>
                                 <td style="text-align: left" v-if="log.pubkey">
-                                    <span class="text-theme" style="cursor: pointer" @click="pubbleys(log.pubkey)">
+                                    <span class="text-theme" style="cursor: pointer" @click="pubbleys(log.votepubkey)">
                                         <!-- {{
                                         stringcate(
                                             promaster[log.pubkey]
@@ -76,12 +76,12 @@
 
 <script setup>
 import CountUp from "vue-countup-v3";
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watchEffect } from "vue";
 import { useAppStore } from "@/stores/index";
 import { chainRequest } from "../../request/chain";
 import { useRouter } from "vue-router";
 const props = defineProps({
-    type:{
+    type: {
         type: Boolean,
         default: false
     }
@@ -108,81 +108,83 @@ const handlePageChange = (newPage) => {
 
 const getActivityLogData = async () => {
     let res = appStore.getvaildators;
-        let ClusterNodes_list = res[0].result;
-        let ProgramAccounts_list = res[1].result;
-        let VoteAccounts_list = res[2].result;
-        let list = [];
-        console.log(ClusterNodes_list);
-        console.log(VoteAccounts_list);
-        
-        for (let i in ProgramAccounts_list) {
-            for (let j in ClusterNodes_list) {
-                if (ClusterNodes_list[j].account.data.parsed) {
-                    for (let y in ClusterNodes_list[j].account.data.parsed.info.keys) {
-                        if (
-                            ClusterNodes_list[j].account.data.parsed.info.keys[y].signer ==
-                            true
-                        ) {
-                            if (
-                                ProgramAccounts_list[i].pubkey ==
-                                ClusterNodes_list[j].account.data.parsed.info.keys[y].pubkey
-                            ) {
-                                list.push({
-                                    ip: ProgramAccounts_list[i].gossip.split(":")[0],
-                                    name: ClusterNodes_list[j].account.data.parsed.info.configData
-                                        .name,
-                                    pubkey: ProgramAccounts_list[i].pubkey,
-                                    icon: ClusterNodes_list[j].account.data.parsed.info.configData
-                                        .iconUrl,
-                                    version: ProgramAccounts_list[i].version,
+    console.log(res);
+    
+    let ClusterNodes_list = res[0].result;
+    let ProgramAccounts_list = res[1].result;
+    let VoteAccounts_list = appStore.getvoteAccount.result;
+    let list = [];
+    console.log(ClusterNodes_list);
+    console.log(VoteAccounts_list);
 
-                                    activatedStake: "",
-                                    votepubkey: "",
-                                });
-                            }
+    for (let i in ProgramAccounts_list) {
+        for (let j in ClusterNodes_list) {
+            if (ClusterNodes_list[j].account.data.parsed) {
+                for (let y in ClusterNodes_list[j].account.data.parsed.info.keys) {
+                    if (
+                        ClusterNodes_list[j].account.data.parsed.info.keys[y].signer ==
+                        true
+                    ) {
+                        if (
+                            ProgramAccounts_list[i].pubkey ==
+                            ClusterNodes_list[j].account.data.parsed.info.keys[y].pubkey
+                        ) {
+                            list.push({
+                                ip: ProgramAccounts_list[i].gossip.split(":")[0],
+                                name: ClusterNodes_list[j].account.data.parsed.info.configData
+                                    .name,
+                                pubkey: ProgramAccounts_list[i].pubkey,
+                                icon: ClusterNodes_list[j].account.data.parsed.info.configData
+                                    .iconUrl,
+                                version: ProgramAccounts_list[i].version,
+
+                                activatedStake: "",
+                                votepubkey: "",
+                            });
                         }
                     }
                 }
             }
         }
-        let listCount = 0;
-        for (let i in list) {
-            for (let h in VoteAccounts_list.current) {
-                if (VoteAccounts_list.current[h].nodePubkey == list[i].pubkey) {
-                    list[i].activatedStake = VoteAccounts_list.current[h].activatedStake;
-                    list[i].votepubkey = VoteAccounts_list.current[h].votePubkey;
-                } else {
-                }
-            }
-            if (list[i].activatedStake) {
-                listCount += JSON.parse(list[i].activatedStake);
+    }
+    let listCount = 0;
+    for (let i in list) {
+        for (let h in VoteAccounts_list.current) {
+            if (VoteAccounts_list.current[h].nodePubkey == list[i].pubkey) {
+                list[i].activatedStake = VoteAccounts_list.current[h].activatedStake;
+                list[i].votepubkey = VoteAccounts_list.current[h].votePubkey;
+            } else {
             }
         }
-        list.sort((a, b) => {
-            let nameA = a.name.toUpperCase();
-            let nameB = b.name.toUpperCase();
-            if (nameA < nameB) {
-                return -1;
-            }
-            if (nameA > nameB) {
-                return 1;
-            }
-            return 0;
-        });
-        countLog.value = listCount;
+        if (list[i].activatedStake) {
+            listCount += JSON.parse(list[i].activatedStake);
+        }
+    }
+    list.sort((a, b) => {
+        let nameA = a.name.toUpperCase();
+        let nameB = b.name.toUpperCase();
+        if (nameA < nameB) {
+            return -1;
+        }
+        if (nameA > nameB) {
+            return 1;
+        }
+        return 0;
+    });
+    countLog.value = listCount;
 
-        ActivityLogData.value = list;
-        console.log(list);
-        
-        totalItems.value = list.length;
-        appStore.setValidators(JSON.stringify(list));
-        appStore
-            .getPartData(
-                (JSON.parse(ClusterNodes_list.length) - JSON.parse(list.length)) /
-                JSON.parse(ClusterNodes_list.length)
-            )
-            .toFixed(2);
-        sessionStorage.setItem("accout", JSON.stringify(list));
+    ActivityLogData.value = list;
+    console.log(list);
+
+    totalItems.value = list.length;
+    appStore.setValidators(JSON.stringify(list));
+    appStore
+        .getPartData(
+            (JSON.parse(ClusterNodes_list.length) - JSON.parse(list.length)) /
+            JSON.parse(ClusterNodes_list.length)
+        )
+        .toFixed(2);
+    sessionStorage.setItem("accout", JSON.stringify(list));
 };
 const countplount = (num) => {
     return ((num / countLog.value) * 100).toFixed(2) + "%";
@@ -200,10 +202,12 @@ const stringcate = (str) => {
     }
 };
 onMounted(() => {
-    getActivityLogData();
+    watchEffect(async () => {
+        await getActivityLogData();
+    })
 });
 const pubbleys = (url) => {
-  router.push({
+    router.push({
         name: "address",
         params: {
             url: url,

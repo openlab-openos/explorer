@@ -3,31 +3,47 @@
         <tbody>
             <tr>
                 <th>
-                    {{$t("account.pubkey")}}
+                    {{ $t("account.pubkey") }}
                 </th>
                 <th>
-                    {{$t("validators.pubkey")}}
+                    {{ $t("validators.pubkey") }}
                 </th>
                 <th>
-                    Amount&nbsp;(BTG)
+                    {{ $t("account.Amount") }}(BTG)
                 </th>
                 <th>
-                    {{$t("transactions.btg")}}
+                    {{ $t("tokens.type") }}
                 </th>
                 <th>
-                    {{$t("timeRemaining")}}
+                    {{ $t("account.type") }}
+                </th>
+                <th>
+                    {{ $t("account.timeRemaining") }}
                 </th>
             </tr>
-            <template v-if="historyData.length != 0">
+            <template v-if="loading">
                 <tr v-for="(item, index) in paginatedHistoryData" :key="index">
                     <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.pubkey)">
                         {{ item.pubkey }}
                     </td>
-                    <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.account.data.parsed.info.stake.delegation.voter)">
-                        {{ item.account.data.parsed.info.stake.delegation.voter }}
+                    <!-- <template v-if="item.account.data.parsed.info.stake"> -->
+                    <td class="text-theme" style="cursor: pointer"
+                        @click="pubbtx(item.account.data.parsed.info.stake ? item.account.data.parsed.info.stake.delegation.voter : '')">
+                        {{ item.account.data.parsed.info.stake ? item.account.data.parsed.info.stake.delegation.voter :
+                        'N/A' }}
+                        <!-- item.account.data.parsed.info.stake.delegation.voter -->
+                    </td>
+                    <!-- </template> -->
+                     <td v-if="item.account.data.parsed.type == 'initialized'">
+                        {{ percent(item.account.lamports ?
+                            item.account.lamports/1000000000 : 'N/A') }}
+                     </td>
+                    <td v-else>
+                        {{ percent(item.account.data.parsed.info.stake ?
+                            item.account.data.parsed.info.stake.delegation.stake/1000000000 : 'N/A') }}
                     </td>
                     <td>
-                        {{ percent(item.account.data.parsed.info.stake.delegation.stake) }}
+                        {{ item.account.data.parsed.type }}
                     </td>
                     <td
                         :style="item.state == 'active' ? 'color:rgba(60,210,165,1)' : (item.state == 'inactive' ? 'color:rgba(60,210,165,1)' : 'color:rgba(225,250,7,1)')">
@@ -41,7 +57,10 @@
             </template>
         </tbody>
     </table>
-    <div v-if="historyData.length == 0" class="text-center">
+    <div v-if="!loading" class="text-center">
+        <loading-vue v-if="true" />
+    </div>
+    <div v-if="historyData.length == 0 && loading" class="text-center">
         {{ $t("account.available") }}
     </div>
     <div class="justify-end padding-10" v-if="historyData.length != 0">
@@ -61,6 +80,7 @@ import { useRouter } from "vue-router"
 import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
 import { useAppStore } from "@/stores/index";
 
+import LoadingVue from "../../components/block/loading.vue"
 
 const connection = new Connection("https://us-seattle.openverse.network/api", "confirmed");
 const appStore = useAppStore();
@@ -74,6 +94,7 @@ const props = defineProps({
 
 });
 console.log(props)
+const loading = ref(false);
 const historyData = ref([]);
 const proportion_amount = ref(0);
 const currentPage = ref(1);
@@ -127,9 +148,10 @@ onMounted(async () => {
     for (let i in historyData.value) {
         historyData.value[i].state = await stateFunction(historyData.value[i].pubkey);
         historyData.value[i].time = await fetchData();
-        
+
     }
     console.log(historyData.value)
+    loading.value = true;
     totalItems.value = historyData.value.length;
 });
 
@@ -168,16 +190,33 @@ const timeSome = (time) => {
     return moment(time * 1000).fromNow();
 }
 
-const percent = (lod) => {
+const percent = (num) => {
 
-    return (lod / 1000000000).toFixed(5);
+        if (typeof num !== 'number') {
+
+        return num;
+    }
+
+    // 检查整数部分是否大于1
+    if (Math.floor(Math.abs(num)) > 1) {
+        return Number(num).toFixed(2);
+    } else if (Math.abs(num) < 1 && num !== 0) {
+        // 对于绝对值小于1且非零的数，保留5位小数
+        return Number(num).toFixed(6);
+    } else {
+        // 如果是0或者整数部分等于1，则不做特殊处理，直接返回原值
+        return num.toString();
+    }
 }
 const pubbtx = (url) => {
-    router.push({
-        name: "address",
-        params: {
-            url: url,
-        },
-    })
+    if (url) {
+        router.push({
+            name: "address",
+            params: {
+                url: url,
+            },
+        })
+    }
 }
+
 </script>

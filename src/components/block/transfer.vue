@@ -4,7 +4,7 @@
     <card class="mb-3" style="height: 160px">
       <card-body>
         <div class="d-flex fw-bold small mb-3">
-          <span class="flex-grow-1">{{ $t('transaction.transfer_amount') }}</span>
+          <span class="flex-grow-1"> {{ $t('transaction.transfer_amount') }}</span>
         </div>
         <div class="row align-items-center mb-2" style="height: 30px">
           <div style="
@@ -89,7 +89,7 @@ const timeout = () => {
     (
       dataTime.value /
       ((now.getTime() / 1000).toFixed(0) -
-        transferData.value[transferData.value.length - 1].result.blockTime)
+        transferData.value[transferData.value.length - 1].blockTime)
     ).toFixed(0) * transferData.value.length
   );
 };
@@ -103,20 +103,20 @@ const info = ref();
 const type = ref(false);
 
 const rendered = (data) => {
+  console.log(data);
 
   if (data.length !== 0) {
     for (let i in data) {
-      if (data[i].result.blockTime * 1000 > dataTime.value) {
+      if (data[i].blockTime * 1000 > dataTime.value) {
         data.push(data[i]);
       }
-      if (data[i].result.transaction.message.instructions[0].parsed.info.lamports) {
+      if (data[i].uiAmount) {
         priceTrans.value +=
-          data[
-            i
-          ].result.transaction.message.instructions[0].parsed.info.lamports;
+        data[i].uiAmount
       }
     }
   }
+  console.log(priceTrans.value);
 
   info.value = [
     {
@@ -145,6 +145,8 @@ const rendered = (data) => {
       language: "dashboard.per_transactions"
     },
   ];
+  console.log(info.value);
+
   type.value = true;
 };
 
@@ -157,15 +159,28 @@ onMounted(() => {
         )
       }
       let data = JSON.parse(appStore.Transaction);
-      let dataArray = [];
-      for (let i in data) {
-        if (data[i].result.transaction.message.instructions.length < 3) {
-          dataArray.push(data[i])
+      console.log(data);
+      if (data.length != 0) {
+        let dataArray = [];
+        for (let i in data) {
+          let etach = data[i];
+          console.log(etach);
+          
+          // return;
+          if (etach.type == "transfer") {
+             dataArray.push(data[i])
+
+          }
+          console.log(dataArray);
+
+          
         }
+        if (dataArray.length != 0) {
+            rendered(dataArray);
+          }
+
       }
-      if (dataArray.length != 0) {
-        rendered(dataArray);
-      }
+
     }
 
 

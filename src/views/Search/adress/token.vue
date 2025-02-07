@@ -272,7 +272,7 @@ const toFexedStake = (num, decimals) => {
     }
     const divisor = Math.pow(10, JSON.parse(decimals));
 
-    return (JSON.parse(num) / divisor).toFixed(2);;
+    return (JSON.parse(num) / divisor).toFixed(2);
 
 };
 const pubbtx = (url) => {

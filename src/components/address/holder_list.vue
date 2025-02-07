@@ -39,7 +39,8 @@
         </tbody>
     </table>
     <div v-if="historyData.length == 0" class="text-center">
-        {{ $t("account.available") }}
+        
+        <loading-vue  /> <text>{{ $t("account.available") }}</text>
     </div>
     <div class="justify-end padding-10" v-if="historyData.length != 0">
         <!-- <el-pagination background :hide-on-single-page="true" :page-sizes="[25]" layout="prev, pager, next" :total="historyData.length" /> -->
@@ -56,6 +57,7 @@ import { chainRequest } from "../../request/chain";
 import { proportionAmount } from "../method/proportion_account"
 import { useRouter } from "vue-router"
 import { titleUrl } from "../../components/method/title_url"
+import LoadingVue from "../../components/block/loading.vue"
 
 const router = useRouter();
 const props = defineProps({

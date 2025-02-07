@@ -20,17 +20,17 @@
     "mint": "Mint",
     "viewaccount": "View account",
     "pledge": "Stakes",
-    "newAccount":"NewAccount",
-    "bufferAccount":"BufferAccount",
-    "clockSysvar":"ClockSysvar",
-    "maxDataLen":"Mac Data Len",
-    "payerAccount":"Payer Account",
-    "programAccount":"Program Account",
-    "programDataAccount":"Program Data Account",
-    "rentSysvar":"RentSysvar",
-    "certificates":"Certificates",
-    "protocol":"Protocol",
-    "rate":"Rate",
+    "newAccount": "NewAccount",
+    "bufferAccount": "BufferAccount",
+    "clockSysvar": "ClockSysvar",
+    "maxDataLen": "Mac Data Len",
+    "payerAccount": "Payer Account",
+    "programAccount": "Program Account",
+    "programDataAccount": "Program Data Account",
+    "rentSysvar": "RentSysvar",
+    "certificates": "Certificates",
+    "protocol": "Protocol",
+    "rate": "Rate",
     "navigation": {
         "title": "Navigation",
         "dashboard": "Dashboard",
@@ -41,7 +41,7 @@
         "document": "Document",
         "wallet": "Wallet",
         "website": "Website",
-        "tokens":"Assets"
+        "tokens": "Assets"
     },
     "dashboard": {
         "title": "Dashboard",
@@ -149,7 +149,7 @@
         "program": "Program",
         "from_address": "From Address",
         "to_address": "To Address",
-        "transfer_amount": " Transfer Amount",
+        "transfer_amount": "24H Transfer Amount",
         "account_input(s)": "Account Input(s)",
         "address": "Address",
         "guange": "Change",
@@ -175,7 +175,7 @@
         "authority": "Authority",
         "wallet": "Wallet",
         "token_program": "Token Program",
-        "extensionTypes":"ExtensionTypes"
+        "extensionTypes": "ExtensionTypes"
     },
     "account": {
         "title": "System Account",
@@ -201,7 +201,7 @@
         "type_administration": "Type of administration",
         "list_communication": "Token Holdings",
         "signature": "Signature",
-        "time": "Time",
+        "time": "Age",
         "movement": "Type",
         "primary": "From",
         "destination": "Amount",
@@ -243,10 +243,12 @@
         "initialize": "Initialize",
         "uiamount": "Amount",
         "program": "Program",
-        "accounts":"Account",
-        "name":"Name",
+        "accounts": "Account",
+        "name": "Name",
         "pubkey": "Pubkey",
-        "timeRemaining":"Time Remaining"
+        "timeRemaining": "Time Remaining",
+        "Amount": "Amount",
+        "type": "Status"
     },
     "nede": {
         "openverse_mainnet": "Openverse Mainnet",
@@ -262,16 +264,15 @@
         "first_block": "First Block",
         "last_block": "Last Block Timestamp"
     },
-    "tokens":{
-        "title":"Token",
-        "type":"Type",
-        "owner":"Owner",
-        "lamports":"Lamports",
-        "space":"Space",
-        "decimals":"Decimals",
-        "name":"Name",
-        "symbol":"Symbol",
-        "supply":"Supply"
-
+    "tokens": {
+        "title": "Token",
+        "type": "Type",
+        "owner": "Owner",
+        "lamports": "Lamports",
+        "space": "Space",
+        "decimals": "Decimals",
+        "name": "Name",
+        "symbol": "Symbol",
+        "supply": "Supply"
     }
 }

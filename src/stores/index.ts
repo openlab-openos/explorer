@@ -22,6 +22,7 @@ export const useAppStore = defineStore('app', {
         epochIfo:{},
         RecentPerformanceSamples:{},
         markersdata:[],
+        voteAccount:[],
     }),
     getters: {
         rateData: (state) => {
@@ -80,7 +81,9 @@ export const useAppStore = defineStore('app', {
         },
         getmarkersdata:(state)=>{
             return state.markersdata
-
+        },
+        getvoteAccount:(state)=>{
+            return state.voteAccount
         }
     },
     actions: {
@@ -140,6 +143,9 @@ export const useAppStore = defineStore('app', {
         },
         setMarkersData(data:any){
             return this.markersdata = data
+        },
+        setVoteAccount(data:any){
+            return this.voteAccount = data
         }
     },
     persist: {

@@ -32,9 +32,18 @@ const server = ref([]);
 
 const activeVueref = ref(null);
 const networkref = ref(null);
-
 const router = useRouter();
+// watchEffect(() => {
+//   solttime.value = getTime(
+//     response.slotsInEpoch - response.slotIndex
+//   );
+//   appStore.setEposhTome(solttime.value);
+//   console.log(response);
 
+//   slot.value = response.slotIndex;
+//   inepoch.value = response.slotsInEpoch;
+//   epoch.value = response.epoch;
+// });
 
 const BlockHeightVue = defineAsyncComponent(() =>
   import("../../components/block/blockHeight.vue")
@@ -78,7 +87,7 @@ function selectLanguage(indexValue) {
 watchEffect(() => {
   selectLanguage(appStore.$state.language);
 })
-
+const requestType = ref(true);
 const pubbleys = (url) => {
   router.push({
     name: "address",
@@ -99,66 +108,32 @@ const cote = ref([]);
 const trueTramsatiom = ref([]);
 
 const performanceSamples = async () => {
-  // let requestBody = {
-  //   jsonrpc: "2.0",
-  //   id: 1,
-  //   method: "getRecentPerformanceSamples",
-  //   params: [24],
-  // };
-  // await chainRequest(requestBody)
-  //   .then((response) => {
-      let res = appStore.getRecentPerformanceSamples;
-      for (let i in res) {
-        timeName.value.unshift(
-          JSON.parse(i) + 1 == 1
-            ? "a" + "minutes ago "
-            : JSON.parse(i) + 1 + "minutes ago "
-        );
-        cote.value.push(JSON.parse(res[i].numTransactions));
-        trueTramsatiom.value.push(
-          JSON.parse(res[i].numNonVoteTransactions)
-        );
-        unnumTranstions.value.push(
-          JSON.parse(res[i].numTransactions) +
-          JSON.parse(res[i].numNonVoteTransactions)
-        );
-      }
-    // })
-    // .catch((error) => {
-    //   console.error("Error fetching epoch info:", error);
-    // });
-};
-
-performanceSamples();
-
-const fetchData = async () => {
-  try {
-
-    const response = appStore.getepochInfo;
-    solttime.value = getTime(
-      response.slotsInEpoch - response.slotIndex
+  unnumTranstions.value = [];
+  let res = appStore.getRecentPerformanceSamples;
+  for (let i in res) {
+    timeName.value.unshift(
+      JSON.parse(i) + 1 == 1
+        ? "a" + "minutes ago "
+        : JSON.parse(i) + 1 + "minutes ago "
     );
-    appStore.setEposhTome(solttime.value);
-    if (slot.value === 1) {
-      slot.value = response.slotIndex;
-      inepoch.value = response.slotsInEpoch;
-      epoch.value = response.epoch;
-    }
-  } catch (error) {
-    console.error("Error fetching epoch info:", error);
+    cote.value.push(JSON.parse(res[i].numTransactions));
+    trueTramsatiom.value.push(
+      JSON.parse(res[i].numNonVoteTransactions)
+    );
+    unnumTranstions.value.push(
+      JSON.parse(res[i].numTransactions) +
+      JSON.parse(res[i].numNonVoteTransactions)
+    );
   }
-};
 
-onMounted(() => {
-  fetchData();
-});
+};
 
 const getTime = (timestamp) => {
   return moment(JSON.parse(moment().format("x")) + timestamp * 400).fromNow();
 };
 
 
-const supplyRequest = async () => {
+const supplyRequest = async (epoch, slot, inepoch, solttime) => {
   await chainRequest({
     jsonrpc: "2.0",
     id: 1,
@@ -169,49 +144,24 @@ const supplyRequest = async () => {
         JSON.parse(JSON.stringify(res.result.value.total).slice(0, 9)) / 1000000
       ).toFixed(1);
       console.log(stubly.value);
-      
+
       appStore.setStubly(stubly.value);
       appStore.setStuBlys(res.result.value.total);
     })
     .catch((err) => {
       console.log(err);
     });
-  // await chainRequest({
-  //   jsonrpc: "2.0",
-  //   id: 1,
-  //   method: "getVoteAccounts",
-  //   params: [],
-  // })
-  //   .then((res) => {
-      let btg = appStore.getvaildators[2].result;
-      let btgcont = 0;
-      let btgcount = 0;
-      console.log(btg);
-      
-      if (btg) {
-        for (let i in btg.current) {
-          btgcont += JSON.parse(JSON.stringify(btg.current[i].activatedStake));
-        }
-        btgcount = btgcont;
-        let num = (btgcont / 1000000000).toFixed(0);
-        btgcont = (num / 1000000).toFixed(1);
-      }
-      pubbley.value = btgcont;
-      console.log(pubbley.value);
-      
-      appStore.setBtgcount(btgcount);
-      appStore.setPubbley(pubbley.value);
-    // })
-    // .catch((err) => {
-    //   console.log(err);
-    // });
+  pubbley.value = appStore.pubbley;
 
-  server.value = getServerData();
+  server.value = getServerData(epoch, slot, inepoch, solttime);
+
 };
 
-supplyRequest();
 
-const getServerData = () => {
+const getServerData = (epoch, slot, inepoch, solttime) => {
+  console.log(unnumTranstions.value);
+  console.log(epoch, slot, inepoch, solttime);
+
   Apex = {
     title: {
       style: {
@@ -284,6 +234,8 @@ const getServerData = () => {
       min: 3000,
     },
   };
+  requestType.value = false;
+
   return {
     chart: {
       series: [
@@ -333,22 +285,22 @@ const getServerData = () => {
       {
         name: "epoch_progress",
         // name:"dashboard",
-        total: slot.value,
-        totals: inepoch.value,
+        total: slot,
+        totals: inepoch,
         unit: "",
         progress: "20%",
         time: "dashboard.last_time",
         info: [
           {
             title: "epoch",
-            value: epoch.value,
+            value: epoch,
             class: "text-theme",
             style: "cursor: pointer",
             click: true,
           },
           {
             title: "epoch_time_remaining",
-            value: solttime.value,
+            value: solttime,
             class: "text-theme text-opacity-50",
             style: "",
             click: false,
@@ -379,8 +331,8 @@ const getServerData = () => {
             },
           },
           series: [
-            JSON.parse((slot.value / inepoch.value).toFixed(2)),
-            JSON.parse((1 - slot.value / inepoch.value).toFixed(2)),
+            JSON.parse((slot / inepoch).toFixed(2)),
+            JSON.parse((1 - slot / inepoch).toFixed(2)),
             // 0.39, 0.61,
           ],
         },
@@ -450,6 +402,24 @@ const epochSkip = (num) => {
     },
   });
 };
+
+watchEffect(async () => {
+  const response = appStore.getepochInfo;
+  solttime.value = getTime(
+    response.slotsInEpoch - response.slotIndex
+  );
+  appStore.setEposhTome(solttime.value);
+
+  if (response) {
+
+  }
+  await performanceSamples();
+  if (requestType.value) {
+    console.log(response);
+    await supplyRequest(response.epoch, response.slotIndex, response.slotsInEpoch, solttime.value);
+  }
+
+});
 
 onBeforeUnmount(() => {
   if (activeVueref.value) {
@@ -543,7 +513,7 @@ onBeforeUnmount(() => {
       <orderVue :boolean="true" />
     </div>
     <div class="col-xl-6">
-       <validatorsVue :type="true" />
+      <validatorsVue :type="true" />
     </div>
 
     <!-- END activity-log -->
