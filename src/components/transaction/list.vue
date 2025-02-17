@@ -80,7 +80,8 @@
                             </td>
                             <td style=" text-align: left">
                                 {{ item.type == 'token_transfer' ? item.uiAmount :
-                                    (typeof item.uiAmount == 'number' ? toFexedStake( item.uiAmount /1000000000) : item.uiAmount) }}
+                                    (typeof item.uiAmount == 'number' ? toFexedStake(item.uiAmount / 1000000000) :
+                                item.uiAmount) }}
                             </td>
                             <td style=" text-align: left;" @click="pubbleys(
                                 item.type == 'token_transfer' ? item.mint : ''
@@ -137,66 +138,69 @@ const fetchOrderData = async () => {
         const res = await order("new_transactions");
 
         for (let i in res) {
+            if (res[i].result) {
+                let etach = res[i].result.transaction.message.instructions;
+
+                if (etach[etach.length - 1].parsed.type == "transfer" && etach[etach.length - 1].programId == "11111111111111111111111111111111") {
+                    let data = {
+                        type: "transfer",
+                        signature: res[i].result.transaction.signatures[0],
+                        source: etach[0].parsed.info.source,
+                        destination: etach[0].parsed.info.destination,
+                        uiAmount: etach[0].parsed.info.lamports,
+                        mint: 'BTG',
+                        blockTime: res[i].result.blockTime,
+                    }
+                    arrayData.value.push(data);
+                } else if (etach[etach.length - 1].parsed.type == "transferChecked" && etach[etach.length - 1].programId == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" || etach[etach.length - 1].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c") {
+                    let data = {
+                        type: "token_transfer",
+                        signature: res[i].result.transaction.signatures[0],
+                        source: etach[etach.length - 1].parsed.info.source,
+                        destination: etach[etach.length - 1].parsed.info.destination,
+                        uiAmount: etach[0].parsed.info.tokenAmount.uiAmount,
+                        mint: etach[0].parsed.info.mint,
+                        blockTime: res[i].result.blockTime,
+                    }
+                    arrayData.value.push(data);
+                } else if (etach[etach.length - 1].parsed.type == "delegate" && etach[etach.length - 1].programId == "Stake11111111111111111111111111111111111111") {
+                    let data = {
+                        type: "stake",
+                        signature: res[i].result.transaction.signatures[0],
+                        source: etach[etach.length - 1].parsed.info.stakeAuthority,
+                        destination: etach[etach.length - 1].parsed.info.stakeAccount,
+                        uiAmount: etach[0].parsed.info.lamports ? etach[0].parsed.info.lamports : 'N/A',
+                        mint: 'BTG',
+                        blockTime: res[i].result.blockTime,
+                    }
+                    arrayData.value.push(data);
+                } if (etach[etach.length - 1].parsed.type == "deactivate") {
+                    let data = {
+                        type: "unstake",
+                        signature: res[i].result.transaction.signatures[0],
+                        source: etach[etach.length - 1].parsed.info.stakeAuthority,
+                        destination: etach[etach.length - 1].parsed.info.stakeAccount,
+                        uiAmount: "N/A",
+                        mint: 'BTG',
+                        blockTime: res[i].result.blockTime,
+                    }
+                    arrayData.value.push(data);
+                } else if (etach[etach.length - 1].parsed.type == "withdraw") {
+                    let data = {
+                        type: "withdraw",
+                        signature: res[i].result.transaction.signatures[0],
+                        source: etach[etach.length - 1].parsed.info.withdrawAuthority,
+                        destination: etach[etach.length - 1].parsed.info.destination,
+                        uiAmount: (etach[etach.length - 1].parsed.info.lamports),
+                        mint: 'BTG',
+                        blockTime: res[i].result.blockTime,
+                    }
+                    arrayData.value.push(data);
+                }
+            }
             // if (res[i].result && res[i].result.transaction.message.instructions.length < 3) {
             // arrayData.value.push(res[i].result.transaction);
-            let etach = res[i].result.transaction.message.instructions;
 
-            if (etach[etach.length - 1].parsed.type == "transfer" && etach[etach.length - 1].programId == "11111111111111111111111111111111") {
-                let data = {
-                    type: "transfer",
-                    signature: res[i].result.transaction.signatures[0],
-                    source: etach[0].parsed.info.source,
-                    destination: etach[0].parsed.info.destination,
-                    uiAmount: etach[0].parsed.info.lamports,
-                    mint: 'BTG',
-                    blockTime: res[i].result.blockTime,
-                }
-                arrayData.value.push(data);
-            } else if (etach[etach.length - 1].parsed.type == "transferChecked" && etach[etach.length - 1].programId == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" || etach[etach.length - 1].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c") {
-                let data = {
-                    type: "token_transfer",
-                    signature: res[i].result.transaction.signatures[0],
-                    source: etach[etach.length - 1].parsed.info.source,
-                    destination: etach[etach.length - 1].parsed.info.destination,
-                    uiAmount: etach[0].parsed.info.tokenAmount.uiAmount,
-                    mint: etach[0].parsed.info.mint,
-                    blockTime: res[i].result.blockTime,
-                }
-                arrayData.value.push(data);
-            } else if (etach[etach.length - 1].parsed.type == "delegate" && etach[etach.length - 1].programId == "Stake11111111111111111111111111111111111111") {
-                let data = {
-                    type: "stake",
-                    signature: res[i].result.transaction.signatures[0],
-                    source: etach[etach.length - 1].parsed.info.stakeAuthority,
-                    destination: etach[etach.length - 1].parsed.info.stakeAccount,
-                    uiAmount: etach[0].parsed.info.lamports ? etach[0].parsed.info.lamports : 'N/A',
-                    mint: 'BTG',
-                    blockTime: res[i].result.blockTime,
-                }
-                arrayData.value.push(data);
-            } if (etach[etach.length - 1].parsed.type == "deactivate") {
-                let data = {
-                    type: "unstake",
-                    signature: res[i].result.transaction.signatures[0],
-                    source: etach[etach.length - 1].parsed.info.stakeAuthority,
-                    destination: etach[etach.length - 1].parsed.info.stakeAccount,
-                    uiAmount: "N/A",
-                    mint: 'BTG',
-                    blockTime: res[i].result.blockTime,
-                }
-                arrayData.value.push(data);
-            } else if (etach[etach.length - 1].parsed.type == "withdraw") {
-                let data = {
-                    type: "withdraw",
-                    signature: res[i].result.transaction.signatures[0],
-                    source: etach[etach.length - 1].parsed.info.withdrawAuthority,
-                    destination: etach[etach.length - 1].parsed.info.destination,
-                    uiAmount: (etach[etach.length - 1].parsed.info.lamports),
-                    mint: 'BTG',
-                    blockTime: res[i].result.blockTime,
-                }
-                arrayData.value.push(data);
-            }
             // }
         }
         console.log();

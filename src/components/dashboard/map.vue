@@ -229,8 +229,18 @@ const getActivityLogData = async () => {
 
 
             mapData.value = mapArray.value;
+            console.log(mapArray.value);
+
             traffic.value = getTrafficData(mapArray.value);
         }
+        let aaaaa = [];
+        console.log(mapArray.value);
+
+        for (let i in mapArray.value) {
+            aaaaa.push(mapArray.value[i].coords);
+        }
+        console.log(aaaaa);
+
     });
 };
 
@@ -286,8 +296,8 @@ const renderMap = async () => {
     });
     for (let i in markers_data) {
         if (markers_data[i].count > 1) {
-            let lat = Number(markers_data[i].coords[0]); // 转换或默认为0
-            let lng = Number(markers_data[i].coords[1]); // 转换或默认为0
+            let lat = JSON.parse(markers_data[i].coords[0]); // 转换或默认为0
+            let lng = JSON.parse(markers_data[i].coords[1]); // 转换或默认为0
 
             // 现在进行数值加法
 
@@ -297,10 +307,9 @@ const renderMap = async () => {
                 lat += 1;
             }
             lng += markers_data[i].count * 1.1; // 这可能是一个合理的经度偏移量
-
             // 更新coords数组
-            markers_data[i].coords[0] = lat;
-            markers_data[i].coords[1] = lng;
+            markers_data[i].coords[0] = lat.toFixed(4);
+            markers_data[i].coords[1] = lng.toFixed(4);
         }
 
         let currentLat = Number(markers_data[i].coords[0]);
@@ -310,13 +319,48 @@ const renderMap = async () => {
                     let compareLat = Number(markers_data[j].coords[0]); // 比较项的纬度
 
                     if (Math.abs(currentLat - compareLat) < 1) {
-                        markers_data[j].coords[0] -= 1;
+                        // let lat = Number(markers_data[j].coords[0]) -= 1;
+                        // markers_data[j].coords[0] = lat.toFixed(4);
+                        let lat = (markers_data[j].coords[1] += 1);
+                        markers_data[j].coords[1] = lat;
                         // markers_data[j].coords[1] += 1;
                     }
                 }
             }
         }
     }
+    // for (let i in markers_data) {
+    //     if (markers_data[i].count > 1) {
+    //         let lat = Number(markers_data[i].coords[0]);
+    //         let lng = Number(markers_data[i].coords[1]);
+
+    //         if (i % 2 == 0) {
+    //             lat -= 1;
+    //         } else {
+    //             lat += 1;
+    //         }
+
+    //         lng += markers_data[i].count * 1.1;
+
+    //         markers_data[i].coords[0] = parseFloat(lat.toFixed(4));
+    //         markers_data[i].coords[1] = parseFloat(lng.toFixed(4));
+    //     }
+
+    //     let currentLat = Number(markers_data[i].coords[0]);
+
+    //     for (let j = 0; j < markers_data.length; j++) {
+    //         if (j !== i) {
+    //             let compareLat = Number(markers_data[j].coords[0]);
+
+    //             if (Math.abs(currentLat - compareLat) < 1) {
+    //                 let newLng = Number(markers_data[j].coords[1]) + 1;
+    //                 markers_data[j].coords[1] = parseFloat(newLng.toFixed(4));
+    //             }
+    //         }
+    //     }
+    // }
+    console.log(markers_data);
+
     appStore.setMarkersData(markers_data);
     map.value.addMarkers(markers_data);
 

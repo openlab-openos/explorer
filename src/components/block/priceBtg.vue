@@ -4,7 +4,7 @@
     <card class="mb-3" style="height: 160px">
       <card-body>
         <div class="d-flex fw-bold small mb-3">
-          <span class="flex-grow-1"> {{ $t("dashboard.exchange_rate")  }} </span>
+          <span class="flex-grow-1"> {{ $t("dashboard.exchange_rate") }} </span>
         </div>
         <div class="row align-items-center mb-2" style="height: 30px">
           <div style="
@@ -43,21 +43,16 @@ import apexchart from "@/components/plugins/Apexcharts.vue";
 import i18n from "@/i18n"
 const appVariable = useAppVariableStore();
 
-
 const appStore = useAppStore();
 const rate = ref();
 
 const info = ref([]);
 
-const echartsChar = ref(null);
-
 // 语言
-function selectLanguage(indexValue){
-  
-  
+function selectLanguage(indexValue) {
   i18n.global.locale = indexValue;
 }
-watchEffect(()=>{
+watchEffect(() => {
   selectLanguage(appStore.$state.language);
 })
 
@@ -110,8 +105,8 @@ const infoRender = () => {
     appStore.datarate.updated_at == null
       ? "a day ago"
       : appStore.datarate.updated_at;
-      console.log(appStore.datarate);
-      
+  console.log(appStore.datarate);
+
   info.value = [
     {
       icon: "fas fa-lg fa-fw me-2 fa-hourglass",
@@ -123,9 +118,11 @@ const infoRender = () => {
       language: "dashboard.reason_words_ido_stage",
       text: " " + appStore.datarate.reason_words,
     },
-    { icon: "fas fa-lg fa-fw me-2 fa-money-bill-alt",
+    {
+      icon: "fas fa-lg fa-fw me-2 fa-money-bill-alt",
       language: "dashboard.when_listing",
-     text: "" },
+      text: ""
+    },
   ];
 }
 

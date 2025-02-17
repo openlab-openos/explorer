@@ -466,7 +466,7 @@ export const ipAddresses = {
       "country_name": "Singapore"
     }, {
       ip: "144.126.155.214",
-      location: [-90.1985, 38.6364], // 注意：经纬度顺序为 [latitude, longitude]
+      location: [38.6364, -90.1985], // 注意：经纬度顺序为 [latitude, longitude]
       try: "US", // 使用国家代码作为 try 字段
       code: "NA", // 使用洲代码作为 code 字段
       timezone: "America/Chicago",
@@ -487,19 +487,12 @@ export const ipAddresses = {
       country_name: "Germany"
     }, {
       ip: "89.117.144.192",
-      location: [-90.1913, 38.6346], // 经度在前，纬度在后
+      location: [38.6346,-90.1913 ], // 经度在前，纬度在后
       try: "US", // 使用国家代码作为 try 字段
       code: "NA", // 使用洲代码作为 code 字段
       timezone: "America/Chicago",
       country_name: "United States"
-    }, {
-      "ip": "89.117.144.192",
-      "location": [-90.1913, 38.6346], // 经度在前，纬度在后
-      "try": "US", // 使用国家代码作为 try 字段
-      "code": "NA", // 使用洲代码作为 code 字段
-      "timezone": "America/Chicago",
-      "country_name": "United States"
-    }, {
+    },  {
       "ip": "193.22.146.84",
       "location": [8.4456, 48.9751], // 经度在前，纬度在后
       "try": "DE", // 使用国家代码作为 try 字段
@@ -522,17 +515,10 @@ export const ipAddresses = {
       "country_name": "Germany"
     }, {
       "ip": "85.239.232.234",
-      "location": [-122.2619, 47.3066], // 经度在前，纬度在后
+      "location": [47.3066,-122.2619], // 经度在前，纬度在后
       "try": "US", // 使用国家代码作为 try 字段
       "code": "NA", // 使用洲代码作为 code 字段
       "timezone": "America/Los_Angeles",
-      "country_name": "United States"
-    }, {
-      "ip": "89.117.144.192",
-      "location": [-90.1913, 38.6346], // 经度在前，纬度在后
-      "try": "US", // 使用国家代码作为 try 字段
-      "code": "NA", // 使用洲代码作为 code 字段
-      "timezone": "America/Chicago",
       "country_name": "United States"
     }, {
       "ip": "95.111.225.112",
@@ -541,6 +527,13 @@ export const ipAddresses = {
       "code": "EU", // 使用洲代码作为 code 字段
       "timezone": "Europe/Paris",
       "country_name": "France"
-    }
+    },{
+      "ip": "154.12.243.45",
+      "location": [ 47.3066,-122.2619], // 经度在前，纬度在后
+      "try": "US", // 使用国家代码作为 try 字段
+      "code": "NA", // 使用洲代码作为 code 字段
+      "timezone": "America/Los_Angeles",
+      "country_name": "United States"
+}
   ]
 };
