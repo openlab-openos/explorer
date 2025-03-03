@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { slideToggle } from "@/composables/slideToggle.js";
 import { useAppOptionStore } from "@/stores/app-option";
-import { ref, watchEffect } from "vue";
+import { ref, watchEffect, onMounted } from "vue";
 import { RouterLink } from "vue-router";
 import { chainRequest } from "../../request/chain";
 import { useRouter } from "vue-router";
@@ -15,6 +15,8 @@ import de from "../../assets/24x24/de.png"
 import ru from "../../assets/24x24/ru.png"
 import my from "../../assets/24x24/my.png"
 import vn from "../../assets/24x24/vn.png"
+import hk from "../../assets/24x24/hk.png"
+console.log(hk);
 
 const router = useRouter();
 const appStore = useAppStore();
@@ -28,20 +30,21 @@ const abbreviationLanguage = ref();
 const languages = ref([
   { name: 'English', abbreviation: 'en-US', flag: um },
   { name: '简体中文', abbreviation: 'zh-CN', flag: cn },
+  { name: '繁体中文', abbreviation: 'hk-HK', flag: hk },
   { name: '日本語', abbreviation: 'jp-JP', flag: jp },
   { name: '한국어', abbreviation: 'kr-KR', flag: kr },
   { name: 'Deutsch', abbreviation: 'de-DE', flag: de },
   { name: 'русский язык', abbreviation: 'ru-RU', flag: ru },
   { name: 'Bahasa Melayu', abbreviation: 'my-MY', flag: my },
   { name: 'Việt nam', abbreviation: 'vn-VN', flag: vn },
-  
+
 ]);
 const selectedLanguage = ref();
 const sessionStorageData = ref(JSON.parse(sessionStorage.getItem('app')));
 
 if (sessionStorageData.value) {
   languages.value.map(item => {
- 
+
     if (item.abbreviation == sessionStorageData.value.language) {
       selectedLanguage.value = item;
       abbreviationLanguage.value = item.abbreviation;
@@ -127,6 +130,42 @@ const selectLanguage = (language: any, abbreviation: any) => {
 
 };
 
+// 节点切换
+const selectData = ref([
+  { name: 'Openverse RPC.EU', url: 'https://api.mainnet.openverse.network', type: false },
+  { name: 'Openverse RPC.SG', url: 'https://rpc6.openverse.network/api', type: false },
+  { name: 'Openverse RPC.US', url: 'https://us-seattle.openverse.network/api', type: false },
+])
+
+const selsetClick = (index: number) => {
+  selectData.value.map((item, i) => {
+    if (i == index) {
+      item.type = true;
+      appStore.setChain(item.url);
+    } else {
+      item.type = false;
+    }
+  })
+  // window.location.reload();
+}
+
+onMounted(() => {
+  console.log(appStore);
+  const chainStorg = JSON.parse(sessionStorage.getItem("app"))
+  const chainData = chainStorg ? chainStorg.chain : '';
+  console.log(appStore.getChain);
+  if (appStore.getChain && chainData) {
+    selectData.value.map((item, i) => {
+      if (selectData.value[i].url == appStore.getChain) {
+        item.type = true;
+      }
+    })
+  } else {
+    appStore.setChain(selectData.value[0].url);
+    selectData.value[0].type = true;
+  }
+})
+
 </script>
 <template>
   <div id="header" class="app-header">
@@ -200,28 +239,38 @@ const selectLanguage = (language: any, abbreviation: any) => {
         <div class="dropdown-menu dropdown-menu-end me-lg-3 fs-11px mt-1">
           <div class="dropdown-item align-items-center" v-for="(language, index) in languages" :key="index"
             :class="{ 'text-theme': abbreviationLanguage === language.abbreviation }"
-            style="cursor: pointer; text-align: center;display: flex;justify-content: center;" @click="selectLanguage(language, language.abbreviation)">
+            style="cursor: pointer; text-align: center;display: flex;justify-content: center;"
+            @click="selectLanguage(language, language.abbreviation)">
             <div style="width: 30%;">
               <img :src="language.flag" alt="">
             </div>
-            <div style="width: 60%;text-align: left;" >
+            <div style="width: 60%;text-align: left;">
               {{ language.name }}
             </div>
           </div>
         </div>
       </div>
       <!-- 节点切换 -->
-      <div class="menu-item dropdown dropdown-mobile-full" style="min-width: 10%;" >
+      <div class="menu-item dropdown dropdown-mobile-full" style="min-width: 10%;">
         <a href="#" data-bs-toggle="dropdown" data-bs-display="static" class="menu-link scales">
           <img src="https://cdn.openverse.network/brands/openverse/icon_128.png" width="32" alt="">
           <i class="bi bi-chevron-down" style="margin: 5px;"></i>
         </a>
-        <div class="dropdown-menu dropdown-menu-end me-lg-3 fs-11px mt-1">
+        <!-- <div class="dropdown-menu dropdown-menu-end me-lg-3 fs-11px mt-1">
           <div class="dropdown-item align-items-center text-theme" style="cursor: pointer;text-align: center;">Openverse
             Mainnet
           </div>
-          <div style="text-align: center;padding: 6px 16px;">Openverse Devnet</div>
-          <div style="text-align: center;padding: 6px 16px;">Openverse Testnet </div>
+          <div style="text-align: center;padding: 6px 16px;cursor: pointer" class="dropdown-item align-items-center">
+            Openverse Devnet</div>
+          <div style="text-align: center;padding: 6px 16px;cursor: pointer" class="dropdown-item align-items-center">
+            Openverse Testnet </div>
+        </div> -->
+        <div class="dropdown-menu dropdown-menu-end me-lg-3 fs-11px mt-1">
+          <div class="dropdown-item align-items-center" :class="item.type ? 'text-theme' : ''"
+            style="cursor: pointer;text-align: center;" v-for="(item, index) in selectData" :key="index"
+            @click="selsetClick(index)">
+            {{ item.name }}
+          </div>
         </div>
       </div>
     </div>

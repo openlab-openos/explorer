@@ -1,7 +1,11 @@
 import axios from "axios";
 
-const solanaApiUrl = "https://us-seattle.openverse.network/api"; // 请替换为正确的 URL
-
+console.log(JSON.parse(sessionStorage.getItem("app")));
+const chainStorg =  JSON.parse(sessionStorage.getItem("app"))
+const chainData =chainStorg ? chainStorg.chain : '';
+// const solanaApiUrl = "https://api.mainnet.openverse.network/api"; // 请替换为正确的 URL
+// const solanaApiUrl = "https://api.mainnet.openverse.network"; // 请替换为正确的 URL
+const solanaApiUrl = chainData ? chainData : "https://api.mainnet.openverse.network";
 export function chainRequest(requestBody) {
   return new Promise((resolve, reject) => {
     axios

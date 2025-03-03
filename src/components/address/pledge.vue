@@ -82,7 +82,8 @@ import { useAppStore } from "@/stores/index";
 
 import LoadingVue from "../../components/block/loading.vue"
 
-const connection = new Connection("https://us-seattle.openverse.network/api", "confirmed");
+const connection = new Connection("https://api.mainnet.openverse.network", "confirmed");
+// const connection = new Connection("https://api.mainnet.openverse.network/api", "confirmed");
 const appStore = useAppStore();
 
 const router = useRouter();

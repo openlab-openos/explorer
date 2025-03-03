@@ -23,6 +23,7 @@ export const useAppStore = defineStore('app', {
         RecentPerformanceSamples:{},
         markersdata:[],
         voteAccount:[],
+        chain:'',
     }),
     getters: {
         rateData: (state) => {
@@ -84,6 +85,9 @@ export const useAppStore = defineStore('app', {
         },
         getvoteAccount:(state)=>{
             return state.voteAccount
+        },
+        getChain:(state)=>{
+            return state.chain
         }
     },
     actions: {
@@ -146,6 +150,9 @@ export const useAppStore = defineStore('app', {
         },
         setVoteAccount(data:any){
             return this.voteAccount = data
+        },
+        setChain(data:any){
+            return this.chain = data
         }
     },
     persist: {
