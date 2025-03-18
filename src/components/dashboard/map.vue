@@ -42,18 +42,18 @@
                                         <apexchart :height="traffic.chart.height" :options="traffic.chart.options"
                                             :series="traffic.chart.series"></apexchart>
                                     </div>
-                                    <div class="flex-1 ps-2">
+                                    <div class="flex-1 ps-2" style="overflow-x: auto;">
                                         <table class="w-100 small mb-0 text-inverse text-opacity-60">
                                             <tbody>
                                                 <tr v-for="(source, index) in traffic.chainArray" :key="index">
-                                                    <td>
+                                                    <td class="minification-size">
                                                         <div class="d-flex align-items-center">
                                                             <div class="w-6px h-6px rounded-pill me-2"
                                                                 v-bind:class="source.class"></div>
                                                             {{ source.timezone }}
                                                         </div>
                                                     </td>
-                                                    <td>
+                                                    <td class="minification-size">
                                                         {{ source.name }}
                                                     </td>
                                                     <td class="text-end">{{ source.pct }}%</td>
@@ -214,6 +214,8 @@ const getActivityLogData = async () => {
         });
         countLog.value = listCount;
         ActivityLogData.value = list;
+        console.log(list);
+        
         appStore.setValidators(JSON.stringify(list));
         appStore
             .getPartData(

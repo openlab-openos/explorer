@@ -1,5 +1,5 @@
 <template>
-  <div class="col-lg-6 col-xl-3">
+  <div class="col-lg-6 col-xl-3 minification">
     <!-- BEGIN card -->
     <card class="mb-3" style="height: 160px">
       <card-body>

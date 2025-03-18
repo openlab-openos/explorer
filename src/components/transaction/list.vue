@@ -136,11 +136,11 @@ const arrayData = ref([]);
 const fetchOrderData = async () => {
     try {
         const res = await order("new_transactions");
-
+        const nullData = ref([]);
         for (let i in res) {
+
             if (res[i].result) {
                 let etach = res[i].result.transaction.message.instructions;
-
                 if (etach[etach.length - 1].parsed.type == "transfer" && etach[etach.length - 1].programId == "11111111111111111111111111111111") {
                     let data = {
                         type: "transfer",
@@ -174,7 +174,7 @@ const fetchOrderData = async () => {
                         blockTime: res[i].result.blockTime,
                     }
                     arrayData.value.push(data);
-                } if (etach[etach.length - 1].parsed.type == "deactivate") {
+                } else if (etach[etach.length - 1].parsed.type == "deactivate") {
                     let data = {
                         type: "unstake",
                         signature: res[i].result.transaction.signatures[0],
@@ -196,6 +196,8 @@ const fetchOrderData = async () => {
                         blockTime: res[i].result.blockTime,
                     }
                     arrayData.value.push(data);
+                } else {
+                    nullData.value.push({data:etach,index:i});
                 }
             }
             // if (res[i].result && res[i].result.transaction.message.instructions.length < 3) {
@@ -203,8 +205,9 @@ const fetchOrderData = async () => {
 
             // }
         }
-        console.log();
-
+        console.log(arrayData.value);
+        console.log(nullData.value);
+        
         appStore.setTransaction(JSON.stringify(arrayData.value));
     } catch (err) {
         console.error("Error fetching order data:", err);

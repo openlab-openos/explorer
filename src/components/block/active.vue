@@ -1,5 +1,5 @@
 <template>
-  <div class="col-lg-6 col-xl-3">
+  <div class="col-lg-6 col-xl-3 minification">
     <!-- BEGIN card -->
     <card class="mb-3" style="height: 160px">
       <card-body>
@@ -19,7 +19,7 @@
           </div>
           <div style="width: 40%; height: 30px">
             <div v-if="chart != null">
-              <apexchart :height="chart.height" :options="chart.options" :series="chart.series"></apexchart>
+              <apexchart :height="chart.height" :options="chart.options" :series="chart.series" style="margin-top: -10px;"></apexchart>
             </div>
           </div>
         </div>
@@ -103,13 +103,20 @@ onMounted(() => {
     console.log(data.value);
 
     stubly.value = appStore.stubly;
+    console.log(appStore);
+    console.log(appStore.Validators);
+
+    console.log(appStore.stubly);
+    console.log(appStore.network);
+
+
     info.value = [
       {
         icon: ['fas', 'chevron-up'],
         language: "dashboard.average_per_node",
         text:
           " " +
-          (appStore.stubly / (appStore.network / 1000000)).toFixed(2) +
+          (data.value / appStore.Validators.length).toFixed(2) +
           "M",
       },
       {

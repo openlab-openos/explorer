@@ -24,20 +24,20 @@
                     <td class="text-theme" style="cursor: pointer" @click="slot(item.slot)">
                         {{ come(item.slot) }}
                     </td>
-                    <td :class="item.err == null ? 'color0-255-179-1' : ''" >
+                    <td :class="item.err == null ? 'color0-255-179-1' : ''">
                         {{ item.err == null ? 'Success' : 'Failed' }}
                     </td>
                     <td>
                         {{ timeSome(item.blockTime) }}
                     </td>
-                    
+
                 </tr>
             </template>
             <div></div>
         </tbody>
     </table>
     <div v-if="!loading" class="text-center">
-        <loading-vue /> 
+        <loading-vue />
     </div>
     <div v-if="historyData.length == 0 && loading" class="text-center">
         {{ $t("account.available") }}
@@ -74,7 +74,7 @@ const paginatedHistoryData = computed(() => {
     const start = (currentPage.value - 1) * pageSize.value;
     const end = start + pageSize.value;
     console.log(historyData);
-    
+
     return historyData.value.slice(start, end);
 });
 const requestType = ref("false")
@@ -104,8 +104,8 @@ onMounted(async () => {
         params: [props.url, { limit: 200 }],
     });
     console.log(historyData.value);
-    if(historyData.value){
-    totalItems.value = historyData.value.length;
+    if (historyData.value) {
+        totalItems.value = historyData.value.length;
     } else {
         historyData.value = [];
     }

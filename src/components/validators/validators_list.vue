@@ -12,7 +12,7 @@
                             <th>{{ $t("validators.name") }}</th>
                             <th style="text-align: left">{{ $t("validators.pubkey") }}</th>
                             <th style="text-align: left">{{ $t("validators.activated_stake") }}</th>
-                            <th style="text-align: left">{{ $t("validators.gossip") }}</th>
+                            <!-- <th style="text-align: left">{{ $t("validators.gossip") }}</th> -->
 
                             <th style="text-align: left">{{ $t("validators.status") }}</th>
                         </tr>
@@ -43,9 +43,9 @@
                                     {{ countplount(log.activatedStake) }}
                                     )
                                 </td>
-                                <td style="text-align: left">
+                                <!-- <td style="text-align: left">
                                     {{ log.ip }}
-                                </td>
+                                </td> -->
                                 <td style="text-align: left">
                                     <span :style="{
                                         color: log.activatedStake !== '' ? 'green' : 'yellow',
@@ -108,79 +108,85 @@ const handlePageChange = (newPage) => {
 
 const getActivityLogData = async () => {
     let res = appStore.getvaildators;
+    console.log(res);
+    
+    if (res.length !== 0) {
+        console.log(res);
+        
+        let ClusterNodes_list = res[0].result;
+        let ProgramAccounts_list = res[1].result;
+        let VoteAccounts_list = appStore.getvoteAccount.result;
+        let list = [];
 
-    let ClusterNodes_list = res[0].result;
-    let ProgramAccounts_list = res[1].result;
-    let VoteAccounts_list = appStore.getvoteAccount.result;
-    let list = [];
-
-    for (let i in ProgramAccounts_list) {
-        for (let j in ClusterNodes_list) {
-            if (ClusterNodes_list[j].account.data.parsed) {
-                for (let y in ClusterNodes_list[j].account.data.parsed.info.keys) {
-                    if (
-                        ClusterNodes_list[j].account.data.parsed.info.keys[y].signer ==
-                        true
-                    ) {
+        for (let i in ProgramAccounts_list) {
+            for (let j in ClusterNodes_list) {
+                if (ClusterNodes_list[j].account.data.parsed) {
+                    for (let y in ClusterNodes_list[j].account.data.parsed.info.keys) {
                         if (
-                            ProgramAccounts_list[i].pubkey ==
-                            ClusterNodes_list[j].account.data.parsed.info.keys[y].pubkey
+                            ClusterNodes_list[j].account.data.parsed.info.keys[y].signer ==
+                            true
                         ) {
-                            list.push({
-                                ip: ProgramAccounts_list[i].gossip.split(":")[0],
-                                name: ClusterNodes_list[j].account.data.parsed.info.configData
-                                    .name,
-                                pubkey: ProgramAccounts_list[i].pubkey,
-                                icon: ClusterNodes_list[j].account.data.parsed.info.configData
-                                    .iconUrl,
-                                version: ProgramAccounts_list[i].version,
+                            if (
+                                ProgramAccounts_list[i].pubkey ==
+                                ClusterNodes_list[j].account.data.parsed.info.keys[y].pubkey
+                            ) {
+                                list.push({
+                                    ip: ProgramAccounts_list[i].gossip.split(":")[0],
+                                    name: ClusterNodes_list[j].account.data.parsed.info.configData
+                                        .name,
+                                    pubkey: ProgramAccounts_list[i].pubkey,
+                                    icon: ClusterNodes_list[j].account.data.parsed.info.configData
+                                        .iconUrl,
+                                    version: ProgramAccounts_list[i].version,
 
-                                activatedStake: "",
-                                votepubkey: "",
-                            });
+                                    activatedStake: "",
+                                    votepubkey: "",
+                                });
+                            }
                         }
                     }
                 }
             }
         }
-    }
-    let listCount = 0;
-    for (let i in list) {
-        for (let h in VoteAccounts_list.current) {
-            if (VoteAccounts_list.current[h].nodePubkey == list[i].pubkey) {
-                list[i].activatedStake = VoteAccounts_list.current[h].activatedStake;
-                list[i].votepubkey = VoteAccounts_list.current[h].votePubkey;
-            } else {
+        let listCount = 0;
+        for (let i in list) {
+            for (let h in VoteAccounts_list.current) {
+                if (VoteAccounts_list.current[h].nodePubkey == list[i].pubkey) {
+                    list[i].activatedStake = VoteAccounts_list.current[h].activatedStake;
+                    list[i].votepubkey = VoteAccounts_list.current[h].votePubkey;
+                } else {
+                }
+            }
+            if (list[i].activatedStake) {
+                listCount += JSON.parse(list[i].activatedStake);
             }
         }
-        if (list[i].activatedStake) {
-            listCount += JSON.parse(list[i].activatedStake);
-        }
+        list.sort((a, b) => {
+            let nameA = a.name.toUpperCase();
+            let nameB = b.name.toUpperCase();
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+            return 0;
+        });
+        countLog.value = listCount;
+
+        ActivityLogData.value = list;
+
+        totalItems.value = list.length;
+        appStore.setValidators(JSON.stringify(list));
+        appStore
+            .getPartData(
+                (JSON.parse(ClusterNodes_list.length) - JSON.parse(list.length)) /
+                JSON.parse(ClusterNodes_list.length)
+            )
+            .toFixed(2);
+        sessionStorage.setItem("accout", JSON.stringify(list));
     }
-    list.sort((a, b) => {
-        let nameA = a.name.toUpperCase();
-        let nameB = b.name.toUpperCase();
-        if (nameA < nameB) {
-            return -1;
-        }
-        if (nameA > nameB) {
-            return 1;
-        }
-        return 0;
-    });
-    countLog.value = listCount;
 
-    ActivityLogData.value = list;
-
-    totalItems.value = list.length;
-    appStore.setValidators(JSON.stringify(list));
-    appStore
-        .getPartData(
-            (JSON.parse(ClusterNodes_list.length) - JSON.parse(list.length)) /
-            JSON.parse(ClusterNodes_list.length)
-        )
-        .toFixed(2);
-    sessionStorage.setItem("accout", JSON.stringify(list));
 };
 const countplount = (num) => {
     return ((num / countLog.value) * 100).toFixed(2) + "%";

@@ -1,5 +1,5 @@
 <template>
-  <div class="col-lg-6 col-xl-3">
+  <div class="col-lg-6 col-xl-3 minification">
     <!-- BEGIN card -->
     <card class="mb-3" style="height: 160px">
       <card-body>
@@ -78,6 +78,8 @@ const fetchData = async () => {
   await chainRequest(requestBody).then((res) => {
     data.value = res.result;
     appStore.setEpochInfo(res.result)
+    console.log(res.result);
+    
     appStore.getNetwork(res.result.transactionCount)
     info.value = [
       {

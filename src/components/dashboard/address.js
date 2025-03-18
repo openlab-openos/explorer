@@ -555,6 +555,62 @@ export const ipAddresses = {
       "code": "NA", // 使用洲代码作为 code 字段
       "timezone": "America/Los_Angeles",
       "country_name": "United States"
+    },{
+      "ip": "157.173.196.166",
+      "location": [-90.1985, 38.6364],
+      "try": "US",
+      "code": "NA",
+      "timezone": "America/Chicago",
+      "country_name": "United States"
+    },{
+      "ip": "51.75.52.14",
+      "location": [20.9916, 52.2338],
+      "try": "PL",
+      "code": "EU",
+      "timezone": "Europe/Warsaw",
+      "country_name": "Poland"
+    },{
+      "ip": "89.117.144.192",
+      "location": [38.6346, -90.1913],
+      "try": "US",
+      "code": "NA",
+      "timezone": "America/Chicago",
+      "country_name": "United States"
+    },{
+      "ip": "51.77.52.209",
+      "location": [52.2299, 21.0093],
+      "try": "PL",
+      "code": "EU",
+      "timezone": "Europe/Warsaw",
+      "country_name": "Poland"
+    },{
+      "ip": "38.242.223.80",
+      "location": [51.2216, 6.7897],
+      "try": "DE",
+      "code": "EU",
+      "timezone": "Europe/Berlin",
+      "country_name": "Germany"
+    },{
+      "ip": "198.27.70.17",
+      "location": [45.5176, -73.5804],
+      "try": "CA",
+      "code": "NA",
+      "timezone": "America/Toronto",
+      "country_name": "Canada"
+    },{
+      "ip": "149.202.78.217",
+      "location": [50.6942, 3.1746],
+      "try": "FR",
+      "code": "EU",
+      "timezone": "Europe/Paris",
+      "country_name": "France"
+    },{
+      "ip": "144.217.75.178",
+      "location": [45.3161, -73.8736],
+      "try": "CA",
+      "code": "NA",
+      "timezone": "America/Toronto",
+      "country_name": "Canada"
     }
   ]
 };

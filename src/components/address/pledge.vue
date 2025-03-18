@@ -146,15 +146,21 @@ onMounted(async () => {
             }
         ]
     });
-    for (let i in historyData.value) {
-        historyData.value[i].state = await stateFunction(historyData.value[i].pubkey);
-        historyData.value[i].time = await fetchData();
-
-    }
+    // for (let i in historyData.value) {
+    //     historyData.value[i].state = "";
+    //     // historyData.value[i].state = await stateFunction(historyData.value[i].pubkey);
+    //     historyData.value[i].time = await fetchData();
+    // }
     console.log(historyData.value)
     loading.value = true;
     totalItems.value = historyData.value.length;
+    console.log(historyData.value);
+    for (let i in historyData.value) {
+        historyData.value[i].state = await stateFunction(historyData.value[i].pubkey);
+        historyData.value[i].time = await fetchData();
+    }
 });
+
 
 const stateFunction = async (url) => {
     const userPubKey = new PublicKey(url);
