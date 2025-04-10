@@ -143,7 +143,7 @@ export const ipAddresses = {
     },
     {
       ip: "82.197.68.80",
-      location: [1.3552, 103.8859],
+      location: [1.3552, 99.8859],
       try: "SG",
       code: "AS",
       timezone: "Asia/Singapore",
@@ -226,7 +226,6 @@ export const ipAddresses = {
       ip: "81.0.221.100",
       location: [50.8544, -1.002],
       // location: [13.0444, 100.2357],
-
       try: "GB",
       code: "AS",
       timezone: "Europe/London",
@@ -258,7 +257,7 @@ export const ipAddresses = {
     },
     {
       ip: "185.250.38.234",
-      location: [1.3552, 103.8859],
+      location: [1.3552, 99.8859],
       try: "SG",
       code: "AS",
       timezone: "Asia/Singapore",
@@ -282,7 +281,7 @@ export const ipAddresses = {
     },
     {
       ip: "154.26.159.163",
-      location: [1.2805, 103.848],
+      location: [ 0.2805,99.848],
       try: "SG",
       code: "AS",
       timezone: "Asia/Singapore",
@@ -295,14 +294,6 @@ export const ipAddresses = {
       code: "EU",
       timezone: "Europe/London",
       country_name: "United Kingdom"
-    },
-    {
-      ip: "154.26.159.163",
-      location: [1.2805, 103.848],
-      try: "SG",
-      code: "AS",
-      timezone: "Asia/Singapore",
-      country_name: "Singapore"
     },
     {
       ip: "38.242.216.73",
@@ -353,13 +344,6 @@ export const ipAddresses = {
       country_name: "United States"
     },
     {
-      ip: "154.26.159.163",
-      location: [1.2805, 103.848],
-      try: "SG",
-      code: "AS",
-      timezone: "Asia/Singapore",
-      country_name: "Singapore"
-    }, {
       ip: "46.250.255.174",
       location: [51.5094, -0.059],
       try: "GB",
@@ -394,14 +378,8 @@ export const ipAddresses = {
       code: "EU", // 洲代码
       timezone: "Europe/London",
       country_name: "United Kingdom"
-    }, {
-      ip: "154.26.159.163",
-      location: [1.2805, 103.848],
-      try: "SG", // 国家代码
-      code: "AS", // 洲代码
-      timezone: "Asia/Singapore",
-      country_name: "Singapore"
-    }, {
+    },
+     {
       ip: "156.67.110.101",
       location: [19.0748, 72.8856],
       try: "IN", // 国家代码 (country_code)
@@ -429,14 +407,8 @@ export const ipAddresses = {
       "continent_code": "EU",
       "timezone": "Europe/London",
       "country_name": "United Kingdom"
-    }, {
-      "ip": "154.26.159.163",
-      "location": [1.2805, 103.848],
-      "country_code": "SG",
-      "continent_code": "AS",
-      "timezone": "Asia/Singapore",
-      "country_name": "Singapore"
-    }, {
+    },
+     {
       "ip": "154.53.38.170",
       "location": [38.5781, -90.4256],
       "country_code": "US",
@@ -445,7 +417,7 @@ export const ipAddresses = {
       "country_name": "United States"
     }, {
       "ip": "154.26.155.139",
-      "location": [1.2805, 103.848],
+      "location":[-1.2805, 103.848],
       "country_code": "SG",
       "continent_code": "AS",
       "timezone": "Asia/Singapore",
@@ -457,35 +429,40 @@ export const ipAddresses = {
       "code": "AS51167",
       "timezone": "Europe/Berlin",
       "country_name": "Germany"
-    }, {
+    },
+   {
       "ip": "194.233.82.186",
-      "location": [1.3552, 103.8859],
+      "location": [9.3552, 105.8859],
       "try": "SG",
       "code": "AS141995",
       "timezone": "Asia/Singapore",
       "country_name": "Singapore"
-    }, {
+    },
+   {
       ip: "144.126.155.214",
       location: [38.6364, -90.1985], // 注意：经纬度顺序为 [latitude, longitude]
       try: "US", // 使用国家代码作为 try 字段
       code: "NA", // 使用洲代码作为 code 字段
       timezone: "America/Chicago",
       country_name: "United States"
-    }, {
+    },
+  {
       ip: "38.242.223.80",
-      location: [6.7897, 51.2216], // 经度在前，纬度在后
+      location: [6.7897, 48.2216], // 经度在前，纬度在后
       try: "DE", // 使用国家代码作为 try 字段
       code: "EU", // 使用洲代码作为 code 字段
       timezone: "Europe/Berlin",
       country_name: "Germany"
-    }, {
+    },
+   {
       ip: "84.247.161.146",
-      location: [6.8607, 51.1878], // 经度在前，纬度在后
+      location: [6.8607, 46.1878], // 经度在前，纬度在后
       try: "DE", // 使用国家代码作为 try 字段
       code: "EU", // 使用洲代码作为 code 字段
       timezone: "Europe/Berlin",
       country_name: "Germany"
-    }, {
+    },
+     {
       ip: "89.117.144.192",
       location: [38.6346, -90.1913], // 经度在前，纬度在后
       try: "US", // 使用国家代码作为 try 字段
@@ -499,7 +476,8 @@ export const ipAddresses = {
       "code": "EU", // 使用洲代码作为 code 字段
       "timezone": "Europe/Berlin",
       "country_name": "Germany"
-    }, {
+    },
+   {
       "ip": "194.233.82.186",
       "location": [103.8859, 1.3552], // 经度在前，纬度在后
       "try": "SG", // 使用国家代码作为 try 字段
@@ -520,7 +498,8 @@ export const ipAddresses = {
       "code": "NA", // 使用洲代码作为 code 字段
       "timezone": "America/Los_Angeles",
       "country_name": "United States"
-    }, {
+    },
+   {
       "ip": "95.111.225.112",
       "location": [8.1851, 48.9742], // 经度在前，纬度在后
       "try": "FR", // 使用国家代码作为 try 字段

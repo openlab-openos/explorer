@@ -46,17 +46,19 @@
                                         <table class="w-100 small mb-0 text-inverse text-opacity-60">
                                             <tbody>
                                                 <tr v-for="(source, index) in traffic.chainArray" :key="index">
-                                                    <td class="minification-size">
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="w-6px h-6px rounded-pill me-2"
-                                                                v-bind:class="source.class"></div>
-                                                            {{ source.timezone }}
-                                                        </div>
-                                                    </td>
-                                                    <td class="minification-size">
-                                                        {{ source.name }}
-                                                    </td>
-                                                    <td class="text-end">{{ source.pct }}%</td>
+                                                    <template v-if="source.name != 'undefined'" >
+                                                        <td class="minification-size">
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="w-6px h-6px rounded-pill me-2"
+                                                                    v-bind:class="source.class"></div>
+                                                                {{ source.timezone }}
+                                                            </div>
+                                                        </td>
+                                                        <td class="minification-size">
+                                                            {{ source.name }}
+                                                        </td>
+                                                        <td class="text-end">{{ source.pct }}%</td>
+                                                    </template>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -78,7 +80,6 @@ import { useAppVariableStore } from "@/stores/app-variable";
 import { chainRequest } from "../../request/chain";
 import { useAppStore } from "@/stores/index";
 import apexchart from "@/components/plugins/Apexcharts.vue";
-
 const country = ref();
 const source = ref();
 const series = ref();
@@ -215,7 +216,7 @@ const getActivityLogData = async () => {
         countLog.value = listCount;
         ActivityLogData.value = list;
         console.log(list);
-        
+
         appStore.setValidators(JSON.stringify(list));
         appStore
             .getPartData(
@@ -237,12 +238,16 @@ const getActivityLogData = async () => {
         }
         let aaaaa = [];
         console.log(mapArray.value);
+                for (let i in mapArray.value) {
+                    aaaaa.push(mapArray.value[i].coords);
 
-        for (let i in mapArray.value) {
-            aaaaa.push(mapArray.value[i].coords);
-        }
-        console.log(aaaaa);
+                }
+                console.log(aaaaa);
+        //         for(let i in aaaaa){
+        //             console.log(aaaaa[i]);
 
+        //             // console.log(JSON.parse(aaaaa[i]));
+        //         }
     });
 };
 
@@ -266,8 +271,9 @@ const renderMap = async () => {
                         timezone: ipData.timezone,
                         country_name: ipData.country_name,
                     });
-                } else {
-                    let loc_lat = await getIPLocation(ActivityLogData.value[i].ip);
+                }
+                 else {
+                     let loc_lat = await getIPLocation(ActivityLogData.value[i].ip);
 
                     markers_data.push({
                         name: "",
@@ -363,9 +369,9 @@ const renderMap = async () => {
     // }
     console.log(markers_data);
 
-    appStore.setMarkersData(markers_data);
+    // appStore.setMarkersData(markers_data);
     map.value.addMarkers(markers_data);
-
+    
     mapData.value = markers_data;
     traffic.value = getTrafficData(markers_data);
 

@@ -100,14 +100,9 @@ onMounted(() => {
       // data.value = appStore.pubbley;
 
     }
-    console.log(data.value);
 
     stubly.value = appStore.stubly;
-    console.log(appStore);
-    console.log(appStore.Validators);
 
-    console.log(appStore.stubly);
-    console.log(appStore.network);
 
 
     info.value = [
