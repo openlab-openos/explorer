@@ -77,7 +77,7 @@
 import { ref, onMounted } from 'vue';
 import { ipAddresses } from "./address";
 import { useAppVariableStore } from "@/stores/app-variable";
-import { chainRequest } from "../../request/chain";
+import { chainRequest } from "../../request/minchain";
 import { useAppStore } from "@/stores/index";
 import apexchart from "@/components/plugins/Apexcharts.vue";
 const country = ref();
@@ -154,7 +154,8 @@ const getActivityLogData = async () => {
         chainRequest(requestBody),
         chainRequest(ClusterNodes),
         // chainRequest(VoteAccounts),
-    ]).then((res) => {
+    ]).then((res) => {console.log(res);
+    
         appStore.setVaildators(res);
         let ClusterNodes_list = res[0].result;
         let ProgramAccounts_list = res[1].result;
@@ -236,13 +237,6 @@ const getActivityLogData = async () => {
 
             traffic.value = getTrafficData(mapArray.value);
         }
-        let aaaaa = [];
-        console.log(mapArray.value);
-                for (let i in mapArray.value) {
-                    aaaaa.push(mapArray.value[i].coords);
-
-                }
-                console.log(aaaaa);
         //         for(let i in aaaaa){
         //             console.log(aaaaa[i]);
 
@@ -402,7 +396,8 @@ const getTrafficData = (data) => {
     if (data) {
         let arrayData = uniqueArrayByProperty(data, "try");
         let country = uniqueArrayByProperty(data, "code");
-
+        console.log(arrayData);
+        
         for (let i = 0; i < 5; i++) {
             if (arrayData[i].value != undefined) {
                 coun.push({

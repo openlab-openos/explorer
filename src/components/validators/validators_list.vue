@@ -78,7 +78,6 @@
 import CountUp from "vue-countup-v3";
 import { ref, onMounted, computed, watchEffect } from "vue";
 import { useAppStore } from "@/stores/index";
-import { chainRequest } from "../../request/chain";
 import { useRouter } from "vue-router";
 const props = defineProps({
     type: {

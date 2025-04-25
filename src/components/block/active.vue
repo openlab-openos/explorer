@@ -1,7 +1,7 @@
 <template>
   <div class="col-lg-6 col-xl-3 minification">
     <!-- BEGIN card -->
-    <card class="mb-3" style="height: 160px">
+    <card class="mb-3" style="height: 175px">
       <card-body>
         <div class="d-flex fw-bold small mb-3">
           <span class="flex-grow-1"> {{ $t("dashboard.active_stake") }}</span>
@@ -84,6 +84,8 @@ onMounted(() => {
             btgcont += JSON.parse(JSON.stringify(btg.current[i].activatedStake));
           }
           btgcount = btgcont;
+          console.log(btgcont);
+          
           let num = (btgcont / 1000000000).toFixed(0);
           btgcont = (num / 1000000).toFixed(1);
         }

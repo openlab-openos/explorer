@@ -31,11 +31,12 @@
 import { useAppStore } from "../../stores/index";
 import { ref, watchEffect,defineAsyncComponent } from "vue";
 import i18n from "@/i18n"
+import { useRouter } from "vue-router";
 const validatorsVue = defineAsyncComponent(() =>
   import("../../components/validators/validators_list.vue")
 );
 
-
+const router = useRouter();
 const appStore = useAppStore();
 
 const shoeType = ref(false);
@@ -73,11 +74,21 @@ watchEffect(() => {
 const ActivityLogData = ref([]);
 ActivityLogData.value = appStore.Validators;
 
+console.log(ActivityLogData.value);
+
+if(ActivityLogData.value.length == 0){
+  router.push({
+    name: "dashboard",
+  });
+}
+
 Vaildators.value[0].value = ActivityLogData.value.length;
 
 Vaildators.value[1].value = (appStore.part * 100).toFixed(2) + "%";
 Vaildators.value[2].value = appStore.stake + "%";
 Vaildators.value[3].value = ActivityLogData.value[0].version;
+
+
 
 const toFexedStake = (num) => {
   if (num) {

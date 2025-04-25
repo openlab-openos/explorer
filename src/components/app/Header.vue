@@ -24,6 +24,7 @@ const appStore = useAppStore();
 
 const appOption = useAppOptionStore();
 const notificationData = [];
+const currentUrl = window.location.href;
 
 const searchcontent = ref("");
 const abbreviationLanguage = ref();
@@ -56,11 +57,10 @@ if (sessionStorageData.value) {
   abbreviationLanguage.value = 'en-US';
 }
 
+const nameText = ref("");
 
 // 语言
 function selectLanguages(indexValue) {
-
-
   i18n.global.locale = indexValue;
 }
 
@@ -132,9 +132,10 @@ const selectLanguage = (language: any, abbreviation: any) => {
 
 // 节点切换
 const selectData = ref([
-  { name: 'Openverse RPC.EU', url: 'https://api.mainnet.openverse.network', type: false },
-  { name: 'Openverse RPC.SG', url: 'https://rpc6.openverse.network/api', type: false },
-  { name: 'Openverse RPC.US', url: 'https://us-seattle.openverse.network/api', type: false },
+  { name: 'Mainnet', url: 'https://api.mainnet.openverse.network', type: false, requestType: 'Formal' },
+  // { name: 'Openverse RPC.SG', url: 'https://rpc6.openverse.network/api', type: false,requestType:'Formal' },
+  // { name: 'Openverse RPC.US', url: 'https://us-seattle.openverse.network/api', type: false,requestType:'Formal' },
+  { name: 'Devnet', url: 'https://api.devnet.openverse.network', type: false, requestType: 'Test' },
 ])
 
 const selsetClick = (index: number) => {
@@ -142,6 +143,13 @@ const selsetClick = (index: number) => {
     if (i == index) {
       item.type = true;
       appStore.setChain(item.url);
+      appStore.setchainType(item.requestType)
+      sessionStorage.setItem("urlType", JSON.stringify({
+        urlType: item.requestType,
+        url: item.url
+      }));
+      window.location.reload();
+
     } else {
       item.type = false;
     }
@@ -151,18 +159,24 @@ const selsetClick = (index: number) => {
 
 onMounted(() => {
   console.log(appStore);
-  const chainStorg = JSON.parse(sessionStorage.getItem("app"))
-  const chainData = chainStorg ? chainStorg.chain : '';
-  console.log(appStore.getChain);
-  if (appStore.getChain && chainData) {
+  const chainStorg = JSON.parse(sessionStorage.getItem("app"));
+  const urlType = JSON.parse(sessionStorage.getItem("urlType"));
+
+
+  const chainData = chainStorg ? (chainStorg.chain ? chainStorg.chain : (urlType ? urlType.url : '')) : (urlType ? urlType.url : '');
+
+
+  if (chainData) {
     selectData.value.map((item, i) => {
-      if (selectData.value[i].url == appStore.getChain) {
+      if (selectData.value[i].url == chainData) {
         item.type = true;
+        nameText.value = selectData.value[i].name
       }
     })
   } else {
     appStore.setChain(selectData.value[0].url);
     selectData.value[0].type = true;
+    nameText.value = 'Openverse RPC.DEV'
   }
 })
 
@@ -252,8 +266,9 @@ onMounted(() => {
       </div>
       <!-- 节点切换 -->
       <div class="menu-item dropdown dropdown-mobile-full" style="min-width: 10%;">
-        <a href="#" data-bs-toggle="dropdown" data-bs-display="static" class="menu-link scales">
-          <img src="https://cdn.openverse.network/brands/openverse/icon_128.png" width="32" alt="">
+        <a href="#" data-bs-toggle="dropdown" data-bs-display="static" class="menu-link scales" style="white-space: nowrap;">
+          {{nameText}}
+          <!-- <img src="https://cdn.openverse.network/brands/openverse/icon_128.png" width="32" alt=""> -->
           <i class="bi bi-chevron-down" style="margin: 5px;"></i>
         </a>
         <!-- <div class="dropdown-menu dropdown-menu-end me-lg-3 fs-11px mt-1">

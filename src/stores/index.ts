@@ -16,14 +16,15 @@ export const useAppStore = defineStore('app', {
         country: {},//country
         network: 0,//network
         language: "en-US",//language
-        programs:[],//programs
-        epochTime:"",
-        vaildators:[],
-        epochIfo:{},
-        RecentPerformanceSamples:{},
-        markersdata:[],
-        voteAccount:[],
-        chain:'',
+        programs: [],//programs
+        epochTime: "",
+        vaildators: [],
+        epochIfo: {},
+        RecentPerformanceSamples: {},
+        markersdata: [],
+        voteAccount: [],
+        chain: '',
+        chainType: '',
     }),
     getters: {
         rateData: (state) => {
@@ -62,32 +63,35 @@ export const useAppStore = defineStore('app', {
         getnetwork: (state) => {
             return state.network
         },
-        getLanguage : (state) => {
+        getLanguage: (state) => {
             return state.language
         },
-        getPrograms:(state)=>{
+        getPrograms: (state) => {
             return state.programs
         },
-        getepochTime:(state)=>{
+        getepochTime: (state) => {
             return state.epochTime
         },
-        getvaildators:(state)=>{
+        getvaildators: (state) => {
             return state.vaildators
         },
-        getepochInfo:(state)=>{
+        getepochInfo: (state) => {
             return state.epochIfo
         },
-        getRecentPerformanceSamples:(state)=>{
+        getRecentPerformanceSamples: (state) => {
             return state.RecentPerformanceSamples
         },
-        getmarkersdata:(state)=>{
+        getmarkersdata: (state) => {
             return state.markersdata
         },
-        getvoteAccount:(state)=>{
+        getvoteAccount: (state) => {
             return state.voteAccount
         },
-        getChain:(state)=>{
+        getChain: (state) => {
             return state.chain
+        },
+        getchainType: (state) => {
+            return state.chainType
         }
     },
     actions: {
@@ -127,32 +131,35 @@ export const useAppStore = defineStore('app', {
         getNetwork(data: any) {
             return this.network = data
         },
-        setLanguage(data: any){
+        setLanguage(data: any) {
             return this.language = data
         },
-        setPrograms(data:any){
+        setPrograms(data: any) {
             return this.programs = data
         },
-        setEposhTome(data:any){
+        setEposhTome(data: any) {
             return this.epochTime = data
         },
-        setVaildators(data:any){
+        setVaildators(data: any) {
             return this.vaildators = data
         },
-        setEpochInfo(data:any){
+        setEpochInfo(data: any) {
             return this.epochIfo = data
         },
-        setRecentPerformanceSamples(data:any){
+        setRecentPerformanceSamples(data: any) {
             return this.RecentPerformanceSamples = data
         },
-        setMarkersData(data:any){
+        setMarkersData(data: any) {
             return this.markersdata = data
         },
-        setVoteAccount(data:any){
+        setVoteAccount(data: any) {
             return this.voteAccount = data
         },
-        setChain(data:any){
+        setChain(data: any) {
             return this.chain = data
+        },
+        setchainType(data: any) {
+            return this.chainType = data
         }
     },
     persist: {

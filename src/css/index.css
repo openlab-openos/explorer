@@ -53,3 +53,7 @@
 .imgWigth25{
     width: 25px;
 }
+
+.card.card-body{
+    min-height: 205px;
+}
