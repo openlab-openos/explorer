@@ -42,7 +42,8 @@
         "document": "Dokumen",
         "wallet": "Dompet",
         "website": "Laman Web",
-        "tokens": "Aset"
+        "tokens": "Aset",
+        "faucet": "Faucet"
     },
     "dashboard": {
         "title": "Papan Pemuka",

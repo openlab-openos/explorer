@@ -432,7 +432,7 @@ export default {
           </card>
         </div>
       </div>
-      <div>
+      <div  v-if="preType">
         <h4 class="marginTOP-50">{{ $t("transaction.instruction") }}</h4>
         <instruction-view :data="instruction" :child="innerInstructions" />
       </div>

@@ -1,10 +1,5 @@
 import axios from "axios";
-import { useAppStore } from "../stores/index";
 
-
-const appStore = useAppStore();
-
-console.log(appStore);
 
 
 const currentUrl = window.location.href;
@@ -12,13 +7,13 @@ const currentUrl = window.location.href;
 let urlType = currentUrl.includes('?cluster=devnet')
 const chainStorg = JSON.parse(sessionStorage.getItem("app"))
 const GeturlType = JSON.parse(sessionStorage.getItem("urlType"));
-const urlTypeData = GeturlType ? GeturlType.urlType : '';
+const urlTypeData = GeturlType ? GeturlType.urlType : (urlType ?  'Test' :  'Formal');
 console.log(urlTypeData);
 console.log(urlTypeData === 'Test');
 console.log(urlType && urlTypeData === 'Test');
 
 
-if ( urlTypeData === 'Test') {
+if (urlTypeData === 'Test') {
   if (chainStorg) {
     chainStorg.chain = ('https://api.devnet.openverse.network');
     chainStorg.chainType = ('Test')

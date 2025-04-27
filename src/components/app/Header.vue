@@ -265,7 +265,7 @@ onMounted(() => {
         </div>
       </div>
       <!-- 节点切换 -->
-      <div class="menu-item dropdown dropdown-mobile-full" style="min-width: 10%;">
+      <div class="menu-item dropdown dropdown-mobile-full">
         <a href="#" data-bs-toggle="dropdown" data-bs-display="static" class="menu-link scales" style="white-space: nowrap;">
           {{nameText}}
           <!-- <img src="https://cdn.openverse.network/brands/openverse/icon_128.png" width="32" alt=""> -->

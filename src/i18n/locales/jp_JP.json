@@ -42,7 +42,8 @@
         "document": "ドキュメント",
         "wallet": "ウォレット",
         "website": "ウェブサイト",
-        "tokens": "トークン"
+        "tokens": "トークン",
+        "faucet": "ファクトリー"
     },
     "dashboard": {
         "title": "ダッシュボード",

@@ -24,7 +24,7 @@ export const useAppStore = defineStore('app', {
         markersdata: [],
         voteAccount: [],
         chain: '',
-        chainType: '',
+        chainType: 'Formal',
     }),
     getters: {
         rateData: (state) => {

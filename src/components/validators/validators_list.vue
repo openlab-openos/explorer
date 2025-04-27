@@ -105,6 +105,13 @@ const handlePageChange = (newPage) => {
     currentPage.value = newPage;
 };
 
+let VoteAccounts = {
+        jsonrpc: "2.0",
+        id: 1,
+        method: "getVoteAccounts",
+        params: [],
+    };
+
 const getActivityLogData = async () => {
     let res = appStore.getvaildators;
     console.log(res);
@@ -114,7 +121,8 @@ const getActivityLogData = async () => {
         
         let ClusterNodes_list = res[0].result;
         let ProgramAccounts_list = res[1].result;
-        let VoteAccounts_list = appStore.getvoteAccount.result;
+        let VoteAccounts_list =res[2].result;
+        console.log(typeof VoteAccounts_list);
         let list = [];
 
         for (let i in ProgramAccounts_list) {

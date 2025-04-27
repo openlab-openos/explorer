@@ -42,7 +42,8 @@
         "document": "Tài liệu",
         "wallet": "Ví",
         "website": "Trang web",
-        "tokens": "Tài sản"
+        "tokens": "Tài sản",
+        "faucet": "Máy chủ phát phí"
     },
     "dashboard": {
         "title": "Bảng điều khiển",

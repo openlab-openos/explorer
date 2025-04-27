@@ -42,7 +42,8 @@
         "document": "문서",
         "wallet": "지갑",
         "website": "웹사이트",
-        "tokens": "자산"
+        "tokens": "자산",
+        "faucet": "풀링"
     },
     "dashboard": {
         "title": "대시보드",

@@ -8,16 +8,18 @@ import Tx from "../views/Search/tx.vue";
 import Transition from "../views/transaction/transactions.vue";
 import Epoch from "../views/Search/epoch.vue";
 import Tokens from "../views/asset/asset_list.vue";
+import Faucet from "../views/Faucet/Faucet.vue"
 import { useAppStore } from "@/stores";
 
 console.log(window.location.href,'router');
 
+const currentUrl = window.location.href;
 
 let app = JSON.parse(sessionStorage.getItem('app'));
 let GeturlType = JSON.parse(sessionStorage.getItem('urlType'));
-
+let url = currentUrl.includes('?cluster=devnet')
 // 假设 urlType 是一个全局状态变量，这里先定义为 false 作为示例
-let urlType = app ? (GeturlType.urlType == 'Test' ? false : (app.chainType == 'Test' ? false : true)) : true ;
+let urlType = app ? (GeturlType? (GeturlType.urlType == 'Test' ? false : (app.chainType == 'Test' ? false : true)) : true ) : (url? false : true) ;
 console.log(urlType);
 
 // 用于避免循环调用的标志
@@ -70,6 +72,11 @@ const router = createRouter({
       path: "/assets",
       name: "assets",
       component: Tokens,
+    },
+    {
+      path: "/faucet",
+      name: "faucet",
+      component: Faucet,
     }
   ],
 });
@@ -86,7 +93,8 @@ router.beforeEach((to, from, next) => {
   // 克隆原有的查询参数对象，避免修改原对象
   const existingQuery = { ...to.query };
   let shouldRedirect = false;
-
+  console.log(!urlType && to.path!== "/");
+  
   if (!urlType && to.path!== "/") {
       // 需要添加 cluster=devnet 参数
       if (existingQuery.cluster!== "devnet") {

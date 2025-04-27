@@ -33,9 +33,13 @@ export const useAppSidebarMenuStore = defineStore({
       'icon': 'bi bi-layout-sidebar',
       'text': 'navigation.transactions',
       'type': false
-
     },
-
+    // {
+    //   'url': "faucet",
+    //   'icon': 'bi bi-collection',
+    //   'text': 'navigation.faucet',
+    //   'type': false
+    // },
     {
       'text': 'navigation.links',
       'is_header': true

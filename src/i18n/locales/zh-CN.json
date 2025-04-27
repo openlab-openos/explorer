@@ -42,7 +42,8 @@
         "document": "文档",
         "wallet": "钱包",
         "website": "网站",
-        "tokens": "资产"
+        "tokens": "资产",
+        "faucet": "水龙头"
     },
     "dashboard": {
         "title": "仪表盘",

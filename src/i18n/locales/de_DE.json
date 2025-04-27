@@ -42,7 +42,8 @@
         "document": "Dokumentation",
         "wallet": "Wallet",
         "website": "Website",
-        "tokens": "Tokens"
+        "tokens": "Tokens",
+        "faucet":"Faucet"
     },
     "dashboard": {
         "title": "Übersicht",

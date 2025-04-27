@@ -41,7 +41,8 @@
         "document": "Document",
         "wallet": "Wallet",
         "website": "Website",
-        "tokens": "Assets"
+        "tokens": "Assets",
+        "faucet":"Faucet"
     },
     "dashboard": {
         "title": "Dashboard",

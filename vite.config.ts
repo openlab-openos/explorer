@@ -66,6 +66,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/dataapi/, ""),
       },
+      "/airdrop": {
+        target: "http://109.123.230.163:8099/",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/airdrop/, ""),
+      },
     },
   },
 });
