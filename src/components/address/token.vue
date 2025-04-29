@@ -45,7 +45,7 @@
                             <td>{{ $t("account.owner") }} </td>
                             <td class="text-end text-theme" style="cursor: pointer" @click="pubbleys(paramsId)"> {{
                                 titleUrl(paramsId).url }} 
-                                 <img v-if="titleUrl(paramsId).type" v-for="(datas,indexs) in titleUrl(paramsId).certificates" :key="indexs" :src="datas.img" width="16" class="marginRight8" alt="">
+                                 <img v-if="titleUrl(paramsId).type" v-for="(datas,indexs) in titleUrl(paramsId).certificates" :key="indexs" :src="datas.img" width="24" class="marginRight8" alt="">
                                 </td>
                         </tr>
                     </tbody>
@@ -65,7 +65,7 @@
                             <td class="text-end text-theme" :style="pubbleys ? 'cursor: pointer' : ''"
                                 @click="pubbtx(pubbleys)"> {{
                                     !pubbleys ? "N/A" : titleUrl(pubbleys).url }}  
-                                 <img v-if="titleUrl(pubbleys).type" v-for="(datas,indexs) in titleUrl(pubbleys).certificates" :key="indexs" :src="datas.img" width="16" class="marginRight8" alt="">
+                                 <img v-if="titleUrl(pubbleys).type" v-for="(datas,indexs) in titleUrl(pubbleys).certificates" :key="indexs" :src="datas.img" width="24" class="marginRight8" alt="">
 
                                 </td>
                         </tr>
@@ -73,7 +73,7 @@
                             <td>{{ $t("account.freeze_authorization") }} </td>
                             <td class="text-end"> {{ tokenData.freezeAuthority == null ? "N/A" :
                                 titleUrl(tokenData.freezeAuthority).url }}   
-                                <img v-if="titleUrl(tokenData.freezeAuthority).type" v-for="(datas,indexs) in titleUrl(tokenData.freezeAuthority).certificates" :key="indexs" :src="datas.img" width="16" class="marginRight8" alt="">
+                                <img v-if="titleUrl(tokenData.freezeAuthority).type" v-for="(datas,indexs) in titleUrl(tokenData.freezeAuthority).certificates" :key="indexs" :src="datas.img" width="24" class="marginRight8" alt="">
                              </td>
                         </tr>
                     </tbody>

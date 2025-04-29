@@ -206,7 +206,7 @@ onMounted(() => {
         <!-- <span class="brand-img">
           <span class="brand-img-text text-theme">H</span>
         </span> -->
-        <img width="20" src="https://cdn.openverse.network/brands/openverse/icon_128.png" alt="">
+        <img  width="24" src="https://cdn.openverse.network/brands/openverse/icon_128.png" alt="">
         <span class="brand-text titleBox">OPENVERSE <span class="marks">LIVE</span> </span>
       </RouterLink>
     </div>

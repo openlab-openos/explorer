@@ -10,47 +10,60 @@
                     <tbody>
                         <tr>
                             <th style=" text-align: left"> {{ $t("tokens.title") }} </th>
-                            <th style=" text-align: left">{{ $t('certificates') }}</th>
-                            <th style=" text-align: left"> {{ $t("tokens.name") }} </th>
                             <th style=" text-align: left"> {{ $t("tokens.symbol") }} </th>
+                            <th style=" text-align: left">{{ $t('certificates') }}</th>
+
+                            <!-- <th style=" text-align: left"> {{ $t("tokens.symbol") }} </th> -->
                             <th style=" text-align: left"> {{ $t("protocol") }}</th>
-                            <th style=" text-align: left"> {{ $t("rate") }}</th>
+                            <th style=" text-align: left"> {{ $t("holders") }}</th>
+                            <th style=" text-align: left"> {{ $t("market_cap") }} </th>
+                            <th style=" text-align: left"> {{ $t("price") }}</th>
                         </tr>
                         <tr v-for="item, index in paginatedHistoryData" :key="index">
                             <td class="text-theme" style="cursor: pointer;" @click="pubbleys(item.address)">
-                                <img v-if="item.image_url" :src="imgUrl + '/' + item.image_url" width="24" alt=""
+                                <img v-if="item.image_url" :src="item.image_url" width="24" alt=""
                                     class="marginRight8">
                                 <img v-if="B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz"
                                     :src="item.pubkey == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' ? 'https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png' : ''"
                                     width="32" alt="" class="marginRight8">
                                 {{ titleUrl(item.address).url }}
                                 <!-- <img v-if="titleUrl(item.pubkey).type" src="../../../src//assets//renzheng.png"
-                                    width="16" alt=""> -->
+                                    width="24" alt=""> -->
                                 <img v-if="titleUrl(item.pubkey).type"
                                     v-for="(datas, indexs) in titleUrl(item.pubkey).certificates" :key="indexs"
-                                    :src="datas.img" width="16" class="marginRight8" alt="">
+                                    :src="datas.img" width="24" class="marginRight8" alt="">
+                            </td>
+                            <td>
+                                {{ item.symbol }}
                             </td>
                             <template v-if="item.certificates.length == 0">
                                 <td>N/A</td>
                             </template>
                             <template v-else>
                                 <td>
-                                    <img v-for="items, indexs in item.certificates " :key="indexs"
-                                        :src="imgUrl + '/' + items.image_url" width="16" class="marginRight8"
-                                        :title="items.certificate_code" :alt="items.certificate_code">
+                                    <img v-for="items, indexs in item.certificates" :key="indexs"
+                                        :src="imageType(items.certificate_code)" width="24" class="marginRight8"
+                                        :title="items.certificate_code">
                                 </td>
                             </template>
-                            <td>
-                                {{ item.name ? item.name : '' }}
-                            </td>
-                            <td>
+
+
+                            <!-- <td>
                                 {{ item.symbol }}
-                            </td>
+                            </td> -->
                             <td>
                                 {{ item.protocol_code ? item.protocol_code : 'N/A' }}
                             </td>
                             <td>
-                                {{ item.rate ? item.rate : 'N/A' }} {{ item.rate ? 'USD' : '' }}
+                                {{ item.holders }}
+                            </td>
+                            <td>
+                               $ {{ item.market_cap }}
+                            </td>
+                            <td>
+                                {{ item.price ? '$' : '' }} {{ item.price ? item.price : 'N/A' }} 
+                                <img v-if="item.price_icon" :src="imgUrl + '/' + item.price_icon" width="24"
+                                    class="marginRight8" alt="">
                             </td>
                         </tr>
                     </tbody>
@@ -81,9 +94,16 @@ import { tokenList } from "./asset";
 import { titleUrl } from "../../components/method/title_url"
 import { useRouter } from "vue-router";
 import LoadingVue from "../../components/block/loading.vue"
+import unknown from "../../assets/assetsLogo/unknown.png"
+import stable from "../../assets/assetsLogo/stable.png"
+import unsafe from "../../assets/assetsLogo/unsafe.png"
+import vrc10 from "../../assets/assetsLogo/vrc10.png"
+import vrc11 from "../../assets/assetsLogo/vrc11.png"
+import vrc12 from "../../assets/assetsLogo/vrc12.png"
+import vrc20 from "../../assets/assetsLogo/vrc20.png"
 const loadingType = ref(false);
 const router = useRouter();
-const imgUrl = ref('https://open.openverse.live/storage');
+const imgUrl = ref('https://liveapi.imboss.cloud');
 const dataArray = ref()
 const historyData = ref([]);
 const currentPage = ref(1);
@@ -96,7 +116,12 @@ const paginatedHistoryData = computed(() => {
     return historyData.value.slice(start, end);
 });
 tokenList().then((res) => {
-    let showData = res.data.filter(item => item.is_show === 1);
+    console.log(res);
+    console.log(res.data);
+
+    let showData = res.data.filter(item => item.is_web == 1);
+    console.log(showData);
+
     dataArray.value = showData;
     historyData.value = showData;
     totalItems.value = showData.length;
@@ -116,4 +141,29 @@ const pubbleys = (url) => {
 
 };
 loadingType.value = true;
+
+const imageType = (type) => {
+    switch (type) {
+        case 'unknown':
+            return unknown
+            break;
+        case 'stable':
+            return stable
+            break;
+        case 'unsafe':
+            return unsafe
+            break;
+        case 'vrc10':
+            return vrc10
+            break;
+        case 'vrc11':
+            return vrc11
+            break;
+        case 'vrc12':
+            return vrc12
+        case 'vrc20':
+            return vrc20
+    }
+}
+
 </script>

@@ -30,7 +30,7 @@
                                 width="32" alt="">
                             <!-- B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz -->
                             {{ titleUrl(item.pubkey).url }}
-                            <img v-if="titleUrl(item.pubkey).type" src="../../../src//assets//renzheng.png" width="16" alt=""> 
+                            <img v-if="titleUrl(item.pubkey).type" src="../../../src//assets//renzheng.png" width="24" alt=""> 
                         </td>
                         <td>
                             <text v-if="item.account.data.parsed.info.extensions">

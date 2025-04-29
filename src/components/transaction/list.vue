@@ -62,7 +62,7 @@
                                 ) }}
                                 <img v-if="titleUrl(item.source).type"
                                     v-for="(datas, indexs) in titleUrl(item.source).certificates" :key="indexs"
-                                    :src="datas.img" width="16" class="marginRight8" alt="">
+                                    :src="datas.img" width="24" class="marginRight8" alt="">
                             </td>
                             <td style=" text-align: left; cursor: pointer" class="text-theme" @click="
                                 pubbleys(
@@ -75,7 +75,7 @@
                                 }}
                                 <img v-if="titleUrl(item.destination).type"
                                     v-for="(datas, indexs) in titleUrl(item.destination).certificates" :key="indexs"
-                                    :src="datas.img" width="16" class="marginRight8" alt="">
+                                    :src="datas.img" width="24" class="marginRight8" alt="">
 
                             </td>
                             <td style=" text-align: left">

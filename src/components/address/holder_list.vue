@@ -21,12 +21,12 @@
                     <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.account.data.parsed.info.owner)">
                         {{ titleUrl(item.account.data.parsed.info.owner).url }}
                         <img v-if="titleUrl(item.account.data.parsed.info.owner).type" v-for="item, index in titleUrl(item.account.data.parsed.info.owner).certificates"
-                            :src="item.img" :key="index" width="20" alt="" class="marginRight10">
+                            :src="item.img" :key="index"  width="24" alt="" class="marginRight10">
                     </td>
                     <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.pubkey)">
                         {{ titleUrl(item.pubkey).url }}
                         <img v-if="titleUrl(item.pubkey).type" v-for="item, index in titleUrl(item.pubkey).certificates"
-                            :src="item.img" :key="index" width="20" alt="" class="marginRight10">
+                            :src="item.img" :key="index"  width="24" alt="" class="marginRight10">
                     </td>
                     <td>
                         {{ (item.account.data.parsed.info.tokenAmount.uiAmount).toFixed(5) }}

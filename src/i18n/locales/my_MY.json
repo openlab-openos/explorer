@@ -32,6 +32,10 @@
     "protocol": "Protokol",
     "rate": "Kadar",
     "timeRemaining": "Baki Masa",
+    "price": "Harga",
+    "holders": "Pemilik",
+    "market_cap": "Kapital Pasaran",
+    "switch ": "Sila tukar ke rangkaian ujian untuk mengakses.",
     "navigation": {
         "title": "Navigasi",
         "dashboard": "Papan Pemuka",
@@ -247,9 +251,9 @@
         "program": "Program",
         "accounts": "Akaun",
         "name": "Nama",
-        "pubkey":"Alamat Janji",
-        "Amount":"Jumlah",
-        "type":"Status"
+        "pubkey": "Alamat Janji",
+        "Amount": "Jumlah",
+        "type": "Status"
     },
     "nede": {
         "openverse_mainnet": "Openverse Utama",

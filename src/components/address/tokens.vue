@@ -38,14 +38,14 @@
 
                                 <img v-if="titleUrl(item.account.data.parsed.info.mint).type"
                                     v-for="(datas, indexs) in titleUrl(item.account.data.parsed.info.mint).certificates"
-                                    :key="indexs" :src="datas.img" width="16" class="marginRight8" alt="">
+                                    :key="indexs" :src="datas.img" width="24" class="marginRight8" alt="">
 
                             </td>
                             <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.pubkey)">
                                 {{ titleUrl(item.pubkey).url }}
                                 <img v-if="titleUrl(item.pubkey).type"
                                     v-for="(datas, indexs) in titleUrl(item.pubkey).certificates" :key="indexs"
-                                    :src="datas.img" width="16" class="marginRight8" alt="">
+                                    :src="datas.img" width="24" class="marginRight8" alt="">
 
                             </td>
 
@@ -53,14 +53,14 @@
                                 {{ titleUrl(item.account.owner).url }}
                                 <img v-if="titleUrl(item.account.owner).type"
                                     v-for="(datas, indexs) in titleUrl(item.account.owner).certificates" :key="indexs"
-                                    :src="datas.img" width="16" class="marginRight8" alt="">
+                                    :src="datas.img" width="24" class="marginRight8" alt="">
 
                             </td>
                             <td>
                                 {{ tokenNumber(item.account.data.parsed.info.tokenAmount.uiAmount) }}
                                 <img v-if="titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).type"
                                     v-for="(datas, indexs) in titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).certificates"
-                                    :key="indexs" :src="datas.img" width="16" class="marginRight8" alt="">
+                                    :key="indexs" :src="datas.img" width="24" class="marginRight8" alt="">
                                 <text v-if="item.symbol"> {{ '(' + item.symbol + ')' }}</text>
                                 <text v-if="titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).symbol">({{
                                     titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).symbol }})</text>

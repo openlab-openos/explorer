@@ -41,7 +41,7 @@
                                     {{ key == "lamports" ? '(BTG)' : '' }}
                                     <img v-if="titleUrl(value).type"
                                         v-for="(datas, indexs) in titleUrl(value).certificates" :key="indexs"
-                                        :src="datas.img" width="16" class="marginRight8" alt="">
+                                        :src="datas.img" width="24" class="marginRight8" alt="">
                                 </td>
                             </tr>
                             <template v-else>
@@ -67,7 +67,7 @@
                                             'byts(s)' : '' }}
                                         {{ keys == "lamports" ? '(BTG)' : '' }}
                                         <img v-if="titleUrl(values).type"
-                                            v-for="(datas) in titleUrl(values).certificates" :src="datas.img" width="16"
+                                            v-for="(datas) in titleUrl(values).certificates" :src="datas.img" width="24"
                                             class="marginRight8" alt="">
                                     </td>
                                 </tr>
@@ -100,7 +100,7 @@
                                 titleUrl(item.accounts[0]).url }}
                                 <img v-if="titleUrl(item.accounts[0]).type"
                                     v-for="(datas, indexs) in titleUrl(item.accounts[0]).certificates" :key="indexs"
-                                    :src="datas.img" width="16" class="marginRight8" alt="">
+                                    :src="datas.img" width="24" class="marginRight8" alt="">
 
                             </td>
                         </tr>
@@ -109,7 +109,7 @@
                             <td class="text-end">{{ titleUrl(item.data ? item.data : 'Note Data').url }}
                                 <img v-if="titleUrl(item.data).type"
                                     v-for="(datas, indexs) in titleUrl(item.data).certificates" :key="indexs"
-                                    :src="datas.img" width="16" class="marginRight8" alt="">
+                                    :src="datas.img" width="24" class="marginRight8" alt="">
 
                             </td>
                         </tr>

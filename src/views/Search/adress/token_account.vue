@@ -2,12 +2,14 @@
     <div>
         <h3 class="align-center">
             <img :src="token_img ? token_img : ''" alt="" class="marginRight10 imgWigth25" v-if="token_img">
-            <img v-if="titleUrl(token_name).type" :src="titleUrl(token_name).img" class="marginRight10 imgWigth25" >
-            <text> {{ $t("account.tokenAccount") }}  {{ token_name ? (titleUrl(url).find ? titleUrl(url).url : '') : '' }}
+            <img v-if="titleUrl(token_name).type" :src="titleUrl(token_name).img" class="marginRight10 imgWigth25">
+            <text> {{ $t("account.tokenAccount") }} {{ token_name ? (titleUrl(url).find ? titleUrl(url).url : '') : ''
+                }}
                 <img v-if="titleUrl(url).type" v-for="item, index in titleUrl(url).certificates" :src="item.img"
-                    :key="index" width="20" alt="" class="marginRight10">
+                    :key="index" width="24" alt="" class="marginRight10">
             </text>
         </h3>
+
         <div class=" marginTOP-50">
             <card class="md-3">
                 <card-body class="card-bodys">
@@ -19,7 +21,7 @@
                                 <td>{{ $t("account.token_account") }} </td>
                                 <td class="text-end"> {{ url }} </td>
                             </tr>
-                            <tr >
+                            <tr>
                                 <td>{{ $t("account.address_label") }} </td>
                                 <td class="text-end"> {{ price ? price.name : 'N/A' }} </td>
                             </tr>
@@ -41,28 +43,28 @@
                                     titleUrl(getMint).url }}
                                     <img v-if="titleUrl(getMint).type"
                                         v-for="(datas, indexs) in titleUrl(getMint).certificates" :src="datas.img"
-                                        :key="indexs" width="16" class="marginRight8" alt="">
+                                        :key="indexs" width="24" class="marginRight8" alt="">
                                 </td>
                             </tr>
                             <tr>
                                 <td>{{ $t("account.state") }} </td>
                                 <td class="text-end">{{ tokenData.isFrozen ? $t("account.frozen") :
                                     $t("account.initialize")
-                                    }} </td>
+                                }} </td>
                             </tr>
                             <tr>
                                 <td>{{ $t("account.Owner") }} </td>
                                 <td class="text-end text-theme" @click="pubbtx(owners)" style="cursor: pointer"> {{
                                     titleUrl(owners).url }} <img v-if="titleUrl(owners).type"
                                         v-for="(datas, indexs) in titleUrl(owners).certificates" :key="indexs"
-                                        :src="datas.img" width="16" class="marginRight8" alt=""> </td>
+                                        :src="datas.img" width="24" class="marginRight8" alt=""> </td>
                             </tr>
                             <tr>
                                 <td>{{ $t("transaction.program") }} </td>
                                 <td class="text-end text-theme" @click="pubbtx(owner)" style="cursor: pointer"> {{
                                     titleUrl(owner).url }} <img v-if="titleUrl(owner).type"
                                         v-for="(datas, indexs) in titleUrl(owner).certificates" :key="indexs"
-                                        :src="datas.img" width="16" class="marginRight8" alt=""></td>
+                                        :src="datas.img" width="24" class="marginRight8" alt=""></td>
                             </tr>
                         </tbody>
                     </table>
@@ -76,7 +78,7 @@
                         <el-tab-pane :label="$t('navigation.transactions')" name="first">
                             <history-view :url="url"></history-view>
                         </el-tab-pane>
-                        <el-tab-pane :label="$t('transfer')" name="second">
+                        <el-tab-pane v-if="transfersType.urlType == 'Formal' " :label="$t('transfer')" name="second">
                             <transfer-view :url="url"></transfer-view>
                         </el-tab-pane>
                         <!-- <el-tab-pane :label="$t('account.holder')" name="third">
@@ -115,6 +117,8 @@ const owners = ref();
 const program = ref();
 const data = ref();
 const activeName = ref('first')
+
+const transfersType = JSON.parse(sessionStorage.getItem('urlType'));
 
 const props = defineProps({
     url: {
@@ -197,7 +201,7 @@ const mintReauest = async (url) => {
     try {
         await solanaRequest(url, owner.value).then(res => {
             console.log(res);
-            
+
             mintData.value = res;
         });
         await metaRequest(url, owner.value).then(res => {

@@ -32,6 +32,10 @@
     "protocol": "프로토콜",
     "rate": "비율",
     "timeRemaining": "남은 시간",
+    "price": "가격",
+    "holders": "소유자",
+    "market_cap": "시장 가치",
+    "switch ": "테스트 네트워크를 사용하십시오",
     "navigation": {
         "title": "네비게이션",
         "dashboard": "대시보드",
@@ -247,9 +251,9 @@
         "program": "프로그램",
         "accounts": "계정",
         "name": "이름",
-        "pubkey":"스테이킹 주소",
-        "Amount":"수량",
-        "type":"상태"
+        "pubkey": "스테이킹 주소",
+        "Amount": "수량",
+        "type": "상태"
     },
     "nede": {
         "openverse_mainnet": "Openverse 메인넷",

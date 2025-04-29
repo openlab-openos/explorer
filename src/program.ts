@@ -1,6 +1,13 @@
 import { Cluster } from '../src/cluster';
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
+import unknown from "../src/assets/assetsLogo/unknown.png"
+import stable from "../src/assets/assetsLogo/stable.png"
+import unsafe from "../src/assets/assetsLogo/unsafe.png"
+import vrc10 from "../src/assets/assetsLogo/vrc10.png"
+import vrc11 from "../src/assets/assetsLogo/vrc11.png"
+import vrc12 from "../src/assets/assetsLogo/vrc12.png"
+import vrc20 from "../src/assets/assetsLogo/vrc20.png"
 // import { useAppStore } from "@/stores/index";
 // const appStore = useAppStore();
 // console.log(appStore);
@@ -462,7 +469,7 @@ export const TOKEN_IDS: { [key: string]: string } = {
 } as const;
 const datas = ref();
 const Authentication = async () => {
-    await axios.get("https://open.openverse.live/api/token/some", {
+    await axios.get("https://liveapi.imboss.cloud/api/token/web", {
         headers: {
             "Content-Type": "application/json"
         }
@@ -482,12 +489,36 @@ const Authentication = async () => {
     })
 }
 
+const imageType = (type :any) => {
+    switch (type) {
+        case 'unknown':
+            return unknown
+            break;
+        case 'stable':
+            return stable
+            break;
+        case 'unsafe':
+            return unsafe
+            break;
+        case 'vrc10':
+            return vrc10
+            break;
+        case 'vrc11':
+            return vrc11
+            break;
+        case 'vrc12':
+            return vrc12
+        case 'vrc20':
+            return vrc20
+    }
+}
+
 const Cretifucate = (data: Array<any>) => {
     let CretifucateArray = [];
     for (let i in data) {
         CretifucateArray.push({
             'address': data[i].address,
-            'img': imgUrl.value + '/' + data[i].image_url,
+            'img': data[i].image_url,
             'name': data[i].name,
             'code': data[i].protocol_code,
             'symbol': data[i].symbol,
@@ -497,7 +528,7 @@ const Cretifucate = (data: Array<any>) => {
         })
         for (let j in data[i].certificates) {
             CretifucateArray[i].certificates.push({
-                'img': imgUrl.value + '/' + data[i].certificates[j].image_url,
+                'img': imageType(data[i].certificates[j].certificate_code),
                 'code': data[i].certificates[j].certificate_code,
             })
 

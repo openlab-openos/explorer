@@ -12,7 +12,7 @@ export const useAppSidebarMenuStore = defineStore({
       'text': 'navigation.dashboard',
       'type': false
     }, {
-      'url': "assets",
+      'url': "assetsView",
       'icon': 'bi bi-x-diamond',
       'text': 'navigation.tokens',
       'type': false
@@ -21,7 +21,6 @@ export const useAppSidebarMenuStore = defineStore({
       'icon': 'bi bi-columns-gap',
       'text': 'navigation.validators',
       'type': false
-
     }, {
       'url': 'blocks',
       'icon': 'bi bi-bar-chart',

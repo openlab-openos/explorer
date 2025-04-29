@@ -4,10 +4,11 @@
         <h3 class="align-center">
             <!-- acquiesce -->
             <img :src="token_img ? token_img : ''" alt="" class="marginRight10 imgWigth25" v-if="token_img">
-            <img v-if="titleUrl(token_name).type" :src="titleUrl(token_name).img" class="marginRight10 imgWigth25" >
-            <text>  {{ token_name ? titleUrl(token_name).url : '' }} {{ $t("account.token") }}
+            <img v-if="titleUrl(token_name).type" :src="titleUrl(token_name).img" class="marginRight10 imgWigth25">
+            <!-- <text> {{ token_name ? titleUrl(token_name).url : '' }} {{ $t("account.token") }} -->
+            <text> {{ token_name ? titleUrl(token_name).url : '' }}
                 <img v-if="titleUrl(url).type" v-for="item, index in titleUrl(url).certificates" :src="item.img"
-                    :key="index" width="20" alt="" class="marginRight10">
+                    :key="index" width="24" alt="" class="marginRight10">
             </text>
         </h3>
         <div class="marginTOP-50">
@@ -61,13 +62,14 @@
                                     titleUrl(paramsId).url }}
                                     <img v-if="titleUrl(paramsId).type"
                                         v-for="(datas, indexs) in titleUrl(paramsId).certificates" :key="indexs"
-                                        :src="datas.img" width="16" class="marginRight8" alt="">
+                                        :src="datas.img" width="24" class="marginRight8" alt="">
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </card-body>
             </card>
+            
             <card class="md-3 marginTOP-50">
                 <card-body class="card-bodys ">
                     <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
@@ -83,7 +85,7 @@
                                         !pubbleys ? "N/A" : titleUrl(pubbleys).url }}
                                     <img v-if="titleUrl(pubbleys).type"
                                         v-for="(datas, indexs) in titleUrl(pubbleys).certificates" :key="indexs"
-                                        :src="datas.img" width="16" class="marginRight10" alt="">
+                                        :src="datas.img" width="24" class="marginRight10" alt="">
                                 </td>
                             </tr>
                             <tr>
@@ -92,7 +94,7 @@
                                     titleUrl(tokenData.freezeAuthority).url }}
                                     <img v-if="titleUrl(tokenData.freezeAuthority).type"
                                         v-for="(datas, indexs) in titleUrl(tokenData.freezeAuthority).certificates"
-                                        :key="indexs" :src="datas.img" width="16" class="marginRight10" alt="">
+                                        :key="indexs" :src="datas.img" width="24" class="marginRight10" alt="">
                                 </td>
                             </tr>
                         </tbody>
@@ -100,6 +102,7 @@
                 </card-body>
             </card>
         </div>
+        <cardView v-if="url" :url="url" />
         <div class="tab-content marginTOP-50">
             <card class="md-3">
                 <card-body class="card-bodys">
@@ -107,7 +110,7 @@
                         <el-tab-pane :label="$t('navigation.transactions')" name="first">
                             <history-view :url="url"></history-view>
                         </el-tab-pane>
-                        <el-tab-pane :label="$t('transfer')" name="second">
+                        <el-tab-pane  v-if="transfersType.urlType == 'Formal' " :label="$t('transfer')" name="second">
                             <transfer-view :url="url"></transfer-view>
                         </el-tab-pane>
                         <el-tab-pane :label="$t('account.holder') + ' ' + '(' + holdNumber + ')'" name="third">
@@ -132,6 +135,8 @@ import historyView from "../../../components/address/history_list.vue"
 import transferView from "../../../components/address/transfer_list.vue";
 import holderView from "../../../components/address/holder_list.vue";
 import pledgeView from "../../../components/address/pledge.vue"
+import  cardView from "./components/card.vue"
+
 
 const tokenData = ref();
 const pubbleys = ref("");
@@ -139,7 +144,8 @@ const address = ref();
 const holdNumber = ref();
 const router = useRouter();
 const mintToken = ref();
-const activeName = ref('first')
+const activeName = ref('first');
+const transfersType = JSON.parse(sessionStorage.getItem('urlType'));
 
 const props = defineProps({
     url: {
@@ -151,10 +157,13 @@ const props = defineProps({
         default: ''
     }
 });
+
+
 const url = ref(props.url);
 const paramsId = ref(props.paramsId);
 const token_name = ref("");
 const token_img = ref("");
+
 const tokenName = async (url, params) => {
 
     try {

@@ -1,16 +1,13 @@
 import axios from "axios";
 
-
-
 const currentUrl = window.location.href;
 
 let urlType = currentUrl.includes('?cluster=devnet')
 const chainStorg = JSON.parse(sessionStorage.getItem("app"))
 const GeturlType = JSON.parse(sessionStorage.getItem("urlType"));
+// const urlTypeData = urlType ? 'Test' : (GeturlType ? GeturlType.urlType : (urlType ?  'Test' :  'Formal'));
+// const urlTypeData = GeturlType ? GeturlType.urlType : (urlType ?  'Test' :  'Formal');
 const urlTypeData = GeturlType ? GeturlType.urlType : (urlType ?  'Test' :  'Formal');
-console.log(urlTypeData);
-console.log(urlTypeData === 'Test');
-console.log(urlType && urlTypeData === 'Test');
 
 
 if (urlTypeData === 'Test') {

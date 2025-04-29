@@ -69,8 +69,8 @@ const router = createRouter({
       component: Epoch,
     },
     {
-      path: "/assets",
-      name: "assets",
+      path: "/assetsView",
+      name: "assetsView",
       component: Tokens,
     },
     {
@@ -115,12 +115,12 @@ router.beforeEach((to, from, next) => {
       const queryString = new URLSearchParams(existingQuery).toString();
       // 构建新的路径
       const newPath = to.path + (queryString.length > 0? `?${queryString}` : "");
+      console.log('Redirecting to:', newPath); // 添加日志输出
       // 进行跳转，并带上新的路径和查询参数
       next({ path: newPath, query: existingQuery });
   } else {
       next();
   }
 });
-
 
 export default router;

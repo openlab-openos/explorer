@@ -20,7 +20,7 @@
                             <tr v-for="(log, index) in paginatedHistoryData" :key="index">
                                 <td>
                                     <span class="d-flex align-items-center">
-                                        <img :src="log.icon" alt="" width="20" style="margin: 0px 5px" />
+                                        <img :src="log.icon" alt="" width="24" style="margin: 0px 5px" />
                                         {{ log.name }}
                                     </span>
                                 </td>

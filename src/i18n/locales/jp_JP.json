@@ -32,6 +32,10 @@
     "protocol": "プロトコル",
     "rate": "レート",
     "timeRemaining": "残り時間",
+    "price": "価格",
+    "holders": "保有者",
+    "market_cap": "マーケットキャップ",
+    "switch ": "テストネットワークをご利用ください",
     "navigation": {
         "title": "ナビゲーション",
         "dashboard": "ダッシュボード",
@@ -247,9 +251,9 @@
         "program": "プログラム",
         "accounts": "アカウント",
         "name": "名前",
-        "pubkey":"ステークアドレス",
-        "Amount":"数量",
-        "type":"ステータス"
+        "pubkey": "ステークアドレス",
+        "Amount": "数量",
+        "type": "ステータス"
     },
     "nede": {
         "openverse_mainnet": "Openverse Mainnet",

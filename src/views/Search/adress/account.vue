@@ -41,7 +41,7 @@
                                     {{ titleUrl(item.owner).url }}
                                     <img v-if="titleUrl(item.owner).type"
                                         v-for="(datas, indexs) in titleUrl(item.owner).certificates" :key="indexs"
-                                        :src="datas.img" width="16" class="marginRight8" alt="">
+                                        :src="datas.img" width="24" class="marginRight8" alt="">
 
                                 </td>
                             </tr>
@@ -102,7 +102,7 @@
                         <el-tab-pane :label="$t('navigation.transactions')" name="first">
                             <history-view :url="url"></history-view>
                         </el-tab-pane>
-                        <el-tab-pane :label="$t('transfer')" name="second">
+                        <el-tab-pane  v-if="transfersType.urlType == 'Formal' " :label="$t('transfer')" name="second">
                             <transfer-view :url="url" v-if="activeName == 'second'"></transfer-view>
                         </el-tab-pane>
                         <el-tab-pane :label="$t('pledge')" name="third">
@@ -145,6 +145,7 @@ onMounted(async () => {
     await menufunction(props.url);
 
 })
+const transfersType = JSON.parse(sessionStorage.getItem('urlType'));
 
 const paramsId = ref([
     "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c",

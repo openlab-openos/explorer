@@ -398,7 +398,7 @@ export default {
                       {{ titleUrl(item.pubkey).url }}
                       <img v-if="titleUrl(item.pubkey).type"
                         v-for="(datas, indexs) in titleUrl(item.pubkey).certificates" :key="indexs" :src="datas.img"
-                        width="16" class="marginRight8" alt="">
+                        width="24" class="marginRight8" alt="">
 
                     </td>
                     <td v-if="historyData.meta.postBalances">

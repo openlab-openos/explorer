@@ -1,5 +1,5 @@
 // import { createSSRApp } from 'vue';
-import { createApp } from 'vue';
+import { createApp, onMounted } from 'vue';
 import { createPinia } from 'pinia';
 import { Vue3ProgressPlugin } from '@marcoschulte/vue3-progress';
 import PerfectScrollbar from 'vue3-perfect-scrollbar';
@@ -49,6 +49,11 @@ if (typeof (window as any).Buffer === "undefined") { // 判断当前环境是否
 } else {
     
 }
+
+onMounted(()=>{
+    console.log("window._paq.push(['trackPageView']);");
+    
+})
 
 const emitter = mitt();
 const appStore = useAppStore();

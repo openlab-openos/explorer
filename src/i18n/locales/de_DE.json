@@ -32,6 +32,10 @@
     "protocol": "Protokoll",
     "rate": "Preis",
     "timeRemaining": "Verbleibende Zeit",
+    "price":  "Preis",
+    "holders":"Besitzer",
+    "market_cap": "Marktkapitalisierung",
+    "switch":"Bitte wechseln Sie zu einem Testnetzwerk um darauf zuzugreifen",
     "navigation": {
         "title": "Navigation",
         "dashboard": "Übersicht",

@@ -31,6 +31,10 @@
     "certificates": "Certificates",
     "protocol": "Protocol",
     "rate": "Rate",
+    "price": "Price",
+    "holders": "Holders",
+    "market_cap": "Market Cap",
+    "switch ": "Please switch to a testnet to access",
     "navigation": {
         "title": "Navigation",
         "dashboard": "Dashboard",
@@ -42,7 +46,7 @@
         "wallet": "Wallet",
         "website": "Website",
         "tokens": "Assets",
-        "faucet":"Faucet"
+        "faucet": "Faucet"
     },
     "dashboard": {
         "title": "Dashboard",

@@ -32,6 +32,10 @@
     "protocol": "Giao thức",
     "rate": "Tỷ giá",
     "timeRemaining": "Thời gian còn lại",
+    "price": "Giá",
+    "holders": "Chủ sở hữu",
+    "market_cap": "Giá trị cổ phiếu",
+    "switch ": "Vui lòng sử dụng mạng thử nghiệm",
     "navigation": {
         "title": "Điều hướng",
         "dashboard": "Bảng điều khiển",
@@ -247,9 +251,9 @@
         "program": "Chương trình",
         "accounts": "Tài khoản",
         "name": "Tên",
-        "pubkey":"Địa chỉ cam kết",
-        "Amount":"Số lượng",
-        "type":"Trạng thái"
+        "pubkey": "Địa chỉ cam kết",
+        "Amount": "Số lượng",
+        "type": "Trạng thái"
     },
     "nede": {
         "openverse_mainnet": "Openverse mainnet",
