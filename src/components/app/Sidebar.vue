@@ -130,11 +130,8 @@ const isActive = computed(() => (url) => {
 </script>
 
 <style scoped>
-<<<<<<< HEAD
-=======
 .app-sidebar {
   width: auto !important;
 }
->>>>>>> master
 /* 添加你的样式 */
 </style>

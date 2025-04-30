@@ -4,7 +4,7 @@ import { onBeforeUnmount, onMounted, ref, watchEffect } from "vue";
 import apexchart from "@/components/plugins/Apexcharts.vue";
 import jsVectorMap from "jsvectormap";
 import "jsvectormap/dist/maps/world.js";
-import "jsvectormap/dist/css/jsvectormap.min.css";
+import "jsvectormap/dist/jsvectormap.min.css";
 import { chainRequest } from "../../request/chain";
 import CountUp from "vue-countup-v3";
 import { useRouter } from "vue-router";
