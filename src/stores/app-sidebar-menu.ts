@@ -48,7 +48,7 @@ export const useAppSidebarMenuStore = defineStore({
       'text': 'navigation.website',
       'type': true
     }, {
-      'url': 'https://uu.cool/',
+      'url': 'https://openwallet.dev/',
       'icon': 'bi bi-credit-card fa-fw fa-lg',
       'text': 'navigation.wallet',
       'type': true

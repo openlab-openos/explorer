@@ -9,12 +9,16 @@
                     <el-input v-model="inputNumber" style="max-width: 600px;height:  2.5rem;" clearable
                         placeholder="Wallet Address" class="input-with-select">
                         <!-- <template #append>
-                            <el-select v-model="selectAddress" placeholder="Select" style="width: 115px;">
-                                <el-option label="0.5" value="1" />
-                                <el-option label="1" value="2" />
-                                <el-option label="2" value="3" />
-                                <el-option label="3" value="4" />
-                                <el-option label="4" value="5" />
+                            <el-select v-model="selectBTG" placeholder="Select" style="width: 50%;">
+                                <el-option label="BTG" value="BTG" />
+                                <el-option label="USDT" value="USDT" />
+                            </el-select>
+                            <el-select v-model="selectAddress" placeholder="Select" style="width: 50%;">
+                                <el-option label="0.5" value="0.5" />
+                                <el-option label="1" value="1" />
+                                <el-option label="2" value="2" />
+                                <el-option label="3" value="3" />
+                                <el-option label="4" value="4" />
                             </el-select>
                         </template> -->
                     </el-input>
@@ -22,7 +26,7 @@
                 <div class="display-flex justify-content-center p-6 ">
                     <el-select v-model="selectBTG" placeholder="Select" style="width: 50%;">
                         <el-option label="BTG" value="BTG" />
-                        <el-option label="1" value="2" />
+                        <el-option label="USDT" value="USDT" />
                     </el-select>
                     <el-select v-model="selectAddress" placeholder="Select" style="width: 50%;">
                         <el-option label="0.5" value="0.5" />
@@ -190,7 +194,7 @@ watch([inputNumber, selectAddress], () => {
     margin-top: 50px;
 }
 
-.tabble-container {}
+/* .tabble-container {} */
 
 .tabble-image {
     padding: 2rem;
