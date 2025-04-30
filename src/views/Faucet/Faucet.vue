@@ -8,7 +8,7 @@
                 <div class="display-flex justify-content-center p-6 ">
                     <el-input v-model="inputNumber" style="max-width: 600px;height:  2.5rem;" clearable
                         placeholder="Wallet Address" class="input-with-select">
-                        <template #append>
+                        <!-- <template #append>
                             <el-select v-model="selectAddress" placeholder="Select" style="width: 115px;">
                                 <el-option label="0.5" value="1" />
                                 <el-option label="1" value="2" />
@@ -16,8 +16,21 @@
                                 <el-option label="3" value="4" />
                                 <el-option label="4" value="5" />
                             </el-select>
-                        </template>
+                        </template> -->
                     </el-input>
+                </div>
+                <div class="display-flex justify-content-center p-6 ">
+                    <el-select v-model="selectBTG" placeholder="Select" style="width: 50%;">
+                        <el-option label="BTG" value="BTG" />
+                        <el-option label="1" value="2" />
+                    </el-select>
+                    <el-select v-model="selectAddress" placeholder="Select" style="width: 50%;">
+                        <el-option label="0.5" value="0.5" />
+                        <el-option label="1" value="1" />
+                        <el-option label="2" value="2" />
+                        <el-option label="3" value="3" />
+                        <el-option label="4" value="4" />
+                    </el-select>
                 </div>
                 <div class="display-flex justify-content-center p-6 p-4">
                     <el-button style="width: 100%;opacity: 0.7;font-weight: 500;font-size: 0.875rem;" class="pading-5"
@@ -34,21 +47,22 @@
         </div>
     </div>
     <div v-else style="text-align: center;">
-        <!-- {{ $t("switch") }} -->
-        请切换测试网络进行访问
+        {{ $t("switch") }}
+        <!-- 请切换测试网络进行访问 -->
     </div>
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch, watchEffect } from 'vue'
 import { Upload } from '@element-plus/icons-vue'
 import Vcode from "vue3-puzzle-vcode";
 import { tokenList } from "../Faucet/assets.js";
 import i18n from "@/i18n"
-// import { useAppStore } from "../../stores/index.js";
+import { useAppStore } from "@/stores/index";
 
 import { ElMessage } from 'element-plus'
 const inputNumber = ref('')
+const selectBTG = ref('BTG')
 const selectAddress = ref('')
 const dialogVisible = ref(false)
 const disabledType = ref(true)
@@ -61,20 +75,24 @@ const urlType = ref(JSON.parse(sessionStorage.getItem('urlType')));
 const currentUrl = window.location.href;
 
 let clusterType = currentUrl.includes('?cluster=devnet')
-// const appStore = useAppStore();
+const appStore = useAppStore();
 onMounted(() => {
     faucetType.value = urlType.value == 'Test' ? true : (clusterType ? true : false);
 })
 
 function selectLanguage(indexValue) {
     i18n.global.locale = indexValue;
+    console.log(indexValue);
+
 }
 
-// watchEffect(() => {
-//     selectLanguage(appStore.$state.language);
-// })
+watchEffect(() => {
+    selectLanguage(appStore.$state.language);
+})
 
 const handleClick = () => {
+    console.log(selectAddress.value);
+    return
     dialogVisible.value = true;
 }
 
@@ -126,7 +144,6 @@ watch([inputNumber, selectAddress], () => {
 </style>
 
 <style scoped>
-
 .borderradius {
     border-radius: 0.5rem;
 }
