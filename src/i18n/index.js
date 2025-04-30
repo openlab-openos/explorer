@@ -7,6 +7,7 @@ import deDE from "./locales/de_DE.json";
 import ruRU from "./locales/ru_RU.json";
 import myMY from "./locales/my_MY.json";
 import vnVN from "./locales/vn_VN.json";
+import hkHK from "./locales/hk_HK.json";
 let i18n = new createI18n({
     locale: "en-US",//默认语
     messages: {
@@ -17,7 +18,8 @@ let i18n = new createI18n({
         "de-DE":deDE,
         "ru-RU":ruRU,
         "my-MY":myMY,
-        "vn-VN":vnVN
+        "vn-VN":vnVN,
+        "hk-HK":hkHK
     }
 })
 

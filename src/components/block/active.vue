@@ -1,7 +1,7 @@
 <template>
-  <div class="col-lg-6 col-xl-3">
+  <div class="col-lg-6 col-xl-3 minification">
     <!-- BEGIN card -->
-    <card class="mb-3" style="height: 160px">
+    <card class="mb-3" style="height: 175px">
       <card-body>
         <div class="d-flex fw-bold small mb-3">
           <span class="flex-grow-1"> {{ $t("dashboard.active_stake") }}</span>
@@ -15,12 +15,11 @@
             ">
             <h5 style="display: flex; height: 30px; font-size:0.9rem;line-height: 30px;">
               {{ data }}M / {{ stubly }}M
-              <!-- {{ data.blockHeight }} -->
             </h5>
           </div>
           <div style="width: 40%; height: 30px">
             <div v-if="chart != null">
-              <apexchart :height="chart.height" :options="chart.options" :series="chart.series"></apexchart>
+              <apexchart :height="chart.height" :options="chart.options" :series="chart.series" style="margin-top: -10px;"></apexchart>
             </div>
           </div>
         </div>
@@ -42,9 +41,9 @@ import { chainRequest } from "../../request/chain";
 import { useAppVariableStore } from "@/stores/app-variable";
 import { useAppStore } from "../../stores/index";
 import { onMounted, ref, watchEffect } from "vue";
-import { constants } from "buffer";
 import i18n from "@/i18n"
 const appStore = useAppStore();
+console.log(appStore);
 
 const appVariable = useAppVariableStore();
 
@@ -64,20 +63,57 @@ watchEffect(() => {
 const randomNo = () => {
   return Math.floor(Math.random() * 60) + 30;
 };
-
+const requestType = ref(true);
 onMounted(() => {
-  watchEffect(() => {
-    epoch.value = appStore.network
-    data.value = appStore.pubbley;
+  watchEffect(async () => {
+    if (requestType.value) {
+      requestType.value = false;
+      epoch.value = appStore.network
+      await chainRequest({
+        jsonrpc: "2.0",
+        id: 1,
+        method: "getVoteAccounts",
+        params: [],
+      }).then((res) => {
+        let btg = res.result;
+        let btgcont = 0;
+        let btgcount = 0;
+
+        if (btg) {
+          for (let i in btg.current) {
+            btgcont += JSON.parse(JSON.stringify(btg.current[i].activatedStake));
+          }
+          btgcount = btgcont;
+          console.log(btgcont);
+          
+          let num = (btgcont / 1000000000).toFixed(0);
+          btgcont = (num / 1000000).toFixed(1);
+        }
+        data.value = btgcont;
+        appStore.setPubbley(data.value);
+        appStore.setBtgcount(btgcount);
+        appStore.setVoteAccount(res);
+      }).catch((err) => {
+        console.log(err);
+        data.value = 0;
+      });
+
+
+      // data.value = appStore.pubbley;
+
+    }
 
     stubly.value = appStore.stubly;
+
+
+
     info.value = [
       {
         icon: ['fas', 'chevron-up'],
         language: "dashboard.average_per_node",
         text:
           " " +
-          (appStore.stubly / (appStore.network / 1000000)).toFixed(2) +
+          (data.value / appStore.Validators.length).toFixed(2) +
           "M",
       },
       {

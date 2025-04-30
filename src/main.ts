@@ -1,5 +1,5 @@
 // import { createSSRApp } from 'vue';
-import { createApp } from 'vue';
+import { createApp, onMounted } from 'vue';
 import { createPinia } from 'pinia';
 import { Vue3ProgressPlugin } from '@marcoschulte/vue3-progress';
 import PerfectScrollbar from 'vue3-perfect-scrollbar';
@@ -16,9 +16,13 @@ import i18n from './i18n';
 import { FontAwesomeIcon } from './fontawesome';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import piniaPersist from "pinia-plugin-persist";
+import VueApexCharts from "vue3-apexcharts";
+
 // import { createApp } from 'vue';
 import vueMatomo from "vue-matomo";
-
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
+import axios from 'axios';
 import { PROGRAM_NAMES, LOADER_IDS, PROGRAM_INFO_BY_ID } from "../src/program";
 
 
@@ -35,16 +39,32 @@ import CardFooter from '@/components/bootstrap/CardFooter.vue';
 import CardGroup from '@/components/bootstrap/CardGroup.vue';
 import CardImgOverlay from '@/components/bootstrap/CardImgOverlay.vue';
 import CardExpandToggler from '@/components/bootstrap/CardExpandToggler.vue';
+import * as buffer from "buffer"; //引入buffer
+import { useAppStore } from "@/stores/index";
+
+ 
+if (typeof (window as any).Buffer === "undefined") { // 判断当前环境是否有Buffer对象
+
+    (window as any).Buffer = buffer.Buffer; // Buffer对象不存在则创建导入的buffer
+} else {
+    
+}
+
+onMounted(()=>{
+    console.log("window._paq.push(['trackPageView']);");
+    
+})
 
 const emitter = mitt();
-
+const appStore = useAppStore();
 let paini = createPinia();
 paini.use(piniaPersist);
 
 const app = createApp(App);
 
 app.config.globalProperties.$progream = PROGRAM_INFO_BY_ID;
-
+app.use(VueApexCharts);
+app.component('apexchart', VueApexCharts)
 
 app.component('Card', Card);
 app.component('CardBody', CardBody);
@@ -57,8 +77,10 @@ app.component('font-awesome-icon', FontAwesomeIcon);
 app.use(paini);
 app.use(router);
 app.use(i18n);
+app.use(ElementPlus);
 app.use(Vue3ProgressPlugin);
 app.use(PerfectScrollbar);
+
 
 app.config.globalProperties.emitter = emitter;
 app.use(vueMatomo, {

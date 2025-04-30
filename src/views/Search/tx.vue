@@ -1,19 +1,28 @@
 <script setup>
-import { getCurrentInstance, ref ,watchEffect} from "vue";
+import { getCurrentInstance, ref, watchEffect } from "vue";
 import i18n from "@/i18n"
 import { useAppStore } from "../../stores/index";
+import { solanapubbleys } from "../../components/method/solana"
+import { PROGRAM_INFO_BY_ID } from "../../program";
+import { titleUrl } from "../../components/method/title_url";
+import logmessViem from "../transaction/methods/logmessage.vue"
+import instructionView from "../../components/transaction/instruction.vue"
 const appStore = useAppStore();
 
 const apps = getCurrentInstance()
 const promaster = apps?.proxy?.$progream;
 // 语言
-function selectLanguage(indexValue){
+function selectLanguage(indexValue) {
   i18n.global.locale = indexValue;
 }
 
-watchEffect(()=>{
+watchEffect(() => {
   selectLanguage(appStore.$state.language);
 })
+// oconst 
+const titleFunction = (item) => {
+
+}
 </script>
 <script>
 import { useAppOptionStore } from "@/stores/app-option";
@@ -39,6 +48,10 @@ export default {
       preType: false,
       raw: true,
       laoding: false,
+      instruction: null,
+      initialize: null,
+      unitLimit: null,
+      innerInstructions: null,
     };
   },
   mounted() {
@@ -91,8 +104,19 @@ export default {
       return moment.unix(time).format("YYYY-MM-DD HH:mm:ss");
     },
     toFexedStake(num) {
-      if (num) {
-        return JSON.stringify(num / 1000000000);
+      if (typeof num !== 'number') {
+        throw new TypeError('The input must be a number.');
+      }
+
+      // 检查整数部分是否大于1
+      if (Math.floor(Math.abs(num)) > 1) {
+        return Number(num).toFixed(2);
+      } else if (Math.abs(num) < 1 && num !== 0) {
+        // 对于绝对值小于1且非零的数，保留5位小数
+        return Number(num).toFixed(6);
+      } else {
+        // 如果是0或者整数部分等于1，则不做特殊处理，直接返回原值
+        return num.toString();
       }
     },
     come(num) {
@@ -130,7 +154,7 @@ export default {
         params: {
           url: url,
         },
-      });
+      })
     },
     dataDeal(item) {
       if (/^\d+$/.test(item.split(" ")[1])) {
@@ -204,13 +228,16 @@ export default {
         },
       ],
     });
+
     if (this.historyData) {
+      this.instruction = this.historyData.transaction.message.instructions;
+      this.innerInstructions = this.historyData.meta.innerInstructions;
       if (this.historyData.meta.logMessages[0].includes("Vote")) {
         this.preType = true;
       }
     }
-
     this.laoding = true
+
 
   },
   watch: {
@@ -290,17 +317,17 @@ export default {
                   <td class="text-end"> {{ textValue(card.value[0].confirmationStatus) }} </td>
                 </tr>
                 <tr>
-                  <td> {{ $t("transaction.confirmation") }}  </td>
+                  <td> {{ $t("transaction.confirmation") }} </td>
                   <td class="text-end"> {{ card.value[0].confirmations ? 'MIN' : 'MAX' }} </td>
                 </tr>
                 <tr v-if="card.value[0].slot">
-                  <td>{{$t("blocks.slot")}}</td>
+                  <td>{{ $t("blocks.slot") }}</td>
                   <td class="text-end"> {{ come(card.value[0].slot) }} </td>
                 </tr>
                 <tr>
                   <td>
                     <InfoTooltip text="Timestamps are only available for confirmed blocks">
-                      {{$t("transaction.recent_blockhash")}}
+                      {{ $t("transaction.recent_blockhash") }}
                     </InfoTooltip>
                   </td>
                   <td class="text-end text-theme" style="cursor: pointer"
@@ -311,96 +338,28 @@ export default {
                     }} </td>
                 </tr>
                 <tr>
-                  <td>{{$t("transaction.fee")}} (BTG)</td>
-                  <td class="text-end"> {{ toFexedStake(historyData.meta.fee) }} </td>
+                  <td>{{ $t("transaction.fee") }} (BTG)</td>
+                  <td class="text-end"> {{ toFexedStake(historyData.meta.fee/1000000000) }} </td>
                 </tr>
                 <tr>
-                  <td>{{$t("transaction.compute_units_consumed")}} </td>
+                  <td>{{ $t("transaction.compute_units_consumed") }} </td>
                   <td class="text-end"> {{ historyData.meta.computeUnitsConsumed }} </td>
                 </tr>
                 <tr>
-                  <td>{{$t("transaction.transaction_version")}}</td>
+                  <td>{{ $t("transaction.transaction_version") }}</td>
                   <td class="text-end"> {{ textValue(historyData.version) }} </td>
                 </tr>
               </tbody>
               <tbody v-else>
                 <tr>
-                  <td>{{$t("transactions.signature")}}</td>
+                  <td>{{ $t("transactions.signature") }}</td>
                   <td class="text-end">{{ url }}</td>
                 </tr>
                 <tr>
-                  <td>{{$t("transaction.result")}}</td>
+                  <td>{{ $t("transaction.result") }}</td>
                   <td class="text-end">
-                    {{$t("transaction.error")}}
+                    {{ $t("transaction.error") }}
                   </td>
-                </tr>
-              </tbody>
-            </table>
-          </card-body>
-
-        </card>
-      </div>
-      <div style="margin-top:50px" v-if="historyData">
-        <h4>{{$t("transaction.instruction")}}</h4>
-        <card class="md-3">
-          <card-body class="card-bodys" v-if="historyData.transaction.message.instructions">
-            <table class=" w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
-              <tr>
-                <th>
-                  <span class="text-theme">
-                    #
-                  </span> {{$t("transaction.system_program")}}
-                </th>
-                <th>
-
-                </th>
-                <th>
-                </th>
-              </tr>
-              <tbody v-for="item, index in historyData.transaction.message.instructions" :key="index">
-                <tr>
-                  <td>
-                    {{$t("transaction.program")}}
-                  </td>
-                  <td class="text-theme" style="cursor: pointer" @click="pubbleys(item.programId)">
-                    {{
-                      promaster[item.programId] ? promaster[item.programId].name : item.programId
-                    }}
-                  </td>
-                  <td></td>
-                </tr>
-                <tr v-if="item.parsed.info.destination">
-                  <td>
-                    {{$t("transaction.from_address")}}
-                  </td>
-                  <td class="text-theme" style="cursor: pointer" @click="pubbleys(item.parsed.info.destination)">
-                    {{
-                      promaster[item.parsed.info.destination] ? promaster[item.parsed.info.destination].name :
-                        item.parsed.info.destination }}
-                  </td>
-                  <td></td>
-                </tr>
-                <tr v-if="item.parsed.info.source">
-                  <td>
-                    {{$t("transaction.to_address")}}
-
-                  </td>
-                  <td class="text-theme" style="cursor: pointer" @click="pubbleys(item.parsed.info.source)">
-
-                    {{
-                      promaster[item.parsed.info.source] ? promaster[item.parsed.info.source].name :
-                        item.parsed.info.source }}
-                  </td>
-                  <td></td>
-                </tr>
-                <tr v-if="item.parsed.info.lamports">
-                  <td>
-                    {{$t("transaction.transfer_amount")}} (BTG)
-                  </td>
-                  <td class="text-theme">
-                    {{ toFexedStake(item.parsed.info.lamports) }}
-                  </td>
-                  <td></td>
                 </tr>
               </tbody>
             </table>
@@ -409,7 +368,7 @@ export default {
       </div>
       <div style="margin-top:50px" v-if="historyData">
         <div v-if="historyData.transaction.message.accountKeys">
-          <h4>{{$t("transaction.account_input(s)")}} </h4>
+          <h4>{{ $t("transaction.account_input(s)") }} </h4>
           <card class="md-3">
             <card-body class="card-bodys">
               <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
@@ -419,16 +378,16 @@ export default {
                       #
                     </th>
                     <th>
-                      {{$t("transaction.address")}}
+                      {{ $t("transaction.address") }}
                     </th>
                     <th>
-                      {{$t("transaction.guange")}}(BTG)
+                      {{ $t("transaction.guange") }}(BTG)
                     </th>
                     <th>
-                      {{$t("transaction.post_balance")}}(BTG)
+                      {{ $t("transaction.post_balance") }}(BTG)
                     </th>
                     <th>
-                      {{$t("transaction.detals")}}
+                      {{ $t("transaction.detals") }}
                     </th>
                   </tr>
                   <tr v-for="item, index in historyData.transaction.message.accountKeys" :key="index">
@@ -436,31 +395,35 @@ export default {
                       {{ index + 1 }}
                     </td>
                     <td class="text-theme" style="cursor: pointer" @click="pubbleys(item.pubkey)">
-                      <!-- {{ item.pubkey }} -->
-                      {{
-                        promaster[item.pubkey] ? promaster[item.pubkey].name : item.pubkey
-                      }}
+                      {{ titleUrl(item.pubkey).url }}
+                      <img v-if="titleUrl(item.pubkey).type"
+                        v-for="(datas, indexs) in titleUrl(item.pubkey).certificates" :key="indexs" :src="datas.img"
+                        width="24" class="marginRight8" alt="">
+
                     </td>
-                    <td v-if="historyData.meta.postBalances[index]">
+                    <td v-if="historyData.meta.postBalances">
                       <span class="symboldata" :style="styleSysmle(
-                        symbolNum(come(toFexedStake(historyData.meta.postBalances[index] -
-                          historyData.meta.preBalances[index])))
+                        symbolNum(come(toFexedStake((historyData.meta.postBalances[index] -
+                          historyData.meta.preBalances[index])/1000000000)))
                       )
                         ">
-                        {{ symbolNum(come(toFexedStake(historyData.meta.postBalances[index] -
-                          historyData.meta.preBalances[index]))).value
+                        {{ symbolNum(come(toFexedStake((historyData.meta.postBalances[index] -
+                          historyData.meta.preBalances[index])/1000000000))).value
                         }}
                       </span>
                     </td>
-                    <td v-if="historyData.meta.postBalances[index]">
-                      {{ come(toFexedStake(historyData.meta.postBalances[index])) }}
+                    <td v-else></td>
+                    <td v-if="historyData.meta.postBalances">
+                      {{ come(toFexedStake(historyData.meta.postBalances[index]/1000000000)) }}
                     </td>
+                    <td v-else></td>
                     <td style="text-align: left;font-size: 12px;">
-                      <span v-if="item.signer ? (item.writable ? true : false) : false" class="dage bg-info">
-                        {{$t("transaction.fee_payer")}}
+                      <span v-if="item.signer ? (item.writable ? (index == 0 ? true : false) : false) : false"
+                        class="dage bg-info">
+                        {{ $t("transaction.fee_payer") }}
                       </span>
-                      <span v-if="item.signer" class="dage bg-info">{{$t("transaction.signer")}}</span>
-                      <span v-if="item.writable" class="dage bg-solt">{{$t("transaction.writable")}}</span>
+                      <span v-if="item.signer" class="dage bg-info">{{ $t("transaction.signer") }}</span>
+                      <span v-if="item.writable" class="dage bg-solt">{{ $t("transaction.writable") }}</span>
                     </td>
                   </tr>
                 </tbody>
@@ -469,18 +432,23 @@ export default {
           </card>
         </div>
       </div>
+      <div  v-if="preType">
+        <h4 class="marginTOP-50">{{ $t("transaction.instruction") }}</h4>
+        <instruction-view :data="instruction" :child="innerInstructions" />
+      </div>
+
       <div style="margin-top:50px" v-if="preType">
-        <h4>{{$t("transaction.instruction")}}</h4>
+        <h4>{{ $t("transaction.instruction") }}</h4>
         <card class="md-3 ">
           <card-body class="card-bodys">
             <table>
               <tbody v-if="historyData">
                 <tr>
-                  <td style="width:50%"> {{$t("transaction.Instruction_Data")}} (JSON)</td>
+                  <td style="width:50%"> {{ $t("transaction.Instruction_Data") }} (JSON)</td>
                   <td style="width:50%">
                     <pre style="background-color: #18202C;border:none;color:#fff;line-height:15px">
-                            {{ historyData.transaction.message.instructions[0].parsed }}
-                        </pre>
+                {{ historyData.transaction.message.instructions[0].parsed }}
+              </pre>
                   </td>
                 </tr>
               </tbody>
@@ -488,45 +456,8 @@ export default {
           </card-body>
         </card>
       </div>
-      <div style="margin-top:50px">
-        <card class="md-3 " v-if="historyData">
-          <card-body class="card-bodys">
-            <div>
-              <div style="width:100%;display:flex;justify-content: space-between;">
-                <h4>{{$t("transaction.LogMessages")}} </h4>
-                <div>
-                  <span style="cursor: pointer" @click="raw = !raw">Raw</span>
-                </div>
-              </div>
-              <div v-if="raw">
-                <div v-for="(item, index) in historyData.transaction.message.instructions" :key="index">
-                  <div style="display:flex;">
-                    <span style="color:#26E97E;background-color:#116939;" class="dage"># {{ index + 1 }}</span>
-                    <h6 style="margin:0;">{{ textValue(item.parsed.type) }}</h6>
-                  </div>
-                  <div>
-                    <ul>
-                      <li v-for="(items, indexs) in historyData.meta.logMessages" :key="indexs" :class="dataDeal(items, item.programId).type == 'success' ? 'text-theme' : ''
-                        ">
-                        {{ dataDeal(items, item.programId).name }}
-                        &nbsp;{{ dataDeal(items, item.programId).value }}
-                        &nbsp;{{ dataDeal(items, item.programId).type
-                        }}
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div v-if="!raw">
-                <pre style="background-color: #18202C;border:none;color:#fff;line-height:15px">
-                            {{
-                              historyData.meta.logMessages
-                            }}
-                        </pre>
-              </div>
-            </div>
-          </card-body>
-        </card>
+      <div style="margin-top:50px" v-if="historyData">
+        <logmess-viem :data="historyData"></logmess-viem>
       </div>
     </div>
   </div>

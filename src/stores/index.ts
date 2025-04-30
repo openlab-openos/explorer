@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { set } from 'vue-demi';
 
 export const useAppStore = defineStore('app', {
     state: () => ({
@@ -15,6 +16,15 @@ export const useAppStore = defineStore('app', {
         country: {},//country
         network: 0,//network
         language: "en-US",//language
+        programs: [],//programs
+        epochTime: "",
+        vaildators: [],
+        epochIfo: {},
+        RecentPerformanceSamples: {},
+        markersdata: [],
+        voteAccount: [],
+        chain: '',
+        chainType: 'Formal',
     }),
     getters: {
         rateData: (state) => {
@@ -53,9 +63,36 @@ export const useAppStore = defineStore('app', {
         getnetwork: (state) => {
             return state.network
         },
-        getLanguage : (state) => {
+        getLanguage: (state) => {
             return state.language
         },
+        getPrograms: (state) => {
+            return state.programs
+        },
+        getepochTime: (state) => {
+            return state.epochTime
+        },
+        getvaildators: (state) => {
+            return state.vaildators
+        },
+        getepochInfo: (state) => {
+            return state.epochIfo
+        },
+        getRecentPerformanceSamples: (state) => {
+            return state.RecentPerformanceSamples
+        },
+        getmarkersdata: (state) => {
+            return state.markersdata
+        },
+        getvoteAccount: (state) => {
+            return state.voteAccount
+        },
+        getChain: (state) => {
+            return state.chain
+        },
+        getchainType: (state) => {
+            return state.chainType
+        }
     },
     actions: {
         setRate(newRate: any) {
@@ -94,8 +131,35 @@ export const useAppStore = defineStore('app', {
         getNetwork(data: any) {
             return this.network = data
         },
-        setLanguage(data: any){
+        setLanguage(data: any) {
             return this.language = data
+        },
+        setPrograms(data: any) {
+            return this.programs = data
+        },
+        setEposhTome(data: any) {
+            return this.epochTime = data
+        },
+        setVaildators(data: any) {
+            return this.vaildators = data
+        },
+        setEpochInfo(data: any) {
+            return this.epochIfo = data
+        },
+        setRecentPerformanceSamples(data: any) {
+            return this.RecentPerformanceSamples = data
+        },
+        setMarkersData(data: any) {
+            return this.markersdata = data
+        },
+        setVoteAccount(data: any) {
+            return this.voteAccount = data
+        },
+        setChain(data: any) {
+            return this.chain = data
+        },
+        setchainType(data: any) {
+            return this.chainType = data
         }
     },
     persist: {

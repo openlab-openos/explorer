@@ -111,7 +111,7 @@ watchEffect(() => {
     <app-header v-if="!appOption.appHeaderHide" />
     <app-top-nav v-if="appOption.appTopNav" />
     <app-sidebar v-if="!appOption.appSidebarHide" />
-    <div class="appContent" v-bind:class="appOption.appContentClass" :style="{ 'margin-left': mediaMarginLeft }">
+    <div class="appContent"  v-bind:class="appOption.appContentClass" :style="{ 'margin-left': mediaMarginLeft }">
       <router-view></router-view>
     </div>
     <app-footer v-if="appOption.appFooter" />

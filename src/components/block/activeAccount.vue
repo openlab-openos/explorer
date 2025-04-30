@@ -1,7 +1,7 @@
 <template>
-  <div class="col-lg-6 col-xl-3">
+  <div class="col-lg-6 col-xl-3 minification">
     <!-- BEGIN card -->
-    <card class="mb-3">
+    <card class="mb-3" style="height: 175px">
       <card-body>
         <div class="d-flex fw-bold small mb-3">
           <span class="flex-grow-1">{{$t ("dashboard.active_account") }}</span>
@@ -24,8 +24,7 @@
               <!-- <div ref="echartsContainers"
                 style="width:100%; height: 40px;display:flex ;justify-content: center;margin-top: -10px;">
               </div> -->
-              <apexchart :height="charts.height" :options="charts.options" :series="charts.series"></apexchart>
-
+              <apexchart :key="componentKey" :height="charts.height" :options="charts.options" :series="charts.series"></apexchart>
             </div>
           </div>
         </div>
@@ -48,7 +47,9 @@ import { onMounted, ref, watchEffect } from "vue";
 import { useAppStore } from "@/stores/index";
 import { useAppVariableStore } from "@/stores/app-variable";
 import i18n from "@/i18n";
+import { onBeforeRouteUpdate } from "vue-router";
 const appVariable = useAppVariableStore();
+const componentKey = ref(0);
 
 
 const appStore = useAppStore();
@@ -56,6 +57,15 @@ const data = ref({});
 const randomNo = () => {
   return Math.floor(Math.random() * 60) + 30;
 };
+
+const forceRerender = () => {
+  componentKey.value += 1;
+};
+
+onBeforeRouteUpdate((to, from, next) => {
+  forceRerender();
+  next();
+});
 
 // 语言
 function selectLanguage(indexValue){
@@ -83,14 +93,14 @@ const charts = ref({
       },
     },
     yaxis: {
-      min: 1500
+      min: 3000
     }
   },
   series: [
     {
       name: "Visitors",
       data: [
-         1555, 1589, 1599, 1593, 1546, 1544,1540, 1550, 1560, 1534, 1560,1544
+         3055, 3089, 3099, 3093, 3046, 3044,3040, 3050, 3060, 3034, 3060,3044
       ],
     },
   ],

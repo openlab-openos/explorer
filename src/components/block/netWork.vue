@@ -1,7 +1,7 @@
 <template>
-  <div class="col-lg-6 col-xl-3">
+  <div class="col-lg-6 col-xl-3 minification">
     <!-- BEGIN card -->
-    <card class="mb-3" style="height: 160px">
+    <card class="mb-3" style="height: 175px">
       <card-body>
         <div class="d-flex fw-bold small mb-3">
           <span class="flex-grow-1"> {{ $t( "dashboard.network_transactions" ) }} </span>
@@ -21,7 +21,7 @@
           </div>
           <div style="width: 40%; height: 30px">
             <div v-if="chart != null">
-              <apexchart :height="chart.height" :options="chart.options" :series="chart.series"></apexchart>
+              <apexchart :height="chart.height" :options="chart.options" :series="chart.series"  style="margin-top: -10px;"></apexchart>
             </div>
           </div>
         </div>
@@ -87,6 +87,10 @@ const performanceSamples = () => {
   };
   chainRequest(requestBody)
     .then((response) => {
+<<<<<<< HEAD
+=======
+      appStore.setRecentPerformanceSamples(response.result)
+>>>>>>> master
       for (let i in response.result) {
         unnumTranstions.value.push(
           JSON.parse(response.result[i].numTransactions) +

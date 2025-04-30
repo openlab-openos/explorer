@@ -1,21 +1,39 @@
-import { fileURLToPath, URL } from "url";
-import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
-import vueJsx from "@vitejs/plugin-vue-jsx";
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import vueJsx from '@vitejs/plugin-vue-jsx';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
+// import styleTmport from 'vite-plugin-style-import';
+import topLevelAwait from 'vite-plugin-top-level-await'
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(), vueJsx()],
+  plugins: [
+    vue(),
+    vueJsx(),
+    nodePolyfills({
+      // 包含你需要的 polyfills
+      include: ['buffer'], // 可以根据需要添加更多模块
+    }),
+    topLevelAwait({
+      // The export name of top-level await promise for each chunk module
+      promiseExportName: '__tla',
+      // The function to generate import names of top-level await promise in each chunk module
+      promiseImportName: i => `__tla_${i}`
+    })
+  ],
   resolve: {
     alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url)),
+      '@': '/src',
     },
   },
   optimizeDeps: {
-    exclude: ['vue-demi']
+    exclude: ['vue-demi'],
+    esbuildOptions: {
+      define: {
+        global: 'globalThis',
+      },
+    },
   },
   build: {
-    // 确保使用 Terser 进行压缩
     minify: 'terser',
     terserOptions: {
       compress: {
@@ -23,7 +41,6 @@ export default defineConfig({
         drop_debugger: true, // 移除 debugger
       },
     },
-    // 配置代码拆分
     sourcemap: true,
     rollupOptions: {
       output: {
@@ -31,8 +48,14 @@ export default defineConfig({
           if (id.includes('node_modules')) {
             return id.toString().split('node_modules/')[1].split('/')[0].toString();
           }
-        }
-      }
+        },
+        globals: {
+          buffer: 'Buffer',
+        },
+      },
+    },
+    commonjsOptions: {
+      requireReturnsDefault: 'namespace'
     }
   },
   server: {
@@ -43,7 +66,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/dataapi/, ""),
       },
-      // 其他代理配置
+      "/airdrop": {
+        target: "http://109.123.230.163:8099/",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/airdrop/, ""),
+      },
     },
   },
 });

@@ -92,18 +92,11 @@ watchEffect(()=>{
   selectLanguage(appStore.$state.language);
 })
 const EpochRequest = async () => {
-  const requestBody = {
-    jsonrpc: "2.0",
-    id: 1,
-    method: "getEpochInfo",
-    params: [],
-  };
-
   try {
-    const response = await chainRequest(requestBody);
-    epochrequest.value = response.result;
-    block.value = response.result.blockHeight;
-    lastBlock.value = block.value + response.result.slotsInEpoch - 1;
+    const response =appStore.getepochInfo;
+    epochrequest.value = response;
+    block.value = response.blockHeight;
+    lastBlock.value = block.value + response.slotsInEpoch - 1;
     blockType.value = true;
     loading.value = true;
 

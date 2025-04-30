@@ -19,66 +19,7 @@
       </div>
 
       <div class="col-xl-6" style="width: 100%">
-        <card class="mb-3">
-          <card-body>
-            <div class="d-flex fw-bold small mb-3">
-              <span class="flex-grow-1"> {{ $t("validators.title") }} </span>
-              <card-expand-toggler />
-            </div>
-            <div class="table-responsive">
-              <table class="table table-striped table-borderless mb-2px small text-nowrap">
-                <tbody>
-                  <tr>
-                    <th> {{ $t("validators.name") }} </th>
-                    <th style="text-align: left">{{ $t("validators.pubkey") }}</th>
-                    <th style="text-align: left"> {{ $t("validators.activated_stake") }} </th>
-                    <th style="text-align: left">{{ $t("validators.gossip") }}</th>
-
-                    <th style="text-align: left">{{ $t("validators.status") }}</th>
-                  </tr>
-                  <tr v-if="ActivityLogData" v-for="(log, index) in ActivityLogData" :key="index">
-                    <td>
-                      <span class="d-flex align-items-center">
-                        <img :src="log.icon" alt="" width="20" style="margin: 0px 5px" />
-                        {{ log.name }}
-                      </span>
-                    </td>
-                    <td style="text-align: left">
-                      <span class="text-theme" style="cursor: pointer" @click="pubbleys(log.pubkey)">
-                        {{ promaster[log.pubkey] ? promaster[log.pubkey].name : log.pubkey }}
-                        <!-- {{ log.pubkey }} -->
-                      </span>
-                    </td>
-                    <td style="text-align: left; display: flex">
-                      <count-up :startVal="toFexedStake(log.activatedStake)" :end-val="toFexedStake(log.activatedStake)"
-                        duration="3"></count-up>
-                      &nbsp; BTG &nbsp; (
-                      {{ countplount(log.activatedStake) }}
-                      )
-                    </td>
-                    <td style="text-align: left">
-                      {{ log.ip }}
-                    </td>
-                    <td style="text-align: left">
-                      <span :style="{
-                        color: log.activatedStake !== '' ? 'green' : 'yellow',
-                      }" class="menu-icon">
-                        <font-awesome-icon icon="fas fa-lg fa-fw me-2 fa-check-circle"
-                          v-if="log.activatedStake !== ''" />
-                        <font-awesome-icon icon="fas fa-lg fa-fw me-2 fa-question-circle"
-                          v-if="log.activatedStake == ''" />
-                        <!-- {{ log.pubkey }} -->
-                      </span>
-                    </td>
-                  </tr>
-                  <tr v-else>
-                    <td colspan="4">{{ $t("not_found") }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </card-body>
-        </card>
+        <validatorsVue  :type="false" />
       </div>
     </div>
     <div v-show="!shoeType">{{ $t("loading") }}</div>
@@ -88,17 +29,14 @@
 
 <script setup>
 import { useAppStore } from "../../stores/index";
-import { ref, getCurrentInstance ,watchEffect} from "vue";
-import { useRouter } from "vue-router";
-import CountUp from "vue-countup-v3";
+import { ref, watchEffect,defineAsyncComponent } from "vue";
 import i18n from "@/i18n"
+import { useRouter } from "vue-router";
+const validatorsVue = defineAsyncComponent(() =>
+  import("../../components/validators/validators_list.vue")
+);
 
 const router = useRouter();
-
-const apps = getCurrentInstance()
-
-const promaster = ref(apps?.proxy?.$progream);
-
 const appStore = useAppStore();
 
 const shoeType = ref(false);
@@ -123,24 +61,34 @@ const Vaildators = ref([
 ]);
 
 // 语言
-function selectLanguage(indexValue){
-  
-  
+function selectLanguage(indexValue) {
+
+
   i18n.global.locale = indexValue;
 }
 
-watchEffect(()=>{
+watchEffect(() => {
   selectLanguage(appStore.$state.language);
 })
 
 const ActivityLogData = ref([]);
 ActivityLogData.value = appStore.Validators;
 
+console.log(ActivityLogData.value);
+
+if(ActivityLogData.value.length == 0){
+  router.push({
+    name: "dashboard",
+  });
+}
+
 Vaildators.value[0].value = ActivityLogData.value.length;
 
 Vaildators.value[1].value = (appStore.part * 100).toFixed(2) + "%";
 Vaildators.value[2].value = appStore.stake + "%";
 Vaildators.value[3].value = ActivityLogData.value[0].version;
+
+
 
 const toFexedStake = (num) => {
   if (num) {
@@ -154,18 +102,9 @@ for (let i in ActivityLogData.value) {
   countLog.value += ActivityLogData.value[i].activatedStake;
 }
 
-const countplount = (num) => {
-  return ((num / countLog.value) * 100).toFixed(2) + "%";
-};
+
 
 shoeType.value = true;
 
-const pubbleys = (url) => {
-  router.push({
-    name: "address",
-    params: {
-      url: url,
-    },
-  });
-};
+
 </script>

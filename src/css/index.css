@@ -1,0 +1,59 @@
+.marginTOP-50{
+    margin-top: 50px;
+}
+.marginTOP-10{
+    margin-top: 10px;
+}
+.marginTOP-20{
+    margin-top: 20px;
+}
+
+.justify-end{
+    display: flex;
+    justify-content: end;
+}
+
+.padding-10{
+    padding: 10px;
+}
+
+.FontSize-12{
+    font-size: 12px;
+}
+.FontSize-14{
+    font-size: 14px;
+}
+
+.FontWeight-Bold{
+    font-weight: bold;
+}
+
+.color27-181-197{
+    color: rgba(67, 181, 197, 1);
+}
+.colorfff{
+    color: #fff;
+}
+.colord1{
+    color: #698582;
+}
+
+.color0-255-179-1{
+    color: rgba(0, 255, 136, 1) !important;
+}
+
+.marginRight8{
+    margin-right: 8px;
+}
+
+.marginRight10{
+    margin-right: 10px;
+}
+
+.imgWigth25{
+    width: 25px;
+}
+
+.card.card-body{
+    min-height: 205px;
+}

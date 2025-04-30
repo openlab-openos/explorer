@@ -21,8 +21,6 @@
                 <span class="menu-icon" widdth="50" height="24">
                   <i class="menu-icon" :class="menu.icon"></i>
                 </span>
-                <!-- <div class="col-md-6 col-sm-6 col-xs-6 mb-1 text-truncate"><i class="fab fa-lg fa-fw me-2 fa-github"></i> <span>github</span></div> -->
-                 
                 <span class="menu-text">{{ $t(menu.text) }}</span>
               </a>
             </div>
@@ -132,5 +130,11 @@ const isActive = computed(() => (url) => {
 </script>
 
 <style scoped>
+<<<<<<< HEAD
+=======
+.app-sidebar {
+  width: auto !important;
+}
+>>>>>>> master
 /* 添加你的样式 */
 </style>

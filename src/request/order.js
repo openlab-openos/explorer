@@ -4,7 +4,7 @@ export function order(url) {
     return new Promise((resolve, reject) => {
         axios
             // .get(url, {
-            .get('dataapi/' + url, {
+            .get('/dataapi/' + url, {
                 headers: {
                     "Content-Type": "application/json",
                 },
