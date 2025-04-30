@@ -108,7 +108,8 @@ const onSuccess = () => {
     onClose();
     tokenList({
         "amount": selectAddress.value,
-        "pubKey": inputNumber.value
+        "pubKey": inputNumber.value,
+        "coinType":selectBTG.value
     }).then((res) => {
         console.log(res)
         loading.value = false;
