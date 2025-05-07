@@ -36,6 +36,9 @@
     "holders": "持有者",
     "market_cap": "市值",
     "switch":"請切換測試網絡進行訪問",
+    "submit":"提交",
+    "Submitsuccess":"提交成功",
+    "Submitfailed":"提交失敗",
     "navigation": {
         "title": "導航",
         "dashboard": "儀表盤",

@@ -36,6 +36,9 @@
     "holders": "Pemilik",
     "market_cap": "Kapital Pasaran",
     "switch": "Sila tukar ke rangkaian ujian untuk mengakses.",
+    "submit": "Hantar",
+    "Submitsuccess": "Berjaya dihantar",
+    "Submitfailed": "Gagal dihantar",
     "navigation": {
         "title": "Navigasi",
         "dashboard": "Papan Pemuka",

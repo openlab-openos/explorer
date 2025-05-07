@@ -36,6 +36,9 @@
     "holders": "保有者",
     "market_cap": "マーケットキャップ",
     "switch": "テストネットワークをご利用ください",
+    "submit": "送信",
+    "Submitsuccess":"送信成功",
+    "Submitfailed":"送信失敗",
     "navigation": {
         "title": "ナビゲーション",
         "dashboard": "ダッシュボード",

@@ -36,6 +36,9 @@
     "holders": "Chủ sở hữu",
     "market_cap": "Giá trị cổ phiếu",
     "switch": "Vui lòng sử dụng mạng thử nghiệm",
+    "submit": "Gửi",
+    "Submitsuccess": "Gửi thành công",
+    "Submitfailed": "Gửi thất bại",
     "navigation": {
         "title": "Điều hướng",
         "dashboard": "Bảng điều khiển",

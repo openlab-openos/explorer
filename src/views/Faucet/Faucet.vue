@@ -37,9 +37,10 @@
                     </el-select>
                 </div>
                 <div class="display-flex justify-content-center p-6 p-4">
-                    <el-button style="width: 100%;opacity: 0.7;font-weight: 500;font-size: 0.875rem;" class="pading-5"
-                        @click="handleClick" :disabled="disabledType">
-                        Confirm Airdrop<el-icon class="el-icon--right">
+                    <el-button style="width: 100%;opacity: 0.7;font-weight: 500;font-size: 0.875rem;border: none;"
+                        class="pading-5" @click="handleClick" :disabled="disabledType"
+                        :style="{ backgroundColor: backgroundColor }">
+                        {{ $t(buttonText) }} <el-icon class="el-icon--right">
                             <Upload />
                         </el-icon>
                     </el-button>
@@ -77,6 +78,8 @@ const errorText = ref('');
 const faucetType = ref(true);
 const urlType = ref(JSON.parse(sessionStorage.getItem('urlType')));
 const currentUrl = window.location.href;
+const backgroundColor = ref("");
+const buttonText = ref('submit');
 
 let clusterType = currentUrl.includes('?cluster=devnet')
 const appStore = useAppStore();
@@ -111,27 +114,40 @@ const onSuccess = () => {
     }).then((res) => {
         console.log(res)
         loading.value = false;
+        disabledType.value = true;
         if (res.success) {
-            successType.value = true;
+            // successType.value = true;
+            buttonText.value = "Submitsuccess";
+            backgroundColor.value = "#67C23A";
         } else {
-            ErrorType.value = true;
+            // ErrorType.value = true;
+            buttonText.value = "Submitfailed";
+            backgroundColor.value = "#F56C6C";
             errorText.value = res.msg;
         }
         setTimeout(() => {
-            successType.value = false;
-            ErrorType.value = false;
+            // successType.value = false;
+            // ErrorType.value = false;
+            buttonText.value = "submit";
+            selectAddress.value = '';
+            inputNumber.value = '';
+            backgroundColor.value = "";
         }, 3000);
     }).catch(error => {
         loading.value = false;
-        ErrorType.value = true;
+        // ErrorType.value = true;
+        backgroundColor.value = "#F56C6C";
         if (!error.msg) {
-            errorText.value = "请求失败";
+            buttonText.value = "Submitfailed";
         } else {
-            errorText.value = error.msg;
+            buttonText.value = error.msg;
         }
         setTimeout(() => {
-            successType.value = false;
-            ErrorType.value = false;
+            // successType.value = false;
+            // ErrorType.value = false;
+            selectAddress.value = '';
+            inputNumber.value = '';
+            backgroundColor.value = "";
         }, 3000);
         console.error('Failed to fetch token list:', error);
     });

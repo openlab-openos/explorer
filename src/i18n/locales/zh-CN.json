@@ -36,6 +36,9 @@
     "holders": "持有者",
     "market_cap": "市值",
     "switch":"请切换测试网络进行访问",
+    "submit":"提交",
+    "Submitsuccess":"提交成功",
+    "Submitfailed":"提交失败",
     "navigation": {
         "title": "导航",
         "dashboard": "仪表盘",

@@ -32,10 +32,12 @@
     "protocol": "Protokoll",
     "rate": "Preis",
     "timeRemaining": "Verbleibende Zeit",
-    "price":  "Preis",
-    "holders":"Besitzer",
+    "price": "Preis",
+    "holders": "Besitzer",
     "market_cap": "Marktkapitalisierung",
-    "switch":"Bitte wechseln Sie zu einem Testnetzwerk um darauf zuzugreifen",
+    "switch": "Bitte wechseln Sie zu einem Testnetzwerk um darauf zuzugreifen",
+    "Submitsuccess": "Einspruch stattgegeben.",
+    "Submitfailed": "Nach dem scheitern.",
     "navigation": {
         "title": "Navigation",
         "dashboard": "Übersicht",
@@ -47,7 +49,7 @@
         "wallet": "Wallet",
         "website": "Website",
         "tokens": "Tokens",
-        "faucet":"Faucet"
+        "faucet": "Faucet"
     },
     "dashboard": {
         "title": "Übersicht",
@@ -251,9 +253,9 @@
         "program": "Programm",
         "accounts": "Konten",
         "name": "Name",
-        "pubkey":"Pfändungsadresse",
-        "Amount":"Menge",
-        "type":"Status"
+        "pubkey": "Pfändungsadresse",
+        "Amount": "Menge",
+        "type": "Status"
     },
     "nede": {
         "openverse_mainnet": "Openverse Mainnet",

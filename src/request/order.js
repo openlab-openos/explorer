@@ -5,7 +5,7 @@ export function order(url) {
         axios
             // .get(url, {
             // .get('/dataapi/' + url, {
-            .get('/dataapi/' + url, {
+            .get('https://openverse.live/dataapi/' + url, {
                 headers: {
                     "Content-Type": "application/json",
                 },
