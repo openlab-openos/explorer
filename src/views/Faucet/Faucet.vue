@@ -95,8 +95,6 @@ watchEffect(() => {
 })
 
 const handleClick = () => {
-    console.log(selectAddress.value);
-    return
     dialogVisible.value = true;
 }
 
@@ -109,7 +107,7 @@ const onSuccess = () => {
     tokenList({
         "amount": selectAddress.value,
         "pubKey": inputNumber.value,
-        "coinType":selectBTG.value
+        "coinType": selectBTG.value
     }).then((res) => {
         console.log(res)
         loading.value = false;
@@ -126,7 +124,11 @@ const onSuccess = () => {
     }).catch(error => {
         loading.value = false;
         ErrorType.value = true;
-        errorText.value = error.msg;
+        if (!error.msg) {
+            errorText.value = "请求失败";
+        } else {
+            errorText.value = error.msg;
+        }
         setTimeout(() => {
             successType.value = false;
             ErrorType.value = false;

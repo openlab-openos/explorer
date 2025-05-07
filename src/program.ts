@@ -469,7 +469,7 @@ export const TOKEN_IDS: { [key: string]: string } = {
 } as const;
 const datas = ref();
 const Authentication = async () => {
-    await axios.get("https://liveapi.imboss.cloud/api/token/web", {
+    await axios.get("https://open.openverse.live/api/token/web", {
         headers: {
             "Content-Type": "application/json"
         }

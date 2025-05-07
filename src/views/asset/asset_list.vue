@@ -103,7 +103,7 @@ import vrc12 from "../../assets/assetsLogo/vrc12.png"
 import vrc20 from "../../assets/assetsLogo/vrc20.png"
 const loadingType = ref(false);
 const router = useRouter();
-const imgUrl = ref('https://liveapi.imboss.cloud');
+const imgUrl = ref('https://open.openverse.live');
 const dataArray = ref()
 const historyData = ref([]);
 const currentPage = ref(1);

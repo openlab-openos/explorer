@@ -2,7 +2,7 @@ import axios from "axios";
 
 export function tokenList(data){
     return new Promise((resolve,reject)=>{
-        axios.post("http://109.123.230.163:8099/airdrop/getAirdrop",data,{
+        axios.post("https://faucet.devnet.openverse.network/airdrop/getAirdrop",data,{
         // axios.post("/airdrop/getAirdrop",data,{
 
             headers:{

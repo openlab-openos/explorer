@@ -2,7 +2,7 @@ import axios from "axios";
 
 export function tokenList(data){
     return new Promise((resolve,reject)=>{
-        axios.get("https://liveapi.imboss.cloud/api/token/web",data,{
+        axios.get("https://open.openverse.live/api/token/web",data,{
             headers:{
                 "Content-Type":"application/json"
             }
