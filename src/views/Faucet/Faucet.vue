@@ -106,6 +106,7 @@ const onClose = () => {
 };
 
 const onSuccess = () => {
+    disabledType.value = true;
     onClose();
     tokenList({
         "amount": selectAddress.value,
@@ -114,7 +115,6 @@ const onSuccess = () => {
     }).then((res) => {
         console.log(res)
         loading.value = false;
-        disabledType.value = true;
         if (res.success) {
             // successType.value = true;
             buttonText.value = "Submitsuccess";
@@ -122,7 +122,8 @@ const onSuccess = () => {
         } else {
             // ErrorType.value = true;
             buttonText.value = "Submitfailed";
-            backgroundColor.value = "#F56C6C";
+            backgroundColor.value = "#ff0000";
+            // backgroundColor.value = "#F56C6C";
             errorText.value = res.msg;
         }
         setTimeout(() => {
