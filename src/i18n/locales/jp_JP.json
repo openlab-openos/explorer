@@ -39,6 +39,9 @@
     "submit": "送信",
     "Submitsuccess":"送信成功",
     "Submitfailed":"送信失敗",
+    "Request-Airdrop": "ファクトリーからトークンを取得",
+    "Requset-text":"8 時間に最大 1 回の要求",
+    "ConfirmAirdrop": "エアドロップを確認する",
     "navigation": {
         "title": "ナビゲーション",
         "dashboard": "ダッシュボード",

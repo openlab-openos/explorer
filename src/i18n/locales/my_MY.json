@@ -39,6 +39,9 @@
     "submit": "Hantar",
     "Submitsuccess": "Berjaya dihantar",
     "Submitfailed": "Gagal dihantar",
+    "Request-Airdrop":  "Minta Airdrop",
+    "ConfirmAirdrop": "Sahkan Airdrop",
+    "Requset-text":"Maksimum 1 permintaan setiap 8 jam",
     "navigation": {
         "title": "Navigasi",
         "dashboard": "Papan Pemuka",

@@ -39,6 +39,9 @@
     "submit": "제출",
     "Submitsuccess":"제출 성공",
     "Submitfailed":"제출 실패",
+    "Request-Airdrop": "에어드랍 요청",
+    "Requset-text":"8시간에 최대 1번의 요청",
+    "ConfirmAirdrop": "에어드롭 확인",
     "navigation": {
         "title": "네비게이션",
         "dashboard": "대시보드",

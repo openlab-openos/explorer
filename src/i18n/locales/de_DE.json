@@ -38,6 +38,10 @@
     "switch": "Bitte wechseln Sie zu einem Testnetzwerk um darauf zuzugreifen",
     "Submitsuccess": "Einspruch stattgegeben.",
     "Submitfailed": "Nach dem scheitern.",
+    "submit": "Einreichen",
+    "Request-Airdrop": "Airdrop beantragen",
+    "Requset-text":"Maximal eine Anfrage alle 8 Stunden",
+     "ConfirmAirdrop": "Airdrop bestätigen",
     "navigation": {
         "title": "Navigation",
         "dashboard": "Übersicht",

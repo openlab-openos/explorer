@@ -39,6 +39,9 @@
     "submit":"提交",
     "Submitsuccess":"提交成功",
     "Submitfailed":"提交失敗",
+    "Request-Airdrop": "請求水龙头",
+    "Requset-text":"每 8 小時最多 1 次請求",
+     "ConfirmAirdrop": "確認空投",
     "navigation": {
         "title": "導航",
         "dashboard": "儀表盤",

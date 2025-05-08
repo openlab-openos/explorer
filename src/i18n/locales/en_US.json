@@ -37,8 +37,11 @@
     "market_cap": "Market Cap",
     "switch": "Please switch to a testnet to access",
     "submit": "Submit",
+    "ConfirmAirdrop": "Confirm Airdrop",
     "Submitsuccess":"Submit Success",
     "Submitfailed":"Submit Failed",
+    "Request-Airdrop":"Request Airdrop",
+    "Requset-text":"Maximum of 1 request every 8 hours",
     "navigation": {
         "title": "Navigation",
         "dashboard": "Dashboard",

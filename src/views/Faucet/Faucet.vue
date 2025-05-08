@@ -5,44 +5,29 @@
                 <img src="../../assets/logo.png" alt="">
             </div>
             <div class="tabbleContainer margin-center borderSolid borderradius">
-                <div class="display-flex justify-content-center p-6 ">
+                <div class="p-7 ">
+                    <h5>{{ $t("Request-Airdrop") }}</h5>
+                    <p>{{ $t("Requset-text") }}</p>
+                </div>
+                <div class="display-flex justify-content-center p-9 ">
+
                     <el-input v-model="inputNumber" style="max-width: 600px;height:  2.5rem;" clearable
                         placeholder="Wallet Address" class="input-with-select">
-                        <!-- <template #append>
-                            <el-select v-model="selectBTG" placeholder="Select" style="width: 50%;">
-                                <el-option label="BTG" value="BTG" />
-                                <el-option label="USDT" value="USDT" />
+                        <template #append>
+                            <el-select v-model="selectAddress" placeholder="Select" style="width: 115px">
+                                <el-option label="2BTG" value="BTG" />
+                                <el-option label="2USD" value="USD" />
                             </el-select>
-                            <el-select v-model="selectAddress" placeholder="Select" style="width: 50%;">
-                                <el-option label="0.5" value="0.5" />
-                                <el-option label="1" value="1" />
-                                <el-option label="2" value="2" />
-                                <el-option label="3" value="3" />
-                                <el-option label="4" value="4" />
-                            </el-select>
-                        </template> -->
+                        </template>
                     </el-input>
                 </div>
-                <div class="display-flex justify-content-center p-6 ">
-                    <el-select v-model="selectBTG" placeholder="Select" style="width: 50%;">
-                        <el-option label="BTG" value="BTG" />
-                        <el-option label="USDT" value="USDT" />
-                    </el-select>
-                    <el-select v-model="selectAddress" placeholder="Select" style="width: 50%;">
-                        <el-option label="0.5" value="0.5" />
-                        <el-option label="1" value="1" />
-                        <el-option label="2" value="2" />
-                        <el-option label="3" value="3" />
-                        <el-option label="4" value="4" />
-                    </el-select>
+                <div class="p-8 lineHeight1" :style="{ color: backgroundColor }">
+                    {{ $t(buttonText) }}
                 </div>
                 <div class="display-flex justify-content-center p-6 p-4">
                     <el-button style="width: 100%;opacity: 0.7;font-weight: 500;font-size: 0.875rem;border: none;"
-                        class="pading-5" @click="handleClick" :disabled="disabledType"
-                        :style="{ backgroundColor: backgroundColor }">
-                        {{ $t(buttonText) }} <el-icon class="el-icon--right">
-                            <Upload />
-                        </el-icon>
+                        class="pading-5" @click="handleClick" :disabled="disabledType">
+                        {{ $t("ConfirmAirdrop") }}
                     </el-button>
                 </div>
             </div>
@@ -79,7 +64,7 @@ const faucetType = ref(true);
 const urlType = ref(JSON.parse(sessionStorage.getItem('urlType')));
 const currentUrl = window.location.href;
 const backgroundColor = ref("");
-const buttonText = ref('submit');
+const buttonText = ref('');
 
 let clusterType = currentUrl.includes('?cluster=devnet')
 const appStore = useAppStore();
@@ -109,9 +94,9 @@ const onSuccess = () => {
     disabledType.value = true;
     onClose();
     tokenList({
-        "amount": selectAddress.value,
+        "amount": 2,
         "pubKey": inputNumber.value,
-        "coinType": selectBTG.value
+        "coinType": selectAddress.value
     }).then((res) => {
         console.log(res)
         loading.value = false;
@@ -120,16 +105,23 @@ const onSuccess = () => {
             buttonText.value = "Submitsuccess";
             backgroundColor.value = "#67C23A";
         } else {
-            // ErrorType.value = true;
-            buttonText.value = "Submitfailed";
-            backgroundColor.value = "#ff0000";
-            // backgroundColor.value = "#F56C6C";
-            errorText.value = res.msg;
+            if (!res.msg) {
+                backgroundColor.value = "#F56C6C";
+                buttonText.value = "Submitfailed";
+            } else {
+                buttonText.value = res.msg;
+                backgroundColor.value = "#F56C6C";
+            }
+            // // ErrorType.value = true;
+            // buttonText.value = "Submitfailed";
+            // backgroundColor.value = "#ff0000";
+            // // backgroundColor.value = "#F56C6C";
+            // errorText.value = res.msg;
         }
         setTimeout(() => {
             // successType.value = false;
             // ErrorType.value = false;
-            buttonText.value = "submit";
+            buttonText.value = "";
             selectAddress.value = '';
             inputNumber.value = '';
             backgroundColor.value = "";
@@ -146,6 +138,7 @@ const onSuccess = () => {
         setTimeout(() => {
             // successType.value = false;
             // ErrorType.value = false;
+            buttonText.value = "";
             selectAddress.value = '';
             inputNumber.value = '';
             backgroundColor.value = "";
@@ -155,8 +148,30 @@ const onSuccess = () => {
 };
 
 watch([inputNumber, selectAddress], () => {
-    disabledType.value = !inputNumber.value.length >= 44 || !selectAddress.value;
+    console.log(!inputNumber.value.length >= 44);
+    console.log(!selectAddress.value != "");
+
+
+    disabledType.value = !(inputNumber.value.length >= 44 && selectAddress.value !== "");
+    console.log(disabledType.value);
+
 });
+
+
+{/* <div class="display-flex justify-content-center p-6 ">
+                    <el-select v-model="selectBTG" placeholder="Select" style="width: 50%;">
+                        <el-option label="BTG" value="BTG" />
+                        <el-option label="USDT" value="USDT" />
+                    </el-select>
+                    <el-select v-model="selectAddress" placeholder="Select" style="width: 50%;">
+                        <el-option label="0.5" value="0.5" />
+                        <el-option label="1" value="1" />
+                        <el-option label="2" value="2" />
+                        <el-option label="3" value="3" />
+                        <el-option label="4" value="4" />
+                    </el-select>
+                </div> */}
+
 </script>
 
 <style scoped>
@@ -182,6 +197,10 @@ watch([inputNumber, selectAddress], () => {
 
 .flex-wrap {
     flex-wrap: wrap;
+}
+
+.borderSolid {
+    border: 1px solid;
 }
 
 .justify-content-center {
@@ -240,8 +259,20 @@ watch([inputNumber, selectAddress], () => {
     color: #67C23A !important;
 }
 
+.p-9 {
+    padding: 1rem 1.5rem;
+}
+
 .p-6 {
     padding: 1.5rem;
+}
+
+.p-7 {
+    padding: 1.5rem 1.5rem 0 1.5rem;
+}
+
+.p-8 {
+    padding: 0 1.5rem;
 }
 
 .pading-5 {
@@ -282,5 +313,10 @@ watch([inputNumber, selectAddress], () => {
     text-align: center;
     margin: 0 25%;
     border-radius: 5px;
+}
+
+.lineHeight1 {
+    line-height: 1rem;
+    height: 1rem;
 }
 </style>
