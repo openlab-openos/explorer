@@ -33,7 +33,6 @@
 
                 </tr>
             </template>
-            <div></div>
         </tbody>
     </table>
     <div v-if="!loading" class="text-center">
