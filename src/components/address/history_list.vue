@@ -72,7 +72,7 @@ const pageSize = ref(20);
 const paginatedHistoryData = computed(() => {
     const start = (currentPage.value - 1) * pageSize.value;
     const end = start + pageSize.value;
-    console.log(historyData);
+
 
     return historyData.value.slice(start, end);
 });
@@ -102,7 +102,6 @@ onMounted(async () => {
         method: "getConfirmedSignaturesForAddress2",
         params: [props.url, { limit: 200 }],
     });
-    console.log(historyData.value);
     if (historyData.value) {
         totalItems.value = historyData.value.length;
     } else {

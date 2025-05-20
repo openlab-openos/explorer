@@ -40,8 +40,9 @@
     "Submitsuccess": "Транзакция отправлена",
     "Submitfailed": "Транзакция не отправлена",
     "Request-Airdrop": "Получить тестовый аккаунт",
-    "Requset-text":"Максимум 1 запрос каждые 8 часов",
-     "ConfirmAirdrop": "Подтвердить эирдроп",
+    "Requset-text": "Максимум 1 запрос каждые 8 часов",
+    "ConfirmAirdrop": "Подтвердить эирдроп",
+    "Margin-record": "Маржа записи",
     "navigation": {
         "title": "Навигация",
         "dashboard": "Панель управления",

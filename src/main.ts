@@ -51,8 +51,7 @@ if (typeof (window as any).Buffer === "undefined") { // 判断当前环境是否
 }
 
 onMounted(()=>{
-    console.log("window._paq.push(['trackPageView']);");
-    
+
 })
 
 const emitter = mitt();

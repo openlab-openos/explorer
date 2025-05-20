@@ -94,7 +94,6 @@ const props = defineProps({
     },
 
 });
-console.log(props)
 const loading = ref(false);
 const historyData = ref([]);
 const proportion_amount = ref(0);
@@ -151,10 +150,8 @@ onMounted(async () => {
     //     // historyData.value[i].state = await stateFunction(historyData.value[i].pubkey);
     //     historyData.value[i].time = await fetchData();
     // }
-    console.log(historyData.value)
     loading.value = true;
     totalItems.value = historyData.value.length;
-    console.log(historyData.value);
     for (let i in historyData.value) {
         historyData.value[i].state = await stateFunction(historyData.value[i].pubkey);
         historyData.value[i].time = await fetchData();
@@ -166,7 +163,7 @@ const stateFunction = async (url) => {
     const userPubKey = new PublicKey(url);
     try {
         const res = await connection.getStakeActivation(userPubKey)
-        console.log(res);
+        
         return res.state;
     } catch (err) {
         console.log(err);

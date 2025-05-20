@@ -40,8 +40,9 @@
     "Submitfailed": "Nach dem scheitern.",
     "submit": "Einreichen",
     "Request-Airdrop": "Airdrop beantragen",
-    "Requset-text":"Maximal eine Anfrage alle 8 Stunden",
-     "ConfirmAirdrop": "Airdrop bestätigen",
+    "Margin-record": "Margin-Record",
+    "Requset-text": "Maximal eine Anfrage alle 8 Stunden",
+    "ConfirmAirdrop": "Airdrop bestätigen",
     "navigation": {
         "title": "Navigation",
         "dashboard": "Übersicht",

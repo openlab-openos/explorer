@@ -126,23 +126,22 @@ const tokenRwquest = async () => {
     };
     await chainRequest(method).then(res => {
         paramsId.value = res.result.value.owner;
-        console.log(res);
+        
 
         try {
             solanaRequest(url.value, res.result.value.owner).then(res => {
-                console.log(res);
+                
                 tokenData.value = res;
-                console.log(tokenData.value);
 
                 if (res.mintAuthority) {
                     let mintAuthorit = res.mintAuthority._bn;
 
                     let mintAuthority = BigInt(mintAuthorit);
                     pubbleys.value = new PublicKey(mintAuthority);
-                    console.log(pubbleys.value);
+                    
 
                 }
-                console.log(pubbleys.value);
+                
 
                 if (res.address) {
                     let addresses = res.address._bn;
@@ -151,7 +150,7 @@ const tokenRwquest = async () => {
                 }
             });
             metaRequest(url.value, res.result.value.owner).then(res => {
-                console.log(res);
+                
                 mintToken.value = res;
             });
         } catch (err) {
@@ -159,7 +158,6 @@ const tokenRwquest = async () => {
         }
     });
 }
-console.log(url.value);
 
 // defineEmits({ mintToken });
 const numberHeld = async () => {
@@ -187,7 +185,7 @@ const numberHeld = async () => {
     }
     chainRequest(method).then(res => {
 
-        console.log(res);
+        
         if (res.err) {
             holdNumber.value = 0;
         } else {

@@ -74,7 +74,6 @@ onMounted(() => {
 
 function selectLanguage(indexValue) {
     i18n.global.locale = indexValue;
-    console.log(indexValue);
 
 }
 
@@ -98,18 +97,17 @@ const onSuccess = () => {
         "pubKey": inputNumber.value,
         "coinType": selectAddress.value
     }).then((res) => {
-        console.log(res)
         loading.value = false;
-        if (res.success) {
+        if (res.status = 'success' ) {
             // successType.value = true;
             buttonText.value = "Submitsuccess";
             backgroundColor.value = "#67C23A";
         } else {
-            if (!res.msg) {
+            if (!res.message) {
                 backgroundColor.value = "#F56C6C";
                 buttonText.value = "Submitfailed";
             } else {
-                buttonText.value = res.msg;
+                buttonText.value = res.message;
                 backgroundColor.value = "#F56C6C";
             }
             // // ErrorType.value = true;
@@ -127,13 +125,14 @@ const onSuccess = () => {
             backgroundColor.value = "";
         }, 3000);
     }).catch(error => {
+        
         loading.value = false;
         // ErrorType.value = true;
         backgroundColor.value = "#F56C6C";
-        if (!error.msg) {
+        if (!error.message) {
             buttonText.value = "Submitfailed";
         } else {
-            buttonText.value = error.msg;
+            buttonText.value = error.message;
         }
         setTimeout(() => {
             // successType.value = false;
@@ -146,14 +145,13 @@ const onSuccess = () => {
         console.error('Failed to fetch token list:', error);
     });
 };
+let a = '4QEDXnBEyw5D5w4xo52vNwuZvHEJiSUbmY16hyx4Qe7q';
+
 
 watch([inputNumber, selectAddress], () => {
-    console.log(!inputNumber.value.length >= 44);
-    console.log(!selectAddress.value != "");
 
 
     disabledType.value = !(inputNumber.value.length >= 44 && selectAddress.value !== "");
-    console.log(disabledType.value);
 
 });
 

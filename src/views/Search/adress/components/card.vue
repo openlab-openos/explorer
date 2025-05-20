@@ -31,7 +31,6 @@ const props = defineProps({
 
 const cardData = ref([])
 
-console.log(props.url);
 
 const tokenType = ref([
     {
@@ -81,9 +80,8 @@ const tokenType = ref([
 const list = ref([])
 
 tokenList(props.url).then(res => {
-    console.log(res);
+    
     cardData.value = res.data.certificates
-    console.log(cardData.value);
     for (let i in cardData.value) {
         for (let j in tokenType.value) {
             if (cardData.value[i].certificate_code == tokenType.value[j].type) {
@@ -91,7 +89,6 @@ tokenList(props.url).then(res => {
             }
         }
     }
-    console.log(list.value);
     
 }).catch(error => {
 });

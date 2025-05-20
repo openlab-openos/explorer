@@ -90,8 +90,7 @@ const handlePageChange = (newPage) => {
 const requestList = async (object) => {
     try {
         const response = await chainRequest(object);
-        // 解析和处理返回的数据
-        console.log(response.result);
+
 
         return response.result; // 现在这个函数会返回解析后的数据
     } catch (error) {
@@ -132,10 +131,8 @@ onMounted(async () => {
         ]
     };
     totalItems.value = historyData.value.length;
-    console.log(historyData.value);
 
     proportion_amount.value = await chainRequest(method).then(res => {
-        console.log(res);
 
         return res.result.value.uiAmount;
     }).catch(err => {
@@ -158,7 +155,7 @@ const timeSome = (time) => {
 }
 
 const percent = (lod, nem) => {
-    console.log(lod, nem);
+
     if (nem == 0) {
         return 0;
     }

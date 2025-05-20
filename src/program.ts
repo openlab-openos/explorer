@@ -10,7 +10,7 @@ import vrc12 from "../src/assets/assetsLogo/vrc12.png"
 import vrc20 from "../src/assets/assetsLogo/vrc20.png"
 // import { useAppStore } from "@/stores/index";
 // const appStore = useAppStore();
-// console.log(appStore);
+// 
 const imgUrl = ref('https://open.openverse.live/storage');
 
 export enum PROGRAM_NAMES {
@@ -474,14 +474,11 @@ const Authentication = async () => {
             "Content-Type": "application/json"
         }
     }).then(res => {
-        console.log(res.data.data);
         let data = Cretifucate(res.data.data);
-        console.log(Cretifucate(res.data.data));
         const transformedObject = data.reduce((acc, item) => {
             acc[item.address] = item;
             return acc;
         }, {} as { [key: string]: any });
-        console.log(transformedObject);
         datas.value = transformedObject
         return transformedObject;
     }).catch(err => {
@@ -537,7 +534,6 @@ const Cretifucate = (data: Array<any>) => {
     return CretifucateArray;
 }
 await Authentication()
-console.log(datas.value);
 
 
 export const Authentications: { [key: string]: TokenProgramInfo } = datas.value;

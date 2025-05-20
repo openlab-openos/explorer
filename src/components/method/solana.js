@@ -2,7 +2,7 @@ import { chainRequest } from "../../request/chain";
 import { solanaRequest } from "../../request/solanaReques";
 
 export const solanapubbleys = async (url) => {
-    console.log(url);
+    
 
     let method = {
         "jsonrpc": "2.0",
@@ -18,7 +18,7 @@ export const solanapubbleys = async (url) => {
 
     try {
         const res = await chainRequest(method);
-        console.log(res);
+        
 
         if (res.result.value) {
             if (res.result.value.owner === "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c" ||

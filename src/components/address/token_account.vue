@@ -102,10 +102,9 @@ const tokenRwquest = async () => {
     try {
         const res = await chainRequest(method);
         owner.value = res.result.value.owner;
-        console.log(owner.value);
 
         const res2 = await solanagetAccount(url.value, owner.value);
-        console.log(res2);
+        
 
         tokenData.value = res2;
         data.value = res2;
@@ -132,7 +131,7 @@ const tokenRwquest = async () => {
 };
 
 const mintReauest = async (url) => {
-    console.log(url);
+    
 
     await chainRequest(
         {
@@ -147,7 +146,6 @@ const mintReauest = async (url) => {
             ]
         }
     ).then(async resd => {
-        console.log(resd.result.value.owner);
         program.value = resd.result.value.owner;
         try {
             await solanaRequest(url, resd.result.value.owner).then(res => {

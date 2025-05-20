@@ -16,10 +16,8 @@ export function solanaRequest(AccountPublicKey, Program) {
         const mintProgram = new PublicKey(
             Program
         )
-        console.log(mintProgram,mintAccountPublicKey);
         
         let mintAccount = await getMint(connection, mintAccountPublicKey, undefined, mintProgram);
-        console.log(mintAccount);
 
         return mintAccount;
     })();

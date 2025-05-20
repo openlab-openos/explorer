@@ -154,14 +154,13 @@ const getActivityLogData = async () => {
         chainRequest(requestBody),
         chainRequest(ClusterNodes),
         chainRequest(VoteAccounts),
-    ]).then((res) => {console.log(res);
-        console.log(res);
+    ]).then((res) => {
+        
         
         appStore.setVaildators(res);
         let ClusterNodes_list = res[0].result;
         let ProgramAccounts_list = res[1].result;
         let VoteAccounts_list = res[2].result;
-        console.log(VoteAccounts_list);
         
         appStore.setminntAccount = res[2].result
         let list = [];
@@ -220,7 +219,6 @@ const getActivityLogData = async () => {
         });
         countLog.value = listCount;
         ActivityLogData.value = list;
-        console.log(list);
 
         appStore.setValidators(JSON.stringify(list));
         appStore
@@ -365,7 +363,6 @@ const renderMap = async () => {
     //         }
     //     }
     // }
-    console.log(markers_data);
 
     // appStore.setMarkersData(markers_data);
     map.value.addMarkers(markers_data);
@@ -400,7 +397,6 @@ const getTrafficData = (data) => {
     if (data) {
         let arrayData = uniqueArrayByProperty(data, "try");
         let country = uniqueArrayByProperty(data, "code");
-        console.log(arrayData);
         
         for (let i = 0; i < 5; i++) {
             if (arrayData[i].value != undefined) {
@@ -443,7 +439,6 @@ const getTrafficData = (data) => {
     appStore.getCountryData(chainArray[0]);
     series.value = chartArray.map(parseFloat);
     let array = series.value;
-    console.log(array);
 
     for (let i in chainArray) {
         chartName.push(chainArray[i].timezone);

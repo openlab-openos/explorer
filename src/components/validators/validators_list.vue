@@ -18,13 +18,13 @@
                         </tr>
                         <template v-if="ActivityLogData">
                             <tr v-for="(log, index) in paginatedHistoryData" :key="index">
-                                <td>
+                                <td style="height: 40px;">
                                     <span class="d-flex align-items-center">
                                         <img :src="log.icon" alt="" width="24" style="margin: 0px 5px" />
                                         {{ log.name }}
                                     </span>
                                 </td>
-                                <td style="text-align: left" v-if="log.pubkey">
+                                <td style="text-align: left;height: 40px;" v-if="log.pubkey">
                                     <span class="text-theme" style="cursor: pointer" @click="pubbleys(log.votepubkey)">
                                         <!-- {{
                                         stringcate(
@@ -36,7 +36,7 @@
                                         {{ stringcate(log.votepubkey) }}
                                     </span>
                                 </td>
-                                <td style="text-align: left; display: flex">
+                                <td style="text-align: left; display: flex;height: 40px;">
                                     <count-up :startVal="toFexedStake(log.activatedStake)"
                                         :end-val="toFexedStake(log.activatedStake)" duration="3"></count-up>
                                     &nbsp; BTG &nbsp; (
@@ -46,7 +46,7 @@
                                 <!-- <td style="text-align: left">
                                     {{ log.ip }}
                                 </td> -->
-                                <td style="text-align: left">
+                                <td style="text-align: left;height: 40px;">
                                     <span :style="{
                                         color: log.activatedStake !== '' ? 'green' : 'yellow',
                                     }" class="menu-icon">
@@ -114,15 +114,14 @@ let VoteAccounts = {
 
 const getActivityLogData = async () => {
     let res = appStore.getvaildators;
-    console.log(res);
+    
     
     if (res.length !== 0) {
-        console.log(res);
+        
         
         let ClusterNodes_list = res[0].result;
         let ProgramAccounts_list = res[1].result;
         let VoteAccounts_list =res[2].result;
-        console.log(typeof VoteAccounts_list);
         let list = [];
 
         for (let i in ProgramAccounts_list) {

@@ -69,7 +69,7 @@
                     </table>
                 </card-body>
             </card>
-            
+
             <card class="md-3 marginTOP-50">
                 <card-body class="card-bodys ">
                     <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
@@ -102,6 +102,36 @@
                 </card-body>
             </card>
         </div>
+
+        <div class="tab-content marginTOP-50">
+            <card class="md-3">
+                <card-body class="card-bodys">
+                    <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
+                        <tr>
+                            <th>Extension</th>
+                            <th class="text-end"></th>
+                        </tr>
+                        <tbody>
+                            <tr>
+                                <td>Account status </td>
+                                <td class="text-end"> {{ AccountType }} </td>
+                            </tr>
+                            <tr>
+                                <td>Permanent principal </td>
+                                <td class="text-end"> {{ TokenPermanentDelegate ? TokenPermanentDelegate : 'N/A' }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Handling fee</td>
+                                <td class="text-end"> {{ TransactionFee ? TransactionFee.totalFee : 'N/A' }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </card-body>
+            </card>
+        </div>
+
         <cardView v-if="url" :url="url" />
         <div class="tab-content marginTOP-50">
             <card class="md-3">
@@ -110,11 +140,14 @@
                         <el-tab-pane :label="$t('navigation.transactions')" name="first">
                             <history-view :url="url"></history-view>
                         </el-tab-pane>
-                        <el-tab-pane  v-if="transfersType.urlType == 'Formal' " :label="$t('transfer')" name="second">
+                        <el-tab-pane v-if="transfersType.urlType == 'Formal'" :label="$t('transfer')" name="second">
                             <transfer-view :url="url"></transfer-view>
                         </el-tab-pane>
                         <el-tab-pane :label="$t('account.holder') + ' ' + '(' + holdNumber + ')'" name="third">
                             <holder-view :url="url" :paramsId="paramsId"></holder-view>
+                        </el-tab-pane>
+                        <el-tab-pane :label="$t('Margin-record')" name="fourth">
+                            <ReserveView :url="url" :paramsId="paramsId"></ReserveView>
                         </el-tab-pane>
                     </el-tabs>
                 </card-body>
@@ -135,7 +168,10 @@ import historyView from "../../../components/address/history_list.vue"
 import transferView from "../../../components/address/transfer_list.vue";
 import holderView from "../../../components/address/holder_list.vue";
 import pledgeView from "../../../components/address/pledge.vue"
-import  cardView from "./components/card.vue"
+import ReserveView from "../../../components/address/reserve_list.vue"
+import cardView from "./components/card.vue"
+import { getAccountState, getTokenPermanentDelegate, getAddressTransactionFees } from "../../../request/extension";
+// import {  checkAccountTransferability,getTokenTransferFeeMax } from "../../../request/extension";
 
 
 const tokenData = ref();
@@ -159,10 +195,27 @@ const props = defineProps({
 });
 
 
+// const url = ref("AmXJDzPZoXJX2buwbeg9aL1WUH7CwoNMw2JYFwk2LbKD");
 const url = ref(props.url);
 const paramsId = ref(props.paramsId);
 const token_name = ref("");
 const token_img = ref("");
+const AccountType = ref("");
+const PermanentDelegate = ref('')
+const TokenTransferFeeMax = ref("");
+const TokenPermanentDelegate = ref("");
+const TransactionFee = ref("");
+
+onMounted(async () => {
+    AccountType.value = await getAccountState(props.url);
+    // PermanentDelegate.value = await checkAccountTransferability(props.url);
+    // console.log(PermanentDelegate.value);
+    // TokenTransferFeeMax.value = await getTokenTransferFeeMax(props.url);
+    // console.log(TokenTransferFeeMax.value);
+    TokenPermanentDelegate.value = await getTokenPermanentDelegate(url.value, paramsId.value);
+    TransactionFee.value = await getAddressTransactionFees(url.value);
+});
+
 
 const tokenName = async (url, params) => {
 
@@ -189,17 +242,16 @@ const tokenRwquest = async () => {
     try {
         solanaRequest(url.value, paramsId.value).then(res => {
             tokenData.value = res;
-            console.log(tokenData.value);
 
             if (res.mintAuthority) {
                 let mintAuthorit = res.mintAuthority._bn;
 
                 let mintAuthority = BigInt(mintAuthorit);
                 pubbleys.value = new PublicKey(mintAuthority);
-                console.log(pubbleys.value);
+                
 
             }
-            console.log(pubbleys.value);
+            
 
             if (res.address) {
                 let addresses = res.address._bn;
@@ -208,7 +260,7 @@ const tokenRwquest = async () => {
             }
         });
         metaRequest(url.value, paramsId.value).then(res => {
-            console.log(res);
+            
             mintToken.value = res;
         });
     } catch (err) {
@@ -216,7 +268,6 @@ const tokenRwquest = async () => {
     }
     // });
 }
-console.log(url.value);
 
 // defineEmits({ mintToken });
 const numberHeld = async () => {
@@ -244,7 +295,7 @@ const numberHeld = async () => {
     }
     chainRequest(method).then(res => {
 
-        console.log(res);
+        
         if (res.err) {
             holdNumber.value = 0;
         } else {

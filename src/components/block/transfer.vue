@@ -103,7 +103,6 @@ const info = ref();
 const type = ref(false);
 
 const rendered = (data) => {
-  console.log(data);
 
   if (data.length !== 0) {
     for (let i in data) {
@@ -116,7 +115,6 @@ const rendered = (data) => {
       }
     }
   }
-  console.log(priceTrans.value);
 
   info.value = [
     {
@@ -145,7 +143,6 @@ const rendered = (data) => {
       language: "dashboard.per_transactions"
     },
   ];
-  console.log(info.value);
 
   type.value = true;
 };
@@ -159,7 +156,6 @@ onMounted(() => {
         )
       }
       let data = JSON.parse(appStore.Transaction);
-      console.log(data);
       if (data.length != 0) {
         let dataArray = [];
         for (let i in data) {

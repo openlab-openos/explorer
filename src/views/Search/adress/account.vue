@@ -24,12 +24,12 @@
                             </tr>
                             <tr v-else>
                                 <td>{{ $t("account.address_label") }} </td>
-                                <td class="text-end">{{ titleUrl(url).find ?titleUrl(url).url : 'N/A'  }}</td>
+                                <td class="text-end">{{ titleUrl(url).find ? titleUrl(url).url : 'N/A' }}</td>
                             </tr>
                             <tr>
                                 <td>{{ $t("account.balance") }} (BTG)</td>
                                 <td class="text-end"> {{ card_data[index] == null ? 'Account does not exist' :
-                                    come(toFexedStake(item.lamports/1000000000)) }} </td>
+                                    come(toFexedStake(item.lamports / 1000000000)) }} </td>
                             </tr>
                             <tr>
                                 <td>{{ $t("account.allocated_data_size") }} </td>
@@ -102,11 +102,14 @@
                         <el-tab-pane :label="$t('navigation.transactions')" name="first">
                             <history-view :url="url"></history-view>
                         </el-tab-pane>
-                        <el-tab-pane  v-if="transfersType.urlType == 'Formal' " :label="$t('transfer')" name="second">
+                        <el-tab-pane v-if="transfersType.urlType == 'Formal'" :label="$t('transfer')" name="second">
                             <transfer-view :url="url" v-if="activeName == 'second'"></transfer-view>
                         </el-tab-pane>
                         <el-tab-pane :label="$t('pledge')" name="third">
                             <pledgeView v-if="activeName == 'third'" :url="url" />
+                        </el-tab-pane>
+                        <el-tab-pane :label="$t('Margin-record')" name="fourth">
+                            <ReserveView :url="url" :paramsId="paramsId"></ReserveView>
                         </el-tab-pane>
                     </el-tabs>
                 </card-body>
@@ -123,6 +126,7 @@ import transferView from "../../../components/address/transfer_list.vue";
 import holderView from "../../../components/address/holder_list.vue";
 import pledgeView from "../../../components/address/pledge.vue"
 import { useRouter } from "vue-router";
+import ReserveView from "../../../components/address/reserve_list.vue"
 import tokensView from "../../../components/address/tokens.vue"
 const router = useRouter();
 const type = ref(true);
@@ -132,7 +136,6 @@ const props = defineProps({
         default: ""
     },
 });
-console.log(props);
 
 const url = ref(props.url);
 const card_data = ref([]);
@@ -164,7 +167,6 @@ const pubbleys = async (url) => {
             },
         ],
     });
-    console.log(cardData);
 
     if (cardData) {
         if (cardData.value[0] != null) {
@@ -188,19 +190,19 @@ const requestList = async (object) => {
 }
 const toFexedStake = (num) => {
     if (typeof num !== 'number') {
-    throw new TypeError('The input must be a number.');
-  }
+        throw new TypeError('The input must be a number.');
+    }
 
-  // 检查整数部分是否大于1
-  if (Math.floor(Math.abs(num)) > 1) {
-    return Number(num).toFixed(2);
-  } else if (Math.abs(num) < 1 && num !== 0) {
-    // 对于绝对值小于1且非零的数，保留5位小数
-    return Number(num).toFixed(5);
-  } else {
-    // 如果是0或者整数部分等于1，则不做特殊处理，直接返回原值
-    return num.toString();
-  }
+    // 检查整数部分是否大于1
+    if (Math.floor(Math.abs(num)) > 1) {
+        return Number(num).toFixed(2);
+    } else if (Math.abs(num) < 1 && num !== 0) {
+        // 对于绝对值小于1且非零的数，保留5位小数
+        return Number(num).toFixed(5);
+    } else {
+        // 如果是0或者整数部分等于1，则不做特殊处理，直接返回原值
+        return num.toString();
+    }
 }
 const come = (num) => {
     let reg =
@@ -229,7 +231,6 @@ const menufunction = async (url) => {
         }
 
         let datas = await requestList(methods);
-        console.log(datas);
 
 
         if (datas) {

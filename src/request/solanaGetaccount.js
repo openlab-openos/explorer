@@ -17,7 +17,6 @@ export function solanagetAccount(AccountPublicKey, Program) {
             Program
         )
         let tokenAccount = await getAccount(connection, tokenAccountPublicKey, undefined, tokenProgram);
-        console.log(tokenAccount);
 
         return tokenAccount;
     })();

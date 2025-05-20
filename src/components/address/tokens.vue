@@ -91,7 +91,6 @@ const router = useRouter();
 const props = defineProps({
     tokens: Array,
 });
-console.log(props.tokens);
 const data = ref(props.tokens);
 const currentPage = ref(1);
 const pageSize = ref(20);
@@ -123,7 +122,7 @@ const tokenList = async () => {
     };
     try {
         const res = await chainRequest(method);
-        console.log(res);
+        
         tokenData.value = res.result;
         return res.result;
     } catch (err) {
@@ -133,26 +132,16 @@ const tokenList = async () => {
 }
 onMounted(async () => {
     await tokenList();
-    console.log(data.value);
 
-    console.log(tokenData.value);
     if (tokenData.value) {
         for (let i in tokenData.value) {
-            console.log(11);
             for (let j in data.value) {
                 if (tokenData.value[i].pubkey == data.value[j].account.data.parsed.info.mint) {
-                    console.log(j);
-                    console.log(i);
-                    console.log(tokenData.value[i].account.data.parsed.info.extensions);
 
                     if (tokenData.value[i].account.data.parsed.info.extensions) {
-                        console.log('11111');
 
                         for (let a in tokenData.value[i].account.data.parsed.info.extensions) {
                             if (tokenData.value[i].account.data.parsed.info.extensions[a].extension == "tokenMetadata") {
-                                console.log(a);
-                                console.log(5555);
-                                console.log(tokenData.value[i].account.data.parsed.info.extensions[a].state.uri);
 
                                 data.value[j].img = tokenData.value[i].account.data.parsed.info.extensions[a].state.uri;
                                 data.value[j].name = tokenData.value[i].account.data.parsed.info.extensions[a].state.name;

@@ -19,7 +19,6 @@ const loadTypeAddress = async () => {
   try {
 
     typeAddress.value = await solanapubbleys(route.params.url);
-    console.log(123);
     if (!typeAddress.value) {
       typeAddress.value = "address";
 
@@ -46,7 +45,7 @@ const getInfo = async (url) => {
   };
   // try {
   const res = await chainRequest(method);
-  console.log(res);
+  
   if (res.result.value) {
     programId.value = res.result.value.owner;
   }
@@ -54,7 +53,6 @@ const getInfo = async (url) => {
 
 onMounted(async () => {
   await loadTypeAddress();
-  console.log(typeAddress.value);
   if (typeAddress.value == "address") {
 
   } else {
@@ -65,7 +63,6 @@ onMounted(async () => {
 watch(
   () => route.path,
   (newPath, oldPath) => {
-    console.log('Route changed from', oldPath, 'to', newPath);
     // 在这里添加你需要执行的操作
     if (newPath != oldPath) {
       window.location.reload();

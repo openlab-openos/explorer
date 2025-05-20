@@ -394,7 +394,6 @@ watchEffect(async () => {
   }
   await performanceSamples();
   if (requestType.value) {
-    console.log(response);
     await supplyRequest(response.epoch, response.slotIndex, response.slotsInEpoch, solttime.value);
   }
 
@@ -425,7 +424,7 @@ onBeforeUnmount(() => {
 
     <!-- BEGIN server-stats -->
     <div class="col-xl-6">
-      <card class="mb-3">
+      <card class="mb-3" v-show="server.stats">
         <card-body style="min-height: 400px">
           <div class="d-flex fw-bold small mb-3">
             <span class="flex-grow-1"> TPM {{ $t("dashboard.history") }} </span>

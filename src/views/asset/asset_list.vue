@@ -116,11 +116,9 @@ const paginatedHistoryData = computed(() => {
     return historyData.value.slice(start, end);
 });
 tokenList().then((res) => {
-    console.log(res);
-    console.log(res.data);
+    
 
     let showData = res.data.filter(item => item.is_web == 1);
-    console.log(showData);
 
     dataArray.value = showData;
     historyData.value = showData;

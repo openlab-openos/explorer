@@ -257,7 +257,7 @@ onMounted(async () => {
         historyData.value = await requestList('transactions/' + props.url);
 
         totalItems.value = historyData.value.length;
-        console.log(historyData.value);
+        
         loading.value = true;
 
         paginatedHistoryFunction(historyData.value);
@@ -278,7 +278,7 @@ const pubbtx = (item) => {
 };
 
 const slot = (url) => {
-    console.log(url);
+    
 
     if (url) {
         router.push({

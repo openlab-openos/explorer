@@ -16,7 +16,6 @@ import ru from "../../assets/24x24/ru.png"
 import my from "../../assets/24x24/my.png"
 import vn from "../../assets/24x24/vn.png"
 import hk from "../../assets/24x24/hk.png"
-console.log(hk);
 
 const router = useRouter();
 const appStore = useAppStore();
@@ -158,7 +157,7 @@ const selsetClick = (index: number) => {
 }
 
 onMounted(() => {
-  console.log(appStore);
+  
   const chainStorg = JSON.parse(sessionStorage.getItem("app"));
   const urlType = JSON.parse(sessionStorage.getItem("urlType"));
 

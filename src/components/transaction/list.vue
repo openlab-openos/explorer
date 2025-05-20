@@ -205,9 +205,6 @@ const fetchOrderData = async () => {
 
             // }
         }
-        console.log(arrayData.value);
-        console.log(nullData.value);
-        
         appStore.setTransaction(JSON.stringify(arrayData.value));
     } catch (err) {
         console.error("Error fetching order data:", err);
@@ -264,7 +261,7 @@ const soltResult = (solt) => {
 
 
 const pubbleys = (url) => {
-    console.log(url);
+    
 
     if (url) {
         router.push({

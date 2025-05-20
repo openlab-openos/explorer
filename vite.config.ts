@@ -67,7 +67,7 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/dataapi/, ""),
       },
       "/airdrop": {
-        target: "http://109.123.230.163:8099/",
+        target: "https://faucet.devnet.openverse.network/",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/airdrop/, ""),
       },

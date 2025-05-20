@@ -7,7 +7,7 @@ export function tokenList(data){
                 "Content-Type":"application/json"
             }
         }).then(res=>{
-            console.log(res);
+            
             resolve(res.data);
         }).catch(err=>{
             reject(err);

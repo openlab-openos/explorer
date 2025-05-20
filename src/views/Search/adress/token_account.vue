@@ -136,7 +136,7 @@ const owner = ref(props.owner);
 const token_name = ref("");
 const token_img = ref("");
 const tokenName = async (url, params) => {
-    console.log(url);
+    
     let method = {
         "jsonrpc": "2.0",
         "id": 1,
@@ -168,11 +168,11 @@ const tokenRwquest = async () => {
 
     try {
         const res2 = await solanagetAccount(url.value, owner.value);
-        console.log(res2);
+        
 
         tokenData.value = res2;
         data.value = res2;
-        console.log(res2);
+        
 
         if (res2.mintAuthority) {
             let mintAuthority = BigInt(res2.mintAuthority._bn);
@@ -182,7 +182,6 @@ const tokenRwquest = async () => {
         if (res2.mint) {
             let mint = BigInt(res2.mint._bn.toString());
             getMint.value = new PublicKey(mint).toString();
-            console.log(getMint.value);
             await mintReauest(getMint.value); // Ensure this is awaited
             await tokenName(getMint.value);
         }
@@ -197,10 +196,10 @@ const tokenRwquest = async () => {
 };
 
 const mintReauest = async (url) => {
-    console.log(url);
+    
     try {
         await solanaRequest(url, owner.value).then(res => {
-            console.log(res);
+            
 
             mintData.value = res;
         });

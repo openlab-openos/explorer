@@ -39,9 +39,10 @@
     "submit": "Gửi",
     "Submitsuccess": "Gửi thành công",
     "Submitfailed": "Gửi thất bại",
-    "Request-Airdrop":  "Yêu cầu Airdrop",
-    "Requset-text":"Tối đa 1 yêu cầu sau mỗi 8 giờ.",
-    "ConfirmAirdrop": "Xác nhận空投" ,
+    "Request-Airdrop": "Yêu cầu Airdrop",
+    "Requset-text": "Tối đa 1 yêu cầu sau mỗi 8 giờ.",
+    "ConfirmAirdrop": "Xác nhận空投",
+    "Margin-record": "Tiền gửi hồ sơ",
     "navigation": {
         "title": "Điều hướng",
         "dashboard": "Bảng điều khiển",

@@ -11,7 +11,6 @@ import Tokens from "../views/asset/asset_list.vue";
 import Faucet from "../views/Faucet/Faucet.vue"
 import { useAppStore } from "@/stores";
 
-console.log(window.location.href,'router');
 
 const currentUrl = window.location.href;
 
@@ -20,7 +19,6 @@ let GeturlType = JSON.parse(sessionStorage.getItem('urlType'));
 let url = currentUrl.includes('?cluster=devnet')
 // 假设 urlType 是一个全局状态变量，这里先定义为 false 作为示例
 let urlType = app ? (GeturlType? (GeturlType.urlType == 'Test' ? false : (app.chainType == 'Test' ? false : true)) : true ) : (url? false : true) ;
-console.log(urlType);
 
 // 用于避免循环调用的标志
 let isProcessing = false;
@@ -93,7 +91,6 @@ router.beforeEach((to, from, next) => {
   // 克隆原有的查询参数对象，避免修改原对象
   const existingQuery = { ...to.query };
   let shouldRedirect = false;
-  console.log(!urlType && to.path!== "/");
   
   if (!urlType && to.path!== "/") {
       // 需要添加 cluster=devnet 参数
@@ -115,7 +112,6 @@ router.beforeEach((to, from, next) => {
       const queryString = new URLSearchParams(existingQuery).toString();
       // 构建新的路径
       const newPath = to.path + (queryString.length > 0? `?${queryString}` : "");
-      console.log('Redirecting to:', newPath); // 添加日志输出
       // 进行跳转，并带上新的路径和查询参数
       next({ path: newPath, query: existingQuery });
   } else {

@@ -6,7 +6,7 @@ export function tokenList(data) {
     return new Promise((resolve, reject) => {
         axios.get(`https://open.openverse.live/api/token/detail?address=${data}`)
            .then(res => {
-                console.log(res);
+                
                 resolve(res.data);
             })
            .catch(err => {

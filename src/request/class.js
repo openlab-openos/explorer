@@ -1,8 +1,7 @@
 import axios from "axios";
 
 export function order(url) {
-    console.log(url);
-    console.log("http://192.168.1.149:9527/transactions" + '/'  + url);
+    
     
     return new Promise((resolve, reject) => {
         axios
@@ -14,12 +13,10 @@ export function order(url) {
             })
             .then((response) => {
                 let axiosdata = response.data;
-                console.log(response);
                 
                 return axiosdata;
             })
             .then((jsonResponse) => {
-                console.log(123);
                 
                 resolve(jsonResponse);
             })

@@ -43,7 +43,7 @@ import { useAppStore } from "../../stores/index";
 import { onMounted, ref, watchEffect } from "vue";
 import i18n from "@/i18n"
 const appStore = useAppStore();
-console.log(appStore);
+
 
 const appVariable = useAppVariableStore();
 
@@ -84,7 +84,6 @@ onMounted(() => {
             btgcont += JSON.parse(JSON.stringify(btg.current[i].activatedStake));
           }
           btgcount = btgcont;
-          console.log(btgcont);
           
           let num = (btgcont / 1000000000).toFixed(0);
           btgcont = (num / 1000000).toFixed(1);
