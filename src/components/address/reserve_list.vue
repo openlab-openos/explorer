@@ -2,24 +2,29 @@
     <div>
 
     </div>
-    <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
+    <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small" v-if="!loading">
         <tbody>
             <tr>
                 <th>
                     {{ $t("account.mint_account") }}
                 </th>
                 <th>
-                    {{ $t("account.owner") }}
+                    {{ $t("blocks.slot") }}
                 </th>
+                <!-- <th>
+                    {{ $t("account.owner") }}
+                </th> -->
                 <th>
                     {{ $t("account.pubkey") }}
                 </th>
-
                 <th>
                     {{ $t("account.lamports") }}
                 </th>
                 <th>
                     {{ $t("account.executable") }}
+                </th>
+                <th>
+                    {{ $t("account.age") }}
                 </th>
             </tr>
             <template v-if="historyData.length != 0">
@@ -31,13 +36,17 @@
                             v-for="item, index in titleUrl(item.metadata.mint).certificates" :src="item.img"
                             :key="index" width="24" alt="" class="marginRight10">
                     </td>
-                    <td class="text-theme" style="cursor: pointer" v-else>N/A  </td>
-                    <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.account.owner)">
+                    <td class="text-theme" style="cursor: pointer" v-else>N/A </td>
+                    <td>
+                        <span v-if="item.signaturesType">{{ come(item.signatures.slot) }}</span>
+                        <span v-else>N/A</span>
+                    </td>
+                    <!-- <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.account.owner)">
                         {{ titleUrl(item.account.owner).url }}
                         <img v-if="titleUrl(item.account.owner).type"
                             v-for="item, index in titleUrl(item.account.owner).certificates" :src="item.img"
                             :key="index" width="24" alt="" class="marginRight10">
-                    </td>
+                    </td> -->
                     <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.pubkey)">
                         {{ titleUrl(item.pubkey).url }}
                         <img v-if="titleUrl(item.pubkey).type" v-for="item, index in titleUrl(item.pubkey).certificates"
@@ -49,12 +58,19 @@
                     <td :style="item.account.executable ? 'color:rgba(60,210,165,1)' : 'color:rgba(225,250,7,1)'">
                         {{ item.account.executable }}
                     </td>
+                    <td>
+                        <span v-if="item.signaturesType">{{ timeSome(item.signatures.blockTime) }}</span>
+                        <span v-else></span>
+                    </td>
                 </tr>
             </template>
         </tbody>
     </table>
-    <div v-if="historyData.length == 0" class="text-center">
-        <loading-vue /> <text>{{ $t("account.available") }}</text>
+    <div v-if="loading" class="text-center">
+        <loading-vue />
+    </div>
+    <div v-if="historyData.length == 0 && !loading" class="text-center">
+        {{ $t("account.available") }}
     </div>
     <div class="justify-end padding-10" v-if="historyData.length != 0">
         <!-- <el-pagination background :hide-on-single-page="true" :page-sizes="[25]" layout="prev, pager, next" :total="historyData.length" /> -->
@@ -74,7 +90,8 @@ import { parseNFTMetadata } from "../../request/reserve"
 import { titleUrl } from "../method/title_url"
 import LoadingVue from "../../components/block/loading.vue"
 import { solanagetAccount } from "../../request/solanaGetaccount";
-
+import { lo } from "element-plus/es/locale/index.mjs";
+const loading = ref(true);
 const router = useRouter();
 const props = defineProps({
     url: {
@@ -126,27 +143,6 @@ const requestList = async (object) => {
 
 onMounted(async () => {
     historyData.value = await requestList(
-        //     {
-        //     "jsonrpc": "2.0",
-        //     "id": 1,
-        //     "method": "getProgramAccounts",
-        //     "params": [
-        //         props.paramsId,
-        //         // "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c",
-        //         {
-        //             "encoding": "jsonParsed",
-        //             "filters": [
-        //                 {
-        //                     "memcmp": {
-        //                         "offset": 0,
-        //                         "bytes": props.url
-        //                         // "bytes": "GragM9tHgicpxtf9qrTkbY1fFZYA8CJaDgLuFnZikdqs"
-        //                     }
-        //                 }
-        //             ]
-        //         }
-        //     ]
-        // }
         {
             "jsonrpc": "2.0",
             "id": 1,
@@ -176,9 +172,32 @@ onMounted(async () => {
             historyData.value[i].metadata = {};
             historyData.value[i].metadataType = false;
         });
+        let getSignaturesForAddress = {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "method": "getSignaturesForAddress",
+            "params": [
+                historyData.value[i].pubkey,
+                {
+                    "limit": 1
+                }
+            ]
+        }
+
+        await requestList(getSignaturesForAddress).then(res => {
+            console.log(res);
+
+            historyData.value[i].signatures = res[0];
+            historyData.value[i].signaturesType = true;
+        }).catch(err => {
+            console.log(err);
+
+            historyData.value[i].signatures = {};
+            historyData.value[i].signaturesType = false;
+        });
         // console.log(parseNFTMetadataData);
     }
-
+    loading.value = false;
     // let method = {
     //     "jsonrpc": "2.0", "id": 1,
     //     "method": "getTokenSupply",

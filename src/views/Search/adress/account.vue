@@ -109,7 +109,7 @@
                             <pledgeView v-if="activeName == 'third'" :url="url" />
                         </el-tab-pane>
                         <el-tab-pane :label="$t('Margin-record')" name="fourth">
-                            <ReserveView :url="url" :paramsId="paramsId"></ReserveView>
+                            <ReserveView :url="url" v-if="activeName == 'fourth'" :paramsId="paramsId"></ReserveView>
                         </el-tab-pane>
                     </el-tabs>
                 </card-body>

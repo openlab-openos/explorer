@@ -20,13 +20,14 @@
                 <tr v-for="(item, index) in paginatedHistoryData" :key="index">
                     <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.account.data.parsed.info.owner)">
                         {{ titleUrl(item.account.data.parsed.info.owner).url }}
-                        <img v-if="titleUrl(item.account.data.parsed.info.owner).type" v-for="item, index in titleUrl(item.account.data.parsed.info.owner).certificates"
-                            :src="item.img" :key="index"  width="24" alt="" class="marginRight10">
+                        <img v-if="titleUrl(item.account.data.parsed.info.owner).type"
+                            v-for="item, index in titleUrl(item.account.data.parsed.info.owner).certificates"
+                            :src="item.img" :key="index" width="24" alt="" class="marginRight10">
                     </td>
                     <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.pubkey)">
                         {{ titleUrl(item.pubkey).url }}
                         <img v-if="titleUrl(item.pubkey).type" v-for="item, index in titleUrl(item.pubkey).certificates"
-                            :src="item.img" :key="index"  width="24" alt="" class="marginRight10">
+                            :src="item.img" :key="index" width="24" alt="" class="marginRight10">
                     </td>
                     <td>
                         {{ (item.account.data.parsed.info.tokenAmount.uiAmount).toFixed(5) }}
@@ -39,8 +40,10 @@
         </tbody>
     </table>
     <div v-if="historyData.length == 0" class="text-center">
-        
-        <loading-vue  /> <text>{{ $t("account.available") }}</text>
+        <loading-vue />
+    </div>
+    <div v-if="historyData.length == 0 && !loading" class="text-center">
+        {{ $t("account.available") }}
     </div>
     <div class="justify-end padding-10" v-if="historyData.length != 0">
         <!-- <el-pagination background :hide-on-single-page="true" :page-sizes="[25]" layout="prev, pager, next" :total="historyData.length" /> -->
@@ -58,6 +61,7 @@ import { proportionAmount } from "../method/proportion_account"
 import { useRouter } from "vue-router"
 import { titleUrl } from "../../components/method/title_url"
 import LoadingVue from "../../components/block/loading.vue"
+const loading = ref(true);
 
 const router = useRouter();
 const props = defineProps({
@@ -131,6 +135,7 @@ onMounted(async () => {
         ]
     };
     totalItems.value = historyData.value.length;
+    loading.value = false;
 
     proportion_amount.value = await chainRequest(method).then(res => {
 

@@ -141,13 +141,13 @@
                             <history-view :url="url"></history-view>
                         </el-tab-pane>
                         <el-tab-pane v-if="transfersType.urlType == 'Formal'" :label="$t('transfer')" name="second">
-                            <transfer-view :url="url"></transfer-view>
+                            <transfer-view :url="url" v-if="activeName == 'second'"></transfer-view>
                         </el-tab-pane>
                         <el-tab-pane :label="$t('account.holder') + ' ' + '(' + holdNumber + ')'" name="third">
-                            <holder-view :url="url" :paramsId="paramsId"></holder-view>
+                            <holder-view :url="url" :paramsId="paramsId" v-if="activeName == 'third'"></holder-view>
                         </el-tab-pane>
                         <el-tab-pane :label="$t('Margin-record')" name="fourth">
-                            <ReserveView :url="url" :paramsId="paramsId"></ReserveView>
+                            <ReserveView :url="url" :paramsId="paramsId" v-if="activeName == 'fourth'"></ReserveView>
                         </el-tab-pane>
                     </el-tabs>
                 </card-body>
