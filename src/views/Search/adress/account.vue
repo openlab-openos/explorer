@@ -95,14 +95,14 @@
         <div class="tab-content marginTOP-50" v-if="menu.length != 0">
             <tokens-View :tokens="menu"></tokens-View>
         </div>
-        <div class="tab-content marginTOP-50">
+        <div class="tab-content marginTOP-50" v-if="card_data[0]">
             <card class="md-3">
                 <card-body class="card-bodys">
                     <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
                         <el-tab-pane :label="$t('navigation.transactions')" name="first">
                             <history-view :url="url"></history-view>
                         </el-tab-pane>
-                        <el-tab-pane v-if="transfersType.urlType == 'Formal'" :label="$t('transfer')" name="second">
+                        <el-tab-pane v-if="transfersType.urlType == 'Formal' && type && !card_data[0].executable " :label="$t('transfer')" name="second">
                             <transfer-view :url="url" v-if="activeName == 'second'"></transfer-view>
                         </el-tab-pane>
                         <!-- <el-tab-pane :label="$t('pledge')" name="third">
@@ -172,6 +172,7 @@ const pubbleys = async (url) => {
         if (cardData.value[0] != null) {
             card_data.value = cardData.value;
             type.value = true
+            
         } else {
             type.value = false
         }

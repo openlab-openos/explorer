@@ -45,6 +45,9 @@
     "Requset-text": "Maximum of 1 request every 8 hours",
     "not-been-released": "The reserve funds have not been released",
     "have-been-released": "The reserve funds awaiting redemption have been released",
+    "stakeTime":"Stake Time",
+    "last_time":"Last Unlock Time",
+    "stage": "Stage",
     "navigation": {
         "title": "Navigation",
         "dashboard": "Dashboard",

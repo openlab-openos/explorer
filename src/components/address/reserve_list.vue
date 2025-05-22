@@ -11,62 +11,95 @@
         <tbody>
             <tr>
                 <th>
-                    {{ $t("transactions.signature") }}
+                    {{ $t("stakeTime") }}
                 </th>
                 <th>
-                    {{ $t("blocks.slot") }}
+                    {{ $t("last_time") }}
                 </th>
                 <!-- <th>
                     {{ $t("account.owner") }}
                 </th> -->
                 <th>
-                    {{ $t("from") }}
+                    {{ $t("stage") }}
                 </th>
                 <th>
-                    {{ $t("account.lamports") }}
+                    {{ $t("account.destination") }}
                 </th>
                 <th>
-                    {{ $t("account.executable") }}
+                    {{ $t("mint") }}
                 </th>
                 <th>
-                    {{ $t("account.age") }}
+                    {{ $t("account.Owner") }}
                 </th>
             </tr>
             <template v-if="historyData.length != 0">
                 <tr v-for="(item, index) in paginatedHistoryData" :key="index">
-                    <td class="text-theme" style="cursor: pointer" @click="transaction(item.signatures.signature)">
-                        <!-- {{ feePayer(item.signatures.signature) }} -->
-                        <!-- {{ titleUrl(item.metadata.mint).url }}
-                        <img v-if="titleUrl(item.metadata.mint).type"
-                            v-for="item, index in titleUrl(item.metadata.mint).certificates" :src="item.img"
-                            :key="index" width="24" alt="" class="marginRight10"> -->
+                    <td>
+                        <!-- {{ item.child[0].startTime }} -->
+                        {{ stampSome(item.startTime) }}
+                    </td>
+                    <td>
+                        <!-- {{ item.child[0].startTime }} -->
+                        {{ stampSome(item.endTime) }}
+                    </td>
+                    <!-- <td>
+                        {{ come(item.serial) }}
+                    </td> -->
+                    <td>
+                        {{ item.futureCount + ' / ' + item.child.length }}
+                    </td>
+                    <td>
+                        {{ come(item.amount) }}
+                    </td>
+                    <td class="text-theme" v-if="item.child" style="cursor: pointer"
+                        @click="pubbtx(item.child[0].mint)">
+                        {{ titleUrl(item.child[0].mint).type ? titleUrl(item.child[0].mint).url :
+                            stringcate(item.child[0].mint) }}
+                        <img v-if="titleUrl(item.child[0].mint).type"
+                            v-for="item, index in titleUrl(item.child[0].mint).certificates" :src="item.img"
+                            :key="index" width="24" alt="" class="marginRight10">
+                    </td>
+                    <td class="text-theme" v-if="item.child" style="cursor: pointer"
+                        @click="pubbtx(item.child[0].owner)">
+                        {{ titleUrl(item.child[0].owner).type ? titleUrl(item.child[0].owner).url :
+                            stringcate(item.child[0].owner) }}
+                        <img v-if="titleUrl(item.child[0].owner).type"
+                            v-for="item, index in titleUrl(item.child[0].owner).certificates" :src="item.img"
+                            :key="index" width="24" alt="" class="marginRight10">
+                    </td>
+                    <!-- <td v-if="item.signatures" class="text-theme" style="cursor: pointer"
+                        @click="transaction(item.signatures.signature)">
                         {{ stringcate(item.signatures.signature) }}
 
                     </td>
-                    <!-- <td class="text-theme" style="cursor: pointer" v-else>N/A </td> -->
+                    <td v-else>N/A</td>
                     <td>
-                        <span>{{ come(item.signatures.slot) }}</span>
-                        <!-- <span v-else>N/A</span> -->
+                        <span v-if="item.signatures">{{ come(item.signatures.slot) }}</span>
+                        <span v-else>N/A</span>
                     </td>
-                    <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.metadata.owner)">
+                    <td class="text-theme" v-if="item.metadata" style="cursor: pointer"
+                        @click="pubbtx(item.metadata.owner)">
                         {{ titleUrl(item.metadata.owner).url }}
                         <img v-if="titleUrl(item.metadata.owner).type"
                             v-for="item, index in titleUrl(item.metadata.owner).certificates" :src="item.img"
                             :key="index" width="24" alt="" class="marginRight10">
                     </td>
-                    <!-- <td class="text-theme" style="cursor: pointer" @click="transaction(item.signatures.signature)">
-                        {{ stringcate(item.signatures.signature) }}
-                    </td> -->
+                    <td v-else>N/A</td>
                     <td>
                         {{ come(item.account.lamports) }}
                     </td>
-                    <td :style="item.account.executable ? 'color:rgba(60,210,165,1)' : 'color:rgba(225,250,7,1)'">
-                        {{ item.account.executable }}
+                    <td v-if="item.metadata"
+                        :style="item.metadata.isUnlocked ? 'color:rgba(60,210,165,1)' : 'color:rgba(225,250,7,1)'">
+                        <text>{{ item.metadata.isUnlocked }}</text>
+
+
                     </td>
+                    <td v-else>N/A</td>
+
                     <td>
                         <span v-if="item.signaturesType">{{ timeSome(item.signatures.blockTime) }}</span>
-                        <span v-else></span>
-                    </td>
+                        <span v-else>N/A</span>
+                    </td> -->
                 </tr>
             </template>
         </tbody>
@@ -97,6 +130,7 @@ import { titleUrl } from "../method/title_url"
 import LoadingVue from "../../components/block/loading.vue"
 import { decodeLockAccount } from "../../request/record";
 import { lo } from "element-plus/es/locale/index.mjs";
+import { start } from "@popperjs/core";
 const loading = ref(true);
 const router = useRouter();
 const props = defineProps({
@@ -151,7 +185,8 @@ onMounted(async () => {
     setTimeout(() => {
         loading.value = false;
     }, 3000);
-    historyData.value = await requestList(
+    let data;
+    data = await requestList(
         {
             "jsonrpc": "2.0",
             "id": 1,
@@ -172,35 +207,86 @@ onMounted(async () => {
         }
     );
 
-    for (let i = 0; i < historyData.value.length; i++) {
-        historyData.value[i].metadata = decodeLockAccount(historyData.value[i].account.data);
-        let getSignaturesForAddress = {
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "getSignaturesForAddress",
-            "params": [
-                historyData.value[i].pubkey,
-                {
-                    "limit": 1
-                }
-            ]
-        }
+    for (let i = 0; i < data.length; i++) {
+        data[i].metadata = decodeLockAccount(data[i].account.data);
+        // let getSignaturesForAddress = {
+        //     "jsonrpc": "2.0",
+        //     "id": 1,
+        //     "method": "getSignaturesForAddress",
+        //     "params": [
+        //         historyData.value[i].pubkey,
+        //         {
+        //             "limit": 1
+        //         }
+        //     ]
+        // }
 
-        await requestList(getSignaturesForAddress).then(res => {
+        // await requestList(getSignaturesForAddress).then(res => {
 
-            historyData.value[i].signatures = res[0];
-            historyData.value[i].signaturesType = true;
-        }).catch(err => {
-            console.log(err);
+        //     historyData.value[i].signatures = res[0];
+        //     historyData.value[i].signaturesType = true;
+        // }).catch(err => {
+        //     console.log(err);
 
-            historyData.value[i].signatures = {};
-            historyData.value[i].signaturesType = false;
-        });
+        //     historyData.value[i].signatures = {};
+        //     historyData.value[i].signaturesType = false;
+        // });
         // console.log(parseNFTMetadataData);
     }
+    // console.log(historyData.value);
+    historyData.value = groupBySerialNumber(data);
+    console.log(historyData.value);
+
     totalItems.value = historyData.value.length;
 
 });
+
+// function groupBySerialNumber(arr) {
+//     const grouped = {};
+//     arr.forEach(item => {
+//         const key = item.metadata.serialNumber;
+//         if (!grouped[key]) {
+//             grouped[key] = {
+//                 serial: key,
+//                 startTime: item.metadata.startTime,
+//                 child: [],
+//                 amount: 0 // 初始化amount字段
+//             };
+//         }
+//         grouped[key].child.push(item.metadata);
+//         // 将当前item的amount转换为数字并累加到总和中
+//         grouped[key].amount += parseFloat(item.metadata.amount) || 0;
+//     });
+//     return Object.values(grouped);
+// }
+
+function groupBySerialNumber(arr) {
+    const grouped = {};
+    arr.forEach(item => {
+        const key = item.metadata.serialNumber;
+        if (!grouped[key]) {
+            grouped[key] = {
+                serial: key,
+                startTime: item.metadata.startTime,
+                endTime: item.metadata.endTime, // 存储endTime用于后续比较
+                child: [],
+                amount: 0,
+                futureCount: 0 // 初始化未来时间数量
+            };
+        }
+        grouped[key].child.push(item.metadata);
+        grouped[key].amount += parseFloat(item.metadata.amount) || 0;
+
+        // 统计child中endTime大于当前时间的数量
+        const currentTime = Math.floor(Date.now());
+        if (parseInt(item.metadata.endTime, 10) > currentTime) {
+            grouped[key].futureCount++;
+        }
+    });
+
+    return Object.values(grouped);
+}
+
 
 const come = (num) => {
     let reg =
@@ -213,6 +299,11 @@ const come = (num) => {
 
 const timeSome = (time) => {
     return moment(time * 1000).fromNow();
+}
+
+const stampSome = (time) => {
+    return moment(time * 1000).fromNow();
+
 }
 
 const percent = (lod, nem) => {
