@@ -1,12 +1,17 @@
 <template>
-    <div>
-
-    </div>
+    <!-- <div v-if="reserveType" >
+        <div>
+            {{ $t("not-been-released") }}
+        </div>
+        <div>
+            {{ $t("have-been-released") }}
+        </div>
+    </div> -->
     <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small" v-if="!loading">
         <tbody>
             <tr>
                 <th>
-                    {{ $t("account.mint_account") }}
+                    {{ $t("transactions.signature") }}
                 </th>
                 <th>
                     {{ $t("blocks.slot") }}
@@ -15,7 +20,7 @@
                     {{ $t("account.owner") }}
                 </th> -->
                 <th>
-                    {{ $t("account.pubkey") }}
+                    {{ $t("from") }}
                 </th>
                 <th>
                     {{ $t("account.lamports") }}
@@ -29,29 +34,29 @@
             </tr>
             <template v-if="historyData.length != 0">
                 <tr v-for="(item, index) in paginatedHistoryData" :key="index">
-                    <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.metadata.mint)"
-                        v-if="item.metadataType">
-                        {{ titleUrl(item.metadata.mint).url }}
+                    <td class="text-theme" style="cursor: pointer" @click="transaction(item.signatures.signature)">
+                        <!-- {{ feePayer(item.signatures.signature) }} -->
+                        <!-- {{ titleUrl(item.metadata.mint).url }}
                         <img v-if="titleUrl(item.metadata.mint).type"
                             v-for="item, index in titleUrl(item.metadata.mint).certificates" :src="item.img"
-                            :key="index" width="24" alt="" class="marginRight10">
+                            :key="index" width="24" alt="" class="marginRight10"> -->
+                        {{ stringcate(item.signatures.signature) }}
+
                     </td>
-                    <td class="text-theme" style="cursor: pointer" v-else>N/A </td>
+                    <!-- <td class="text-theme" style="cursor: pointer" v-else>N/A </td> -->
                     <td>
-                        <span v-if="item.signaturesType">{{ come(item.signatures.slot) }}</span>
-                        <span v-else>N/A</span>
+                        <span>{{ come(item.signatures.slot) }}</span>
+                        <!-- <span v-else>N/A</span> -->
                     </td>
-                    <!-- <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.account.owner)">
-                        {{ titleUrl(item.account.owner).url }}
-                        <img v-if="titleUrl(item.account.owner).type"
-                            v-for="item, index in titleUrl(item.account.owner).certificates" :src="item.img"
+                    <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.metadata.owner)">
+                        {{ titleUrl(item.metadata.owner).url }}
+                        <img v-if="titleUrl(item.metadata.owner).type"
+                            v-for="item, index in titleUrl(item.metadata.owner).certificates" :src="item.img"
                             :key="index" width="24" alt="" class="marginRight10">
-                    </td> -->
-                    <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.pubkey)">
-                        {{ titleUrl(item.pubkey).url }}
-                        <img v-if="titleUrl(item.pubkey).type" v-for="item, index in titleUrl(item.pubkey).certificates"
-                            :src="item.img" :key="index" width="24" alt="" class="marginRight10">
                     </td>
+                    <!-- <td class="text-theme" style="cursor: pointer" @click="transaction(item.signatures.signature)">
+                        {{ stringcate(item.signatures.signature) }}
+                    </td> -->
                     <td>
                         {{ come(item.account.lamports) }}
                     </td>
@@ -86,10 +91,11 @@ import { order } from "../../request/order";
 import { chainRequest } from "../../request/chain";
 import { proportionAmount } from "../method/proportion_account"
 import { useRouter } from "vue-router"
+import { Transaction } from "@solana/web3.js";
 import { parseNFTMetadata } from "../../request/reserve"
 import { titleUrl } from "../method/title_url"
 import LoadingVue from "../../components/block/loading.vue"
-import { solanagetAccount } from "../../request/solanaGetaccount";
+import { decodeLockAccount } from "../../request/record";
 import { lo } from "element-plus/es/locale/index.mjs";
 const loading = ref(true);
 const router = useRouter();
@@ -113,7 +119,7 @@ const currentPage = ref(1);
 const pageSize = ref(25);
 const url = ref(props.url);
 const paramsId = ref(props.paramsId);
-console.log(parseNFTMetadata(url.value, paramsId.value));
+const reserveType = ref(props.type);
 
 
 const paginatedHistoryData = computed(() => {
@@ -142,6 +148,9 @@ const requestList = async (object) => {
 
 
 onMounted(async () => {
+    setTimeout(() => {
+        loading.value = false;
+    }, 3000);
     historyData.value = await requestList(
         {
             "jsonrpc": "2.0",
@@ -162,16 +171,9 @@ onMounted(async () => {
             ]
         }
     );
-    console.log(historyData.value);
+
     for (let i = 0; i < historyData.value.length; i++) {
-        await parseNFTMetadata(historyData.value[i].pubkey).then((res) => {
-            console.log(res);
-            historyData.value[i].metadata = res;
-            historyData.value[i].metadataType = true;
-        }).catch(err => {
-            historyData.value[i].metadata = {};
-            historyData.value[i].metadataType = false;
-        });
+        historyData.value[i].metadata = decodeLockAccount(historyData.value[i].account.data);
         let getSignaturesForAddress = {
             "jsonrpc": "2.0",
             "id": 1,
@@ -185,7 +187,6 @@ onMounted(async () => {
         }
 
         await requestList(getSignaturesForAddress).then(res => {
-            console.log(res);
 
             historyData.value[i].signatures = res[0];
             historyData.value[i].signaturesType = true;
@@ -197,26 +198,8 @@ onMounted(async () => {
         });
         // console.log(parseNFTMetadataData);
     }
-    loading.value = false;
-    // let method = {
-    //     "jsonrpc": "2.0", "id": 1,
-    //     "method": "getTokenSupply",
-    //     "params": [
-    //         // "GragM9tHgicpxtf9qrTkbY1fFZYA8CJaDgLuFnZikdqs"
-    //         props.url
-    //     ]
-    // };
     totalItems.value = historyData.value.length;
 
-
-    // proportion_amount.value = await chainRequest(method).then(res => {
-
-
-    //     return res.result.value.uiAmount;
-    // }).catch(err => {
-    //     console.log(err);
-    //     return 0;
-    // });
 });
 
 const come = (num) => {
@@ -238,6 +221,9 @@ const percent = (lod, nem) => {
     }
     return (lod / nem * 100).toFixed(5);
 }
+
+
+
 const pubbtx = (url) => {
     router.push({
         name: "address",
@@ -246,4 +232,20 @@ const pubbtx = (url) => {
         },
     })
 }
+const transaction = (item) => {
+    router.push({
+        name: "tx",
+        params: {
+            item: item,
+        },
+    });
+};
+
+const stringcate = (str) => {
+    if (str.length < 10) {
+        return str;
+    } else {
+        return str.slice(0, 8) + "..." + str.slice(-8);
+    }
+};
 </script>

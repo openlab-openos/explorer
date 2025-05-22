@@ -95,8 +95,12 @@ const timeout = () => {
 };
 
 const toFexedStake = (num) => {
-  if (num) {
+  console.log(num);
+  
+  if (typeof num == "number" && num !='Infinity' ) {
     return JSON.parse((num / 1000000000).toFixed(2));
+  } else {
+    return 0;
   }
 };
 const info = ref();
@@ -111,7 +115,7 @@ const rendered = (data) => {
       }
       if (data[i].uiAmount) {
         priceTrans.value +=
-        data[i].uiAmount
+          data[i].uiAmount
       }
     }
   }
@@ -144,11 +148,12 @@ const rendered = (data) => {
     },
   ];
 
-  type.value = true;
 };
 
 onMounted(() => {
   watchEffect(() => {
+    console.log(JSON.parse(appStore.Transaction));
+    let dataArray = [];
     if (appStore.Transaction.length != 0) {
       for (let i in JSON.parse(appStore.Transaction)) {
         transferData.value.push(
@@ -157,26 +162,28 @@ onMounted(() => {
       }
       let data = JSON.parse(appStore.Transaction);
       if (data.length != 0) {
-        let dataArray = [];
+
         for (let i in data) {
           let etach = data[i];
 
           // return;
           if (etach.type == "transfer") {
-             dataArray.push(data[i])
-
+            dataArray.push(data[i])
           }
 
-          
+
         }
+        console.log(dataArray);
+
         if (dataArray.length != 0) {
-            rendered(dataArray);
-          }
+          rendered(dataArray);
+        }
 
       }
 
     }
-
+    rendered(dataArray);
+    type.value = true;
 
   })
 })

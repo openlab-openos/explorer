@@ -520,7 +520,6 @@ const Cretifucate = (data: Array<any>) => {
             'code': data[i].protocol_code,
             'symbol': data[i].symbol,
             'certificates': [
-
             ]
         })
         for (let j in data[i].certificates) {

@@ -43,6 +43,8 @@
     "Requset-text": "Tối đa 1 yêu cầu sau mỗi 8 giờ.",
     "ConfirmAirdrop": "Xác nhận空投",
     "Margin-record": "Tiền gửi hồ sơ",
+    "not-been-released": "Không phát hành dự trữ",
+    "have-been-released": "Tiền dự trữ đã được phát hành",
     "navigation": {
         "title": "Điều hướng",
         "dashboard": "Bảng điều khiển",

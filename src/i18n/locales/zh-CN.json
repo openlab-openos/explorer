@@ -43,6 +43,8 @@
     "Requset-text":  "每 8 小时最多 1 次请求",
     "ConfirmAirdrop": "确认空投",
     "Margin-record": "储备金记录",
+    "not-been-released":"未释放储备金",
+    "have-been-released":"已释放待赎回储备金",
     "navigation": {
         "title": "导航",
         "dashboard": "仪表盘",
@@ -260,7 +262,8 @@
         "name": "名称",
         "pubkey":"质押地址",
         "Amount":"数量",
-        "type":"状态"
+        "type":"状态",
+        "Payer":"付款人"
     },
     "nede": {
         "openverse_mainnet": "Openverse 主网",

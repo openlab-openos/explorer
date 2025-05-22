@@ -43,6 +43,8 @@
     "Requset-text": "Максимум 1 запрос каждые 8 часов",
     "ConfirmAirdrop": "Подтвердить эирдроп",
     "Margin-record": "Маржа записи",
+    "not-been-released": "Невыпущенные резервы",
+    "have-been-released": "Отпущен под залог",
     "navigation": {
         "title": "Навигация",
         "dashboard": "Панель управления",

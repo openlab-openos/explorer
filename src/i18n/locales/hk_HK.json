@@ -43,6 +43,8 @@
     "Requset-text": "每 8 小時最多 1 次請求",
     "ConfirmAirdrop": "確認空投",
     "Margin-record": "マージン記録",
+    "not-been-released": "未釋放儲備金",
+    "have-been-released": "已釋放待贖回儲備金",
     "navigation": {
         "title": "導航",
         "dashboard": "儀表盤",

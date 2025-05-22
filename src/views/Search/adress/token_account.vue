@@ -25,12 +25,13 @@
                                 <td>{{ $t("account.address_label") }} </td>
                                 <td class="text-end"> {{ price ? price.name : 'N/A' }} </td>
                             </tr>
+
                             <template v-if="mintData">
-                                <tr v-if="mintData.supply">
+                                <tr>
                                     <td>{{ $t("account.balance") }} </td>
                                     <td class="text-end">
-                                        {{ come(mintData.supply ?
-                                            toFexedStake(mintData.supply, mintData.decimals) : 0) }}
+                                        <!-- {{ mintData }} -->
+                                        {{ mintData.value.uiAmount }}
                                         <span v-if="price">
                                             {{ price.symbol != '' ? "(" + price.symbol + ")" : "" }}
                                         </span>
@@ -78,7 +79,7 @@
                         <el-tab-pane :label="$t('navigation.transactions')" name="first">
                             <history-view :url="url"></history-view>
                         </el-tab-pane>
-                        <el-tab-pane v-if="transfersType.urlType == 'Formal' " :label="$t('transfer')" name="second">
+                        <el-tab-pane v-if="transfersType.urlType == 'Formal'" :label="$t('transfer')" name="second">
                             <transfer-view :url="url"></transfer-view>
                         </el-tab-pane>
                         <!-- <el-tab-pane :label="$t('account.holder')" name="third">
@@ -136,7 +137,7 @@ const owner = ref(props.owner);
 const token_name = ref("");
 const token_img = ref("");
 const tokenName = async (url, params) => {
-    
+
     let method = {
         "jsonrpc": "2.0",
         "id": 1,
@@ -168,11 +169,11 @@ const tokenRwquest = async () => {
 
     try {
         const res2 = await solanagetAccount(url.value, owner.value);
-        
+
 
         tokenData.value = res2;
         data.value = res2;
-        
+
 
         if (res2.mintAuthority) {
             let mintAuthority = BigInt(res2.mintAuthority._bn);
@@ -196,14 +197,29 @@ const tokenRwquest = async () => {
 };
 
 const mintReauest = async (url) => {
-    
-    try {
-        await solanaRequest(url, owner.value).then(res => {
-            
 
-            mintData.value = res;
+    try {
+        // await solanaRequest(url, owner.value).then(res => {
+        //     console.log(res);
+
+        //     mintData.value = res;
+        // });
+        console.log(url);
+
+        await chainRequest({
+            "jsonrpc": "2.0",
+            "id": 1,
+            "method": "getTokenAccountBalance",
+            "params": [
+                props.url
+            ]
+        }).then(res => {
+            console.log(res);
+            mintData.value = res.result;
         });
         await metaRequest(url, owner.value).then(res => {
+            console.log(res);
+
             price.value = res;
         });
     } catch (err) {

@@ -103,7 +103,7 @@
             </card>
         </div>
 
-        <div class="tab-content marginTOP-50">
+        <!-- <div class="tab-content marginTOP-50">
             <card class="md-3">
                 <card-body class="card-bodys">
                     <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
@@ -130,7 +130,7 @@
                     </table>
                 </card-body>
             </card>
-        </div>
+        </div> -->
 
         <cardView v-if="url" :url="url" />
         <div class="tab-content marginTOP-50">
@@ -147,7 +147,7 @@
                             <holder-view :url="url" :paramsId="paramsId" v-if="activeName == 'third'"></holder-view>
                         </el-tab-pane>
                         <el-tab-pane :label="$t('Margin-record')" name="fourth">
-                            <ReserveView :url="url" :paramsId="paramsId" v-if="activeName == 'fourth'"></ReserveView>
+                            <ReserveView :url="url" :paramsId="paramsId" v-if="activeName == 'fourth'" :type="false"></ReserveView>
                         </el-tab-pane>
                     </el-tabs>
                 </card-body>
@@ -311,7 +311,7 @@ onMounted(async () => {
     await numberHeld();
     if (url.value == "B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz") {
         mintToken.value = {
-            "name": "netive",
+            "name": "Wrap BTG",
             "symbol": "WBTG",
         }
     }

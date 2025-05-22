@@ -205,6 +205,8 @@ const fetchOrderData = async () => {
 
             // }
         }
+        console.log(arrayData.value);
+        
         appStore.setTransaction(JSON.stringify(arrayData.value));
     } catch (err) {
         console.error("Error fetching order data:", err);
