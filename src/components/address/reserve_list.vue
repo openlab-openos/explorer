@@ -25,22 +25,23 @@
                 <th>
                     {{ $t("account.destination") }}
                 </th>
-                <th>
+                <th v-if="reserveType">
                     {{ $t("mint") }}
                 </th>
-                <th>
+                <th v-else>
                     {{ $t("account.Owner") }}
                 </th>
             </tr>
             <template v-if="historyData.length != 0">
-                <tr v-for="(item, index) in paginatedHistoryData" :key="index">
+                <tr v-for="(item, index) in paginatedHistoryData" :key="index" style="cursor: pointer"
+                    @click="detailsFunction(item.child)">
                     <td>
                         <!-- {{ item.child[0].startTime }} -->
-                        {{ stampSome(item.startTime) }}
+                        {{ formatTimestamp(item.startTime) }}
                     </td>
                     <td>
                         <!-- {{ item.child[0].startTime }} -->
-                        {{ stampSome(item.endTime) }}
+                        {{ formatTimestamp(item.endTime) }}
                     </td>
                     <!-- <td>
                         {{ come(item.serial) }}
@@ -49,57 +50,22 @@
                         {{ item.futureCount + ' / ' + item.child.length }}
                     </td>
                     <td>
-                        {{ come(item.amount) }}
+                        {{ come(toFexedStake(item.amount)) }}
                     </td>
-                    <td class="text-theme" v-if="item.child" style="cursor: pointer"
-                        @click="pubbtx(item.child[0].mint)">
+                    <td class="text-theme" v-if="reserveType">
                         {{ titleUrl(item.child[0].mint).type ? titleUrl(item.child[0].mint).url :
                             stringcate(item.child[0].mint) }}
                         <img v-if="titleUrl(item.child[0].mint).type"
                             v-for="item, index in titleUrl(item.child[0].mint).certificates" :src="item.img"
                             :key="index" width="24" alt="" class="marginRight10">
                     </td>
-                    <td class="text-theme" v-if="item.child" style="cursor: pointer"
-                        @click="pubbtx(item.child[0].owner)">
+                    <td class="text-theme" v-else>
                         {{ titleUrl(item.child[0].owner).type ? titleUrl(item.child[0].owner).url :
                             stringcate(item.child[0].owner) }}
                         <img v-if="titleUrl(item.child[0].owner).type"
                             v-for="item, index in titleUrl(item.child[0].owner).certificates" :src="item.img"
                             :key="index" width="24" alt="" class="marginRight10">
                     </td>
-                    <!-- <td v-if="item.signatures" class="text-theme" style="cursor: pointer"
-                        @click="transaction(item.signatures.signature)">
-                        {{ stringcate(item.signatures.signature) }}
-
-                    </td>
-                    <td v-else>N/A</td>
-                    <td>
-                        <span v-if="item.signatures">{{ come(item.signatures.slot) }}</span>
-                        <span v-else>N/A</span>
-                    </td>
-                    <td class="text-theme" v-if="item.metadata" style="cursor: pointer"
-                        @click="pubbtx(item.metadata.owner)">
-                        {{ titleUrl(item.metadata.owner).url }}
-                        <img v-if="titleUrl(item.metadata.owner).type"
-                            v-for="item, index in titleUrl(item.metadata.owner).certificates" :src="item.img"
-                            :key="index" width="24" alt="" class="marginRight10">
-                    </td>
-                    <td v-else>N/A</td>
-                    <td>
-                        {{ come(item.account.lamports) }}
-                    </td>
-                    <td v-if="item.metadata"
-                        :style="item.metadata.isUnlocked ? 'color:rgba(60,210,165,1)' : 'color:rgba(225,250,7,1)'">
-                        <text>{{ item.metadata.isUnlocked }}</text>
-
-
-                    </td>
-                    <td v-else>N/A</td>
-
-                    <td>
-                        <span v-if="item.signaturesType">{{ timeSome(item.signatures.blockTime) }}</span>
-                        <span v-else>N/A</span>
-                    </td> -->
                 </tr>
             </template>
         </tbody>
@@ -131,6 +97,7 @@ import LoadingVue from "../../components/block/loading.vue"
 import { decodeLockAccount } from "../../request/record";
 import { lo } from "element-plus/es/locale/index.mjs";
 import { start } from "@popperjs/core";
+import { setData } from "../../views/Search/adress/components/event-bus"
 const loading = ref(true);
 const router = useRouter();
 const props = defineProps({
@@ -209,29 +176,6 @@ onMounted(async () => {
 
     for (let i = 0; i < data.length; i++) {
         data[i].metadata = decodeLockAccount(data[i].account.data);
-        // let getSignaturesForAddress = {
-        //     "jsonrpc": "2.0",
-        //     "id": 1,
-        //     "method": "getSignaturesForAddress",
-        //     "params": [
-        //         historyData.value[i].pubkey,
-        //         {
-        //             "limit": 1
-        //         }
-        //     ]
-        // }
-
-        // await requestList(getSignaturesForAddress).then(res => {
-
-        //     historyData.value[i].signatures = res[0];
-        //     historyData.value[i].signaturesType = true;
-        // }).catch(err => {
-        //     console.log(err);
-
-        //     historyData.value[i].signatures = {};
-        //     historyData.value[i].signaturesType = false;
-        // });
-        // console.log(parseNFTMetadataData);
     }
     // console.log(historyData.value);
     historyData.value = groupBySerialNumber(data);
@@ -240,25 +184,6 @@ onMounted(async () => {
     totalItems.value = historyData.value.length;
 
 });
-
-// function groupBySerialNumber(arr) {
-//     const grouped = {};
-//     arr.forEach(item => {
-//         const key = item.metadata.serialNumber;
-//         if (!grouped[key]) {
-//             grouped[key] = {
-//                 serial: key,
-//                 startTime: item.metadata.startTime,
-//                 child: [],
-//                 amount: 0 // 初始化amount字段
-//             };
-//         }
-//         grouped[key].child.push(item.metadata);
-//         // 将当前item的amount转换为数字并累加到总和中
-//         grouped[key].amount += parseFloat(item.metadata.amount) || 0;
-//     });
-//     return Object.values(grouped);
-// }
 
 function groupBySerialNumber(arr) {
     const grouped = {};
@@ -287,6 +212,13 @@ function groupBySerialNumber(arr) {
     return Object.values(grouped);
 }
 
+const detailsFunction = (data) => {
+    console.log(data);
+    sessionStorage.setItem("details", JSON.stringify(data));
+    router.push({
+        name: "details",
+    })
+}
 
 const come = (num) => {
     let reg =
@@ -300,12 +232,24 @@ const come = (num) => {
 const timeSome = (time) => {
     return moment(time * 1000).fromNow();
 }
-
+const toFexedStake = (num) => {
+    if (num) {
+        return (num / 1000000000);
+    }
+};
 const stampSome = (time) => {
     return moment(time * 1000).fromNow();
 
 }
+function formatTimestamp(timestamp) {
+    const date = new Date(timestamp * 1000); // 将秒转换为毫秒
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hour = String(date.getHours()).padStart(2, '0');
 
+    return `${year}:${month}:${day}:${hour}`;
+}
 const percent = (lod, nem) => {
     if (nem == 0) {
         return 0;

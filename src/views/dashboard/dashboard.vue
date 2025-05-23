@@ -79,7 +79,7 @@ function selectLanguage(indexValue) {
 watchEffect(() => {
   selectLanguage(appStore.$state.language);
 })
-const requestType = ref(true);
+const requestType = ref(false);
 
 ustdData().then((data) => {
   appStore.setRate(data.data.rate);
@@ -136,7 +136,7 @@ const supplyRequest = async (epoch, slot, inepoch, solttime) => {
   pubbley.value = appStore.pubbley;
 
   server.value = getServerData(epoch, slot, inepoch, solttime);
-  requestType.value = false;
+  // requestType.value = false;
 
 };
 
@@ -212,7 +212,7 @@ const getServerData = (epoch, slot, inepoch, solttime) => {
           cssClass: "apexcharts-xaxis-label",
         },
       },
-      min: Gettype?(Gettype.urlType == 'Formal'?3000:0):3000,
+      min: Gettype ? (Gettype.urlType == 'Formal' ? 3000 : 0) : 3000,
     },
   };
   return {
@@ -388,11 +388,28 @@ watchEffect(async () => {
     response.slotsInEpoch - response.slotIndex
   );
   appStore.setEposhTome(solttime.value);
+  console.log(response.slotsInEpoch);
+  console.log(response.slotIndex);
+  console.log(response.slotsInEpoch - response.slotIndex);
+  console.log(getTime(
+    response.slotsInEpoch - response.slotIndex
+  ));
+
 
   if (response) {
 
   }
   await performanceSamples();
+  console.log(response.epoch, response.slotIndex, response.slotsInEpoch, solttime.value);
+  if(response.epoch &&  response.slotIndex && response.slotsInEpoch && solttime.value ){
+    requestType.value = true;
+    console.log(123);
+    
+  } else {
+    requestType.value = false;
+    console.log(222);
+    
+  }
   if (requestType.value) {
     await supplyRequest(response.epoch, response.slotIndex, response.slotsInEpoch, solttime.value);
   }
@@ -434,7 +451,7 @@ onBeforeUnmount(() => {
             <apexchart type="bar" width="100%" height="100%" :options="server.chart.options"
               :series="server.chart.series"></apexchart>
           </div>
-          <div class="row">
+          <div class="row" v-if="requestType" >
             <div class="col-lg-6 mb-3 mb-lg-0" v-for="(stat, index) in server.stats" :key="index">
               <div class="d-flex align-items-center">
                 <div class="w-50px h-50px">

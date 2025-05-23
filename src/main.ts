@@ -60,6 +60,7 @@ let paini = createPinia();
 paini.use(piniaPersist);
 
 const app = createApp(App);
+console.log(router);
 
 app.config.globalProperties.$progream = PROGRAM_INFO_BY_ID;
 app.use(VueApexCharts);

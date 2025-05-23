@@ -9,7 +9,7 @@ import Transition from "../views/transaction/transactions.vue";
 import Epoch from "../views/Search/epoch.vue";
 import Tokens from "../views/asset/asset_list.vue";
 import Faucet from "../views/Faucet/Faucet.vue"
-import { useAppStore } from "@/stores";
+import Details from "../views/Search/adress/components/details.vue"
 
 
 const currentUrl = window.location.href;
@@ -75,6 +75,11 @@ const router = createRouter({
       path: "/faucet",
       name: "faucet",
       component: Faucet,
+    },
+    {
+      path: "/details",
+      name: "details",
+      component: Details,
     }
   ],
 });

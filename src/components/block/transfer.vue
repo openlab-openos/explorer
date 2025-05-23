@@ -96,8 +96,8 @@ const timeout = () => {
 
 const toFexedStake = (num) => {
   console.log(num);
-  
-  if (typeof num == "number" && num !='Infinity' ) {
+
+  if (typeof num == "number" && num != 'Infinity') {
     return JSON.parse((num / 1000000000).toFixed(2));
   } else {
     return 0;
@@ -151,39 +151,43 @@ const rendered = (data) => {
 };
 
 onMounted(() => {
+  // console.log(appStore.Transaction);
+
   watchEffect(() => {
-    console.log(JSON.parse(appStore.Transaction));
-    let dataArray = [];
     if (appStore.Transaction.length != 0) {
-      for (let i in JSON.parse(appStore.Transaction)) {
-        transferData.value.push(
-          JSON.parse(appStore.Transaction)[i]
-        )
-      }
-      let data = JSON.parse(appStore.Transaction);
-      if (data.length != 0) {
+      let dataArray = [];
+      if (appStore.Transaction.length != 0) {
+        for (let i in JSON.parse(appStore.Transaction)) {
+          transferData.value.push(
+            JSON.parse(appStore.Transaction)[i]
+          )
+        }
+        let data = JSON.parse(appStore.Transaction);
+        if (data.length != 0) {
 
-        for (let i in data) {
-          let etach = data[i];
+          for (let i in data) {
+            let etach = data[i];
 
-          // return;
-          if (etach.type == "transfer") {
-            dataArray.push(data[i])
+            // return;
+            if (etach.type == "transfer") {
+              dataArray.push(data[i])
+            }
+
+
+          }
+          console.log(dataArray);
+
+          if (dataArray.length != 0) {
+            rendered(dataArray);
           }
 
-
-        }
-        console.log(dataArray);
-
-        if (dataArray.length != 0) {
-          rendered(dataArray);
         }
 
       }
-
+      rendered(dataArray);
+      type.value = true;
     }
-    rendered(dataArray);
-    type.value = true;
+
 
   })
 })
