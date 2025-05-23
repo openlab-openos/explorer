@@ -4,6 +4,7 @@
         <!-- BEGIN card -->
         <card class="mb-3">
             <card-body>
+                <h3> Details</h3>
                 <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small"
                     v-if="!loading">
                     <tbody>
@@ -51,7 +52,7 @@
                         {{ item.futureCount + ' / ' + item.child.length }}
                     </td> -->
                                 <td>
-                                    {{ come(toFexedStake(item.amount)) }}
+                                    {{ come(smartFormatNumber(toFexedStake(item.amount))) }}
                                 </td>
                                 <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.mint)">
                                     {{ titleUrl(item.mint).type ? titleUrl(item.mint).url :
@@ -83,7 +84,9 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue';
 import { getData, on } from './event-bus.js';
+import moment from "moment";
 import { useRouter } from "vue-router"
+import {smartFormatNumber} from '../../../../components/number/smart.js'
 import { titleUrl } from "../../../../components/method/title_url"
 const router = useRouter();
 
@@ -97,9 +100,9 @@ const detailsData = ref(null);
 onMounted(() => {
     detailsData.value = JSON.parse(sessionStorage.getItem('details'))
 
-    console.log(detailsData.value);
+    // console.log(detailsData.value);
     historyData.value = detailsData.value;
-    console.log(historyData.value);
+    // console.log(historyData.value);
 
     if (!detailsData.value) {
         router.push({
@@ -121,13 +124,7 @@ const paginatedHistoryData = computed(() => {
 });
 
 function formatTimestamp(timestamp) {
-    const date = new Date(timestamp * 1000); // 将秒转换为毫秒
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hour = String(date.getHours()).padStart(2, '0');
-
-    return `${year}:${month}:${day}:${hour}`;
+       return moment(timestamp*1000).format('YYYY-M-DD hh:mm:ss')
 }
 const toFexedStake = (num) => {
     if (num) {

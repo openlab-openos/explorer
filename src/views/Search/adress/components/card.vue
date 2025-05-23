@@ -80,7 +80,7 @@ const tokenType = ref([
 const list = ref([])
 
 tokenList(props.url).then(res => {
-    
+
     cardData.value = res.data.certificates
     for (let i in cardData.value) {
         for (let j in tokenType.value) {
@@ -89,7 +89,7 @@ tokenList(props.url).then(res => {
             }
         }
     }
-    
+
 }).catch(error => {
 });
 

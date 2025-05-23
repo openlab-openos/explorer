@@ -1,12 +1,23 @@
 <template>
-    <!-- <div v-if="reserveType" >
-        <div>
-            {{ $t("not-been-released") }}
+    <div v-if="!reserveType" class="releasedBox">
+        <div class="releasedChild">
+            <h3>{{ $t("not-been-released") }}</h3>
+            <h4>
+                <p class="releasedAmount">{{ amountReserve(historyData, false) }} BTG</p>
+            </h4>
         </div>
-        <div>
-            {{ $t("have-been-released") }}
+        <div class="releasedChild">
+            <h3>{{ $t("have-been-released") }}</h3>
+            <h4>
+                <p class="releasedAmount"> {{ smartFormatNumber(amountReserve(historyData, true)) }}BTG</p>
+            </h4>
         </div>
-    </div> -->
+    </div>
+    <div class="EChartsBox">
+        <apexchart :height="chart.height" :options="chart.options" :series="chart.series" style="margin-top: -10px;">
+        </apexchart>
+
+    </div>
     <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small" v-if="!loading">
         <tbody>
             <tr>
@@ -50,7 +61,9 @@
                         {{ item.futureCount + ' / ' + item.child.length }}
                     </td>
                     <td>
-                        {{ come(toFexedStake(item.amount)) }}
+                        <!-- {{ come(toFexedStake(item.amount)) }} -->
+                        {{ come(smartFormatNumber(toFexedStake(item.amount))) }}
+
                     </td>
                     <td class="text-theme" v-if="reserveType">
                         {{ titleUrl(item.child[0].mint).type ? titleUrl(item.child[0].mint).url :
@@ -97,6 +110,9 @@ import LoadingVue from "../../components/block/loading.vue"
 import { decodeLockAccount } from "../../request/record";
 import { lo } from "element-plus/es/locale/index.mjs";
 import { start } from "@popperjs/core";
+import apexchart from "@/components/plugins/Apexcharts.vue";
+import { useAppVariableStore } from "@/stores/app-variable";
+import { smartFormatNumber } from "../../components/number/smart"
 import { setData } from "../../views/Search/adress/components/event-bus"
 const loading = ref(true);
 const router = useRouter();
@@ -114,6 +130,8 @@ const props = defineProps({
         default: false
     }
 })
+const appVariable = useAppVariableStore();
+
 const historyData = ref([]);
 const proportion_amount = ref(0);
 const currentPage = ref(1);
@@ -121,7 +139,8 @@ const pageSize = ref(25);
 const url = ref(props.url);
 const paramsId = ref(props.paramsId);
 const reserveType = ref(props.type);
-
+const releasedArray = ref([]);
+const unreleasedArray = ref([]);
 
 const paginatedHistoryData = computed(() => {
     const start = (currentPage.value - 1) * pageSize.value;
@@ -196,19 +215,48 @@ function groupBySerialNumber(arr) {
                 endTime: item.metadata.endTime, // 存储endTime用于后续比较
                 child: [],
                 amount: 0,
-                futureCount: 0 // 初始化未来时间数量
+                futureCount: 0,// 初始化未来时间数量
+                released: 0,
+                unreleased: 0,
+                releasedArray: [],
+                unreleasedArray: [],
             };
         }
         grouped[key].child.push(item.metadata);
         grouped[key].amount += parseFloat(item.metadata.amount) || 0;
 
         // 统计child中endTime大于当前时间的数量
-        const currentTime = Math.floor(Date.now());
-        if (parseInt(item.metadata.endTime, 10) > currentTime) {
+        const currentTime = Math.floor(Date.now() / 1000);
+
+
+        if (parseInt(item.metadata.endTime) > currentTime) {
+            // grouped[key].futureCount++;
+            grouped[key].released += parseFloat(item.metadata.amount) || 0;
+            grouped[key].releasedArray.push(item.metadata.amount);
+            grouped[key].unreleasedArray.push(0);
+        } else {
+            console.log(parseInt(item.metadata.endTime, 10));
+            console.log(currentTime);
             grouped[key].futureCount++;
+            grouped[key].releasedArray.push(0);
+            grouped[key].unreleasedArray.push(item.metadata.amount);
+            if (!item.metadata.isUnlocked) {
+                grouped[key].unreleased += parseFloat(item.metadata.amount) || 0;
+
+            }
         }
     });
+    console.log(Object.values(grouped));
+    const mergedReleasedArray = [];
+    const unmergedReleasedArray = [];
 
+    Object.values(grouped).forEach(group => {
+        mergedReleasedArray.push(...group.releasedArray);
+        unmergedReleasedArray.push(...group.unreleasedArray);
+    });
+    console.log(mergedReleasedArray);
+    releasedArray.value = mergedReleasedArray;
+    unreleasedArray.value = unmergedReleasedArray;
     return Object.values(grouped);
 }
 
@@ -221,6 +269,8 @@ const detailsFunction = (data) => {
 }
 
 const come = (num) => {
+    console.log(num);
+
     let reg =
         num.toString().indexOf(".") > -1
             ? /(\d)(?=(\d{3})+\.)/g
@@ -234,7 +284,7 @@ const timeSome = (time) => {
 }
 const toFexedStake = (num) => {
     if (num) {
-        return (num / 1000000000);
+        return (num / 1000000000) > 1 ? (num / 1000000000).toFixed(2) : num / 1000000000;
     }
 };
 const stampSome = (time) => {
@@ -242,13 +292,14 @@ const stampSome = (time) => {
 
 }
 function formatTimestamp(timestamp) {
-    const date = new Date(timestamp * 1000); // 将秒转换为毫秒
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hour = String(date.getHours()).padStart(2, '0');
+    // const date = new Date(timestamp * 1000); // 将秒转换为毫秒
+    // const year = date.getFullYear();
+    // const month = String(date.getMonth() + 1).padStart(2, '0');
+    // const day = String(date.getDate()).padStart(2, '0');
+    // const hour = String(date.getHours()).padStart(2, '0');
 
-    return `${year}:${month}:${day}:${hour}`;
+    // return `${year}-${month}-${day} ${hour}`;
+    return moment(timestamp * 1000).format('YYYY-M-DD hh:mm:ss')
 }
 const percent = (lod, nem) => {
     if (nem == 0) {
@@ -283,4 +334,76 @@ const stringcate = (str) => {
         return str.slice(0, 8) + "..." + str.slice(-8);
     }
 };
+
+const amountReserve = (item, boolean) => {
+    if (boolean) {
+        let amount = 0
+        for (let i in item) {
+            amount += item[i].unreleased
+        }
+        let num = (amount / 1000000000) > 1 ? (amount / 1000000000).toFixed(2) : amount / 1000000000;
+        let reg =
+            num.toString().indexOf(".") > -1
+                ? /(\d)(?=(\d{3})+\.)/g
+                : /(\d)(?=(\d{3})+$)/g;
+
+        return num.toString().replace(reg, "$1,");
+    } else {
+        let amount = 0
+        for (let i in item) {
+            amount += item[i].released
+        }
+        let num = (amount / 1000000000) > 1 ? (amount / 1000000000).toFixed(2) : amount / 1000000000;
+
+        let reg =
+            num.toString().indexOf(".") > -1
+                ? /(\d)(?=(\d{3})+\.)/g
+                : /(\d)(?=(\d{3})+$)/g;
+
+        return num.toString().replace(reg, "$1,");
+        // return toFexedStake(amount);
+    }
+};
+const chart = ref({
+    height: 200,
+    options: {
+        chart: { type: "bar", sparkline: { enabled: true } },
+        colors: [
+            "rgba(" + appVariable.color.themeRgb + ", 1)",
+            "rgba(" + appVariable.color.themeRgb + ", .75)",
+            "rgba(" + appVariable.color.themeRgb + ", .5)",
+        ],
+        stroke: { show: false },
+        tooltip: {
+            enabled: false
+        },
+    },
+    series: [
+        {
+            name: " reserve",
+            data: unreleasedArray,
+            color: "rgba(" + appVariable.color.themeRgb + ", 0.4)"
+        },
+        {
+            name: "redemption",
+            data: releasedArray,
+            color: "rgba(" + appVariable.color.themeRgb + ", 2)"
+        },
+    ],
+});
 </script>
+
+<style scoped>
+.releasedBox {
+    width: 90%;
+    margin: 10px auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.EChartsBox {
+    width: 90%;
+    margin: auto;
+    padding: 4rem 2rem;
+}
+</style>
