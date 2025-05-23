@@ -45,6 +45,7 @@
     "Margin-record": "Tiền gửi hồ sơ",
     "not-been-released": "Không phát hành dự trữ",
     "have-been-released": "Tiền dự trữ đã được phát hành",
+    "isUnlocked":"Tiền dự trữ đã được mở",
     "navigation": {
         "title": "Điều hướng",
         "dashboard": "Bảng điều khiển",

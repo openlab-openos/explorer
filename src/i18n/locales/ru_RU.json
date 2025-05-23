@@ -45,6 +45,7 @@
     "Margin-record": "Маржа записи",
     "not-been-released": "Невыпущенные резервы",
     "have-been-released": "Отпущен под залог",
+    "isUnlocked":"разблокирован",
     "navigation": {
         "title": "Навигация",
         "dashboard": "Панель управления",

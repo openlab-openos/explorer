@@ -48,6 +48,7 @@
     "stakeTime":"Stake Time",
     "last_time":"Last Unlock Time",
     "stage": "Stage",
+    "isUnlocked":"Is Unlocked",
     "navigation": {
         "title": "Navigation",
         "dashboard": "Dashboard",

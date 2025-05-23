@@ -45,6 +45,7 @@
     "Requset-text": "Maksimum 1 permintaan setiap 8 jam",
     "not-been-released": "Rizab yang belum dikeluarkan",
     "have-been-released": "Rizab untuk penebusan telah dikeluarka",
+    "isUnlocked":"Telah dibuka",
     "navigation": {
         "title": "Navigasi",
         "dashboard": "Papan Pemuka",

@@ -45,6 +45,7 @@
     "Margin-record": "マージン記録",
     "not-been-released": "未釋放儲備金",
     "have-been-released": "已釋放待贖回儲備金",
+    "isUnlocked":"已解鎖",
     "navigation": {
         "title": "導航",
         "dashboard": "儀表盤",

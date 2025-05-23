@@ -45,6 +45,7 @@
     "Margin-record": "储备金记录",
     "not-been-released":"未释放储备金",
     "have-been-released":"已释放待赎回储备金",
+    "isUnlocked":"已解锁",
     "navigation": {
         "title": "导航",
         "dashboard": "仪表盘",

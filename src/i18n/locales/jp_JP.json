@@ -45,6 +45,7 @@
     "Margin-record": "マーケットプレイスのレコード",
     "not-been-released": "引当金を放出していません",
     "have-been-released": "償還準備金は解放されました",
+    "isUnlocked":"解锁",
     "navigation": {
         "title": "ナビゲーション",
         "dashboard": "ダッシュボード",

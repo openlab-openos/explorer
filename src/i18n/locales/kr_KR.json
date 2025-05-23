@@ -45,6 +45,7 @@
     "Margin-record": "마진 기록",
     "not-been-released": "준비금을 미석방하다",
     "have-been-released": "준비금을 이미 석방하여 도로 찾기를 기다리다",
+    "isUnlocked":"잠금 해제되었습니다.",
     "navigation": {
         "title": "네비게이션",
         "dashboard": "대시보드",
