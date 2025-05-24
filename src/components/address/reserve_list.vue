@@ -1,23 +1,27 @@
 <template>
-    <div v-if="!reserveType" class="releasedBox">
-        <div class="releasedChild">
-            <h3>{{ $t("not-been-released") }}</h3>
-            <h4>
-                <p class="releasedAmount">{{ amountReserve(historyData, false) }} BTG</p>
-            </h4>
+    <div v-if="historyData.length != 0">
+        <div v-if="!reserveType" class="releasedBox">
+            <div class="releasedChild">
+                <h3>{{ $t("not-been-released") }}</h3>
+                <h4>
+                    <p class="releasedAmount">{{ amountReserve(historyData, false) }} BTG</p>
+                </h4>
+            </div>
+            <div class="releasedChild">
+                <h3>{{ $t("have-been-released") }}</h3>
+                <h4>
+                    <p class="releasedAmount"> {{ smartFormatNumber(amountReserve(historyData, true)) }}BTG</p>
+                </h4>
+            </div>
         </div>
-        <div class="releasedChild">
-            <h3>{{ $t("have-been-released") }}</h3>
-            <h4>
-                <p class="releasedAmount"> {{ smartFormatNumber(amountReserve(historyData, true)) }}BTG</p>
-            </h4>
-        </div>
-    </div>
-    <div class="EChartsBox">
-        <apexchart :height="chart.height" :options="chart.options" :series="chart.series" style="margin-top: -10px;">
-        </apexchart>
+        <div class="EChartsBox">
+            <apexchart :height="chart.height" :options="chart.options" :series="chart.series"
+                style="margin-top: -10px;">
+            </apexchart>
 
+        </div>
     </div>
+
     <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small" v-if="!loading">
         <tbody>
             <tr>

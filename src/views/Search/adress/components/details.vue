@@ -1,9 +1,9 @@
 <template>
 
-    <div class="col-xl-3 minification">
+    <div class=" minification">
         <!-- BEGIN card -->
-        <card class="mb-3">
-            <card-body>
+        <!-- <card>
+            <card-body> -->
                 <h3> Details</h3>
                 <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small"
                     v-if="!loading">
@@ -75,8 +75,8 @@
                         </template>
                     </tbody>
                 </table>
-            </card-body>
-        </card>
+            <!-- </card-body>
+        </card> -->
         <!-- END card -->
     </div>
 </template>
@@ -100,9 +100,9 @@ const detailsData = ref(null);
 onMounted(() => {
     detailsData.value = JSON.parse(sessionStorage.getItem('details'))
 
-    // console.log(detailsData.value);
+    console.log(detailsData.value);
     historyData.value = detailsData.value;
-    // console.log(historyData.value);
+    console.log(historyData.value);
 
     if (!detailsData.value) {
         router.push({
