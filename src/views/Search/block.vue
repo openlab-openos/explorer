@@ -304,12 +304,8 @@ watchEffect(() => {
       <div style="margin-top:50px">
         <ul class="nav nav-pills mb-3" id="pills-tab">
           <li class="nav-item">
-<<<<<<< HEAD
-            <a class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" href="#pills-home">{{ $t("blocks.transctions") }}</a>
-=======
             <a class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" href="#pills-home">{{
               $t("blocks.transctions") }}</a>
->>>>>>> master
           </li>
         </ul>
         <div class="tab-content" id="pills-tabContent">

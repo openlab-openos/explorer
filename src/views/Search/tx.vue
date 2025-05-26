@@ -1,6 +1,7 @@
 <script setup>
 import { getCurrentInstance, ref, watchEffect } from "vue";
 import i18n from "@/i18n"
+import {smartFormatNumber} from '../../components/number/smart.js'
 import { useAppStore } from "../../stores/index";
 import { solanapubbleys } from "../../components/method/solana"
 import { PROGRAM_INFO_BY_ID } from "../../program";
@@ -339,7 +340,7 @@ export default {
                 </tr>
                 <tr>
                   <td>{{ $t("transaction.fee") }} (BTG)</td>
-                  <td class="text-end"> {{ toFexedStake(historyData.meta.fee/1000000000) }} </td>
+                  <td class="text-end"> {{ smartFormatNumber(historyData.meta.fee/1000000000) }} </td>
                 </tr>
                 <tr>
                   <td>{{ $t("transaction.compute_units_consumed") }} </td>
@@ -403,18 +404,18 @@ export default {
                     </td>
                     <td v-if="historyData.meta.postBalances">
                       <span class="symboldata" :style="styleSysmle(
-                        symbolNum(come(toFexedStake((historyData.meta.postBalances[index] -
+                        symbolNum(come(smartFormatNumber((historyData.meta.postBalances[index] -
                           historyData.meta.preBalances[index])/1000000000)))
                       )
                         ">
-                        {{ symbolNum(come(toFexedStake((historyData.meta.postBalances[index] -
+                        {{ symbolNum(come(smartFormatNumber((historyData.meta.postBalances[index] -
                           historyData.meta.preBalances[index])/1000000000))).value
                         }}
                       </span>
                     </td>
                     <td v-else></td>
                     <td v-if="historyData.meta.postBalances">
-                      {{ come(toFexedStake(historyData.meta.postBalances[index]/1000000000)) }}
+                      {{ come(smartFormatNumber(historyData.meta.postBalances[index]/1000000000)) }}
                     </td>
                     <td v-else></td>
                     <td style="text-align: left;font-size: 12px;">

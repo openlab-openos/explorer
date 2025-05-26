@@ -6,7 +6,10 @@
             <img :src="token_img ? token_img : ''" alt="" class="marginRight10 imgWigth25" v-if="token_img">
             <img v-if="titleUrl(token_name).type" :src="titleUrl(token_name).img" class="marginRight10 imgWigth25">
             <!-- <text> {{ token_name ? titleUrl(token_name).url : '' }} {{ $t("account.token") }} -->
-            <text> {{ token_name ? titleUrl(token_name).url : '' }}
+            <text>
+                {{ token_name ? (titleUrl(url).type ? titleUrl(url).url : (token_name == url ? 'Token' : token_name))
+                : 'Token' }}
+                <!-- {{ titleUrl(url).type }} -->
                 <img v-if="titleUrl(url).type" v-for="item, index in titleUrl(url).certificates" :src="item.img"
                     :key="index" width="24" alt="" class="marginRight10">
             </text>
@@ -32,9 +35,10 @@
                                 <td>{{ $t("account.address_label") }} </td>
                                 <td class="text-end">{{ titleUrl(url).find ? titleUrl(url).url : 'N/A' }}</td>
                             </tr>
-                            <tr v-if="mintToken">
+                            <tr>
                                 <td>{{ $t("account.symbol") }} </td>
-                                <td class="text-end"> {{ mintToken.symbol ? mintToken.symbol : 'N/A' }} </td>
+                                <td class="text-end"> {{mintToken?( mintToken.symbol ? mintToken.symbol : 'N/A') :'N/A' }} </td>
+                                <!-- <td class="text-end"> {{ mintToken.symbol ? mintToken.symbol : 'N/A' }} </td> -->
                             </tr>
                             <tr>
                                 <td>{{ $t("transaction.Decimals") }} </td>
@@ -147,7 +151,8 @@
                             <holder-view :url="url" :paramsId="paramsId" v-if="activeName == 'third'"></holder-view>
                         </el-tab-pane>
                         <el-tab-pane :label="$t('Margin-record')" name="fourth">
-                            <ReserveView :url="url" :paramsId="paramsId" v-if="activeName == 'fourth'" :type="false"></ReserveView>
+                            <ReserveView :url="url" :paramsId="paramsId" v-if="activeName == 'fourth'" :type="false">
+                            </ReserveView>
                         </el-tab-pane>
                     </el-tabs>
                 </card-body>
@@ -248,10 +253,10 @@ const tokenRwquest = async () => {
 
                 let mintAuthority = BigInt(mintAuthorit);
                 pubbleys.value = new PublicKey(mintAuthority);
-                
+
 
             }
-            
+
 
             if (res.address) {
                 let addresses = res.address._bn;
@@ -260,7 +265,7 @@ const tokenRwquest = async () => {
             }
         });
         metaRequest(url.value, paramsId.value).then(res => {
-            
+
             mintToken.value = res;
         });
     } catch (err) {
@@ -295,7 +300,7 @@ const numberHeld = async () => {
     }
     chainRequest(method).then(res => {
 
-        
+
         if (res.err) {
             holdNumber.value = 0;
         } else {

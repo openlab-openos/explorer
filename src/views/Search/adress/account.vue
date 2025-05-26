@@ -1,8 +1,10 @@
 <template>
     <div>
         <h3>
-            {{ card_data[0] == null ? $t("account.title") : (card_data[0].executable ? $t("account.program_title") :
-                $t("account.title")) }}
+            <!-- {{ card_data[0] == null ? $t("account.title") : (card_data[0].executable ? $t("account.program_title") :
+                $t("account.title"))
+                 }} -->
+            {{ card_data[0] == null ? "Account": (card_data[0].executable ? $t("Program") : "Account") }}
         </h3>
 
         <div v-if="type">
@@ -29,7 +31,7 @@
                             <tr>
                                 <td>{{ $t("account.balance") }} (BTG)</td>
                                 <td class="text-end"> {{ card_data[index] == null ? 'Account does not exist' :
-                                    come(toFexedStake(item.lamports / 1000000000)) }} </td>
+                                    come(smartFormatNumber(toFexedStake(item.lamports / 1000000000))) }} </td>
                             </tr>
                             <tr>
                                 <td>{{ $t("account.allocated_data_size") }} </td>
@@ -126,6 +128,7 @@ import transferView from "../../../components/address/transfer_list.vue";
 import holderView from "../../../components/address/holder_list.vue";
 import pledgeView from "../../../components/address/pledge.vue"
 import { useRouter } from "vue-router";
+import {smartFormatNumber} from '../../../components/number/smart.js'
 import ReserveView from "../../../components/address/reserve_list.vue"
 import tokensView from "../../../components/address/tokens.vue"
 const router = useRouter();

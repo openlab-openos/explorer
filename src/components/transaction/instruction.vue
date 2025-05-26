@@ -62,7 +62,8 @@
                                             toFexedStake(values)
                                             :
                                             (keys
-                                                == 'tokenAmount' ? values.uiAmount : titleUrl(values).url)) }} {{ keys ==
+                                                == 'tokenAmount' ? values.uiAmount :(keys == 'lockouts' ? 'data' :  titleUrl(values).url ))) }}
+                                                 {{ keys ==
                                             'space' ?
                                             'byts(s)' : '' }}
                                         {{ keys == "lamports" ? '(BTG)' : '' }}
@@ -140,6 +141,7 @@ const props = defineProps({
 })
 const instruction = ref(props.data);
 const innerInstructions = ref(props.child)
+console.log(233333);
 
 
 const toFexedStake = (num) => {

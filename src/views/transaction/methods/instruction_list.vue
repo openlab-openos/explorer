@@ -53,6 +53,8 @@ const dataDeal = (item) => {
         type: item.split(" ")[2],
     };
 };
+console.log(111111);
+
 const extractLogsBetweenFirstAndLast = (data, item, index, lastprogramId) => {
     let startIndex = 0;
     let endIndex = 0;

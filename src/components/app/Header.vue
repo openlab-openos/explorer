@@ -97,11 +97,13 @@ function toggleAppHeaderSearch(event) {
 function searchMenu() {
   if (searchcontent.value == "") {
   } else {
-    if (searchcontent.value.length >= 45) {
+    let chainData = searchcontent.value.trim();
+
+    if (chainData.length >= 45) {
       router.push({
         name: "tx",
         params: {
-          item: searchcontent.value,
+          item: chainData,
         },
       });
       searchcontent.value = "";
@@ -111,7 +113,7 @@ function searchMenu() {
         .push({
           name: "address",
           params: {
-            url: searchcontent.value,
+            url: chainData,
           },
         })
         .then(() => {
