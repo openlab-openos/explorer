@@ -470,7 +470,6 @@ let app = JSON.parse(sessionStorage.getItem('app'));
 
 const GeturlType = JSON.parse(sessionStorage.getItem('urlType'));
 let url = currentUrl.includes('?cluster=devnet')
-console.log(url);
 let urlType = app ? (GeturlType? (GeturlType.urlType == 'Test' ? false : (app.chainType == 'Test' ? false : true)) : true ) : (url? false : true) ;
 
 export const TOKEN_IDS: { [key: string]: string } = {
