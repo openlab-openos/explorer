@@ -1,13 +1,16 @@
-import { Cluster } from '../src/cluster';
+import { ref } from 'vue';
+
 import axios from 'axios';
-import { onMounted, ref } from 'vue';
-import unknown from "../src/assets/assetsLogo/unknown.png"
-import stable from "../src/assets/assetsLogo/stable.png"
-import unsafe from "../src/assets/assetsLogo/unsafe.png"
-import vrc10 from "../src/assets/assetsLogo/vrc10.png"
-import vrc11 from "../src/assets/assetsLogo/vrc11.png"
-import vrc12 from "../src/assets/assetsLogo/vrc12.png"
-import vrc20 from "../src/assets/assetsLogo/vrc20.png"
+
+import stable from '../src/assets/assetsLogo/stable.png';
+import unknown from '../src/assets/assetsLogo/unknown.png';
+import unsafe from '../src/assets/assetsLogo/unsafe.png';
+import vrc10 from '../src/assets/assetsLogo/vrc10.png';
+import vrc11 from '../src/assets/assetsLogo/vrc11.png';
+import vrc12 from '../src/assets/assetsLogo/vrc12.png';
+import vrc20 from '../src/assets/assetsLogo/vrc20.png';
+import { Cluster } from '../src/cluster';
+
 // import { useAppStore } from "@/stores/index";
 // const appStore = useAppStore();
 // 
@@ -462,6 +465,13 @@ export const SYSVAR_IDS: { [key: string]: string } = {
     SysvarS1otHistory11111111111111111111111111: 'Sysvar: Slot History',
     SysvarStakeHistory1111111111111111111111111: 'Sysvar: Stake History',
 };
+const currentUrl = window.location.href;
+let app = JSON.parse(sessionStorage.getItem('app'));
+
+const GeturlType = JSON.parse(sessionStorage.getItem('urlType'));
+let url = currentUrl.includes('?cluster=devnet')
+console.log(url);
+let urlType = app ? (GeturlType? (GeturlType.urlType == 'Test' ? false : (app.chainType == 'Test' ? false : true)) : true ) : (url? false : true) ;
 
 export const TOKEN_IDS: { [key: string]: string } = {
     TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA: 'Token Program',
@@ -469,7 +479,7 @@ export const TOKEN_IDS: { [key: string]: string } = {
 } as const;
 const datas = ref();
 const Authentication = async () => {
-    await axios.get("https://open.openverse.live/api/token/web", {
+    await axios.get(`https://open.openverse.live/api/token/some?net=${urlType ? 'mainnet' : 'devnet'}`, {
         headers: {
             "Content-Type": "application/json"
         }
@@ -524,7 +534,8 @@ const Cretifucate = (data: Array<any>) => {
         })
         for (let j in data[i].certificates) {
             CretifucateArray[i].certificates.push({
-                'img': imageType(data[i].certificates[j].certificate_code),
+                'img': data[i].certificates[j].image_url,
+                // 'img': imageType(data[i].certificates[j].certificate_code),
                 'code': data[i].certificates[j].certificate_code,
             })
 

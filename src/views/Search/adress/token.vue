@@ -10,8 +10,10 @@
                 {{ token_name ? (titleUrl(url).type ? titleUrl(url).url : (token_name == url ? 'Token' : token_name))
                 : 'Token' }}
                 <!-- {{ titleUrl(url).type }} -->
+                <!-- <img v-if="titleUrl(url).type" v-for="item, index in titleUrl(url).certificates" :src="item.img"
+                    :key="index" width="24" alt="" class="marginRight10"> -->
                 <img v-if="titleUrl(url).type" v-for="item, index in titleUrl(url).certificates" :src="item.img"
-                    :key="index" width="24" alt="" class="marginRight10">
+                    :key="index" height="24" alt="" class="marginRight10">
             </text>
         </h3>
         <div class="marginTOP-50">
@@ -162,20 +164,31 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { chainRequest } from "../../../request/chain";
-import { solanaRequest } from "../../../request/solanaReques";
-import { PublicKey } from "@solana/web3.js";
-import { titleUrl } from "../../../components/method/title_url"
-import { useRouter } from "vue-router";
-import { metaRequest } from "../../../request/tokenMeta"
-import historyView from "../../../components/address/history_list.vue"
-import transferView from "../../../components/address/transfer_list.vue";
-import holderView from "../../../components/address/holder_list.vue";
-import pledgeView from "../../../components/address/pledge.vue"
-import ReserveView from "../../../components/address/reserve_list.vue"
-import cardView from "./components/card.vue"
-import { getAccountState, getTokenPermanentDelegate, getAddressTransactionFees } from "../../../request/extension";
+import {
+  onMounted,
+  ref,
+} from 'vue';
+
+import { useRouter } from 'vue-router';
+
+import { PublicKey } from '@solana/web3.js';
+
+import historyView from '../../../components/address/history_list.vue';
+import holderView from '../../../components/address/holder_list.vue';
+import pledgeView from '../../../components/address/pledge.vue';
+import ReserveView from '../../../components/address/reserve_list.vue';
+import transferView from '../../../components/address/transfer_list.vue';
+import { titleUrl } from '../../../components/method/title_url';
+import { chainRequest } from '../../../request/chain';
+import {
+  getAccountState,
+  getAddressTransactionFees,
+  getTokenPermanentDelegate,
+} from '../../../request/extension';
+import { solanaRequest } from '../../../request/solanaReques';
+import { metaRequest } from '../../../request/tokenMeta';
+import cardView from './components/card.vue';
+
 // import {  checkAccountTransferability,getTokenTransferFeeMax } from "../../../request/extension";
 
 

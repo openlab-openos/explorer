@@ -42,7 +42,7 @@
                             <template v-else>
                                 <td>
                                     <img v-for="items, indexs in item.certificates" :key="indexs"
-                                        :src="imageType(items.certificate_code)" width="24" class="marginRight8"
+                                        :src="items.image_url" height="20" class="marginRight8"
                                         :title="items.certificate_code">
                                 </td>
                             </template>
@@ -89,18 +89,25 @@
     </div>
 </template>
 <script setup>
-import { ref, computed, defineAsyncComponent } from 'vue'; // 假设这是在一个Vue组件中
-import { tokenList } from "./asset";
-import { titleUrl } from "../../components/method/title_url"
-import { useRouter } from "vue-router";
-import LoadingVue from "../../components/block/loading.vue"
-import unknown from "../../assets/assetsLogo/unknown.png"
-import stable from "../../assets/assetsLogo/stable.png"
-import unsafe from "../../assets/assetsLogo/unsafe.png"
-import vrc10 from "../../assets/assetsLogo/vrc10.png"
-import vrc11 from "../../assets/assetsLogo/vrc11.png"
-import vrc12 from "../../assets/assetsLogo/vrc12.png"
-import vrc20 from "../../assets/assetsLogo/vrc20.png"
+import {
+  computed,
+  defineAsyncComponent,
+  ref,
+} from 'vue'; // 假设这是在一个Vue组件中
+
+import { useRouter } from 'vue-router';
+
+import stable from '../../assets/assetsLogo/stable.png';
+import unknown from '../../assets/assetsLogo/unknown.png';
+import unsafe from '../../assets/assetsLogo/unsafe.png';
+import vrc10 from '../../assets/assetsLogo/vrc10.png';
+import vrc11 from '../../assets/assetsLogo/vrc11.png';
+import vrc12 from '../../assets/assetsLogo/vrc12.png';
+import vrc20 from '../../assets/assetsLogo/vrc20.png';
+import LoadingVue from '../../components/block/loading.vue';
+import { titleUrl } from '../../components/method/title_url';
+import { tokenList } from './asset';
+
 const loadingType = ref(false);
 const router = useRouter();
 const imgUrl = ref('https://open.openverse.live');

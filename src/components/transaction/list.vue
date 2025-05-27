@@ -80,7 +80,7 @@
                             </td>
                             <td style=" text-align: left">
                                 {{ item.type == 'token_transfer' ? item.uiAmount :
-                                    (typeof item.uiAmount == 'number' ? toFexedStake(item.uiAmount / 1000000000) :
+                                    (typeof item.uiAmount == 'number' ? come(smartFormatNumber(item.uiAmount / 1000000000)) :
                                 item.uiAmount) }}
                             </td>
                             <td style=" text-align: left;" @click="pubbleys(
@@ -105,14 +105,23 @@
 </template>
 
 <script setup>
-import { order } from "../../request/order";
-import { ref, onMounted, getCurrentInstance } from "vue";
-import { useAppStore } from "@/stores/index";
-import CountUp from "vue-countup-v3";
-import moment from "moment";
-import { useRouter } from "vue-router";
-import { solanapubbleys } from "../../components/method/solana"
-import { titleUrl } from "../../components/method/title_url";
+import {
+  getCurrentInstance,
+  onMounted,
+  ref,
+} from 'vue';
+
+import moment from 'moment';
+import CountUp from 'vue-countup-v3';
+import { useRouter } from 'vue-router';
+
+import { useAppStore } from '@/stores/index';
+
+import { solanapubbleys } from '../../components/method/solana';
+import { titleUrl } from '../../components/method/title_url';
+import { smartFormatNumber } from '../../components/number/smart.js';
+import { order } from '../../request/order';
+
 const props = defineProps({
     boolean: {
         type: Boolean,
@@ -153,13 +162,15 @@ const fetchOrderData = async () => {
                     }
                     arrayData.value.push(data);
                 } else if (etach[etach.length - 1].parsed.type == "transferChecked" && etach[etach.length - 1].programId == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" || etach[etach.length - 1].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c") {
+                    console.log(etach);
+                    
                     let data = {
                         type: "token_transfer",
                         signature: res[i].result.transaction.signatures[0],
                         source: etach[etach.length - 1].parsed.info.source,
                         destination: etach[etach.length - 1].parsed.info.destination,
-                        uiAmount: etach[0].parsed.info.tokenAmount.uiAmount,
-                        mint: etach[0].parsed.info.mint,
+                        uiAmount: etach[etach.length - 1].parsed.info.tokenAmount ? etach[etach.length - 1].parsed.info.tokenAmount.uiAmount  : 0,
+                        mint: etach[etach.length - 1].parsed.info.mint,
                         blockTime: res[i].result.blockTime,
                     }
                     arrayData.value.push(data);
@@ -228,6 +239,15 @@ const stringcate = (str) => {
         return 'N/A'
     }
 };
+
+const come = (num) => {
+    let reg =
+        num.toString().indexOf(".") > -1
+            ? /(\d)(?=(\d{3})+\.)/g
+            : /(\d)(?=(\d{3})+$)/g;
+
+    return num.toString().replace(reg, "$1,");
+}
 
 const toFexedStake = (num) => {
 
