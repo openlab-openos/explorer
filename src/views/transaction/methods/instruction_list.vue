@@ -21,8 +21,10 @@
     </ul>
 </template>
 <script setup>
-import { end } from "@popperjs/core";
-import { titleUrl } from "../../../components/method/title_url";
+import { end } from '@popperjs/core';
+
+import { titleUrl } from '../../../components/method/title_url';
+
 const props = defineProps({
     data: {
         typeof: Array,
@@ -53,7 +55,7 @@ const dataDeal = (item) => {
         type: item.split(" ")[2],
     };
 };
-console.log(111111);
+
 
 const extractLogsBetweenFirstAndLast = (data, item, index, lastprogramId) => {
     let startIndex = 0;

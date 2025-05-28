@@ -101,23 +101,31 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from "vue";
-import moment from "moment";
-import { order } from "../../request/order";
-import { chainRequest } from "../../request/chain";
-import { proportionAmount } from "../method/proportion_account"
-import { useRouter } from "vue-router"
-import { Transaction } from "@solana/web3.js";
-import { parseNFTMetadata } from "../../request/reserve"
-import { titleUrl } from "../method/title_url"
-import LoadingVue from "../../components/block/loading.vue"
-import { decodeLockAccount } from "../../request/record";
-import { lo } from "element-plus/es/locale/index.mjs";
-import { start } from "@popperjs/core";
-import apexchart from "@/components/plugins/Apexcharts.vue";
-import { useAppVariableStore } from "@/stores/app-variable";
-import { smartFormatNumber } from "../../components/number/smart"
-import { setData } from "../../views/Search/adress/components/event-bus"
+import {
+  computed,
+  onMounted,
+  ref,
+} from 'vue';
+
+import { lo } from 'element-plus/es/locale/index.mjs';
+import moment from 'moment';
+import { useRouter } from 'vue-router';
+
+import apexchart from '@/components/plugins/Apexcharts.vue';
+import { useAppVariableStore } from '@/stores/app-variable';
+import { start } from '@popperjs/core';
+import { Transaction } from '@solana/web3.js';
+
+import LoadingVue from '../../components/block/loading.vue';
+import { smartFormatNumber } from '../../components/number/smart';
+import { chainRequest } from '../../request/chain';
+import { order } from '../../request/order';
+import { decodeLockAccount } from '../../request/record';
+import { parseNFTMetadata } from '../../request/reserve';
+import { setData } from '../../views/Search/adress/components/event-bus';
+import { proportionAmount } from '../method/proportion_account';
+import { titleUrl } from '../method/title_url';
+
 const loading = ref(true);
 const router = useRouter();
 const props = defineProps({
@@ -145,6 +153,10 @@ const paramsId = ref(props.paramsId);
 const reserveType = ref(props.type);
 const releasedArray = ref([]);
 const unreleasedArray = ref([]);
+
+// edit
+const echartReleased = ref([]);
+const echartUnreleased = ref([]);
 
 const paginatedHistoryData = computed(() => {
     const start = (currentPage.value - 1) * pageSize.value;

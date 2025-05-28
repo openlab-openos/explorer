@@ -59,14 +59,14 @@
                                         stringcate(item.mint) }}
                                     <img v-if="titleUrl(item.mint).type"
                                         v-for="item, index in titleUrl(item.mint).certificates" :src="item.img"
-                                        :key="index" width="24" alt="" class="marginRight10">
+                                        :key="index" height="24" alt="" class="marginRight10">
                                 </td>
                                 <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.owner)">
                                     {{ titleUrl(item.owner).type ? titleUrl(item.owner).url :
                                         stringcate(item.owner) }}
                                     <img v-if="titleUrl(item.owner).type"
                                         v-for="item, index in titleUrl(item.owner).certificates" :src="item.img"
-                                        :key="index" width="24" alt="" class="marginRight10">
+                                        :key="index" height="24" alt="" class="marginRight10">
                                 </td>
                                 <td>
                                     {{ item.isUnlocked }}
@@ -82,12 +82,22 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from 'vue';
-import { getData, on } from './event-bus.js';
-import moment from "moment";
-import { useRouter } from "vue-router"
-import {smartFormatNumber} from '../../../../components/number/smart.js'
-import { titleUrl } from "../../../../components/method/title_url"
+import {
+  computed,
+  onMounted,
+  ref,
+} from 'vue';
+
+import moment from 'moment';
+import { useRouter } from 'vue-router';
+
+import { titleUrl } from '../../../../components/method/title_url';
+import { smartFormatNumber } from '../../../../components/number/smart.js';
+import {
+  getData,
+  on,
+} from './event-bus.js';
+
 const router = useRouter();
 
 const historyData = ref([]);

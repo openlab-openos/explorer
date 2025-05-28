@@ -39,9 +39,6 @@ export function smartFormatNumber(num) {
       return number.toFixed(lastNonZeroIndex + 1);
     }
   }
-  console.log(number
-  );
-  console.log(number > 1);
 
 
   // 默认情况：没有小数部分或全是0

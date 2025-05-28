@@ -1,13 +1,20 @@
 <script setup>
-import { getCurrentInstance, ref, watchEffect } from "vue";
-import i18n from "@/i18n"
-import {smartFormatNumber} from '../../components/number/smart.js'
-import { useAppStore } from "../../stores/index";
-import { solanapubbleys } from "../../components/method/solana"
-import { PROGRAM_INFO_BY_ID } from "../../program";
-import { titleUrl } from "../../components/method/title_url";
-import logmessViem from "../transaction/methods/logmessage.vue"
-import instructionView from "../../components/transaction/instruction.vue"
+import {
+  getCurrentInstance,
+  ref,
+  watchEffect,
+} from 'vue';
+
+import i18n from '@/i18n';
+
+import { solanapubbleys } from '../../components/method/solana';
+import { titleUrl } from '../../components/method/title_url';
+import { smartFormatNumber } from '../../components/number/smart.js';
+import instructionView from '../../components/transaction/instruction.vue';
+import { PROGRAM_INFO_BY_ID } from '../../program';
+import { useAppStore } from '../../stores/index';
+import logmessViem from '../transaction/methods/logmessage.vue';
+
 const appStore = useAppStore();
 
 const apps = getCurrentInstance()
@@ -20,10 +27,7 @@ function selectLanguage(indexValue) {
 watchEffect(() => {
   selectLanguage(appStore.$state.language);
 })
-// oconst 
-const titleFunction = (item) => {
 
-}
 </script>
 <script>
 import { useAppOptionStore } from "@/stores/app-option";
@@ -59,6 +63,7 @@ export default {
     appOption.appSidebarHide = true;
     appOption.appHeaderHide = true;
     appOption.appContentClass = "p-0";
+    
   },
   beforeUnmount() {
     appOption.appSidebarHide = false;
@@ -229,12 +234,15 @@ export default {
         },
       ],
     });
-
+      console.log(this.historyData.meta.logMessages[0].includes("Vote"));
+     
     if (this.historyData) {
       this.instruction = this.historyData.transaction.message.instructions;
       this.innerInstructions = this.historyData.meta.innerInstructions;
       if (this.historyData.meta.logMessages[0].includes("Vote")) {
         this.preType = true;
+      } else{
+        this.preType = false;
       }
     }
     this.laoding = true
@@ -242,7 +250,11 @@ export default {
 
   },
   watch: {
+    
     async $route(to, from) {
+      console.log('变化');
+      console.log(this.$route.params.item);
+      
       this.laoding = false
       this.url = this.$route.params.item;
       this.type = this.$route.params.err;
@@ -270,10 +282,14 @@ export default {
           },
         ],
       });
+      console.log(this.historyData.meta.logMessages[0].includes("Vote"));
+      
       if (this.historyData) {
         if (this.historyData.meta.logMessages[0].includes("Vote")) {
           this.preType = true;
-        }
+        } else{
+        this.preType = false;
+      }
       }
 
       this.laoding = true
@@ -302,7 +318,6 @@ export default {
                 <tr>
                   <td>{{ $t("transaction.reault") }}</td>
                   <td class="text-end " :style="{ 'color': card.value[0].err == null ? '#26e97e' : 'red' }">
-
                     <span class="bagdge">
                       {{
                         card.value[0].err == null ? 'Success' : 'Failed' }}
@@ -433,7 +448,7 @@ export default {
           </card>
         </div>
       </div>
-      <div  v-if="preType">
+      <div  v-if="!preType">
         <h4 class="marginTOP-50">{{ $t("transaction.instruction") }}</h4>
         <instruction-view :data="instruction" :child="innerInstructions" />
       </div>
