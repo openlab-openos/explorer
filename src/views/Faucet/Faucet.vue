@@ -5,9 +5,16 @@
                 <img src="../../assets/logo.png" alt="">
             </div>
             <div class="tabbleContainer margin-center borderSolid borderradius">
-                <div class="p-7 ">
-                    <h5>{{ $t("Request-Airdrop") }}</h5>
-                    <p>{{ $t("Requset-text") }}</p>
+                <div class="p-7 " style="display: flex;justify-content: space-between;">
+                    <div>
+                        <h5>{{ $t("Request-Airdrop") }}</h5>
+                        <p>{{ $t("Requset-text") }}</p>
+                    </div>
+                    <div>
+                        <el-select disabled v-model="dennetType" placeholder="Select" style="width: 115px">
+
+                        </el-select>
+                    </div>
                 </div>
                 <div class="display-flex justify-content-center p-9 ">
 
@@ -15,24 +22,92 @@
                         placeholder="Wallet Address" class="input-with-select">
                         <template #append>
                             <el-select v-model="selectAddress" placeholder="Select" style="width: 115px">
-                                <el-option label="2BTG" value="BTG" />
-                                <el-option label="2USD" value="USD" />
+                                <el-option label="2tBTG" value="tBTG" />
+                                <el-option label="2tUSD" value="tUSD" />
                             </el-select>
                         </template>
                     </el-input>
                 </div>
-                <div class="p-8 lineHeight1" :style="{ color: backgroundColor }">
+                <!-- <div class="p-8 lineHeight1" :style="{ color: backgroundColor }">
                     {{ $t(buttonText) }}
-                </div>
+                </div> -->
                 <div class="display-flex justify-content-center p-6 p-4">
-                    <el-button style="width: 100%;opacity: 0.7;font-weight: 500;font-size: 0.875rem;border: none;"
-                        class="pading-5" @click="handleClick" :disabled="disabledType">
+                    <el-button type="primary" v-if="disabledType"
+                        style="width: 100%;font-weight: 500;font-size: 0.875rem;border: none;color: #5A9CF8;"
+                        class="pading-5" @click="handleClick" :disabled="disabledType" plain>
+                        {{ $t("ConfirmAirdrop") }}
+                    </el-button>
+                    <el-button type="primary" v-else
+                        style="width: 100%;font-weight: 500;font-size: 0.875rem;border: none;" class="pading-5"
+                        @click="handleClick" :disabled="disabledType">
                         {{ $t("ConfirmAirdrop") }}
                     </el-button>
                 </div>
             </div>
-            <div class="alerts" v-if="successType"> 提交成功 </div>
-            <div class="alertsError" v-if="ErrorType"> {{ errorText }} </div>
+            <!-- <div class="alerts" v-if="successType"> 提交成功 </div> -->
+            <!-- <div class="alertsError" v-if="ErrorType"> {{ errorText }} </div> -->
+            <el-dialog v-model="dialogTableVisible" :show-close="false" width="500" :close-on-click-modal="false"
+                :close-on-press-escape="false" align-center center
+                style="background-color: rgba(00, 11, 11, 0);display: flex;justify-content: center;">
+                <div class="spinner-box">
+                    <div class="solar-system">
+                        <div class="earth-orbit orbit">
+                            <div class="planet earth"></div>
+                            <div class="venus-orbit orbit">
+                                <div class="planet venus"></div>
+                                <div class="mercury-orbit orbit">
+                                    <div class="planet mercury"></div>
+                                    <div class="sun"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </el-dialog>
+            <el-dialog v-model="successType" :show-close="false" width="300" :close-on-click-modal="false"
+                :close-on-press-escape="false" align-center center
+                style="background-color: rgba(00, 11, 11, 0);display: flex;justify-content: center;">
+                <svg viewBox="0 0 400 400">
+                    <circle class="circle" fill="none" stroke="#68E534" stroke-width="20" cx="200" cy="200" r="190"
+                        stroke-linecap="round" />
+                    <polyline class="tick" fill="none" stroke="#68E534" stroke-width="24"
+                        points="88,214 173,284 304,138" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </el-dialog>
+            <el-dialog v-model="ErrorType" :show-close="false" :width="WidthError" :close-on-click-modal="false"
+                :close-on-press-escape="false" align-center center style="background-color: #fff;display: flex;">
+                <template #header="{ close, titleId, titleClass }">
+                    <div style="display: flex;">
+                        <svg viewBox="0 0 400 400">
+                            <!-- 圆形背景 -->
+                            <circle class="circle" fill="none" stroke="#FF9800" stroke-width="20" cx="200" cy="200"
+                                r="190" stroke-linecap="round" />
+
+                            <!-- 感叹号 -->
+                            <g class="exclamation" transform="translate(200, 200)">
+                                <!-- 感叹号上半部分 -->
+                                <rect x="-20" y="-120" width="40" height="160" rx="20" ry="20" fill="#FF9800" />
+                                <!-- 感叹号下半部分（点） -->
+                                <circle cx="0" cy="100" r="20" fill="#FF9800" />
+                            </g>
+                        </svg>
+                        <!-- <div style="padding: 8px 12px;color: red;" :style="{'line-height':Lingheight}" >
+                            {{ buttonText }}
+                        </div> -->
+                        <div style="display: flex;align-items: center;">
+                            <div
+                                style="padding: 8px 12px;color: red;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;overflow: hidden;text-overflow: ellipsis;">
+                                {{ buttonText }}
+                            </div>
+                        </div>
+
+                    </div>
+                </template>
+                <!-- <div style="display: flex;"> -->
+
+                <!-- </div> -->
+
+            </el-dialog>
             <Vcode :show="dialogVisible" @success="onSuccess" @close="onClose" />
         </div>
     </div>
@@ -43,14 +118,23 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch, watchEffect } from 'vue'
-import { Upload } from '@element-plus/icons-vue'
-import Vcode from "vue3-puzzle-vcode";
-import { tokenList } from "../Faucet/assets.js";
-import i18n from "@/i18n"
-import { useAppStore } from "@/stores/index";
+import {
+  onMounted,
+  ref,
+  watch,
+  watchEffect,
+} from 'vue';
 
-import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus';
+import RadialProgressBar from 'vue-radial-progress';
+import Vcode from 'vue3-puzzle-vcode';
+
+import i18n from '@/i18n';
+import { useAppStore } from '@/stores/index';
+import { Upload } from '@element-plus/icons-vue';
+
+import { tokenList } from '../Faucet/assets.js';
+
 const inputNumber = ref('')
 const selectBTG = ref('BTG')
 const selectAddress = ref('')
@@ -65,12 +149,30 @@ const urlType = ref(JSON.parse(sessionStorage.getItem('urlType')));
 const currentUrl = window.location.href;
 const backgroundColor = ref("");
 const buttonText = ref('');
+const dennetType = ref("Devent");
+const dialogTableVisible = ref(true);
+const submitType = ref(false);
+const SubmitError = ref(false);
+const Lingheight = ref();
+const WidthError = ref(400);
+setTimeout(() => {
+    dialogTableVisible.value = false;
+    // submitType.value = true
+}, 2000)
+
+// setTimeout(() => {
+//     submitType.value = false
+//     SubmitError.value = true
+// }, 5000)
 
 let clusterType = currentUrl.includes('?cluster=devnet')
 const appStore = useAppStore();
 onMounted(() => {
     faucetType.value = urlType.value == 'Test' ? true : (clusterType ? true : false);
 })
+
+const totalSteps = ref(10);
+const completedSteps = ref(0);
 
 function selectLanguage(indexValue) {
     i18n.global.locale = indexValue;
@@ -91,6 +193,7 @@ const onClose = () => {
 
 const onSuccess = () => {
     disabledType.value = true;
+    dialogTableVisible.value = true;
     onClose();
     tokenList({
         "amount": 2,
@@ -98,17 +201,24 @@ const onSuccess = () => {
         "coinType": selectAddress.value
     }).then((res) => {
         loading.value = false;
-        if (res.status = 'success' ) {
-            // successType.value = true;
+        dialogTableVisible.value = false;
+
+        if (res.status = 'success' && res.data.message == 'Airdrop successful.') {
+            successType.value = true;
             buttonText.value = "Submitsuccess";
             backgroundColor.value = "#67C23A";
         } else {
-            if (!res.message) {
+            ErrorType.value = true;
+            console.log(res.message);
+
+            if (!res.data.message) {
                 backgroundColor.value = "#F56C6C";
                 buttonText.value = "Submitfailed";
+                Lingheight.value = '50px'
             } else {
-                buttonText.value = res.message;
+                buttonText.value = res.data.message;
                 backgroundColor.value = "#F56C6C";
+                Lingheight.value = '';
             }
             // // ErrorType.value = true;
             // buttonText.value = "Submitfailed";
@@ -117,17 +227,19 @@ const onSuccess = () => {
             // errorText.value = res.msg;
         }
         setTimeout(() => {
-            // successType.value = false;
-            // ErrorType.value = false;
+            successType.value = false;
+            ErrorType.value = false;
             buttonText.value = "";
             selectAddress.value = '';
             inputNumber.value = '';
             backgroundColor.value = "";
         }, 3000);
     }).catch(error => {
-        
+        console.log(error);
+
+        dialogTableVisible.value = false;
         loading.value = false;
-        // ErrorType.value = true;
+        ErrorType.value = true;
         backgroundColor.value = "#F56C6C";
         if (!error.message) {
             buttonText.value = "Submitfailed";
@@ -135,8 +247,8 @@ const onSuccess = () => {
             buttonText.value = error.message;
         }
         setTimeout(() => {
-            // successType.value = false;
-            // ErrorType.value = false;
+            successType.value = false;
+            ErrorType.value = false;
             buttonText.value = "";
             selectAddress.value = '';
             inputNumber.value = '';
@@ -154,21 +266,6 @@ watch([inputNumber, selectAddress], () => {
     disabledType.value = !(inputNumber.value.length >= 44 && selectAddress.value !== "");
 
 });
-
-
-{/* <div class="display-flex justify-content-center p-6 ">
-                    <el-select v-model="selectBTG" placeholder="Select" style="width: 50%;">
-                        <el-option label="BTG" value="BTG" />
-                        <el-option label="USDT" value="USDT" />
-                    </el-select>
-                    <el-select v-model="selectAddress" placeholder="Select" style="width: 50%;">
-                        <el-option label="0.5" value="0.5" />
-                        <el-option label="1" value="1" />
-                        <el-option label="2" value="2" />
-                        <el-option label="3" value="3" />
-                        <el-option label="4" value="4" />
-                    </el-select>
-                </div> */}
 
 </script>
 
@@ -239,17 +336,21 @@ watch([inputNumber, selectAddress], () => {
 
 ::v-deep .el-select__wrapper {
     height: 2.5rem;
-    box-shadow: none !important;
-    border: 1px solid #29282C !important;
+    /* box-shadow: none !important; */
+    /* border: 1px solid #29282C !important; */
 }
 
-::v-deep .el-input__wrapper {
+/* ::v-deep .el-input__wrapper {
     box-shadow: none !important;
     border: 1px solid #29282C !important;
-}
+} */
 
 ::v-deep .el-loading-mask {
     background-color: rgba(0, 0, 0, 0) !important;
+}
+
+::v-deep .el-dialog__header {
+    padding: 0 !important;
 }
 
 ::v-deep #message_2 {
@@ -316,5 +417,295 @@ watch([inputNumber, selectAddress], () => {
 .lineHeight1 {
     line-height: 1rem;
     height: 1rem;
+}
+
+/* KEYFRAMES */
+
+@keyframes spin {
+    from {
+        transform: rotate(0);
+    }
+
+    to {
+        transform: rotate(359deg);
+    }
+}
+
+@keyframes configure-clockwise {
+    0% {
+        transform: rotate(0);
+    }
+
+    25% {
+        transform: rotate(90deg);
+    }
+
+    50% {
+        transform: rotate(180deg);
+    }
+
+    75% {
+        transform: rotate(270deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes configure-xclockwise {
+    0% {
+        transform: rotate(45deg);
+    }
+
+    25% {
+        transform: rotate(-45deg);
+    }
+
+    50% {
+        transform: rotate(-135deg);
+    }
+
+    75% {
+        transform: rotate(-225deg);
+    }
+
+    100% {
+        transform: rotate(-315deg);
+    }
+}
+
+@keyframes pulse {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    to {
+        opacity: .25;
+        transform: scale(.75);
+    }
+}
+
+/* GRID STYLING */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background-color: #37474f;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.spinner-box {
+    width: 300px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+}
+
+/* SPINNING CIRCLE */
+
+.circle-border {
+    width: 150px;
+    height: 150px;
+    padding: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background: rgb(63, 249, 220);
+    background: linear-gradient(0deg, rgba(63, 249, 220, 0.1) 33%, rgba(63, 249, 220, 1) 100%);
+    animation: spin .8s linear 0s infinite;
+}
+
+.circle-core {
+    width: 100%;
+    height: 100%;
+    background-color: #37474f;
+    border-radius: 50%;
+}
+
+/* X-ROTATING BOXES */
+
+.configure-border-1 {
+    width: 115px;
+    height: 115px;
+    padding: 3px;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #ffab91;
+    animation: configure-clockwise 3s ease-in-out 0s infinite alternate;
+}
+
+.configure-border-2 {
+    width: 115px;
+    height: 115px;
+    padding: 3px;
+    left: -115px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgb(63, 249, 220);
+    transform: rotate(45deg);
+    animation: configure-xclockwise 3s ease-in-out 0s infinite alternate;
+}
+
+.configure-core {
+    width: 100%;
+    height: 100%;
+    background-color: #37474f;
+}
+
+/* PULSE BUBBLES */
+
+.pulse-container {
+    width: 120px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pulse-bubble {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #3ff9dc;
+}
+
+.pulse-bubble-1 {
+    animation: pulse .4s ease 0s infinite alternate;
+}
+
+.pulse-bubble-2 {
+    animation: pulse .4s ease .2s infinite alternate;
+}
+
+.pulse-bubble-3 {
+    animation: pulse .4s ease .4s infinite alternate;
+}
+
+/* SOLAR SYSTEM */
+
+.solar-system {
+    width: 250px;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.orbit {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #fff;
+    border-radius: 50%;
+}
+
+.earth-orbit {
+    width: 165px;
+    height: 165px;
+    -webkit-animation: spin 12s linear 0s infinite;
+}
+
+.venus-orbit {
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 7.4s linear 0s infinite;
+}
+
+.mercury-orbit {
+    width: 90px;
+    height: 90px;
+    -webkit-animation: spin 3s linear 0s infinite;
+}
+
+.planet {
+    position: absolute;
+    top: -5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #3ff9dc;
+}
+
+.sun {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #ffab91;
+}
+
+/* success */
+svg {
+    width: 60px;
+    height: 60px;
+}
+
+h2 {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    font-size: 36px;
+    margin-top: 20px;
+    color: #333;
+    opacity: 0;
+    animation: 0.6s title ease-in-out;
+    animation-delay: 1s;
+    animation-fill-mode: forwards;
+}
+
+.circle {
+    stroke-dasharray: 1194;
+    stroke-dashoffset: 1194;
+    animation: circle 1s ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+@keyframes circle {
+    from {
+        stroke-dashoffset: 1194;
+    }
+
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+.tick {
+    stroke-dasharray: 350;
+    stroke-dashoffset: 350;
+    animation: tick 0.8s ease-in-out;
+    animation-fill-mode: forwards;
+    animation-delay: 0.9s;
+}
+
+@keyframes tick {
+    from {
+        stroke-dashoffset: 350;
+    }
+
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes title {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 </style>

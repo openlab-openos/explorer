@@ -83,11 +83,11 @@ import { useAppVariableStore } from '@/stores/app-variable';
 import LoadingVue from '../../components/block/loading.vue';
 import { smartFormatNumber } from '../../components/number/smart';
 import { chainRequest } from '../../request/chain';
-import { order } from '../../request/order';
+// import { order } from '../../request/order';
 import { decodeLockAccount } from '../../request/record';
-import { parseNFTMetadata } from '../../request/reserve';
-import { setData } from '../../views/Search/adress/components/event-bus';
-import { proportionAmount } from '../method/proportion_account';
+// import { parseNFTMetadata } from '../../request/reserve';
+// import { setData } from '../../views/Search/adress/components/event-bus';
+// import { proportionAmount } from '../method/proportion_account';
 import { titleUrl } from '../method/title_url';
 
 const props = defineProps({
