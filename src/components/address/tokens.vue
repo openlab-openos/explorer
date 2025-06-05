@@ -26,10 +26,11 @@
                         <tr v-for="(item, index) in paginatedHistoryData" :key="index">
                             <td class="text-theme" style="cursor: pointer"
                                 @click="pubbtx(item.account.data.parsed.info.mint)">
-                                <img v-if="item.img" :src="item.img" width="28" alt="">
+                                <img v-if="item.img" :src="item.img" height="28" alt="">
                                 <img v-if="item.account.data.parsed.info.mint == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'"
                                     src="https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png"
-                                    width="28" alt="">
+                                    width="28"
+                                    height="28" alt="">
                                 {{ titleUrl(item.account.data.parsed.info.mint).url }}
                                 <text v-if="item.name">{{ '(' + item.name + ')' }}</text>
                                 <text
@@ -38,14 +39,14 @@
 
                                 <img v-if="titleUrl(item.account.data.parsed.info.mint).type"
                                     v-for="(datas, indexs) in titleUrl(item.account.data.parsed.info.mint).certificates"
-                                    :key="indexs" :src="datas.img" width="24" class="marginRight8" alt="">
+                                    :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
 
                             </td>
                             <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.pubkey)">
                                 {{ titleUrl(item.pubkey).url }}
                                 <img v-if="titleUrl(item.pubkey).type"
                                     v-for="(datas, indexs) in titleUrl(item.pubkey).certificates" :key="indexs"
-                                    :src="datas.img" width="24" class="marginRight8" alt="">
+                                    :src="datas.img" height="24" class="marginRight8" alt="">
 
                             </td>
 
@@ -53,14 +54,14 @@
                                 {{ titleUrl(item.account.owner).url }}
                                 <img v-if="titleUrl(item.account.owner).type"
                                     v-for="(datas, indexs) in titleUrl(item.account.owner).certificates" :key="indexs"
-                                    :src="datas.img" width="24" class="marginRight8" alt="">
+                                    :src="datas.img" height="24" class="marginRight8" alt="">
 
                             </td>
                             <td>
                                 {{ tokenNumber(item.account.data.parsed.info.tokenAmount.uiAmount) }}
                                 <img v-if="titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).type"
                                     v-for="(datas, indexs) in titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).certificates"
-                                    :key="indexs" :src="datas.img" width="24" class="marginRight8" alt="">
+                                    :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
                                 <text v-if="item.symbol"> {{ '(' + item.symbol + ')' }}</text>
                                 <text v-if="titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).symbol">({{
                                     titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).symbol }})</text>
@@ -82,10 +83,16 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { titleUrl } from "../../components/method/title_url"
-import { useRouter } from "vue-router";
-import { chainRequest } from "../../request/chain";
+import {
+  computed,
+  onMounted,
+  ref,
+} from 'vue';
+
+import { useRouter } from 'vue-router';
+
+import { titleUrl } from '../../components/method/title_url';
+import { chainRequest } from '../../request/chain';
 
 const router = useRouter();
 const props = defineProps({

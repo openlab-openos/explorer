@@ -35,7 +35,7 @@
                                 {{ key == 'extensionTypes' ? value[0] :(key == 'lamports' ? toFexedStake(value) : (key == 'tokenAmount' ? value.uiAmount : titleUrl(value).url) ) }} {{ key == 'space' ?
                                     'byts(s)' : '' }}
                                 {{ key == "lamports" ? '(BTG)' : '' }}
-                      <img v-if="titleUrl(value).type" v-for="(datas,indexs) in titleUrl(value).certificates" :key="indexs" :src="datas.img" width="24" class="marginRight8" alt="">
+                      <img v-if="titleUrl(value).type" v-for="(datas,indexs) in titleUrl(value).certificates" :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
 
                             </td>
                         </tr>
@@ -51,14 +51,14 @@
                             <td>Account</td>
                             <td class="text-end text-theme " style="cursor: pointer" @click="item.accounts[0]">{{
                                 titleUrl(item.accounts[0]).url }}
-                      <img v-if="titleUrl(item.accounts[0]).type" v-for="(datas,indexs) in titleUrl(item.accounts[0]).certificates" :key="indexs" :src="datas.img" width="24" class="marginRight8" alt="">
+                      <img v-if="titleUrl(item.accounts[0]).type" v-for="(datas,indexs) in titleUrl(item.accounts[0]).certificates" :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
 
                             </td>
                         </tr>
                         <tr v-if="item">
                             <td>Data</td>
                             <td class="text-end">{{ titleUrl(item.data?item.data:'Note Data').url }}
-                      <img v-if="titleUrl(item.data).type" v-for="(datas,indexs) in titleUrl(item.data).certificates" :key="indexs" :src="datas.img" width="24" class="marginRight8" alt="">
+                      <img v-if="titleUrl(item.data).type" v-for="(datas,indexs) in titleUrl(item.data).certificates" :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
 
                             </td>
                         </tr>
@@ -69,9 +69,12 @@
     </card>
 </template>
 <script setup>
-import { titleUrl } from "../../components/method/title_url";
-import { useRouter } from "vue-router";
-import { ref } from "vue";
+import { ref } from 'vue';
+
+import { useRouter } from 'vue-router';
+
+import { titleUrl } from '../../components/method/title_url';
+
 const router = useRouter();
 const props = defineProps({
     data: {

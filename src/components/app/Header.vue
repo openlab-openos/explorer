@@ -1,21 +1,30 @@
 <script setup lang="ts">
-import { slideToggle } from "@/composables/slideToggle.js";
-import { useAppOptionStore } from "@/stores/app-option";
-import { ref, watchEffect, onMounted } from "vue";
-import { RouterLink } from "vue-router";
-import { chainRequest } from "../../request/chain";
-import { useRouter } from "vue-router";
-import { useAppStore } from "@/stores/index";
-import i18n from "@/i18n";
-import um from "../../assets/24x24/um.png"
-import cn from "../../assets/24x24/cn.png"
-import jp from "../../assets/24x24/jp.png"
-import kr from "../../assets/24x24/kr.png"
-import de from "../../assets/24x24/de.png"
-import ru from "../../assets/24x24/ru.png"
-import my from "../../assets/24x24/my.png"
-import vn from "../../assets/24x24/vn.png"
-import hk from "../../assets/24x24/hk.png"
+import {
+  onMounted,
+  ref,
+  watchEffect,
+} from 'vue';
+
+import {
+  RouterLink,
+  useRouter,
+} from 'vue-router';
+
+import { slideToggle } from '@/composables/slideToggle.js';
+import i18n from '@/i18n';
+import { useAppOptionStore } from '@/stores/app-option';
+import { useAppStore } from '@/stores/index';
+
+import cn from '../../assets/24x24/cn.png';
+import de from '../../assets/24x24/de.png';
+import hk from '../../assets/24x24/hk.png';
+import jp from '../../assets/24x24/jp.png';
+import kr from '../../assets/24x24/kr.png';
+import my from '../../assets/24x24/my.png';
+import ru from '../../assets/24x24/ru.png';
+import um from '../../assets/24x24/um.png';
+import vn from '../../assets/24x24/vn.png';
+import { chainRequest } from '../../request/chain';
 
 const router = useRouter();
 const appStore = useAppStore();
@@ -207,7 +216,7 @@ onMounted(() => {
         <!-- <span class="brand-img">
           <span class="brand-img-text text-theme">H</span>
         </span> -->
-        <img  width="24" src="https://cdn.openverse.network/brands/openverse/icon_128.png" alt="">
+        <img  height="24px" src="https://cdn.openverse.network/brands/openverse/icon_128.png" alt="">
         <span class="brand-text titleBox">OPENVERSE <span class="marks">LIVE</span> </span>
       </RouterLink>
     </div>

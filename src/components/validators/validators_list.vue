@@ -20,7 +20,7 @@
                             <tr v-for="(log, index) in paginatedHistoryData" :key="index">
                                 <td style="height: 40px;">
                                     <span class="d-flex align-items-center">
-                                        <img :src="log.icon" alt="" width="24" style="margin: 0px 5px" />
+                                        <img :src="log.icon" alt="" height="24" style="margin: 0px 5px" />
                                         {{ log.name }}
                                     </span>
                                 </td>
@@ -75,10 +75,18 @@
 </template>
 
 <script setup>
-import CountUp from "vue-countup-v3";
-import { ref, onMounted, computed, watchEffect } from "vue";
-import { useAppStore } from "@/stores/index";
-import { useRouter } from "vue-router";
+import {
+  computed,
+  onMounted,
+  ref,
+  watchEffect,
+} from 'vue';
+
+import CountUp from 'vue-countup-v3';
+import { useRouter } from 'vue-router';
+
+import { useAppStore } from '@/stores/index';
+
 const props = defineProps({
     type: {
         type: Boolean,

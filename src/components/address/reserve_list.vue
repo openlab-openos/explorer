@@ -43,11 +43,11 @@
             <td>{{ come(smartFormatNumber(toFexedStake(item.amount))) }}</td>
             <td class="text-theme" v-if="reserveType">
               {{ titleUrl(item.child[0].mint).type ? titleUrl(item.child[0].mint).url : stringcate(item.child[0].mint) }}
-              <img v-if="titleUrl(item.child[0].mint).type" v-for="(imgItem, index) in titleUrl(item.child[0].mint).certificates" :src="imgItem.img" :key="index" width="24" alt="" class="marginRight10">
+              <img v-if="titleUrl(item.child[0].mint).type" v-for="(imgItem, index) in titleUrl(item.child[0].mint).certificates" :src="imgItem.img" :key="index" height="24" alt="" class="marginRight10">
             </td>
             <td class="text-theme" v-else>
               {{ titleUrl(item.child[0].owner).type ? titleUrl(item.child[0].owner).url : stringcate(item.child[0].owner) }}
-              <img v-if="titleUrl(item.child[0].owner).type" v-for="(imgItem, index) in titleUrl(item.child[0].owner).certificates" :src="imgItem.img" :key="index" width="24" alt="" class="marginRight10">
+              <img v-if="titleUrl(item.child[0].owner).type" v-for="(imgItem, index) in titleUrl(item.child[0].owner).certificates" :src="imgItem.img" :key="index" height="24" alt="" class="marginRight10">
             </td>
           </tr>
         </template>

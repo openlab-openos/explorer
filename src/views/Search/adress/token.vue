@@ -11,7 +11,7 @@
                 : 'Token' }}
                 <!-- {{ titleUrl(url).type }} -->
                 <!-- <img v-if="titleUrl(url).type" v-for="item, index in titleUrl(url).certificates" :src="item.img"
-                    :key="index" width="24" alt="" class="marginRight10"> -->
+                    :key="index" height="24" alt="" class="marginRight10"> -->
                 <img v-if="titleUrl(url).type" v-for="item, index in titleUrl(url).certificates" :src="item.img"
                     :key="index" height="24" alt="" class="marginRight10">
             </text>
@@ -68,7 +68,7 @@
                                     titleUrl(paramsId).url }}
                                     <img v-if="titleUrl(paramsId).type"
                                         v-for="(datas, indexs) in titleUrl(paramsId).certificates" :key="indexs"
-                                        :src="datas.img" width="24" class="marginRight8" alt="">
+                                        :src="datas.img" height="24" class="marginRight8" alt="">
                                 </td>
                             </tr>
                         </tbody>
@@ -91,7 +91,7 @@
                                         !pubbleys ? "N/A" : titleUrl(pubbleys).url }}
                                     <img v-if="titleUrl(pubbleys).type"
                                         v-for="(datas, indexs) in titleUrl(pubbleys).certificates" :key="indexs"
-                                        :src="datas.img" width="24" class="marginRight10" alt="">
+                                        :src="datas.img" height="24" class="marginRight10" alt="">
                                 </td>
                             </tr>
                             <tr>
@@ -100,7 +100,7 @@
                                     titleUrl(tokenData.freezeAuthority).url }}
                                     <img v-if="titleUrl(tokenData.freezeAuthority).type"
                                         v-for="(datas, indexs) in titleUrl(tokenData.freezeAuthority).certificates"
-                                        :key="indexs" :src="datas.img" width="24" class="marginRight10" alt="">
+                                        :key="indexs" :src="datas.img" height="24" class="marginRight10" alt="">
                                 </td>
                             </tr>
                         </tbody>

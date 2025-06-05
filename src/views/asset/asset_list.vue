@@ -21,17 +21,17 @@
                         </tr>
                         <tr v-for="item, index in paginatedHistoryData" :key="index">
                             <td class="text-theme" style="cursor: pointer;" @click="pubbleys(item.address)">
-                                <img v-if="item.image_url" :src="item.image_url" width="24" alt=""
+                                <img v-if="item.image_url" :src="item.image_url" height="24" alt=""
                                     class="marginRight8">
                                 <img v-if="B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz"
                                     :src="item.pubkey == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' ? 'https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png' : ''"
                                     width="32" alt="" class="marginRight8">
                                 {{ titleUrl(item.address).url }}
                                 <!-- <img v-if="titleUrl(item.pubkey).type" src="../../../src//assets//renzheng.png"
-                                    width="24" alt=""> -->
+                                    height="24" alt=""> -->
                                 <img v-if="titleUrl(item.pubkey).type"
                                     v-for="(datas, indexs) in titleUrl(item.pubkey).certificates" :key="indexs"
-                                    :src="datas.img" width="24" class="marginRight8" alt="">
+                                    :src="datas.img" height="24" class="marginRight8" alt="">
                             </td>
                             <td>
                                 {{ item.symbol }}
@@ -62,7 +62,7 @@
                             </td>
                             <td>
                                 {{ item.price ? '$' : '' }} {{ item.price ? item.price : 'N/A' }} 
-                                <img v-if="item.price_icon" :src="imgUrl + '/' + item.price_icon" width="24"
+                                <img v-if="item.price_icon" :src="imgUrl + '/' + item.price_icon" height="24"
                                     class="marginRight8" alt="">
                             </td>
                         </tr>

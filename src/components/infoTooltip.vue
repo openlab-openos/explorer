@@ -2,7 +2,7 @@
     <div class="popover-container w-100" @mouseover="showPopover" @mouseout="hidePopover">
         <div :class="justifyClass">
             <slot></slot>
-            <img src="../assets/mark.png"  width="24" style="margin: 0px 10px;" alt="">
+            <img src="../assets/mark.png"  height="24" style="margin: 0px 10px;" alt="">
             <!-- <HelpCircle class="ms-2" size="13" /> -->
         </div>
         <Popover :bottom="bottom" :right="right" :state="state" :text="text" />
@@ -11,6 +11,7 @@
 
 <script>
 import { ref } from 'vue';
+
 import Popover from './Popover.vue';
 
 // import { HelpCircle } from 'vue-feather-icons';

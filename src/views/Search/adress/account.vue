@@ -43,7 +43,7 @@
                                     {{ titleUrl(item.owner).url }}
                                     <img v-if="titleUrl(item.owner).type"
                                         v-for="(datas, indexs) in titleUrl(item.owner).certificates" :key="indexs"
-                                        :src="datas.img" width="24" class="marginRight8" alt="">
+                                        :src="datas.img" height="24" class="marginRight8" alt="">
 
                                 </td>
                             </tr>
@@ -120,17 +120,26 @@
     </div>
 </template>
 <script setup>
-import { getCurrentInstance, ref, watchEffect, onMounted, watch } from "vue";
-import { titleUrl } from "../../../components/method/title_url"
-import { chainRequest } from "../../../request/chain";
-import historyView from "../../../components/address/history_list.vue"
-import transferView from "../../../components/address/transfer_list.vue";
-import holderView from "../../../components/address/holder_list.vue";
-import pledgeView from "../../../components/address/pledge.vue"
-import { useRouter } from "vue-router";
-import {smartFormatNumber} from '../../../components/number/smart.js'
-import ReserveView from "../../../components/address/reserve_list.vue"
-import tokensView from "../../../components/address/tokens.vue"
+import {
+  getCurrentInstance,
+  onMounted,
+  ref,
+  watch,
+  watchEffect,
+} from 'vue';
+
+import { useRouter } from 'vue-router';
+
+import historyView from '../../../components/address/history_list.vue';
+import holderView from '../../../components/address/holder_list.vue';
+import pledgeView from '../../../components/address/pledge.vue';
+import ReserveView from '../../../components/address/reserve_list.vue';
+import tokensView from '../../../components/address/tokens.vue';
+import transferView from '../../../components/address/transfer_list.vue';
+import { titleUrl } from '../../../components/method/title_url';
+import { smartFormatNumber } from '../../../components/number/smart.js';
+import { chainRequest } from '../../../request/chain';
+
 const router = useRouter();
 const type = ref(true);
 const props = defineProps({

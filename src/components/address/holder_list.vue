@@ -22,12 +22,12 @@
                         {{ titleUrl(item.account.data.parsed.info.owner).url }}
                         <img v-if="titleUrl(item.account.data.parsed.info.owner).type"
                             v-for="item, index in titleUrl(item.account.data.parsed.info.owner).certificates"
-                            :src="item.img" :key="index" width="24" alt="" class="marginRight10">
+                            :src="item.img" :key="index" height="24" alt="" class="marginRight10">
                     </td>
                     <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.pubkey)">
                         {{ titleUrl(item.pubkey).url }}
                         <img v-if="titleUrl(item.pubkey).type" v-for="item, index in titleUrl(item.pubkey).certificates"
-                            :src="item.img" :key="index" width="24" alt="" class="marginRight10">
+                            :src="item.img" :key="index" height="24" alt="" class="marginRight10">
                     </td>
                     <td>
                         {{ (item.account.data.parsed.info.tokenAmount.uiAmount).toFixed(5) }}
@@ -53,14 +53,21 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from "vue";
-import moment from "moment";
-import { order } from "../../request/order";
-import { chainRequest } from "../../request/chain";
-import { proportionAmount } from "../method/proportion_account"
-import { useRouter } from "vue-router"
-import { titleUrl } from "../../components/method/title_url"
-import LoadingVue from "../../components/block/loading.vue"
+import {
+  computed,
+  onMounted,
+  ref,
+} from 'vue';
+
+import moment from 'moment';
+import { useRouter } from 'vue-router';
+
+import LoadingVue from '../../components/block/loading.vue';
+import { titleUrl } from '../../components/method/title_url';
+import { chainRequest } from '../../request/chain';
+import { order } from '../../request/order';
+import { proportionAmount } from '../method/proportion_account';
+
 const loading = ref(true);
 
 const router = useRouter();

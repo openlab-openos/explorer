@@ -30,7 +30,7 @@
                                 width="32" alt="">
                             <!-- B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz -->
                             {{ titleUrl(item.pubkey).url }}
-                            <img v-if="titleUrl(item.pubkey).type" src="../../../src//assets//renzheng.png" width="24" alt=""> 
+                            <img v-if="titleUrl(item.pubkey).type" src="../../../src//assets//renzheng.png" height="24" alt=""> 
                         </td>
                         <td>
                             <text v-if="item.account.data.parsed.info.extensions">
@@ -93,10 +93,16 @@
     </card>
 </template>
 <script setup>
-import { ref, computed } from 'vue'; // 假设这是在一个Vue组件中
-import { tokenList } from "./tokens_request";
-import { titleUrl } from "../../components/method/title_url"
-import { useRouter } from "vue-router";
+import {
+  computed,
+  ref,
+} from 'vue'; // 假设这是在一个Vue组件中
+
+import { useRouter } from 'vue-router';
+
+import { titleUrl } from '../../components/method/title_url';
+import { tokenList } from './tokens_request';
+
 const router = useRouter();
 
 const historyData = ref([]);

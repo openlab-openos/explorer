@@ -84,7 +84,7 @@
                                     .parsed.info.destination).type" v-for="(datas, indexs) in titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
                                         .parsed.info.destination : item.result.transaction.message.instructions[1]
                                             .parsed.info.destination).certificates" :key="indexs" :src="datas.img"
-                                width="24" class="marginRight8" alt="">
+                                height="24" class="marginRight8" alt="">
 
                         </td>
                         <td style=" text-align: left; cursor: pointer" :class="item.result.transaction.message.instructions.length == 1 ?
@@ -114,7 +114,7 @@
                                     .parsed.info.destination).type" v-for="(datas, indexs) in titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
                                         .parsed.info.destination : item.result.transaction.message.instructions[1]
                                             .parsed.info.destination).certificates" :key="indexs" :src="datas.img"
-                                width="24" class="marginRight8" alt="">
+                                height="24" class="marginRight8" alt="">
                         </td>
                         <td style=" text-align: left; cursor: pointer" class="text-theme" @click="slot(
 
@@ -136,7 +136,7 @@
                             <!-- <img v-if="item.result.transaction.message.instructions.length == 1 ?
                                 titleUrl(item.result.transaction.message.instructions[0]
                                     .programId).type : titleUrl(item.result.transaction.message.instructions[1]
-                                        .programId).type" src="../../../src//assets//renzheng.png" width="24" alt=""> -->
+                                        .programId).type" src="../../../src//assets//renzheng.png" height="24" alt=""> -->
                             <img v-if="item.result.transaction.message.instructions.length == 1 ?
                                 titleUrl(item.result.transaction.message.instructions[0]
                                     .programId).type : titleUrl(item.result.transaction.message.instructions[1]
@@ -144,7 +144,7 @@
                                             titleUrl(item.result.transaction.message.instructions[0]
                                                 .programId).certificates : titleUrl(item.result.transaction.message.instructions[1]
                                                     .programId).certificates" :key="indexs" :src="datas.img"
-                                width="24" class="marginRight8" alt="">
+                                height="24" class="marginRight8" alt="">
                         </td>
                         <td>
                             {{ item.result.transaction.message.instructions.length == 1 ?
@@ -175,10 +175,10 @@
 
                             }}
                             <!-- <img v-if="titleUrl(item.result.transaction.message.instructions[0]
-                                .parsed.info.mint).type" src="../../../src//assets//renzheng.png" width="24" alt=""> -->
+                                .parsed.info.mint).type" src="../../../src//assets//renzheng.png" height="24" alt=""> -->
                             <img v-if="titleUrl(item.result.transaction.message.instructions[0]
                                 .parsed.info.mint).type" v-for="(datas, indexs) in titleUrl(item.result.transaction.message.instructions[0]
-                                    .parsed.info.mint).certificates" :key="indexs" :src="datas.img" width="24"
+                                    .parsed.info.mint).certificates" :key="indexs" :src="datas.img" height="24"
                                 class="marginRight8" alt="">
                         </td>
 
@@ -204,14 +204,21 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watchEffect, computed } from "vue";
-import moment from "moment";
-import { order } from "../../request/order";
-import { chainRequest } from "../../request/chain";
-import { useRouter } from "vue-router";
-import { solanapubbleys } from "../method/solana"
-import { titleUrl } from "../method/title_url";
-import LoadingVue from "../../components/block/loading.vue"
+import {
+  computed,
+  onMounted,
+  ref,
+  watchEffect,
+} from 'vue';
+
+import moment from 'moment';
+import { useRouter } from 'vue-router';
+
+import LoadingVue from '../../components/block/loading.vue';
+import { chainRequest } from '../../request/chain';
+import { order } from '../../request/order';
+import { solanapubbleys } from '../method/solana';
+import { titleUrl } from '../method/title_url';
 
 const router = useRouter();
 const props = defineProps({

@@ -15,13 +15,13 @@
 <script setup>
 import { ref } from 'vue';
 
-import stable from '../../../../assets/assetsLogo/stable.png';
-import unknown from '../../../../assets/assetsLogo/unknown.png';
-import unsafe from '../../../../assets/assetsLogo/unsafe.png';
-import vrc10 from '../../../../assets/assetsLogo/vrc10.png';
-import vrc11 from '../../../../assets/assetsLogo/vrc11.png';
-import vrc12 from '../../../../assets/assetsLogo/vrc12.png';
-import vrc20 from '../../../../assets/assetsLogo/vrc20.png';
+// import stable from '../../../../assets/assetsLogo/stable.png';
+// import unknown from '../../../../assets/assetsLogo/unknown.png';
+// import unsafe from '../../../../assets/assetsLogo/unsafe.png';
+// import vrc10 from '../../../../assets/assetsLogo/vrc10.png';
+// import vrc11 from '../../../../assets/assetsLogo/vrc11.png';
+// import vrc12 from '../../../../assets/assetsLogo/vrc12.png';
+// import vrc20 from '../../../../assets/assetsLogo/vrc20.png';
 import { tokenList } from './request.js';
 
 const props = defineProps({

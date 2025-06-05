@@ -6,7 +6,7 @@
             <text> {{ $t("account.tokenAccount") }} {{ token_name ? (titleUrl(url).find ? titleUrl(url).url : '') : ''
                 }}
                 <img v-if="titleUrl(url).type" v-for="item, index in titleUrl(url).certificates" :src="item.img"
-                    :key="index" width="24" alt="" class="marginRight10">
+                    :key="index" height="24" alt="" class="marginRight10">
             </text>
         </h3>
 
@@ -44,7 +44,7 @@
                                     titleUrl(getMint).url }}
                                     <img v-if="titleUrl(getMint).type"
                                         v-for="(datas, indexs) in titleUrl(getMint).certificates" :src="datas.img"
-                                        :key="indexs" width="24" class="marginRight8" alt="">
+                                        :key="indexs"  height="24" class="marginRight8" alt="">
                                 </td>
                             </tr>
                             <tr>
@@ -58,14 +58,14 @@
                                 <td class="text-end text-theme" @click="pubbtx(owners)" style="cursor: pointer"> {{
                                     titleUrl(owners).url }} <img v-if="titleUrl(owners).type"
                                         v-for="(datas, indexs) in titleUrl(owners).certificates" :key="indexs"
-                                        :src="datas.img" width="24" class="marginRight8" alt=""> </td>
+                                        :src="datas.img" height="24" class="marginRight8" alt=""> </td>
                             </tr>
                             <tr>
                                 <td>{{ $t("transaction.program") }} </td>
                                 <td class="text-end text-theme" @click="pubbtx(owner)" style="cursor: pointer"> {{
                                     titleUrl(owner).url }} <img v-if="titleUrl(owner).type"
                                         v-for="(datas, indexs) in titleUrl(owner).certificates" :key="indexs"
-                                        :src="datas.img" width="24" class="marginRight8" alt=""></td>
+                                        :src="datas.img" height="24" class="marginRight8" alt=""></td>
                             </tr>
                         </tbody>
                     </table>
@@ -95,19 +95,32 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
-import { chainRequest } from "../../../request/chain";
-import { solanagetAccount } from "../../../request/solanaGetaccount";
-import { PublicKey, Connection } from "@solana/web3.js";
-import { solanaRequest } from "../../../request/solanaReques";
-import { getExtensionData, ExtensionType } from "open-token-web3";
-import { metaRequest } from "../../../request/tokenMeta";
-import { titleUrl } from "../../../components/method/title_url"
-import { useRouter } from "vue-router";
-import historyView from "../../../components/address/history_list.vue"
-import transferView from "../../../components/address/transfer_list.vue";
-import holderView from "../../../components/address/holder_list.vue";
-import pledgeView from "../../../components/address/pledge.vue"
+import {
+  onMounted,
+  ref,
+} from 'vue';
+
+import {
+  ExtensionType,
+  getExtensionData,
+} from 'open-token-web3';
+import { useRouter } from 'vue-router';
+
+import {
+  Connection,
+  PublicKey,
+} from '@solana/web3.js';
+
+import historyView from '../../../components/address/history_list.vue';
+import holderView from '../../../components/address/holder_list.vue';
+import pledgeView from '../../../components/address/pledge.vue';
+import transferView from '../../../components/address/transfer_list.vue';
+import { titleUrl } from '../../../components/method/title_url';
+import { chainRequest } from '../../../request/chain';
+import { solanagetAccount } from '../../../request/solanaGetaccount';
+import { solanaRequest } from '../../../request/solanaReques';
+import { metaRequest } from '../../../request/tokenMeta';
+
 const router = useRouter();
 const tokenData = ref();
 const pubbleys = ref();

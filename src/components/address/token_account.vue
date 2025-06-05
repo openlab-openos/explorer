@@ -27,7 +27,7 @@
                             <td>{{ $t("account.owning_token") }}</td>
                             <td class="text-end text-theme" @click="pubbtx(getMint)" style="cursor: pointer"> {{
                                 titleUrl(getMint).url }} 
-                                <img v-if="titleUrl(getMint).type" v-for="(datas,indexs) in titleUrl(getMint).certificates" :src="datas.img" :key="indexs" width="24" class="marginRight8" alt=""> 
+                                <img v-if="titleUrl(getMint).type" v-for="(datas,indexs) in titleUrl(getMint).certificates" :src="datas.img" :key="indexs" height="24" class="marginRight8" alt=""> 
                             </td>
                         </tr>
                         <tr>
@@ -38,12 +38,12 @@
                         <tr>
                             <td>{{ $t("account.Owner") }} </td>
                             <td class="text-end text-theme" @click="pubbtx(owners)" style="cursor: pointer"> {{
-                                titleUrl(owners).url }} <img v-if="titleUrl(owners).type" v-for="(datas,indexs) in titleUrl(owners).certificates" :key="indexs" :src="datas.img" width="24" class="marginRight8" alt=""> </td>
+                                titleUrl(owners).url }} <img v-if="titleUrl(owners).type" v-for="(datas,indexs) in titleUrl(owners).certificates" :key="indexs" :src="datas.img" height="24" class="marginRight8" alt=""> </td>
                         </tr>
                         <tr>
                             <td>{{ $t("transaction.program") }} </td>
                             <td class="text-end text-theme" @click="pubbtx(owners)" style="cursor: pointer"> {{
-                                titleUrl(program).url }} <img v-if="titleUrl(program).type" v-for="(datas,indexs) in titleUrl(program).certificates" :key="indexs" :src="datas.img" width="24" class="marginRight8" alt=""></td>
+                                titleUrl(program).url }} <img v-if="titleUrl(program).type" v-for="(datas,indexs) in titleUrl(program).certificates" :key="indexs" :src="datas.img" height="24" class="marginRight8" alt=""></td>
                         </tr>
                     </tbody>
                 </table>
@@ -54,15 +54,28 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { chainRequest } from "../../request/chain";
-import { solanagetAccount } from "../../request/solanaGetaccount";
-import { PublicKey, Connection } from "@solana/web3.js";
-import { solanaRequest } from "../../request/solanaReques";
-import { getExtensionData, ExtensionType } from "open-token-web3";
-import { metaRequest } from "../../request/tokenMeta";
-import { titleUrl } from "../method/title_url"
-import { useRouter } from "vue-router";
+import {
+  onMounted,
+  ref,
+} from 'vue';
+
+import {
+  ExtensionType,
+  getExtensionData,
+} from 'open-token-web3';
+import { useRouter } from 'vue-router';
+
+import {
+  Connection,
+  PublicKey,
+} from '@solana/web3.js';
+
+import { chainRequest } from '../../request/chain';
+import { solanagetAccount } from '../../request/solanaGetaccount';
+import { solanaRequest } from '../../request/solanaReques';
+import { metaRequest } from '../../request/tokenMeta';
+import { titleUrl } from '../method/title_url';
+
 const router = useRouter();
 const tokenData = ref();
 const pubbleys = ref();

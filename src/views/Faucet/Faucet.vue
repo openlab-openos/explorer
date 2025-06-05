@@ -11,9 +11,11 @@
                         <p>{{ $t("Requset-text") }}</p>
                     </div>
                     <div>
-                        <el-select disabled v-model="dennetType" placeholder="Select" style="width: 115px">
+                        <!-- <el-select disabled v-model="dennetType" placeholder="Select" style="width: 115px"
+                            :suffix-transition="false">
 
-                        </el-select>
+                        </el-select> -->
+                        <el-input v-model="dennetType" style="width: 115px" disabled placeholder="Please input" />
                     </div>
                 </div>
                 <div class="display-flex justify-content-center p-9 ">
@@ -22,8 +24,8 @@
                         placeholder="Wallet Address" class="input-with-select">
                         <template #append>
                             <el-select v-model="selectAddress" placeholder="Select" style="width: 115px">
-                                <el-option label="2tBTG" value="tBTG" />
-                                <el-option label="2tUSD" value="tUSD" />
+                                <el-option label="2tBTG" value="BTG" />
+                                <el-option label="2tUSD" value="USD" />
                             </el-select>
                         </template>
                     </el-input>
@@ -70,7 +72,7 @@
                 <svg viewBox="0 0 400 400">
                     <circle class="circle" fill="none" stroke="#68E534" stroke-width="20" cx="200" cy="200" r="190"
                         stroke-linecap="round" />
-                    <polyline class="tick" fill="none" stroke="#68E534" stroke-width="24"
+                    <polyline class="tick" fill="none" stroke="#68E534" stroke-height="24"
                         points="88,214 173,284 304,138" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </el-dialog>
@@ -137,7 +139,7 @@ import { tokenList } from '../Faucet/assets.js';
 
 const inputNumber = ref('')
 const selectBTG = ref('BTG')
-const selectAddress = ref('')
+const selectAddress = ref('BTG')
 const dialogVisible = ref(false)
 const disabledType = ref(true)
 const loading = ref(false)
