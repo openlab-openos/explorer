@@ -1,4 +1,11 @@
-import { LOADER_IDS, PROGRAM_INFO_BY_ID, SPECIAL_IDS, SYSVAR_IDS, TOKEN_IDS, Authentications } from "../../program";
+import {
+  Authentications,
+  LOADER_IDS,
+  PROGRAM_INFO_BY_ID,
+  SPECIAL_IDS,
+  SYSVAR_IDS,
+  TOKEN_IDS,
+} from '../../program';
 
 export const titleUrl = (url) => {
     let auth = false;
@@ -50,7 +57,7 @@ export const titleUrl = (url) => {
     }
     if (url == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz') {
         return {
-            url: 'Wrap BTG',
+            url: 'Wrapped BTG',
             type: true,
             find: true,
             symbol: 'WBTG',

@@ -29,8 +29,7 @@
                                 <img v-if="item.img" :src="item.img" height="28" alt="">
                                 <img v-if="item.account.data.parsed.info.mint == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'"
                                     src="https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png"
-                                    width="28"
-                                    height="28" alt="">
+                                    width="28" height="28" alt="">
                                 {{ titleUrl(item.account.data.parsed.info.mint).url }}
                                 <text v-if="item.name">{{ '(' + item.name + ')' }}</text>
                                 <text
@@ -75,7 +74,6 @@
             {{ $t("account.available") }}
         </div>
         <div class="justify-end padding-10" v-if="tokens.length != 0">
-            <!-- <el-pagination background :hide-on-single-page="true" :page-sizes="[25]" layout="prev, pager, next" :total="historyData.length" /> -->
             <el-pagination background layout="prev, pager, next" :hide-on-single-page="true" :current-page="currentPage"
                 :page-size="pageSize" :total="totalItems" @current-change="handlePageChange" />
         </div>
@@ -100,13 +98,17 @@ const props = defineProps({
 });
 const data = ref(props.tokens);
 const currentPage = ref(1);
-const pageSize = ref(20);
+const pageSize = ref(10);
 const tokenData = ref();
+const totalItems = ref(props.tokens.length);
 const paginatedHistoryData = computed(() => {
     const start = (currentPage.value - 1) * pageSize.value;
     const end = start + pageSize.value;
     return props.tokens.slice(start, end);
 });
+const handlePageChange = (newPage) => {
+    currentPage.value = newPage;
+};
 const tokenList = async () => {
     let method = {
         jsonrpc: "2.0",

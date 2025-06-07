@@ -44,8 +44,10 @@
                                         :src="datas.img" height="24" class="marginRight8" alt="">
                                 </td>
                             </tr>
+
                             <template v-else>
-                                <tr v-for="[keys, values] in Object.entries(value)" :key="keys">
+                                <template v-if="value" >
+                                    <tr v-for="[keys, values] in Object.entries(value)" :key="keys">
                                     <td>
                                         {{ capitalize(key == "lamports" ? 'amount' : key) }}.<span
                                             v-for="[keyChild, valuechild] in Object.entries(keys)" :key="keyChild">
@@ -72,6 +74,7 @@
                                             class="marginRight8" alt="">
                                     </td>
                                 </tr>
+                                </template>
                             </template>
                             <!-- <tr v-else>
                                     <td>1
