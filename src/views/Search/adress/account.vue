@@ -111,14 +111,11 @@
                         </el-tab-pane>
                         <el-tab-pane v-if="transfersType.urlType == 'Formal' && type && !card_data[0].executable"
                             :label="$t('transfer')" name="second">
-                            <transfer-view :url="url" v-if="activeName == 'second'"></transfer-view>
+                            <transfer-view :url="url" :type="true" v-if="activeName == 'second'"></transfer-view>
                         </el-tab-pane>
                         <el-tab-pane :label="$t('pledge')" name="third">
                             <pledgeView v-if="activeName == 'third'" :url="url" />
                         </el-tab-pane>
-                        <!-- <el-tab-pane :label="$t('Margin-record')" name="fourth">
-                            <ReserveView :url="url" v-if="activeName == 'fourth'" :paramsId="paramsId" :type="true" ></ReserveView>
-                        </el-tab-pane> -->
                     </el-tabs>
                 </card-body>
             </card>

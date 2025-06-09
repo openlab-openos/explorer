@@ -49,8 +49,7 @@ export const titleUrl = (url) => {
             assest:false
         };
     }
-    console.log(Authentications,'----22---');
-    
+
     if (Authentications[url]) {
         return {
             url: Authentications[url].name,

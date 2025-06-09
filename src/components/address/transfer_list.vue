@@ -31,9 +31,8 @@
                 </tr>
                 <template v-if="loading">
                     <tr v-for="(item, index) in paginatedHistoryData" :key="index">
-                        <td class="text-theme" style="cursor: pointer"
-                            @click="pubbtx(item.result.transaction.signatures[0])">
-                            {{ stringcate(item.result.transaction.signatures[0]) }}
+                        <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.signature)">
+                            {{ stringcate(item.signature) }}
                         </td>
                         <td>
                             <button type="button" style="
@@ -49,34 +48,18 @@
                       cursor: auto;">
                                 {{
                                     textValue(
-                                        item.result.transaction.message.instructions[0]
-                                            .parsed.type == "transfer" ? "Transfer" : "token_transfer"
+                                        item.movement
                                     )
                                 }}
                             </button>
                         </td>
-                        <td style=" text-align: left; cursor: pointer" :class="item.result.transaction.message.instructions.length == 1 ?
-                            (item.result.transaction.message.instructions[0]
-                                .parsed.info.source == props.url ? 'color0-255-179-1' : (item.result.transaction.message.instructions[0]
-                                    .parsed.info.authority == props.url ? 'color0-255-179-1' : 'text-theme')) : (item.result.transaction.message.instructions[1]
-                                        .parsed.info.source == props.url ? 'color0-255-179-1' : (item.result.transaction.message.instructions[1]
-                                            .parsed.info.authority == props.url ? 'color0-255-179-1' : 'text-theme'))
+                        <td style=" text-align: left; cursor: pointer" :class="item.primaryType ? 'color0-255-179-1' : 'text-theme'
                             " @click="slot(
-                                item.result.transaction.message.instructions.length == 1 ?
-                                    item.result.transaction.message.instructions[0]
-                                        .parsed.info.source
-                                    :
-                                    item.result.transaction.message.instructions[1]
-                                        .parsed.info.source
+                                item.primary
                             )">
 
-                            {{ item.result.transaction.message.instructions.length == 1 ?
-
-                                titleUrl(item.result.transaction.message.instructions[0]
-                                    .parsed.info.source).url
-                                :
-                                titleUrl(item.result.transaction.message.instructions[1]
-                                    .parsed.info.source).url
+                            {{
+                                titleUrl(item.primary).url
 
                             }}
                             <!-- <img v-if="titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
@@ -85,62 +68,28 @@
                                         .parsed.info.destination : item.result.transaction.message.instructions[1]
                                             .parsed.info.destination).certificates" :key="indexs" :src="datas.img"
                                 height="24" class="marginRight8" alt=""> -->
-                            <img v-if="titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
-                                .parsed.info.destination : item.result.transaction.message.instructions[1]
-                                    .parsed.info.destination).type && titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
-                                        .parsed.info.destination : item.result.transaction.message.instructions[1]
-                                            .parsed.info.destination).assest" v-for="(datas, indexs) in titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
-                                                .parsed.info.destination : item.result.transaction.message.instructions[1]
-                                                    .parsed.info.destination).certificates" :key="indexs"
+                            <img v-if="titleUrl(item.primary).type && titleUrl(item.primary).assest"
+                                v-for="(datas, indexs) in titleUrl(item.primary).certificates" :key="indexs"
                                 :src="datas.img" height="24" class="marginRight8" alt="">
-                            <text v-for="items, indexs in titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
-                                .parsed.info.destination : item.result.transaction.message.instructions[1]
-                                    .parsed.info.destination).certificates" :key="indexs"
+                            <text v-for="items, indexs in titleUrl(item.primary).certificates" :key="indexs"
                                 :style="'background-color: ' + items.backColor"
                                 style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                 {{ items.code }}
                             </text>
 
                         </td>
-                        <td style=" text-align: left; cursor: pointer" :class="item.result.transaction.message.instructions.length == 1 ?
-                            (item.result.transaction.message.instructions[0]
-                                .parsed.info.destination == props.url ? 'color0-255-179-1' : 'text-theme') : (item.result.transaction.message.instructions[1]
-                                    .parsed.info.destination == props.url ? 'color0-255-179-1' : 'text-theme')
+                        <td style=" text-align: left; cursor: pointer" :class="item.quantityType ? 'color0-255-179-1' : 'text-theme'
                             " @click="slot(
-                                item.result.transaction.message.instructions.length == 1 ?
-
-                                    item.result.transaction.message.instructions[0]
-                                        .parsed.info.destination
-                                    :
-                                    item.result.transaction.message.instructions[1]
-                                        .parsed.info.destination
+                                item.quantity
                             )">
-                            {{ item.result.transaction.message.instructions.length == 1 ?
-
-                                titleUrl(item.result.transaction.message.instructions[0]
-                                    .parsed.info.destination).url
-                                :
-                                titleUrl(item.result.transaction.message.instructions[1]
-                                    .parsed.info.destination).url
-
+                            {{
+                                titleUrl(item.quantity).url
                             }}
-                            <!-- <img v-if="titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
-                                .parsed.info.destination : item.result.transaction.message.instructions[1]
-                                    .parsed.info.destination).type" v-for="(datas, indexs) in titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
-                                        .parsed.info.destination : item.result.transaction.message.instructions[1]
-                                            .parsed.info.destination).certificates" :key="indexs" :src="datas.img"
-                                height="24" class="marginRight8" alt=""> -->
-                            <img v-if="titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
-                                .parsed.info.destination : item.result.transaction.message.instructions[1]
-                                    .parsed.info.destination).type && titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
-                                        .parsed.info.destination : item.result.transaction.message.instructions[1]
-                                            .parsed.info.destination).assest" v-for="(datas, indexs) in titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
-                                                .parsed.info.destination : item.result.transaction.message.instructions[1]
-                                                    .parsed.info.destination).certificates" :key="indexs"
+
+                            <img v-if="titleUrl(quantity).type && titleUrl(item.quantity).assest"
+                                v-for="(datas, indexs) in titleUrl(item.quantity).certificates" :key="indexs"
                                 :src="datas.img" height="24" class="marginRight8" alt="">
-                            <text v-for="items, indexs in titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
-                                .parsed.info.destination : item.result.transaction.message.instructions[1]
-                                    .parsed.info.destination).certificates" :key="indexs"
+                            <text v-for="items, indexs in titleUrl(item.quantity).certificates" :key="indexs"
                                 :style="'background-color: ' + items.backColor"
                                 style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                 {{ items.code }}
@@ -148,90 +97,40 @@
                         </td>
                         <td style=" text-align: left; cursor: pointer" class="text-theme" @click="slot(
 
-                            item.result.transaction.message.instructions.length == 1 ?
-                                (item.result.transaction.message.instructions[1]
-                                    .programId ? item.result.transaction.message.instructions[1]
-                                    .programId : '') : (item.result.transaction.message.instructions[0]
-                                        .programId ? item.result.transaction.message.instructions[0]
-                                        .programId : '')
+                            item.program
                         )">
                             {{
-
-                                item.result.transaction.message.instructions.length == 1 ?
-                                    titleUrl(item.result.transaction.message.instructions[0]
-                                        .programId).url : titleUrl(item.result.transaction.message.instructions[1]
-                                            .programId).url
+                                titleUrl(item.program).url
 
                             }}
-                            <!-- <img v-if="item.result.transaction.message.instructions.length == 1 ?
-                                titleUrl(item.result.transaction.message.instructions[0]
-                                    .programId).type : titleUrl(item.result.transaction.message.instructions[1]
-                                        .programId).type" src="../../../src//assets//renzheng.png" height="24" alt=""> -->
-                            <!-- <img v-if="item.result.transaction.message.instructions.length == 1 ?
-                                titleUrl(item.result.transaction.message.instructions[0]
-                                    .programId).type : titleUrl(item.result.transaction.message.instructions[1]
-                                        .programId).type" v-for="(datas, indexs) in item.result.transaction.message.instructions.length == 1 ?
-                                            titleUrl(item.result.transaction.message.instructions[0]
-                                                .programId).certificates : titleUrl(item.result.transaction.message.instructions[1]
-                                                    .programId).certificates" :key="indexs" :src="datas.img"
-                                height="24" class="marginRight8" alt=""> -->
-                            <img v-if="item.result.transaction.message.instructions.length == 1 ?
-                                titleUrl(item.result.transaction.message.instructions[0]
-                                    .programId).type : titleUrl(item.result.transaction.message.instructions[1]
-                                        .programId).type && item.result.transaction.message.instructions.length == 1 ?
-                                    !titleUrl(item.result.transaction.message.instructions[0]
-                                        .programId).assest : !titleUrl(item.result.transaction.message.instructions[1]
-                                            .programId).assest" v-for="(datas, indexs) in item.result.transaction.message.instructions.length == 1 ?
-                                                titleUrl(item.result.transaction.message.instructions[0]
-                                                    .programId).certificates : titleUrl(item.result.transaction.message.instructions[1]
-                                                        .programId).certificates" :key="indexs" :src="datas.img"
-                                height="24" class="marginRight8" alt="">
-                            <text v-for="items, indexs in item.result.transaction.message.instructions.length == 1 ?
-                                titleUrl(item.result.transaction.message.instructions[0]
-                                    .programId).certificates : titleUrl(item.result.transaction.message.instructions[1]
-                                        .programId).certificates" :key="indexs"
+                            <img v-if="
+                                !titleUrl(item.program).type && !titleUrl(program).assest" v-for="(datas, indexs) in
+                                    titleUrl(item.program).certificates" :key="indexs" :src="datas.img" height="24"
+                                class="marginRight8" alt="">
+                            <text v-for="items, indexs in
+                                titleUrl(item.program).certificates" :key="indexs"
                                 :style="'background-color: ' + items.backColor"
                                 style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                 {{ items.code }}
                             </text>
                         </td>
                         <td>
-                            {{ item.result.transaction.message.instructions.length == 1 ?
-                                item.result.transaction.message.instructions[0]
-                                    .parsed.info.mint ? item.result.transaction.message.instructions[0]
-                                        .parsed.info.tokenAmount.uiAmount : toFexedStake(
-                                            item.result.transaction.message.instructions[0].parsed
-                                                .info.lamports
-                                        ) : item.result.transaction.message.instructions[1]
-                                            .parsed.info.mint ? item.result.transaction.message.instructions[1]
-                                                .parsed.info.tokenAmount.uiAmount : toFexedStake(
-                                                    item.result.transaction.message.instructions[1].parsed
-                                                        .info.lamports
-                                                )
+                            {{ toFexedStake(
+                                item.lamports
+                            )
                             }}
                         </td>
-                        <td style=" text-align: left; " :style="item.result.transaction.message.instructions[0]
-                            .parsed.info.mint ? 'cursor: pointer' : ''" class="text-theme" @click="slot(
-                                item.result.transaction.message.instructions[0]
-                                    .parsed.info.mint ? item.result.transaction.message.instructions[0]
-                                        .parsed.info.mint : ''
+                        <td style=" text-align: left; " :style="item.token ? 'cursor: pointer' : ''" class="text-theme" @click="slot(
+                                item.token
                             )">
                             {{
 
-                                item.result.transaction.message.instructions[0]
-                                    .parsed.info.mint ? titleUrl(item.result.transaction.message.instructions[0]
-                                        .parsed.info.mint).url : "BTG"
+                                item.token
 
                             }}
-                            <!-- <img v-if="titleUrl(item.result.transaction.message.instructions[0]
-                                .parsed.info.mint).type" src="../../../src//assets//renzheng.png" height="24" alt=""> -->
-                            <img v-if="titleUrl(item.result.transaction.message.instructions[0]
-                                .parsed.info.mint).type && !titleUrl(item.result.transaction.message.instructions[0]
-                                    .parsed.info.mint).assest" v-for="(datas, indexs) in titleUrl(item.result.transaction.message.instructions[0]
-                                        .parsed.info.mint).certificates" :key="indexs" :src="datas.img" height="24"
+                            <img v-if="titleUrl(item.token).type && !titleUrl(item.token).assest" v-for="(datas, indexs) in titleUrl(item.token).certificates" :key="indexs" :src="datas.img" height="24"
                                 class="marginRight8" alt="">
-                            <text v-for="items, indexs in titleUrl(item.result.transaction.message.instructions[0]
-                                .parsed.info.mint).certificates" :key="indexs"
+                            <text v-for="items, indexs in titleUrl(item.token).certificates" :key="indexs"
                                 :style="'background-color: ' + items.backColor"
                                 style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                 {{ items.code }}
@@ -239,8 +138,7 @@
                         </td>
 
                         <td class="text-theme" style="cursor: pointer">
-                            {{ timeSome(item.result.blockTime) }}
-
+                            {{ item.time}}
                         </td>
                     </tr>
                 </template>
@@ -281,8 +179,13 @@ const props = defineProps({
     url: {
         type: String,
         default: ""
+    },
+    type: {
+        type: String,
+        default: ""
     }
 })
+
 const loading = ref(false);
 const historyData = ref([]);
 
@@ -319,17 +222,91 @@ const requestList = async (object) => {
 
 onMounted(async () => {
     try {
-        historyData.value = await requestList('transactions/' + props.url);
-
+        let res = await requestList('transactions/' + props.url);
+        historyData.value = HandleList(res)
         totalItems.value = historyData.value.length;
-
         loading.value = true;
-
+        // console.log(historyData.value);
         paginatedHistoryFunction(historyData.value);
     } catch {
 
     }
 });
+
+const HandleList = (listItem) => {
+    console.log('原始数据:', listItem);
+    let array = [];
+
+    for (let i in listItem) {
+        try {
+            // 提取常用对象以简化代码
+            const transaction = listItem[i]?.result?.transaction;
+            if (!transaction) continue; // 跳过无效项
+
+            const signatures = transaction.signatures;
+            const instructions = transaction.message?.instructions || [];
+
+            // 确保签名存在
+            const signature = signatures?.[0];
+
+            // 确保第一条指令存在且格式正确
+            const firstInstruction = instructions?.[0];
+            const movementType = firstInstruction?.parsed?.type === "transfer"
+                ? "Transfer"
+                : "token_transfer";
+
+            // 安全获取 primary 地址
+            let primary = '';
+            let quantity = '';
+            let program = '';
+            let lamports = 0;
+            let primaryType = false;
+            let quantityType = false;
+            if (instructions.length === 1) {
+                primary = firstInstruction?.parsed?.info?.source || '';
+                primaryType = props.type ? (firstInstruction?.parsed?.info?.source == props.url ? true : false) : false;
+                quantity = firstInstruction?.parsed?.info?.destination || '';
+                quantityType = props.type ? (firstInstruction?.parsed?.info?.source == props.url ? ((firstInstruction?.parsed?.info?.destination == props.url ? true : false)) : true) : false;
+                program = firstInstruction?.programId || '';
+                lamports = firstInstruction?.parsed?.info?.tokenAmount ? firstInstruction?.parsed?.info?.tokenAmount?.amount : firstInstruction?.parsed?.info?.lamports;
+            } else if (instructions.length >= 2) {
+                primary = instructions[1]?.parsed?.info?.source || '';
+                primaryType = props.type ? (instructions[1]?.parsed?.info?.source == props.url ? true : false) : false ;
+                quantity = instructions[1]?.parsed?.info?.destination || '';
+                quantityType = props.type ? (instructions[1]?.parsed?.info?.source == props.url ? (instructions[1]?.parsed?.info?.destination == props.url ? true : false) : true) : false;
+                program = instructions[1]?.programId || '';
+                lamports = instructions[1]?.parsed?.info?.tokenAmount ? instructions[1]?.parsed?.info?.tokenAmount?.amount : instructions[1]?.parsed?.info?.lamports;
+            }
+            let token = firstInstruction.parsed.info.mint ? titleUrl(firstInstruction.parsed.info.mint).url : 'BTG'
+            let time = timeSome(listItem[i].result.blockTime)
+            // 创建对象
+            let obj = {
+                signature,
+                movement: movementType,
+                primary,
+                primaryType,
+                quantity,
+                quantityType,
+                program,
+                lamports,
+                token,
+                time,
+            };
+
+            // console.log('处理后的项:', obj);
+            array.push(obj);
+
+        } catch (error) {
+            console.error(`处理索引 ${i} 时出错:`, error);
+            continue; // 继续处理其他项
+        }
+    }
+
+    console.log('处理后的数组:', array);
+    console.log('函数执行完成');
+    return array; // 返回处理后的数组
+}
+
 const textValue = (text) => {
     return text.toUpperCase();
 };

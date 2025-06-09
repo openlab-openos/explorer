@@ -87,7 +87,7 @@
                             <history-view :url="url"></history-view>
                         </el-tab-pane>
                         <el-tab-pane v-if="transfersType.urlType == 'Formal'" :label="$t('transfer')" name="second">
-                            <transfer-view :url="url"></transfer-view>
+                            <transfer-view :url="url" :type="true"></transfer-view>
                         </el-tab-pane>
                         <!-- <el-tab-pane :label="$t('account.holder')" name="third">
                             <holder-view :url="url" :paramsId="owner"></holder-view>
