@@ -63,7 +63,7 @@ export default {
     appOption.appSidebarHide = true;
     appOption.appHeaderHide = true;
     appOption.appContentClass = "p-0";
-    
+
   },
   beforeUnmount() {
     appOption.appSidebarHide = false;
@@ -234,14 +234,14 @@ export default {
         },
       ],
     });
-      console.log(this.historyData.meta.logMessages[0].includes("Vote"));
-     
+    console.log(this.historyData.meta.logMessages[0].includes("Vote"));
+
     if (this.historyData) {
       this.instruction = this.historyData.transaction.message.instructions;
       this.innerInstructions = this.historyData.meta.innerInstructions;
       if (this.historyData.meta.logMessages[0].includes("Vote")) {
         this.preType = true;
-      } else{
+      } else {
         this.preType = false;
       }
     }
@@ -250,11 +250,11 @@ export default {
 
   },
   watch: {
-    
+
     async $route(to, from) {
       console.log('变化');
       console.log(this.$route.params.item);
-      
+
       this.laoding = false
       this.url = this.$route.params.item;
       this.type = this.$route.params.err;
@@ -283,13 +283,13 @@ export default {
         ],
       });
       console.log(this.historyData.meta.logMessages[0].includes("Vote"));
-      
+
       if (this.historyData) {
         if (this.historyData.meta.logMessages[0].includes("Vote")) {
           this.preType = true;
-        } else{
-        this.preType = false;
-      }
+        } else {
+          this.preType = false;
+        }
       }
 
       this.laoding = true
@@ -355,7 +355,7 @@ export default {
                 </tr>
                 <tr>
                   <td>{{ $t("transaction.fee") }} (BTG)</td>
-                  <td class="text-end"> {{ smartFormatNumber(historyData.meta.fee/1000000000) }} </td>
+                  <td class="text-end"> {{ smartFormatNumber(historyData.meta.fee / 1000000000) }} </td>
                 </tr>
                 <tr>
                   <td>{{ $t("transaction.compute_units_consumed") }} </td>
@@ -412,25 +412,30 @@ export default {
                     </td>
                     <td class="text-theme" style="cursor: pointer" @click="pubbleys(item.pubkey)">
                       {{ titleUrl(item.pubkey).url }}
-                      <img v-if="titleUrl(item.pubkey).type"
-                        v-for="(datas, indexs) in titleUrl(item.pubkey).certificates" :key="indexs" :src="datas.img"
-                        height="24" class="marginRight8" alt="">
-
+                      <img
+                        v-if="titleUrl(item.pubkey).type && !titleUrl(item.pubkey).assest"
+                        v-for="(datas, indexs) in titleUrl(item.pubkey).certificates"
+                        :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
+                      <text v-for="items, indexs in titleUrl(item.pubkey).certificates"
+                        :key="indexs" :style="'background-color: ' + items.backColor"
+                        style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
+                        {{ items.code }}
+                      </text>
                     </td>
                     <td v-if="historyData.meta.postBalances">
                       <span class="symboldata" :style="styleSysmle(
                         symbolNum(come(smartFormatNumber((historyData.meta.postBalances[index] -
-                          historyData.meta.preBalances[index])/1000000000)))
+                          historyData.meta.preBalances[index]) / 1000000000)))
                       )
                         ">
                         {{ symbolNum(come(smartFormatNumber((historyData.meta.postBalances[index] -
-                          historyData.meta.preBalances[index])/1000000000))).value
+                          historyData.meta.preBalances[index]) / 1000000000))).value
                         }}
                       </span>
                     </td>
                     <td v-else></td>
                     <td v-if="historyData.meta.postBalances">
-                      {{ come(smartFormatNumber(historyData.meta.postBalances[index]/1000000000)) }}
+                      {{ come(smartFormatNumber(historyData.meta.postBalances[index] / 1000000000)) }}
                     </td>
                     <td v-else></td>
                     <td style="text-align: left;font-size: 12px;">
@@ -448,7 +453,7 @@ export default {
           </card>
         </div>
       </div>
-      <div  v-if="!preType">
+      <div v-if="!preType">
         <h4 class="marginTOP-50">{{ $t("transaction.instruction") }}</h4>
         <instruction-view :data="instruction" :child="innerInstructions" />
       </div>

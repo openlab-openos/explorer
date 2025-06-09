@@ -8,7 +8,9 @@
                     <th>
                         <span class="text-theme">
                             #{{ instruction_index == 0 ? '' : instruction_index + '.' + (index + 1) }}
-                        </span> {{ titleUrl(item.programId).url ? titleUrl(item.programId).url : (titleUrl(item.programId).find ? 'Associated Token Program' : 'Unknown Program' ) }} : {{ item.parsed ? item.parsed.type : '' }}
+                        </span> {{ titleUrl(item.programId).url ? titleUrl(item.programId).url :
+                            (titleUrl(item.programId).find ? 'Associated Token Program' : 'Unknown Program') }} : {{
+                            item.parsed ? item.parsed.type : '' }}
                     </th>
                     <th>
                     </th>
@@ -24,19 +26,26 @@
                             </td>
                         </tr>
                         <tr v-for="[key, value] in Object.entries(item.parsed.info)" :key="key">
-                            <td>{{ capitalize(key == "lamports" ? 'amount':key ) }}
+                            <td>{{ capitalize(key == "lamports" ? 'amount' : key) }}
                                 {{ key == "lamports" ? '(BTG)' : '' }}
                             </td>
                             <td class="text-end" :class="typeof titleUrl(value).url == 'string' ? 'text-theme' : ''"
                                 :style="typeof titleUrl(value).url == 'string' ? 'cursor: pointer' : ''" @click="pubbleys(
-                                    key == 'extensionTypes' ? '' : (key == 'lamports' ? '' : (key == 'space' ? '' : (key == 'decimals' ? '' : (key == 'tokenAmount' ?  '' :value ) )))
+                                    key == 'extensionTypes' ? '' : (key == 'lamports' ? '' : (key == 'space' ? '' : (key == 'decimals' ? '' : (key == 'tokenAmount' ? '' : value))))
                                 )">
-                                
-                                {{ key == 'extensionTypes' ? value[0] :(key == 'lamports' ? toFexedStake(value) : (key == 'tokenAmount' ? value.uiAmount : titleUrl(value).url) ) }} {{ key == 'space' ?
+
+                                {{ key == 'extensionTypes' ? value[0] : (key == 'lamports' ? toFexedStake(value) : (key
+                                    == 'tokenAmount' ? value.uiAmount : titleUrl(value).url)) }} {{ key == 'space' ?
                                     'byts(s)' : '' }}
                                 {{ key == "lamports" ? '(BTG)' : '' }}
-                      <img v-if="titleUrl(value).type" v-for="(datas,indexs) in titleUrl(value).certificates" :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
-
+                                <img v-if="titleUrl(value).type && !titleUrl(value).assest"
+                                    v-for="(datas, indexs) in titleUrl(value).certificates" :key="indexs"
+                                    :src="datas.img" height="24" class="marginRight8" alt="">
+                                <text v-for="items, indexs in titleUrl(value).certificates" :key="indexs"
+                                    :style="'background-color: ' + items.backColor"
+                                    style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
+                                    {{ items.code }}
+                                </text>
                             </td>
                         </tr>
                     </template>
@@ -47,19 +56,32 @@
                                 titleUrl(item.programId).url }}
                             </td>
                         </tr>
-                        <tr v-if="item.accounts.length !=0">
+                        <tr v-if="item.accounts.length != 0">
                             <td>Account</td>
                             <td class="text-end text-theme " style="cursor: pointer" @click="item.accounts[0]">{{
                                 titleUrl(item.accounts[0]).url }}
-                      <img v-if="titleUrl(item.accounts[0]).type" v-for="(datas,indexs) in titleUrl(item.accounts[0]).certificates" :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
+                                <img v-if="titleUrl(item.accounts[0]).type && !titleUrl(item.accounts[0]).assest"
+                                    v-for="(datas, indexs) in titleUrl(item.accounts[0]).certificates" :key="indexs"
+                                    :src="datas.img" height="24" class="marginRight8" alt="">
+                                <text v-for="items, indexs in titleUrl(item.accounts[0]).certificates" :key="indexs"
+                                    :style="'background-color: ' + items.backColor"
+                                    style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
+                                    {{ items.code }}
+                                </text>
 
                             </td>
                         </tr>
                         <tr v-if="item">
                             <td>Data</td>
-                            <td class="text-end">{{ titleUrl(item.data?item.data:'Note Data').url }}
-                      <img v-if="titleUrl(item.data).type" v-for="(datas,indexs) in titleUrl(item.data).certificates" :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
-
+                            <td class="text-end">{{ titleUrl(item.data ? item.data : 'Note Data').url }}
+                                <img v-if="titleUrl(item.data).type && !titleUrl(item.data).assest"
+                                    v-for="(datas, indexs) in titleUrl(item.data).certificates" :key="indexs"
+                                    :src="datas.img" height="24" class="marginRight8" alt="">
+                                <text v-for="items, indexs in titleUrl(item.data).certificates" :key="indexs"
+                                    :style="'background-color: ' + items.backColor"
+                                    style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
+                                    {{ items.code }}
+                                </text>
                             </td>
                         </tr>
                     </template>

@@ -13,38 +13,44 @@ export const titleUrl = (url) => {
         return {
             url: LOADER_IDS[url],
             type: auth,
-            find: true
+            find: true,
+            assest:false
         };
     }
     if (PROGRAM_INFO_BY_ID[url]) {
         return {
             url: PROGRAM_INFO_BY_ID[url].name,
             type: auth,
-            find: true
+            find: true,
+            assest:false
         };
     }
     if (SPECIAL_IDS[url]) {
         return {
             url: SPECIAL_IDS[url],
             type: auth,
-            find: true
+            find: true,
+            assest:false
         };
     }
     if (SYSVAR_IDS[url]) {
         return {
             url: SYSVAR_IDS[url],
             type: auth,
-            find: true
+            find: true,
+            assest:false
         };
     }
     if (TOKEN_IDS[url]) {
         return {
             url: TOKEN_IDS[url],
             type: auth,
-            find: true
+            find: true,
+            assest:false
         };
     }
-
+    console.log(Authentications,'----22---');
+    
     if (Authentications[url]) {
         return {
             url: Authentications[url].name,
@@ -52,7 +58,10 @@ export const titleUrl = (url) => {
             find: true,
             certificates: Authentications[url].certificates,
             img: Authentications[url].img,
-            symbol: Authentications[url].symbol
+            symbol: Authentications[url].symbol,
+            code:Authentications[url].code,
+            assest:true,
+            backColor:Authentications[url].backColor
         };
     }
     if (url == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz') {
@@ -62,7 +71,8 @@ export const titleUrl = (url) => {
             find: true,
             symbol: 'WBTG',
             certificates: [{'img':'https://pic1.imgdb.cn/item/682da89b58cb8da5c80290c2.png'}],
-            img:'https://pic1.imgdb.cn/item/682da8a958cb8da5c8029118.png'
+            img:'https://pic1.imgdb.cn/item/682da8a958cb8da5c8029118.png',
+            assest:false,
         };
     }
     return {

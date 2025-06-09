@@ -41,9 +41,14 @@
                             </template>
                             <template v-else>
                                 <td>
-                                    <img v-for="items, indexs in item.certificates" :key="indexs"
+                                    <!-- <img v-for="items, indexs in item.certificates" :key="indexs"
                                         :src="items.image_url" height="20" class="marginRight8"
-                                        :title="items.certificate_code">
+                                        :title="items.certificate_code"> -->
+                                    <div style="display: flex;">
+                                        <p v-for="items, indexs in item.certificates" :key="indexs" :style="'background-color: ' + items.backColor" style="border-radius: 5px;padding: 2px 4px;margin-right: 5px;margin-bottom: 0;font-weight: 500;">
+                                            {{ items.certificate_code }}
+                                        </p>
+                                    </div>
                                 </td>
                             </template>
 
@@ -58,10 +63,10 @@
                                 {{ item.holders }}
                             </td>
                             <td>
-                               $ {{ item.market_cap }}
+                                $ {{ come(item.market_cap) }}
                             </td>
                             <td>
-                                {{ item.price ? '$' : '' }} {{ item.price ? item.price : 'N/A' }} 
+                                {{ item.price ? '$' : '' }} {{ item.price ? item.price : 'N/A' }}
                                 <img v-if="item.price_icon" :src="imgUrl + '/' + item.price_icon" height="24"
                                     class="marginRight8" alt="">
                             </td>
@@ -123,11 +128,44 @@ const paginatedHistoryData = computed(() => {
     return historyData.value.slice(start, end);
 });
 tokenList().then((res) => {
-    
+
 
     let showData = res.data.filter(item => item.is_web == 1);
 
     dataArray.value = showData;
+    console.log(showData);
+    for (let i in showData) {
+        for (let j in showData[i].certificates) {
+            switch (showData[i].certificates[j].certificate_code) {
+                case 'Official':
+                    showData[i].certificates[j].backColor = '#229cF2'
+                    break;
+                case 'Unknown':
+                    showData[i].certificates[j].backColor = '#d4d6d7'
+                    break;
+                case 'Unsafe':
+                    showData[i].certificates[j].backColor = '#F61414'
+                    break;
+                case 'VRC10':
+                    showData[i].certificates[j].backColor = '#ffa06f'
+                    break;
+                case 'VRC11':
+                    showData[i].certificates[j].backColor = '#ffa06f'
+                    break;
+                case 'VRC12':
+                    showData[i].certificates[j].backColor = '#ffa06f'
+                    break;
+                case "USDStableCoin":
+                    showData[i].certificates[j].certificate_code = 'Stablecoin'
+                    showData[i].certificates[j].backColor = '#5ba556'
+                    break;
+                case "Stablecoin":
+                    showData[i].certificates[j].backColor = '#5ba556'
+                    break;
+            }
+        }
+    }
+
     historyData.value = showData;
     totalItems.value = showData.length;
     loading.value = true;
@@ -170,5 +208,12 @@ const imageType = (type) => {
             return vrc20
     }
 }
+const come = (num) => {
+    let reg =
+        num.toString().indexOf(".") > -1
+            ? /(\d)(?=(\d{3})+\.)/g
+            : /(\d)(?=(\d{3})+$)/g;
 
+    return num.toString().replace(reg, "$1,");
+}
 </script>

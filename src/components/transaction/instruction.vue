@@ -39,41 +39,52 @@
                                             == 'tokenAmount' ? value.uiAmount : titleUrl(value).url)) }} {{ key == 'space' ?
                                         'byts(s)' : '' }}
                                     {{ key == "lamports" ? '(BTG)' : '' }}
-                                    <img v-if="titleUrl(value).type"
+                                    <img v-if="titleUrl(value).type && !titleUrl(value).assest"
                                         v-for="(datas, indexs) in titleUrl(value).certificates" :key="indexs"
                                         :src="datas.img" height="24" class="marginRight8" alt="">
+                                    <text v-for="items, indexs in titleUrl(value).certificates" :key="indexs"
+                                        :style="'background-color: ' + items.backColor"
+                                        style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
+                                        {{ items.code }}
+                                    </text>
                                 </td>
                             </tr>
 
                             <template v-else>
-                                <template v-if="value" >
+                                <template v-if="value">
                                     <tr v-for="[keys, values] in Object.entries(value)" :key="keys">
-                                    <td>
-                                        {{ capitalize(key == "lamports" ? 'amount' : key) }}.<span
-                                            v-for="[keyChild, valuechild] in Object.entries(keys)" :key="keyChild">
-                                            {{ valuechild }}
-                                        </span>
-                                    </td>
-                                    <td class="text-end"
-                                        :class="typeof titleUrl(values).url == 'string' ? 'text-theme' : ''"
-                                        :style="typeof titleUrl(values).url == 'string' ? 'cursor: pointer' : ''"
-                                        @click="pubbleys(
-                                            keys == 'extensionTypes' ? '' : (keys == 'lamports' ? '' : (keys == 'space' ? '' : (keys == 'decimals' ? '' : (keys == 'tokenAmount' ? '' : values))))
-                                        )">
-                                        {{ keys == 'extensionTypes' ? values[0] : (keys == 'lamports' ?
-                                            toFexedStake(values)
-                                            :
-                                            (keys
-                                                == 'tokenAmount' ? values.uiAmount :(keys == 'lockouts' ? 'data' :  titleUrl(values).url ))) }}
-                                                 {{ keys ==
-                                            'space' ?
-                                            'byts(s)' : '' }}
-                                        {{ keys == "lamports" ? '(BTG)' : '' }}
-                                        <img v-if="titleUrl(values).type"
-                                            v-for="(datas) in titleUrl(values).certificates" :src="datas.img" height="24"
-                                            class="marginRight8" alt="">
-                                    </td>
-                                </tr>
+                                        <td>
+                                            {{ capitalize(key == "lamports" ? 'amount' : key) }}.<span
+                                                v-for="[keyChild, valuechild] in Object.entries(keys)" :key="keyChild">
+                                                {{ valuechild }}
+                                            </span>
+                                        </td>
+                                        <td class="text-end"
+                                            :class="typeof titleUrl(values).url == 'string' ? 'text-theme' : ''"
+                                            :style="typeof titleUrl(values).url == 'string' ? 'cursor: pointer' : ''"
+                                            @click="pubbleys(
+                                                keys == 'extensionTypes' ? '' : (keys == 'lamports' ? '' : (keys == 'space' ? '' : (keys == 'decimals' ? '' : (keys == 'tokenAmount' ? '' : values))))
+                                            )">
+                                            {{ keys == 'extensionTypes' ? values[0] : (keys == 'lamports' ?
+                                                toFexedStake(values)
+                                                :
+                                                (keys
+                                                    == 'tokenAmount' ? values.uiAmount : (keys == 'lockouts' ? 'data' :
+                                                        titleUrl(values).url))) }}
+                                            {{ keys ==
+                                                'space' ?
+                                                'byts(s)' : '' }}
+                                            {{ keys == "lamports" ? '(BTG)' : '' }}
+                                            <img v-if="titleUrl(values).type && !titleUrl(values).assest"
+                                                v-for="(datas, indexs) in titleUrl(values).certificates" :key="indexs"
+                                                :src="datas.img" height="24" class="marginRight8" alt="">
+                                            <text v-for="items, indexs in titleUrl(values).certificates" :key="indexs"
+                                                :style="'background-color: ' + items.backColor"
+                                                style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
+                                                {{ items.code }}
+                                            </text>
+                                        </td>
+                                    </tr>
                                 </template>
                             </template>
                             <!-- <tr v-else>
@@ -102,18 +113,28 @@
                             <!-- {{ item.accounts[0] }} -->
                             <td class="text-end text-theme " style="cursor: pointer" @click="item.accounts[0]">{{
                                 titleUrl(item.accounts[0]).url }}
-                                <img v-if="titleUrl(item.accounts[0]).type"
+                                <img v-if="titleUrl(item.accounts[0]).type && !titleUrl(item.accounts[0]).assest"
                                     v-for="(datas, indexs) in titleUrl(item.accounts[0]).certificates" :key="indexs"
                                     :src="datas.img" height="24" class="marginRight8" alt="">
+                                <text v-for="items, indexs in titleUrl(item.accounts[0]).certificates" :key="indexs"
+                                    :style="'background-color: ' + items.backColor"
+                                    style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
+                                    {{ items.code }}
+                                </text>
 
                             </td>
                         </tr>
                         <tr v-if="item">
                             <td>Data</td>
                             <td class="text-end">{{ titleUrl(item.data ? item.data : 'Note Data').url }}
-                                <img v-if="titleUrl(item.data).type"
+                                <img v-if="titleUrl(item.data).type && !titleUrl(item.data).assest"
                                     v-for="(datas, indexs) in titleUrl(item.data).certificates" :key="indexs"
                                     :src="datas.img" height="24" class="marginRight8" alt="">
+                                <text v-for="items, indexs in titleUrl(item.data).certificates" :key="indexs"
+                                    :style="'background-color: ' + items.backColor"
+                                    style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
+                                    {{ items.code }}
+                                </text>
 
                             </td>
                         </tr>

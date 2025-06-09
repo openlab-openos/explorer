@@ -26,8 +26,10 @@
                         <tr>
                             <td>{{ $t("account.owning_token") }}</td>
                             <td class="text-end text-theme" @click="pubbtx(getMint)" style="cursor: pointer"> {{
-                                titleUrl(getMint).url }} 
-                                <img v-if="titleUrl(getMint).type" v-for="(datas,indexs) in titleUrl(getMint).certificates" :src="datas.img" :key="indexs" height="24" class="marginRight8" alt=""> 
+                                titleUrl(getMint).url }}
+                                <img v-if="titleUrl(getMint).type"
+                                    v-for="(datas, indexs) in titleUrl(getMint).certificates" :src="datas.img"
+                                    :key="indexs" height="24" class="marginRight8" alt="">
                             </td>
                         </tr>
                         <tr>
@@ -38,12 +40,37 @@
                         <tr>
                             <td>{{ $t("account.Owner") }} </td>
                             <td class="text-end text-theme" @click="pubbtx(owners)" style="cursor: pointer"> {{
-                                titleUrl(owners).url }} <img v-if="titleUrl(owners).type" v-for="(datas,indexs) in titleUrl(owners).certificates" :key="indexs" :src="datas.img" height="24" class="marginRight8" alt=""> </td>
+                                titleUrl(owners).url }}
+                                <!-- <img v-if="titleUrl(owners).type"
+                                    v-for="(datas, indexs) in titleUrl(owners).certificates" :key="indexs"
+                                    :src="datas.img" height="24" class="marginRight8" alt=""> -->
+                                <img v-if="titleUrl(owners).type && !titleUrl(owners).assest"
+                                    v-for="(datas, indexs) in titleUrl(owners).certificates" :key="indexs"
+                                    :src="datas.img" height="24" class="marginRight8" alt="">
+                                <text v-for="items, indexs in titleUrl(owners).certificates" :key="indexs"
+                                    :style="'background-color: ' + items.backColor"
+                                    style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
+                                    {{ items.code }}
+                                </text>
+                            </td>
+
                         </tr>
                         <tr>
                             <td>{{ $t("transaction.program") }} </td>
                             <td class="text-end text-theme" @click="pubbtx(owners)" style="cursor: pointer"> {{
-                                titleUrl(program).url }} <img v-if="titleUrl(program).type" v-for="(datas,indexs) in titleUrl(program).certificates" :key="indexs" :src="datas.img" height="24" class="marginRight8" alt=""></td>
+                                titleUrl(program).url }}
+                                <!-- <img v-if="titleUrl(program).type"
+                                    v-for="(datas, indexs) in titleUrl(program).certificates" :key="indexs"
+                                    :src="datas.img" height="24" class="marginRight8" alt=""> -->
+                                <img v-if="titleUrl(program).type && !titleUrl(program).assest"
+                                    v-for="(datas, indexs) in titleUrl(program).certificates" :key="indexs"
+                                    :src="datas.img" height="24" class="marginRight8" alt="">
+                                <text v-for="items, indexs in titleUrl(program).certificates" :key="indexs"
+                                    :style="'background-color: ' + items.backColor"
+                                    style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
+                                    {{ items.code }}
+                                </text>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -117,7 +144,7 @@ const tokenRwquest = async () => {
         owner.value = res.result.value.owner;
 
         const res2 = await solanagetAccount(url.value, owner.value);
-        
+
 
         tokenData.value = res2;
         data.value = res2;
@@ -144,7 +171,7 @@ const tokenRwquest = async () => {
 };
 
 const mintReauest = async (url) => {
-    
+
 
     await chainRequest(
         {

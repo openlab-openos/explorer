@@ -15,11 +15,11 @@
                         </tr>
                         <tr>
                             <td>{{ $t("account.name") }} </td>
-                            <td class="text-end">  {{ mintToken.name ? mintToken.name  :'N/A' }} </td>
+                            <td class="text-end"> {{ mintToken.name ? mintToken.name : 'N/A' }} </td>
                         </tr>
                         <tr>
                             <td>{{ $t("account.symbol") }} </td>
-                            <td class="text-end">  {{ mintToken.symbol ? mintToken.symbol  :'N/A' }} </td>
+                            <td class="text-end"> {{ mintToken.symbol ? mintToken.symbol : 'N/A' }} </td>
                         </tr>
                         <tr>
                             <td>{{ $t("transaction.Decimals") }} </td>
@@ -44,9 +44,19 @@
                         <tr>
                             <td>{{ $t("account.owner") }} </td>
                             <td class="text-end text-theme" style="cursor: pointer" @click="pubbleys(paramsId)"> {{
-                                titleUrl(paramsId).url }} 
-                                 <img v-if="titleUrl(paramsId).type" v-for="(datas,indexs) in titleUrl(paramsId).certificates" :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
-                                </td>
+                                titleUrl(paramsId).url }}
+                                <!-- <img v-if="titleUrl(paramsId).type"
+                                    v-for="(datas, indexs) in titleUrl(paramsId).certificates" :key="indexs"
+                                    :src="datas.img" height="24" class="marginRight8" alt=""> -->
+                                <img v-if="titleUrl(paramsId).type && !titleUrl(paramsId).assest"
+                                    v-for="(datas, indexs) in titleUrl(paramsId).certificates" :key="indexs"
+                                    :src="datas.img" height="24" class="marginRight8" alt="">
+                                <text v-for="items, indexs in titleUrl(paramsId).certificates" :key="indexs"
+                                    :style="'background-color: ' + items.backColor"
+                                    style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
+                                    {{ items.code }}
+                                </text>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -64,17 +74,21 @@
                             <td>{{ $t("account.foundry_license") }} </td>
                             <td class="text-end text-theme" :style="pubbleys ? 'cursor: pointer' : ''"
                                 @click="pubbtx(pubbleys)"> {{
-                                    !pubbleys ? "N/A" : titleUrl(pubbleys).url }}  
-                                 <img v-if="titleUrl(pubbleys).type" v-for="(datas,indexs) in titleUrl(pubbleys).certificates" :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
+                                    !pubbleys ? "N/A" : titleUrl(pubbleys).url }}
+                                <img v-if="titleUrl(pubbleys).type"
+                                    v-for="(datas, indexs) in titleUrl(pubbleys).certificates" :key="indexs"
+                                    :src="datas.img" height="24" class="marginRight8" alt="">
 
-                                </td>
+                            </td>
                         </tr>
                         <tr>
                             <td>{{ $t("account.freeze_authorization") }} </td>
                             <td class="text-end"> {{ tokenData.freezeAuthority == null ? "N/A" :
-                                titleUrl(tokenData.freezeAuthority).url }}   
-                                <img v-if="titleUrl(tokenData.freezeAuthority).type" v-for="(datas,indexs) in titleUrl(tokenData.freezeAuthority).certificates" :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
-                             </td>
+                                titleUrl(tokenData.freezeAuthority).url }}
+                                <img v-if="titleUrl(tokenData.freezeAuthority).type"
+                                    v-for="(datas, indexs) in titleUrl(tokenData.freezeAuthority).certificates"
+                                    :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -132,11 +146,11 @@ const tokenRwquest = async () => {
     };
     await chainRequest(method).then(res => {
         paramsId.value = res.result.value.owner;
-        
+
 
         try {
             solanaRequest(url.value, res.result.value.owner).then(res => {
-                
+
                 tokenData.value = res;
 
                 if (res.mintAuthority) {
@@ -144,10 +158,10 @@ const tokenRwquest = async () => {
 
                     let mintAuthority = BigInt(mintAuthorit);
                     pubbleys.value = new PublicKey(mintAuthority);
-                    
+
 
                 }
-                
+
 
                 if (res.address) {
                     let addresses = res.address._bn;
@@ -156,7 +170,7 @@ const tokenRwquest = async () => {
                 }
             });
             metaRequest(url.value, res.result.value.owner).then(res => {
-                
+
                 mintToken.value = res;
             });
         } catch (err) {
@@ -191,7 +205,7 @@ const numberHeld = async () => {
     }
     chainRequest(method).then(res => {
 
-        
+
         if (res.err) {
             holdNumber.value = 0;
         } else {

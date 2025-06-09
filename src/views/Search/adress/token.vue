@@ -8,12 +8,18 @@
             <!-- <text> {{ token_name ? titleUrl(token_name).url : '' }} {{ $t("account.token") }} -->
             <text>
                 {{ token_name ? (titleUrl(url).type ? titleUrl(url).url : (token_name == url ? 'Token' : token_name))
-                : 'Token' }}
+                    : 'Token' }}
                 <!-- {{ titleUrl(url).type }} -->
                 <!-- <img v-if="titleUrl(url).type" v-for="item, index in titleUrl(url).certificates" :src="item.img"
                     :key="index" height="24" alt="" class="marginRight10"> -->
-                <img v-if="titleUrl(url).type" v-for="item, index in titleUrl(url).certificates" :src="item.img"
-                    :key="index" height="24" alt="" class="marginRight10">
+                <img v-if="titleUrl(url).type && !titleUrl(url).assest"
+                    v-for="item, index in titleUrl(url).certificates" :src="item.img" :key="index" height="24" alt=""
+                    class="marginRight10">
+                <text v-for="items, indexs in titleUrl(url).certificates" :key="indexs"
+                    :style="'background-color: ' + items.backColor"
+                    style="border-radius: 5px;padding: 2px 4px;margin: 0px 5px 0 0;font-weight: 500;font-size: 16px;">
+                    {{ items.code }}
+                </text>
             </text>
         </h3>
         <div class="marginTOP-50">
@@ -39,7 +45,9 @@
                             </tr>
                             <tr>
                                 <td>{{ $t("account.symbol") }} </td>
-                                <td class="text-end"> {{mintToken?( mintToken.symbol ? mintToken.symbol : 'N/A') :'N/A' }} </td>
+                                <td class="text-end"> {{ mintToken ? (mintToken.symbol ? mintToken.symbol : 'N/A') :
+                                    'N/A'
+                                }} </td>
                                 <!-- <td class="text-end"> {{ mintToken.symbol ? mintToken.symbol : 'N/A' }} </td> -->
                             </tr>
                             <tr>
@@ -66,9 +74,14 @@
                                 <td>{{ $t("account.owner") }} </td>
                                 <td class="text-end text-theme" style="cursor: pointer" @click="pubbtx(paramsId)"> {{
                                     titleUrl(paramsId).url }}
-                                    <img v-if="titleUrl(paramsId).type"
+                                    <img v-if="titleUrl(paramsId).type && !titleUrl(paramsId).assest"
                                         v-for="(datas, indexs) in titleUrl(paramsId).certificates" :key="indexs"
                                         :src="datas.img" height="24" class="marginRight8" alt="">
+                                    <text v-for="items, indexs in titleUrl(paramsId).certificates" :key="indexs"
+                                        :style="'background-color: ' + items.backColor"
+                                        style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
+                                        {{ items.code }}
+                                    </text>
                                 </td>
                             </tr>
                         </tbody>
@@ -89,9 +102,15 @@
                                 <td class="text-end text-theme" :style="pubbleys ? 'cursor: pointer' : ''"
                                     @click="pubbtx(pubbleys)"> {{
                                         !pubbleys ? "N/A" : titleUrl(pubbleys).url }}
-                                    <img v-if="titleUrl(pubbleys).type"
-                                        v-for="(datas, indexs) in titleUrl(pubbleys).certificates" :key="indexs"
-                                        :src="datas.img" height="24" class="marginRight10" alt="">
+                                    <img v-if="titleUrl(pubbleys).type && !titleUrl(pubbleys).assest"
+                                        v-for="(datas, indexs) in titleUrl(pubbleys).certificates"
+                                        :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
+                                    <text
+                                        v-for="items, indexs in titleUrl(pubbleys).certificates"
+                                        :key="indexs" :style="'background-color: ' + items.backColor"
+                                        style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
+                                        {{ items.code }}
+                                    </text>
                                 </td>
                             </tr>
                             <tr>
@@ -137,8 +156,7 @@
                 </card-body>
             </card>
         </div> -->
-
-        <cardView v-if="url" :url="url" />
+        <!-- <cardView v-if="url" :url="url" /> -->
         <div class="tab-content marginTOP-50">
             <card class="md-3">
                 <card-body class="card-bodys">

@@ -60,9 +60,14 @@
                                 {{ stringcate(
                                     titleUrl(item.source).url
                                 ) }}
-                                <img v-if="titleUrl(item.source).type"
-                                    v-for="(datas, indexs) in titleUrl(item.source).certificates" :key="indexs"
-                                    :src="datas.img" height="24" class="marginRight8" alt="">
+                                <img v-if="titleUrl(item.source).type && !titleUrl(item.source).assest"
+                                    v-for="(datas, indexs) in titleUrl(item.source).certificates"
+                                    :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
+                                <text v-for="items, indexs in titleUrl(item.source).certificates"
+                                    :key="indexs" :style="'background-color: ' + items.backColor"
+                                    style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
+                                    {{ items.code }}
+                                </text>
                             </td>
                             <td style=" text-align: left; cursor: pointer" class="text-theme" @click="
                                 pubbleys(
@@ -73,15 +78,21 @@
                                     titleUrl(item.destination).url
                                 )
                                 }}
-                                <img v-if="titleUrl(item.destination).type"
+                                <img v-if="titleUrl(item.destination).type && !titleUrl(item.destination).assest"
                                     v-for="(datas, indexs) in titleUrl(item.destination).certificates" :key="indexs"
                                     :src="datas.img" height="24" class="marginRight8" alt="">
+                                <text v-for="items, indexs in titleUrl(item.destination).certificates" :key="indexs"
+                                    :style="'background-color: ' + items.backColor"
+                                    style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
+                                    {{ items.code }}
+                                </text>
 
                             </td>
                             <td style=" text-align: left">
                                 {{ item.type == 'token_transfer' ? item.uiAmount :
-                                    (typeof item.uiAmount == 'number' ? come(smartFormatNumber(item.uiAmount / 1000000000)) :
-                                item.uiAmount) }}
+                                    (typeof item.uiAmount == 'number' ? come(smartFormatNumber(item.uiAmount / 1000000000))
+                                        :
+                                        item.uiAmount) }}
                             </td>
                             <td style=" text-align: left;" @click="pubbleys(
                                 item.type == 'token_transfer' ? item.mint : ''
@@ -163,13 +174,13 @@ const fetchOrderData = async () => {
                     arrayData.value.push(data);
                 } else if (etach[etach.length - 1].parsed.type == "transferChecked" && etach[etach.length - 1].programId == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" || etach[etach.length - 1].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c") {
                     console.log(etach);
-                    
+
                     let data = {
                         type: "token_transfer",
                         signature: res[i].result.transaction.signatures[0],
                         source: etach[etach.length - 1].parsed.info.source,
                         destination: etach[etach.length - 1].parsed.info.destination,
-                        uiAmount: etach[etach.length - 1].parsed.info.tokenAmount ? etach[etach.length - 1].parsed.info.tokenAmount.uiAmount  : 0,
+                        uiAmount: etach[etach.length - 1].parsed.info.tokenAmount ? etach[etach.length - 1].parsed.info.tokenAmount.uiAmount : 0,
                         mint: etach[etach.length - 1].parsed.info.mint,
                         blockTime: res[i].result.blockTime,
                     }
@@ -208,7 +219,7 @@ const fetchOrderData = async () => {
                     }
                     arrayData.value.push(data);
                 } else {
-                    nullData.value.push({data:etach,index:i});
+                    nullData.value.push({ data: etach, index: i });
                 }
             }
             // if (res[i].result && res[i].result.transaction.message.instructions.length < 3) {
@@ -217,7 +228,7 @@ const fetchOrderData = async () => {
             // }
         }
         console.log(arrayData.value);
-        
+
         appStore.setTransaction(JSON.stringify(arrayData.value));
     } catch (err) {
         console.error("Error fetching order data:", err);
@@ -283,7 +294,7 @@ const soltResult = (solt) => {
 
 
 const pubbleys = (url) => {
-    
+
 
     if (url) {
         router.push({

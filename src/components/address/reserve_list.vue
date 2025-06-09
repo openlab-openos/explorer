@@ -36,18 +36,35 @@
           <th v-else>{{ $t("account.Owner") }}</th>
         </tr>
         <template v-if="historyData.length != 0">
-          <tr v-for="(item, index) in paginatedHistoryData" :key="index" style="cursor: pointer" @click="detailsFunction(item.child)">
+          <tr v-for="(item, index) in paginatedHistoryData" :key="index" style="cursor: pointer"
+            @click="detailsFunction(item.child)">
             <td>{{ formatTimestamp(item.startTime) }}</td>
             <td>{{ formatTimestamp(item.endTime) }}</td>
             <td>{{ item.futureCount + ' / ' + item.child.length }}</td>
             <td>{{ come(smartFormatNumber(toFexedStake(item.amount))) }}</td>
             <td class="text-theme" v-if="reserveType">
-              {{ titleUrl(item.child[0].mint).type ? titleUrl(item.child[0].mint).url : stringcate(item.child[0].mint) }}
-              <img v-if="titleUrl(item.child[0].mint).type" v-for="(imgItem, index) in titleUrl(item.child[0].mint).certificates" :src="imgItem.img" :key="index" height="24" alt="" class="marginRight10">
+              {{ titleUrl(item.child[0].mint).type ? titleUrl(item.child[0].mint).url : stringcate(item.child[0].mint)
+              }}
+              <img v-if="titleUrl(item.child[0].mint).type && !titleUrl(item.child[0].mint).assest"
+                v-for="(datas, indexs) in titleUrl(item.child[0].mint).certificates" :key="indexs" :src="datas.img"
+                height="24" class="marginRight8" alt="">
+              <text v-for="items, indexs in titleUrl(item.child[0].mint).certificates" :key="indexs"
+                :style="'background-color: ' + items.backColor"
+                style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
+                {{ items.code }}
+              </text>
             </td>
             <td class="text-theme" v-else>
-              {{ titleUrl(item.child[0].owner).type ? titleUrl(item.child[0].owner).url : stringcate(item.child[0].owner) }}
-              <img v-if="titleUrl(item.child[0].owner).type" v-for="(imgItem, index) in titleUrl(item.child[0].owner).certificates" :src="imgItem.img" :key="index" height="24" alt="" class="marginRight10">
+              {{ titleUrl(item.child[0].owner).type ? titleUrl(item.child[0].owner).url :
+                stringcate(item.child[0].owner) }}
+              <img v-if="titleUrl(item.child[0].owner).type && !titleUrl(item.child[0].owner).assest"
+                v-for="(datas, indexs) in titleUrl(item.child[0].owner).certificates" :key="indexs" :src="datas.img"
+                height="24" class="marginRight8" alt="">
+              <text v-for="items, indexs in titleUrl(item.child[0].owner).certificates" :key="indexs"
+                :style="'background-color: ' + items.backColor"
+                style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
+                {{ items.code }}
+              </text>
             </td>
           </tr>
         </template>
@@ -60,7 +77,8 @@
       {{ $t("account.available") }}
     </div>
     <div class="justify-end padding-10" v-if="historyData.length != 0">
-      <el-pagination background layout="prev, pager, next" :hide-on-single-page="true" :current-page="currentPage" :page-size="pageSize" :total="totalItems" @current-change="handlePageChange" />
+      <el-pagination background layout="prev, pager, next" :hide-on-single-page="true" :current-page="currentPage"
+        :page-size="pageSize" :total="totalItems" @current-change="handlePageChange" />
     </div>
   </div>
 </template>
@@ -77,6 +95,7 @@ import {
 
 import * as echarts from 'echarts';
 import moment from 'moment';
+import { useRouter } from 'vue-router';
 
 import { useAppVariableStore } from '@/stores/app-variable';
 
@@ -118,7 +137,7 @@ const paginatedHistoryData = computed(() => {
   const end = start + pageSize.value;
   return historyData.value.slice(start, end);
 });
-
+const router = useRouter();
 const totalItems = ref(0);
 
 const handlePageChange = (newPage) => {
@@ -139,7 +158,7 @@ onMounted(async () => {
   setTimeout(() => {
     loading.value = false;
   }, 3000);
-  
+
   let data;
   data = await requestList({
     "jsonrpc": "2.0",
@@ -163,7 +182,7 @@ onMounted(async () => {
   for (let i = 0; i < data.length; i++) {
     data[i].metadata = decodeLockAccount(data[i].account.data);
   }
-  
+
   historyData.value = groupBySerialNumber(data);
   initChart();
   totalItems.value = historyData.value.length;
@@ -172,7 +191,7 @@ onMounted(async () => {
 const groupBySerialNumber = (arr) => {
   const grouped = {};
   const currentTime = Math.floor(Date.now() / 1000);
-  
+
   arr.forEach(item => {
     const key = item.metadata.serialNumber;
     if (!grouped[key]) {
@@ -189,10 +208,10 @@ const groupBySerialNumber = (arr) => {
         unreleasedArray: []
       };
     }
-    
+
     grouped[key].child.push(item.metadata);
     grouped[key].amount += parseFloat(item.metadata.amount) || 0;
-    
+
     if (parseInt(item.metadata.endTime) > currentTime) {
       grouped[key].released += parseFloat(item.metadata.amount) || 0;
       grouped[key].releasedArray.push({
@@ -225,31 +244,31 @@ const groupBySerialNumber = (arr) => {
         startDay: timeSome(item.metadata.startTime),
         endDay: timeSome(item.metadata.endTime)
       });
-      
+
       if (!item.metadata.isUnlocked) {
         grouped[key].unreleased += parseFloat(item.metadata.amount) || 0;
       }
     }
   });
-  
+
   const mergedReleasedArray = [];
   const unmergedReleasedArray = [];
   Object.values(grouped).forEach(group => {
     mergedReleasedArray.push(...group.releasedArray);
     unmergedReleasedArray.push(...group.unreleasedArray);
   });
-  
+
   releasedArray.value = mergedReleasedArray;
   unreleasedArray.value = unmergedReleasedArray;
   echartReleased.value = amountFunction(mergedReleasedArray, true);
   echartUnreleased.value = amountFunction(unmergedReleasedArray, false);
-  
+
   return Object.values(grouped);
 };
 
 const detailsFunction = (data) => {
   sessionStorage.setItem('details', JSON.stringify(data));
-  const router = useRouter();
+
   router.push({ name: 'details' });
 };
 
@@ -282,16 +301,6 @@ const percent = (lod, nem) => {
   return (lod / nem * 100).toFixed(5);
 };
 
-const pubbtx = (url) => {
-  const router = useRouter();
-  router.push({ name: 'address', params: { url } });
-};
-
-const transaction = (item) => {
-  const router = useRouter();
-  router.push({ name: 'tx', params: { item } });
-};
-
 const stringcate = (str) => {
   if (str.length < 10) return str;
   return str.slice(0, 8) + '...' + str.slice(-8);
@@ -321,16 +330,16 @@ const amountReserve = (item, boolean) => {
 const initChart = () => {
   const chartDom = document.getElementById('main');
   if (!chartDom) return;
-  
+
   // 销毁旧实例
   if (chartInstance.value) {
     chartInstance.value.dispose();
   }
-  
+
   // 初始化新实例
   chartInstance.value = echarts.init(chartDom, null, { height: 300 });
   updateDateRange(selectAddress.value);
-  
+
   // 监听选择变化
   watch(
     selectAddress,
@@ -350,7 +359,7 @@ const updateDateRange = (value) => {
     startOffset = -2;
     endOffset = 4;
   }
-  
+
   weekArray.value = getWeekDates(startOffset, endOffset);
   echartReleased.value = amountFunction(releasedArray.value, true);
   echartUnreleased.value = amountFunction(unreleasedArray.value, false);
@@ -359,7 +368,7 @@ const updateDateRange = (value) => {
 
 const updateChart = () => {
   if (!chartInstance.value) return;
-  
+
   chartInstance.value.setOption({
     title: { show: false },
     tooltip: {},
@@ -410,33 +419,33 @@ function getWeekDates(index, indext) {
 const amountFunction = (data, boolean) => {
   const weeklyAmounts = new Map();
   weekArray.value.forEach(day => weeklyAmounts.set(day, 0));
-  
+
   data.forEach(item => {
     const dateKey = boolean ? 'startDay' : 'endDay';
     const targetDay = item[dateKey];
     const amount = parseFloat(item.amount) || 0;
-    
+
     if (weeklyAmounts.has(targetDay)) {
       const currentAmount = weeklyAmounts.get(targetDay);
       weeklyAmounts.set(targetDay, currentAmount + amount);
     }
   });
-  
+
   return Array.from(weeklyAmounts.values());
 }
 </script>
 
 <style scoped>
 .releasedBox {
-    width: 90%;
-    margin: 10px auto;
-    display: flex;
-    justify-content: space-between;
+  width: 90%;
+  margin: 10px auto;
+  display: flex;
+  justify-content: space-between;
 }
 
 .EChartsBox {
-    width: 90%;
-    margin: auto;
-    padding: 4rem 2rem;
+  width: 90%;
+  margin: auto;
+  padding: 4rem 2rem;
 }
 </style>

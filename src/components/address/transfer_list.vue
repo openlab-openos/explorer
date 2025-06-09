@@ -79,12 +79,27 @@
                                     .parsed.info.source).url
 
                             }}
-                            <img v-if="titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
+                            <!-- <img v-if="titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
                                 .parsed.info.destination : item.result.transaction.message.instructions[1]
                                     .parsed.info.destination).type" v-for="(datas, indexs) in titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
                                         .parsed.info.destination : item.result.transaction.message.instructions[1]
                                             .parsed.info.destination).certificates" :key="indexs" :src="datas.img"
-                                height="24" class="marginRight8" alt="">
+                                height="24" class="marginRight8" alt=""> -->
+                            <img v-if="titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
+                                .parsed.info.destination : item.result.transaction.message.instructions[1]
+                                    .parsed.info.destination).type && titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
+                                        .parsed.info.destination : item.result.transaction.message.instructions[1]
+                                            .parsed.info.destination).assest" v-for="(datas, indexs) in titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
+                                                .parsed.info.destination : item.result.transaction.message.instructions[1]
+                                                    .parsed.info.destination).certificates" :key="indexs"
+                                :src="datas.img" height="24" class="marginRight8" alt="">
+                            <text v-for="items, indexs in titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
+                                .parsed.info.destination : item.result.transaction.message.instructions[1]
+                                    .parsed.info.destination).certificates" :key="indexs"
+                                :style="'background-color: ' + items.backColor"
+                                style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
+                                {{ items.code }}
+                            </text>
 
                         </td>
                         <td style=" text-align: left; cursor: pointer" :class="item.result.transaction.message.instructions.length == 1 ?
@@ -109,12 +124,27 @@
                                     .parsed.info.destination).url
 
                             }}
-                            <img v-if="titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
+                            <!-- <img v-if="titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
                                 .parsed.info.destination : item.result.transaction.message.instructions[1]
                                     .parsed.info.destination).type" v-for="(datas, indexs) in titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
                                         .parsed.info.destination : item.result.transaction.message.instructions[1]
                                             .parsed.info.destination).certificates" :key="indexs" :src="datas.img"
-                                height="24" class="marginRight8" alt="">
+                                height="24" class="marginRight8" alt=""> -->
+                            <img v-if="titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
+                                .parsed.info.destination : item.result.transaction.message.instructions[1]
+                                    .parsed.info.destination).type && titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
+                                        .parsed.info.destination : item.result.transaction.message.instructions[1]
+                                            .parsed.info.destination).assest" v-for="(datas, indexs) in titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
+                                                .parsed.info.destination : item.result.transaction.message.instructions[1]
+                                                    .parsed.info.destination).certificates" :key="indexs"
+                                :src="datas.img" height="24" class="marginRight8" alt="">
+                            <text v-for="items, indexs in titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
+                                .parsed.info.destination : item.result.transaction.message.instructions[1]
+                                    .parsed.info.destination).certificates" :key="indexs"
+                                :style="'background-color: ' + items.backColor"
+                                style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
+                                {{ items.code }}
+                            </text>
                         </td>
                         <td style=" text-align: left; cursor: pointer" class="text-theme" @click="slot(
 
@@ -137,14 +167,33 @@
                                 titleUrl(item.result.transaction.message.instructions[0]
                                     .programId).type : titleUrl(item.result.transaction.message.instructions[1]
                                         .programId).type" src="../../../src//assets//renzheng.png" height="24" alt=""> -->
-                            <img v-if="item.result.transaction.message.instructions.length == 1 ?
+                            <!-- <img v-if="item.result.transaction.message.instructions.length == 1 ?
                                 titleUrl(item.result.transaction.message.instructions[0]
                                     .programId).type : titleUrl(item.result.transaction.message.instructions[1]
                                         .programId).type" v-for="(datas, indexs) in item.result.transaction.message.instructions.length == 1 ?
                                             titleUrl(item.result.transaction.message.instructions[0]
                                                 .programId).certificates : titleUrl(item.result.transaction.message.instructions[1]
                                                     .programId).certificates" :key="indexs" :src="datas.img"
+                                height="24" class="marginRight8" alt=""> -->
+                            <img v-if="item.result.transaction.message.instructions.length == 1 ?
+                                titleUrl(item.result.transaction.message.instructions[0]
+                                    .programId).type : titleUrl(item.result.transaction.message.instructions[1]
+                                        .programId).type && item.result.transaction.message.instructions.length == 1 ?
+                                    !titleUrl(item.result.transaction.message.instructions[0]
+                                        .programId).assest : !titleUrl(item.result.transaction.message.instructions[1]
+                                            .programId).assest" v-for="(datas, indexs) in item.result.transaction.message.instructions.length == 1 ?
+                                                titleUrl(item.result.transaction.message.instructions[0]
+                                                    .programId).certificates : titleUrl(item.result.transaction.message.instructions[1]
+                                                        .programId).certificates" :key="indexs" :src="datas.img"
                                 height="24" class="marginRight8" alt="">
+                            <text v-for="items, indexs in item.result.transaction.message.instructions.length == 1 ?
+                                titleUrl(item.result.transaction.message.instructions[0]
+                                    .programId).certificates : titleUrl(item.result.transaction.message.instructions[1]
+                                        .programId).certificates" :key="indexs"
+                                :style="'background-color: ' + items.backColor"
+                                style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
+                                {{ items.code }}
+                            </text>
                         </td>
                         <td>
                             {{ item.result.transaction.message.instructions.length == 1 ?
@@ -177,9 +226,16 @@
                             <!-- <img v-if="titleUrl(item.result.transaction.message.instructions[0]
                                 .parsed.info.mint).type" src="../../../src//assets//renzheng.png" height="24" alt=""> -->
                             <img v-if="titleUrl(item.result.transaction.message.instructions[0]
-                                .parsed.info.mint).type" v-for="(datas, indexs) in titleUrl(item.result.transaction.message.instructions[0]
-                                    .parsed.info.mint).certificates" :key="indexs" :src="datas.img" height="24"
+                                .parsed.info.mint).type && !titleUrl(item.result.transaction.message.instructions[0]
+                                    .parsed.info.mint).assest" v-for="(datas, indexs) in titleUrl(item.result.transaction.message.instructions[0]
+                                        .parsed.info.mint).certificates" :key="indexs" :src="datas.img" height="24"
                                 class="marginRight8" alt="">
+                            <text v-for="items, indexs in titleUrl(item.result.transaction.message.instructions[0]
+                                .parsed.info.mint).certificates" :key="indexs"
+                                :style="'background-color: ' + items.backColor"
+                                style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
+                                {{ items.code }}
+                            </text>
                         </td>
 
                         <td class="text-theme" style="cursor: pointer">
@@ -236,7 +292,7 @@ const paginatedHistoryData = computed(() => {
     const start = (currentPage.value - 1) * pageSize.value;
     const end = start + pageSize.value;
     console.log(historyData.value[0]);
-    
+
     return historyData.value.slice(start, end);
 });
 const totalItems = ref(0);
@@ -266,7 +322,7 @@ onMounted(async () => {
         historyData.value = await requestList('transactions/' + props.url);
 
         totalItems.value = historyData.value.length;
-        
+
         loading.value = true;
 
         paginatedHistoryFunction(historyData.value);
@@ -287,7 +343,7 @@ const pubbtx = (item) => {
 };
 
 const slot = (url) => {
-    
+
 
     if (url) {
         router.push({

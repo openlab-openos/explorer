@@ -4,7 +4,7 @@
             <!-- {{ card_data[0] == null ? $t("account.title") : (card_data[0].executable ? $t("account.program_title") :
                 $t("account.title"))
                  }} -->
-            {{ card_data[0] == null ? "Account": (card_data[0].executable ? $t("Program") : "Account") }}
+            {{ card_data[0] == null ? "Account" : (card_data[0].executable ? $t("Program") : "Account") }}
         </h3>
 
         <div v-if="type">
@@ -41,10 +41,15 @@
                                 <td>{{ $t("account.assigned_program_id") }} </td>
                                 <td class="text-end text-theme" style="cursor: pointer" @click="pubbtx(item.owner)">
                                     {{ titleUrl(item.owner).url }}
-                                    <img v-if="titleUrl(item.owner).type"
-                                        v-for="(datas, indexs) in titleUrl(item.owner).certificates" :key="indexs"
-                                        :src="datas.img" height="24" class="marginRight8" alt="">
-
+                                    <img v-if="titleUrl(item.owner).type && !titleUrl(item.owner).assest"
+                                        v-for="(datas, indexs) in titleUrl(item.owner).certificates"
+                                        :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
+                                    <text
+                                        v-for="items, indexs in titleUrl(item.owner).certificates"
+                                        :key="indexs" :style="'background-color: ' + items.backColor"
+                                        style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
+                                        {{ items.code }}
+                                    </text>
                                 </td>
                             </tr>
                             <tr>
@@ -104,7 +109,8 @@
                         <el-tab-pane :label="$t('navigation.transactions')" name="first">
                             <history-view :url="url"></history-view>
                         </el-tab-pane>
-                        <el-tab-pane v-if="transfersType.urlType == 'Formal' && type && !card_data[0].executable " :label="$t('transfer')" name="second">
+                        <el-tab-pane v-if="transfersType.urlType == 'Formal' && type && !card_data[0].executable"
+                            :label="$t('transfer')" name="second">
                             <transfer-view :url="url" v-if="activeName == 'second'"></transfer-view>
                         </el-tab-pane>
                         <el-tab-pane :label="$t('pledge')" name="third">
@@ -184,7 +190,7 @@ const pubbleys = async (url) => {
         if (cardData.value[0] != null) {
             card_data.value = cardData.value;
             type.value = true
-            
+
         } else {
             type.value = false
         }
@@ -244,7 +250,7 @@ const menufunction = async (url) => {
         }
 
         let datas = await requestList(methods);
- 
+
 
         if (datas) {
             for (let i in datas.value) {
