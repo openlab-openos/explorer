@@ -10,7 +10,9 @@ import {
   useRouter,
 } from 'vue-router';
 
+// @ts-ignore
 import { slideToggle } from '@/composables/slideToggle.js';
+// @ts-ignore
 import i18n from '@/i18n';
 import { useAppOptionStore } from '@/stores/app-option';
 import { useAppStore } from '@/stores/index';
@@ -24,7 +26,6 @@ import my from '../../assets/24x24/my.png';
 import ru from '../../assets/24x24/ru.png';
 import um from '../../assets/24x24/um.png';
 import vn from '../../assets/24x24/vn.png';
-import { chainRequest } from '../../request/chain';
 
 const router = useRouter();
 const appStore = useAppStore();
@@ -49,6 +50,7 @@ const languages = ref([
 
 ]);
 const selectedLanguage = ref();
+// @ts-ignore
 const sessionStorageData = ref(JSON.parse(sessionStorage.getItem('app')));
 
 if (sessionStorageData.value) {
@@ -68,6 +70,7 @@ if (sessionStorageData.value) {
 const nameText = ref("");
 
 // 语言
+// @ts-ignore
 function selectLanguages(indexValue) {
   i18n.global.locale = indexValue;
 }
@@ -96,6 +99,7 @@ function toggleAppSidebarMobileToggled() {
     window.scrollTo(0, 0);
   }
 }
+// @ts-ignore
 function toggleAppHeaderSearch(event) {
   event.preventDefault();
 
@@ -136,6 +140,7 @@ function searchMenu() {
 const selectLanguage = (language: any, abbreviation: any) => {
   selectedLanguage.value = language;
   abbreviationLanguage.value = abbreviation;
+  // @ts-ignore
   appStore.setLanguage(abbreviation);
 
 };
@@ -152,12 +157,15 @@ const selsetClick = (index: number) => {
   selectData.value.map((item, i) => {
     if (i == index) {
       item.type = true;
+      // @ts-ignore
       appStore.setChain(item.url);
+      // @ts-ignore
       appStore.setchainType(item.requestType)
       sessionStorage.setItem("urlType", JSON.stringify({
         urlType: item.requestType,
         url: item.url
-      }));
+      })); // @ts-ignore
+      sessionStorage.setItem('Dev', item.requestType == 'Test' ? 'Dev' : 'Mint' );
       window.location.reload();
 
     } else {
@@ -168,8 +176,10 @@ const selsetClick = (index: number) => {
 }
 
 onMounted(() => {
-  
+
+  // @ts-ignore
   const chainStorg = JSON.parse(sessionStorage.getItem("app"));
+  // @ts-ignore
   const urlType = JSON.parse(sessionStorage.getItem("urlType"));
 
 
@@ -184,6 +194,7 @@ onMounted(() => {
       }
     })
   } else {
+    // @ts-ignore
     appStore.setChain(selectData.value[0].url);
     selectData.value[0].type = true;
     nameText.value = 'Openverse RPC.DEV'
@@ -216,7 +227,7 @@ onMounted(() => {
         <!-- <span class="brand-img">
           <span class="brand-img-text text-theme">H</span>
         </span> -->
-        <img  height="24px" src="https://cdn.openverse.network/brands/openverse/icon_128.png" alt="">
+        <img height="24px" src="https://cdn.openverse.network/brands/openverse/icon_128.png" alt="">
         <span class="brand-text titleBox">OPENVERSE <span class="marks">LIVE</span> </span>
       </RouterLink>
     </div>
@@ -276,8 +287,9 @@ onMounted(() => {
       </div>
       <!-- 节点切换 -->
       <div class="menu-item dropdown dropdown-mobile-full">
-        <a href="#" data-bs-toggle="dropdown" data-bs-display="static" class="menu-link scales" style="white-space: nowrap;">
-          {{nameText}}
+        <a href="#" data-bs-toggle="dropdown" data-bs-display="static" class="menu-link scales"
+          style="white-space: nowrap;">
+          {{ nameText }}
           <!-- <img src="https://cdn.openverse.network/brands/openverse/icon_128.png" width="32" alt=""> -->
           <i class="bi bi-chevron-down" style="margin: 5px;"></i>
         </a>

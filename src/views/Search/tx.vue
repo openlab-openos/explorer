@@ -234,8 +234,6 @@ export default {
         },
       ],
     });
-    console.log(this.historyData.meta.logMessages[0].includes("Vote"));
-
     if (this.historyData) {
       this.instruction = this.historyData.transaction.message.instructions;
       this.innerInstructions = this.historyData.meta.innerInstructions;
@@ -282,7 +280,6 @@ export default {
           },
         ],
       });
-      console.log(this.historyData.meta.logMessages[0].includes("Vote"));
 
       if (this.historyData) {
         if (this.historyData.meta.logMessages[0].includes("Vote")) {
@@ -453,7 +450,8 @@ export default {
           </card>
         </div>
       </div>
-      <div v-if="!preType">
+
+      <div v-if="!preType && historyData">
         <h4 class="marginTOP-50">{{ $t("transaction.instruction") }}</h4>
         <instruction-view :data="instruction" :child="innerInstructions" />
       </div>

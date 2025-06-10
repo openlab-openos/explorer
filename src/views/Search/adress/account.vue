@@ -158,7 +158,11 @@ const apps = getCurrentInstance()
 const menu = ref([]);
 const activeName = ref('first')
 const promaster = apps?.proxy?.$progream;
+console.log(1111);
+
 onMounted(async () => {
+    console.log(1111);
+    
     await pubbleys(props.url)
     await menufunction(props.url);
 
@@ -196,9 +200,13 @@ const pubbleys = async (url) => {
     }
 }
 const requestList = async (object) => {
+    console.log(1111);
+    
     try {
         const response = await chainRequest(object);
         // 解析和处理返回的数据
+        console.log(response);
+        
         return response.result; // 现在这个函数会返回解析后的数据
     } catch (error) {
         return []; // 返回一个空数组或抛出错误取决于你的需求

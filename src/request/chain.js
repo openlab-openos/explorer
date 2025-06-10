@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 const currentUrl = window.location.href;
 
@@ -9,6 +9,8 @@ const GeturlType = JSON.parse(sessionStorage.getItem("urlType"));
 // const urlTypeData = GeturlType ? GeturlType.urlType : (urlType ?  'Test' :  'Formal');
 const urlTypeData = GeturlType ? GeturlType.urlType : (urlType ?  'Test' :  'Formal');
 
+console.log(urlTypeData);
+console.log(chainStorg);
 
 if (urlTypeData === 'Test') {
   if (chainStorg) {
@@ -19,6 +21,7 @@ if (urlTypeData === 'Test') {
     urlType: 'Test',
     url: 'https://api.devnet.openverse.network'
   }));
+
 } else {
   if (chainStorg) {
     chainStorg.chain = ('https://api.mainnet.openverse.network');
