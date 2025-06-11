@@ -1,9 +1,10 @@
 import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
-import vueJsx from '@vitejs/plugin-vue-jsx';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 // import styleTmport from 'vite-plugin-style-import';
-import topLevelAwait from 'vite-plugin-top-level-await'
+import topLevelAwait from 'vite-plugin-top-level-await';
+
+import vue from '@vitejs/plugin-vue';
+import vueJsx from '@vitejs/plugin-vue-jsx';
 
 export default defineConfig({
   plugins: [
@@ -70,6 +71,11 @@ export default defineConfig({
         target: "https://faucet.devnet.openverse.network/",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/airdrop/, ""),
+      },
+      "/api": {
+        target: "https://faucet.devnet.openverse.network/",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
   },

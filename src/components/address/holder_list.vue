@@ -44,7 +44,7 @@
                         </text>
                     </td>
                     <td>
-                        {{ (item.account.data.parsed.info.tokenAmount.uiAmount).toFixed(5) }}
+                        {{ smartFormatNumber(item.account.data.parsed.info.tokenAmount.uiAmount) }}
                     </td>
                     <td>
                         {{ percent(item.account.data.parsed.info.tokenAmount.uiAmount, proportion_amount) }} %
@@ -78,6 +78,7 @@ import { useRouter } from 'vue-router';
 
 import LoadingVue from '../../components/block/loading.vue';
 import { titleUrl } from '../../components/method/title_url';
+import { smartFormatNumber } from '../../components/number/smart';
 import { chainRequest } from '../../request/chain';
 import { order } from '../../request/order';
 import { proportionAmount } from '../method/proportion_account';

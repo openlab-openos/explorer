@@ -260,7 +260,8 @@ const groupBySerialNumber = (arr) => {
 
   releasedArray.value = mergedReleasedArray;
   unreleasedArray.value = unmergedReleasedArray;
-  echartReleased.value = amountFunction(mergedReleasedArray, true);
+  // echartReleased.value = amountFunction(mergedReleasedArray, true);
+  echartReleased.value = amountFunction(unmergedReleasedArray, true);
   echartUnreleased.value = amountFunction(unmergedReleasedArray, false);
 
   return Object.values(grouped);
