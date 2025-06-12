@@ -1,5 +1,10 @@
-import { Connection, PublicKey } from "@solana/web3.js";
-import { getAccount } from "open-token-web3";
+import { getAccount } from 'open-token-web3';
+
+import {
+  Connection,
+  PublicKey,
+} from '@solana/web3.js';
+
 const chainStorg =  JSON.parse(sessionStorage.getItem("app"))
 const chainData =chainStorg ? chainStorg.chain : '';
 export function solanagetAccount(AccountPublicKey, Program) {

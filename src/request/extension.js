@@ -1,5 +1,11 @@
-import { Connection, PublicKey, LAMPORTS_PER_SOL } from "@solana/web3.js";
-import { getMint } from "open-token-web3";
+import { getMint } from 'open-token-web3';
+
+import {
+  Connection,
+  LAMPORTS_PER_SOL,
+  PublicKey,
+} from '@solana/web3.js';
+
 // import { Token, TOKEN_PROGRAM_ID } from '@solana/spl-token';
 
 const chainStorg = JSON.parse(sessionStorage.getItem("app"))

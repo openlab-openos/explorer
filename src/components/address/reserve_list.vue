@@ -18,8 +18,8 @@
     </div>
     <div style="width: 96%; margin: auto; display: flex; justify-content: end;">
       <el-select v-model="selectAddress" placeholder="Select" style="width: 115px">
-        <el-option label="7 Days" value="7" />
-        <el-option label="30 Days" value="30" />
+        <el-option label="One month" value="30" />
+        <el-option label="One year" value="365" />
       </el-select>
     </div>
     <div class="EChartsBox">
@@ -128,7 +128,7 @@ const unreleasedArray = ref([]);
 
 const echartReleased = ref([]);
 const echartUnreleased = ref([]);
-const selectAddress = ref('7'); // 初始值设为value
+const selectAddress = ref('One month'); // 初始值设为value
 const weekArray = ref([]);
 const chartInstance = ref(null); // 保存ECharts实例
 
@@ -182,6 +182,8 @@ onMounted(async () => {
   for (let i = 0; i < data.length; i++) {
     data[i].metadata = decodeLockAccount(data[i].account.data);
   }
+  console.log(data);
+
 
   historyData.value = groupBySerialNumber(data);
   initChart();
@@ -353,12 +355,12 @@ const initChart = () => {
 
 const updateDateRange = (value) => {
   let startOffset, endOffset;
-  if (value === '30') {
+  if (value === '365') {
+    startOffset = -100;
+    endOffset = 264;
+  } else {
     startOffset = -10;
     endOffset = 19;
-  } else {
-    startOffset = -2;
-    endOffset = 4;
   }
 
   weekArray.value = getWeekDates(startOffset, endOffset);

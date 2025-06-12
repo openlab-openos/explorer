@@ -71,16 +71,26 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from "vue";
-import moment from "moment";
-import { order } from "../../request/order";
-import { chainRequest } from "../../request/chain";
-import { proportionAmount } from "../method/proportion_account"
-import { useRouter } from "vue-router"
-import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
-import { useAppStore } from "@/stores/index";
+import {
+  computed,
+  onMounted,
+  ref,
+} from 'vue';
 
-import LoadingVue from "../../components/block/loading.vue"
+import moment from 'moment';
+import { useRouter } from 'vue-router';
+
+import { useAppStore } from '@/stores/index';
+import {
+  clusterApiUrl,
+  Connection,
+  PublicKey,
+} from '@solana/web3.js';
+
+import LoadingVue from '../../components/block/loading.vue';
+import { chainRequest } from '../../request/chain';
+import { order } from '../../request/order';
+import { proportionAmount } from '../method/proportion_account';
 
 const connection = new Connection("https://api.mainnet.openverse.network", "confirmed");
 // const connection = new Connection("https://api.mainnet.openverse.network/api", "confirmed");

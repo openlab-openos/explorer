@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 const solanaApiUrl = "https://api.mainnet.openverse.network";
 // const solanaApiUrl = chainData ? chainData : "https://api.mainnet.openverse.network";
