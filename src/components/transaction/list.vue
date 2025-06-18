@@ -61,10 +61,10 @@
                                     titleUrl(item.source).url
                                 ) }}
                                 <img v-if="titleUrl(item.source).type && !titleUrl(item.source).assest"
-                                    v-for="(datas, indexs) in titleUrl(item.source).certificates"
-                                    :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
-                                <text v-for="items, indexs in titleUrl(item.source).certificates"
-                                    :key="indexs" :style="'background-color: ' + items.backColor"
+                                    v-for="(datas, indexs) in titleUrl(item.source).certificates" :key="indexs"
+                                    :src="datas.img" height="24" class="marginRight8" alt="">
+                                <text v-for="items, indexs in titleUrl(item.source).certificates" :key="indexs"
+                                    :style="'background-color: ' + items.backColor"
                                     style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                     {{ items.code }}
                                 </text>
@@ -165,14 +165,27 @@ const fetchOrderData = async () => {
                     let data = {
                         type: "transfer",
                         signature: res[i].result.transaction.signatures[0],
-                        source: etach[0].parsed.info.source,
+                        source: etach[etach.length - 1].parsed.info.source,
                         destination: etach[0].parsed.info.destination,
-                        uiAmount: etach[0].parsed.info.lamports,
+                        uiAmount: etach[etach.length - 1].parsed.info.lamports,
                         mint: 'BTG',
                         blockTime: res[i].result.blockTime,
                     }
                     arrayData.value.push(data);
                 } else if (etach[etach.length - 1].parsed.type == "transferChecked" && etach[etach.length - 1].programId == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" || etach[etach.length - 1].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c") {
+                    console.log(etach);
+
+                    let data = {
+                        type: "token_transfer",
+                        signature: res[i].result.transaction.signatures[0],
+                        source: etach[etach.length - 1].parsed.info.source,
+                        destination: etach[etach.length - 1].parsed.info.destination,
+                        uiAmount: etach[etach.length - 1].parsed.info.tokenAmount ? etach[etach.length - 1].parsed.info.tokenAmount.uiAmount : 0,
+                        mint: etach[etach.length - 1].parsed.info.mint,
+                        blockTime: res[i].result.blockTime,
+                    }
+                    arrayData.value.push(data);
+                } else if (etach[etach.length - 1].parsed.type == "transfer" && etach[etach.length - 1].programId == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" || etach[etach.length - 1].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c") {
                     console.log(etach);
 
                     let data = {

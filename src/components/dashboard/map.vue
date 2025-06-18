@@ -74,12 +74,23 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { ipAddresses } from "./address";
-import { useAppVariableStore } from "@/stores/app-variable";
-import { chainRequest } from "../../request/minchain";
-import { useAppStore } from "@/stores/index";
-import apexchart from "@/components/plugins/Apexcharts.vue";
+import 'jsvectormap/dist/maps/world.js';
+import 'jsvectormap/dist/jsvectormap.min.css';
+
+import {
+  onMounted,
+  ref,
+} from 'vue';
+
+import jsVectorMap from 'jsvectormap';
+
+import apexchart from '@/components/plugins/Apexcharts.vue';
+import { useAppVariableStore } from '@/stores/app-variable';
+import { useAppStore } from '@/stores/index';
+
+import { chainRequest } from '../../request/minchain';
+import { ipAddresses } from './address';
+
 const country = ref();
 const source = ref();
 const series = ref();

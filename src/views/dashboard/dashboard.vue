@@ -1,19 +1,25 @@
 <script setup>
-import { useAppVariableStore } from "@/stores/app-variable";
-import { onBeforeUnmount, onMounted, ref, watchEffect } from "vue";
-import apexchart from "@/components/plugins/Apexcharts.vue";
-import jsVectorMap from "jsvectormap";
-import "jsvectormap/dist/maps/world.js";
-import "jsvectormap/dist/jsvectormap.min.css";
-import { chainRequest } from "../../request/chain";
-import CountUp from "vue-countup-v3";
-import { useRouter } from "vue-router";
-import { ustdData } from "../../request/ustd";
-import { defineAsyncComponent, getCurrentInstance } from "vue";
-import { useAppStore } from "@/stores/index";
-import i18n from "@/i18n";
-import moment from "moment";
+import {
+  defineAsyncComponent,
+  getCurrentInstance,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watchEffect,
+} from 'vue';
 
+import jsVectorMap from 'jsvectormap';
+import moment from 'moment';
+import CountUp from 'vue-countup-v3';
+import { useRouter } from 'vue-router';
+
+import apexchart from '@/components/plugins/Apexcharts.vue';
+import i18n from '@/i18n';
+import { useAppVariableStore } from '@/stores/app-variable';
+import { useAppStore } from '@/stores/index';
+
+import { chainRequest } from '../../request/chain';
+import { ustdData } from '../../request/ustd';
 
 const appStore = useAppStore();
 const appVariable = useAppVariableStore();
@@ -118,23 +124,27 @@ const getTime = (timestamp) => {
 
 
 const supplyRequest = async (epoch, slot, inepoch, solttime) => {
-  await chainRequest({
-    jsonrpc: "2.0",
-    id: 1,
-    method: "getSupply",
-  })
-    .then((res) => {
-      stubly.value = (
-        JSON.parse(JSON.stringify(res.result.value.total).slice(0, 9)) / 1000000
-      ).toFixed(1);
-      appStore.setStubly(stubly.value);
-      appStore.setStuBlys(res.result.value.total);
+  console.log();
+  if (!requestType.value) {
+    await chainRequest({
+      jsonrpc: "2.0",
+      id: 1,
+      method: "getSupply",
     })
-    .catch((err) => {
-      console.log(err);
-    });
-  pubbley.value = appStore.pubbley;
+      .then((res) => {
+        stubly.value = (
+          JSON.parse(JSON.stringify(res.result.value.total).slice(0, 9)) / 1000000
+        ).toFixed(1);
+        appStore.setStubly(stubly.value);
+        appStore.setStuBlys(res.result.value.total);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    pubbley.value = appStore.pubbley;
 
+
+  }
   server.value = getServerData(epoch, slot, inepoch, solttime);
   // requestType.value = false;
 
@@ -401,14 +411,14 @@ watchEffect(async () => {
   }
   await performanceSamples();
   console.log(response.epoch, response.slotIndex, response.slotsInEpoch, solttime.value);
-  if(response.epoch &&  response.slotIndex && response.slotsInEpoch && solttime.value ){
+  if (response.epoch && response.slotIndex && response.slotsInEpoch && solttime.value) {
     requestType.value = true;
     console.log(123);
-    
+
   } else {
     requestType.value = false;
     console.log(222);
-    
+
   }
   if (requestType.value) {
     await supplyRequest(response.epoch, response.slotIndex, response.slotsInEpoch, solttime.value);
@@ -451,7 +461,7 @@ onBeforeUnmount(() => {
             <apexchart type="bar" width="100%" height="100%" :options="server.chart.options"
               :series="server.chart.series"></apexchart>
           </div>
-          <div class="row" v-if="requestType" >
+          <div class="row" v-if="requestType">
             <div class="col-lg-6 mb-3 mb-lg-0" v-for="(stat, index) in server.stats" :key="index">
               <div class="d-flex align-items-center">
                 <div class="w-50px h-50px">

@@ -69,7 +69,7 @@
                                 </text>
                             </td>
                             <td>
-                                {{ tokenNumber(item.account.data.parsed.info.tokenAmount.uiAmount) }}
+                                {{ come(smartFormatNumber(item.account.data.parsed.info.tokenAmount.uiAmount)) }}
                                 <img v-if="titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).type && !titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).assest"
                                     v-for="(datas, indexs) in titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).certificates"
                                     :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
@@ -108,6 +108,7 @@ import {
 import { useRouter } from 'vue-router';
 
 import { titleUrl } from '../../components/method/title_url';
+import { smartFormatNumber } from '../../components/number/smart';
 import { chainRequest } from '../../request/chain';
 
 const router = useRouter();
@@ -182,6 +183,14 @@ onMounted(async () => {
         }
     }
 })
+const come = (num) => {
+    let reg =
+        num.toString().indexOf(".") > -1
+            ? /(\d)(?=(\d{3})+\.)/g
+            : /(\d)(?=(\d{3})+$)/g;
+
+    return num.toString().replace(reg, "$1,");
+}
 const tokenNumber = (num) => {
     if (typeof num !== 'number') {
         throw new TypeError('The input must be a number.');

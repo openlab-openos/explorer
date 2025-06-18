@@ -115,9 +115,9 @@
                             </text>
                         </td>
                         <td>
-                            {{ toFexedStake(
-                                item.lamports
-                            )
+                            {{ come(smartFormatNumber(
+                                item.lamports/1000000000
+                            ))
                             }}
                         </td>
                         <td style=" text-align: left; " :style="item.token ? 'cursor: pointer' : ''" class="text-theme" @click="slot(
@@ -169,6 +169,7 @@ import moment from 'moment';
 import { useRouter } from 'vue-router';
 
 import LoadingVue from '../../components/block/loading.vue';
+import { smartFormatNumber } from '../../components/number/smart.js';
 import { chainRequest } from '../../request/chain';
 import { order } from '../../request/order';
 import { solanapubbleys } from '../method/solana';
@@ -264,14 +265,14 @@ const HandleList = (listItem) => {
             let quantityType = false;
             if (instructions.length === 1) {
                 primary = firstInstruction?.parsed?.info?.source || '';
-                primaryType = props.type ? (firstInstruction?.parsed?.info?.source == props.url ? true : false) : false;
+                primaryType = props.type ? (firstInstruction?.parsed?.info?.source == props.url ? true : ((firstInstruction?.parsed?.info?.source ==firstInstruction?.parsed?.info?.destination ? true : false)) ) : false;
                 quantity = firstInstruction?.parsed?.info?.destination || '';
                 quantityType = props.type ? (firstInstruction?.parsed?.info?.source == props.url ? ((firstInstruction?.parsed?.info?.destination == props.url ? true : false)) : true) : false;
                 program = firstInstruction?.programId || '';
                 lamports = firstInstruction?.parsed?.info?.tokenAmount ? firstInstruction?.parsed?.info?.tokenAmount?.amount : firstInstruction?.parsed?.info?.lamports;
             } else if (instructions.length >= 2) {
                 primary = instructions[1]?.parsed?.info?.source || '';
-                primaryType = props.type ? (instructions[1]?.parsed?.info?.source == props.url ? true : false) : false ;
+                primaryType = props.type ? (instructions[1]?.parsed?.info?.source == props.url ? true : (instructions[1]?.parsed?.info?.source == instructions[1]?.parsed?.info?.destination ? true : false ) ) : false ;
                 quantity = instructions[1]?.parsed?.info?.destination || '';
                 quantityType = props.type ? (instructions[1]?.parsed?.info?.source == props.url ? (instructions[1]?.parsed?.info?.destination == props.url ? true : false) : true) : false;
                 program = instructions[1]?.programId || '';
