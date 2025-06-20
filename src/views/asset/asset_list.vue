@@ -20,13 +20,14 @@
                             <th style=" text-align: left"> {{ $t("price") }}</th>
                         </tr>
                         <tr v-for="item, index in paginatedHistoryData" :key="index">
-                            <td class="text-theme" style="cursor: pointer;" @click="pubbleys(item.address)">
+                            <td class="text-theme">
                                 <img v-if="item.image_url" :src="item.image_url" height="24" alt=""
                                     class="marginRight8">
                                 <img v-if="B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz"
                                     :src="item.pubkey == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' ? 'https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png' : ''"
                                     width="32" alt="" class="marginRight8">
-                                {{ titleUrl(item.address).url }}
+                                
+                                <text style="cursor: pointer;"  @click="pubbleys(item.address)">{{ titleUrl(item.address).url }}</text>
                                 <!-- <img v-if="titleUrl(item.pubkey).type" src="../../../src//assets//renzheng.png"
                                     height="24" alt=""> -->
                                 <img v-if="titleUrl(item.pubkey).type"

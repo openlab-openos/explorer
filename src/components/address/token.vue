@@ -43,8 +43,9 @@
                         </tr>
                         <tr>
                             <td>{{ $t("account.owner") }} </td>
-                            <td class="text-end text-theme" style="cursor: pointer" @click="pubbleys(paramsId)"> {{
-                                titleUrl(paramsId).url }}
+                            <td class="text-end text-theme">
+                                <text style="cursor: pointer" @click="pubbleys(paramsId)">{{
+                                    titleUrl(paramsId).url }}</text>
                                 <!-- <img v-if="titleUrl(paramsId).type"
                                     v-for="(datas, indexs) in titleUrl(paramsId).certificates" :key="indexs"
                                     :src="datas.img" height="24" class="marginRight8" alt=""> -->
@@ -72,9 +73,9 @@
                     <tbody v-if="tokenData">
                         <tr>
                             <td>{{ $t("account.foundry_license") }} </td>
-                            <td class="text-end text-theme" :style="pubbleys ? 'cursor: pointer' : ''"
-                                @click="pubbtx(pubbleys)"> {{
-                                    !pubbleys ? "N/A" : titleUrl(pubbleys).url }}
+                            <td class="text-end text-theme">
+                                <text :style="pubbleys ? 'cursor: pointer' : ''" @click="pubbtx(pubbleys)">{{
+                                    !pubbleys ? "N/A" : titleUrl(pubbleys).url }}</text>
                                 <img v-if="titleUrl(pubbleys).type"
                                     v-for="(datas, indexs) in titleUrl(pubbleys).certificates" :key="indexs"
                                     :src="datas.img" height="24" class="marginRight8" alt="">

@@ -21,23 +21,25 @@
                     <template v-if="item.parsed">
                         <tr v-if="item.programId">
                             <td>ProgramId</td>
-                            <td class="text-end text-theme " style="cursor: pointer" @click="item.programId">{{
-                                titleUrl(item.programId).url }}
+                            <td class="text-end text-theme ">
+                                <text style="cursor: pointer" @click="item.programId"> {{
+                                    titleUrl(item.programId).url }}</text>
+
                             </td>
                         </tr>
                         <tr v-for="[key, value] in Object.entries(item.parsed.info)" :key="key">
                             <td>{{ capitalize(key == "lamports" ? 'amount' : key) }}
                                 {{ key == "lamports" ? '(BTG)' : '' }}
                             </td>
-                            <td class="text-end" :class="typeof titleUrl(value).url == 'string' ? 'text-theme' : ''"
-                                :style="typeof titleUrl(value).url == 'string' ? 'cursor: pointer' : ''" @click="pubbleys(
+                            <td class="text-end" :class="typeof titleUrl(value).url == 'string' ? 'text-theme' : ''">
+                                <text :style="typeof titleUrl(value).url == 'string' ? 'cursor: pointer' : ''" @click="pubbleys(
                                     key == 'extensionTypes' ? '' : (key == 'lamports' ? '' : (key == 'space' ? '' : (key == 'decimals' ? '' : (key == 'tokenAmount' ? '' : value))))
-                                )">
+                                )">{{ key == 'extensionTypes' ? value[0] : (key == 'lamports' ? toFexedStake(value) :
+                                    (key
+                                        == 'tokenAmount' ? value.uiAmount : titleUrl(value).url)) }} {{ key == 'space' ?
+                                        'byts(s)' : '' }}
+                                    {{ key == "lamports" ? '(BTG)' : '' }}</text>
 
-                                {{ key == 'extensionTypes' ? value[0] : (key == 'lamports' ? toFexedStake(value) : (key
-                                    == 'tokenAmount' ? value.uiAmount : titleUrl(value).url)) }} {{ key == 'space' ?
-                                    'byts(s)' : '' }}
-                                {{ key == "lamports" ? '(BTG)' : '' }}
                                 <img v-if="titleUrl(value).type && !titleUrl(value).assest"
                                     v-for="(datas, indexs) in titleUrl(value).certificates" :key="indexs"
                                     :src="datas.img" height="24" class="marginRight8" alt="">
@@ -52,14 +54,17 @@
                     <template v-if="item.accounts">
                         <tr v-if="item.programId">
                             <td>ProgramId</td>
-                            <td class="text-end text-theme " style="cursor: pointer" @click="item.programId">{{
-                                titleUrl(item.programId).url }}
+                            <td class="text-end text-theme ">
+                                <text style="cursor: pointer" @click="item.programId">{{
+                                    titleUrl(item.programId).url }}</text>
+
                             </td>
                         </tr>
                         <tr v-if="item.accounts.length != 0">
                             <td>Account</td>
-                            <td class="text-end text-theme " style="cursor: pointer" @click="item.accounts[0]">{{
-                                titleUrl(item.accounts[0]).url }}
+                            <td class="text-end text-theme ">
+                                <text style="cursor: pointer" @click="item.accounts[0]">{{
+                                    titleUrl(item.accounts[0]).url }}</text>
                                 <img v-if="titleUrl(item.accounts[0]).type && !titleUrl(item.accounts[0]).assest"
                                     v-for="(datas, indexs) in titleUrl(item.accounts[0]).certificates" :key="indexs"
                                     :src="datas.img" height="24" class="marginRight8" alt="">

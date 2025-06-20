@@ -4,7 +4,7 @@
             <img :src="token_img ? token_img : ''" alt="" class="marginRight10 imgWigth25" v-if="token_img">
             <img v-if="titleUrl(token_name).type" :src="titleUrl(token_name).img" class="marginRight10 imgWigth25">
             <text> {{ $t("account.tokenAccount") }} {{ token_name ? (titleUrl(url).find ? titleUrl(url).url : '') : ''
-            }}
+                }}
                 <img v-if="titleUrl(url).type" v-for="item, index in titleUrl(url).certificates" :src="item.img"
                     :key="index" height="24" alt="" class="marginRight10">
             </text>
@@ -40,14 +40,14 @@
                             </template>
                             <tr>
                                 <td>{{ $t("account.owning_token") }}</td>
-                                <td class="text-end text-theme" @click="pubbtx(getMint)" style="cursor: pointer"> {{
-                                    titleUrl(getMint).url }}
+                                <td class="text-end text-theme">
+                                    <text @click="pubbtx(getMint)" style="cursor: pointer">{{
+                                        titleUrl(getMint).url }}</text>
                                     <img v-if="titleUrl(getMint).type && !titleUrl(getMint).assest"
-                                        v-for="(datas, indexs) in titleUrl(getMint).certificates"
-                                        :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
-                                    <text
-                                        v-for="items, indexs in titleUrl(getMint).certificates"
-                                        :key="indexs" :style="'background-color: ' + items.backColor"
+                                        v-for="(datas, indexs) in titleUrl(getMint).certificates" :key="indexs"
+                                        :src="datas.img" height="24" class="marginRight8" alt="">
+                                    <text v-for="items, indexs in titleUrl(getMint).certificates" :key="indexs"
+                                        :style="'background-color: ' + items.backColor"
                                         style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                         {{ items.code }}
                                     </text>
@@ -58,21 +58,27 @@
                                 <td>{{ $t("account.state") }} </td>
                                 <td class="text-end">{{ tokenData.isFrozen ? $t("account.frozen") :
                                     $t("account.initialize")
-                                    }} </td>
+                                }} </td>
                             </tr>
                             <tr>
                                 <td>{{ $t("account.Owner") }} </td>
-                                <td class="text-end text-theme" @click="pubbtx(owners)" style="cursor: pointer"> {{
-                                    titleUrl(owners).url }} <img v-if="titleUrl(owners).type"
+                                <td class="text-end text-theme">
+                                    <text @click="pubbtx(owners)" style="cursor: pointer">{{
+                                        titleUrl(owners).url }} </text>
+                                    <img v-if="titleUrl(owners).type"
                                         v-for="(datas, indexs) in titleUrl(owners).certificates" :key="indexs"
-                                        :src="datas.img" height="24" class="marginRight8" alt=""> </td>
+                                        :src="datas.img" height="24" class="marginRight8" alt="">
+                                </td>
                             </tr>
                             <tr>
                                 <td>{{ $t("transaction.program") }} </td>
-                                <td class="text-end text-theme" @click="pubbtx(owner)" style="cursor: pointer"> {{
-                                    titleUrl(owner).url }} <img v-if="titleUrl(owner).type"
+                                <td class="text-end text-theme">
+                                    <text @click="pubbtx(owner)" style="cursor: pointer">{{
+                                        titleUrl(owner).url }}</text>
+                                    <img v-if="titleUrl(owner).type"
                                         v-for="(datas, indexs) in titleUrl(owner).certificates" :key="indexs"
-                                        :src="datas.img" height="24" class="marginRight8" alt=""></td>
+                                        :src="datas.img" height="24" class="marginRight8" alt="">
+                                </td>
                             </tr>
                         </tbody>
                     </table>

@@ -23,24 +23,27 @@
             </tr>
             <template v-if="loading">
                 <tr v-for="(item, index) in paginatedHistoryData" :key="index">
-                    <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.pubkey)">
-                        {{ item.pubkey }}
+                    <td class="text-theme">
+                        <text style="cursor: pointer" @click="pubbtx(item.pubkey)">{{ item.pubkey }}</text>
+
                     </td>
                     <!-- <template v-if="item.account.data.parsed.info.stake"> -->
-                    <td class="text-theme" style="cursor: pointer"
-                        @click="pubbtx(item.account.data.parsed.info.stake ? item.account.data.parsed.info.stake.delegation.voter : '')">
-                        {{ item.account.data.parsed.info.stake ? item.account.data.parsed.info.stake.delegation.voter :
-                        'N/A' }}
+                    <td class="text-theme">
+                        <text style="cursor: pointer"
+                            @click="pubbtx(item.account.data.parsed.info.stake ? item.account.data.parsed.info.stake.delegation.voter : '')">
+                            {{ item.account.data.parsed.info.stake ?
+                                item.account.data.parsed.info.stake.delegation.voter :
+                            'N/A' }}</text>
                         <!-- item.account.data.parsed.info.stake.delegation.voter -->
                     </td>
                     <!-- </template> -->
-                     <td v-if="item.account.data.parsed.type == 'initialized'">
+                    <td v-if="item.account.data.parsed.type == 'initialized'">
                         {{ percent(item.account.lamports ?
-                            item.account.lamports/1000000000 : 'N/A') }}
-                     </td>
+                            item.account.lamports / 1000000000 : 'N/A') }}
+                    </td>
                     <td v-else>
                         {{ percent(item.account.data.parsed.info.stake ?
-                            item.account.data.parsed.info.stake.delegation.stake/1000000000 : 'N/A') }}
+                            item.account.data.parsed.info.stake.delegation.stake / 1000000000 : 'N/A') }}
                     </td>
                     <td>
                         {{ item.account.data.parsed.type }}
@@ -173,7 +176,7 @@ const stateFunction = async (url) => {
     const userPubKey = new PublicKey(url);
     try {
         const res = await connection.getStakeActivation(userPubKey)
-        
+
         return res.state;
     } catch (err) {
         console.log(err);
@@ -206,7 +209,7 @@ const timeSome = (time) => {
 
 const percent = (num) => {
 
-        if (typeof num !== 'number') {
+    if (typeof num !== 'number') {
 
         return num;
     }

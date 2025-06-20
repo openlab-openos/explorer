@@ -16,8 +16,9 @@
                     <template v-if="item.parsed?.info">
                         <tr v-if="item.programId">
                             <td>ProgramId</td>
-                            <td class="text-end text-theme " style="cursor: pointer" @click="item.programId">{{
-                                titleUrl(item.programId).url }}
+                            <td class="text-end text-theme ">
+                                <text style="cursor: pointer" @click="item.programId">{{
+                                    titleUrl(item.programId).url }}</text>
                             </td>
                         </tr>
 
@@ -31,15 +32,18 @@
                                         {{ values }}
                                     </span>
                                 </td>
-                                <td class="text-end" :class="typeof titleUrl(value).url == 'string' ? 'text-theme' : ''"
-                                    :style="typeof titleUrl(value).url == 'string' ? 'cursor: pointer' : ''" @click="pubbleys(
-                                        key == 'extensionTypes' ? '' : (key == 'lamports' ? '' : (key == 'space' ? '' : (key == 'decimals' ? '' : (key == 'tokenAmount' ? '' : value))))
-                                    )">
-                                    {{ key == 'extensionTypes' ? value[0] : (key == 'lamports' ? toFexedStake(value)
-                                        :
-                                        (key
-                                            == 'tokenAmount' ? value.uiAmount : titleUrl(value).url)) }} {{ key == 'space' ?
-                                        'byts(s)' : '' }}
+                                <td class="text-end"
+                                    :class="typeof titleUrl(value).url == 'string' ? 'text-theme' : ''">
+                                    <text :style="typeof titleUrl(value).url == 'string' ? 'cursor: pointer' : ''"
+                                        @click="pubbleys(
+                                            key == 'extensionTypes' ? '' : (key == 'lamports' ? '' : (key == 'space' ? '' : (key == 'decimals' ? '' : (key == 'tokenAmount' ? '' : value))))
+                                        )">{{ key == 'extensionTypes' ? value[0] : (key == 'lamports' ?
+                                            toFexedStake(value)
+                                            :
+                                            (key
+                                                == 'tokenAmount' ? value.uiAmount : titleUrl(value).url)) }} {{ key == 'space' ?
+                                            'byts(s)' : '' }}</text>
+
                                     {{ key == "lamports" ? '(BTG)' : '' }}
                                     <img v-if="titleUrl(value).type && !titleUrl(value).assest"
                                         v-for="(datas, indexs) in titleUrl(value).certificates" :key="indexs"
@@ -62,24 +66,26 @@
                                             </span>
                                         </td>
                                         <td class="text-end"
-                                            :class="typeof titleUrl(values).url == 'string' ? 'text-theme' : ''"
-                                            :style="typeof titleUrl(values).url == 'string' ? 'cursor: pointer' : ''"
-                                            @click="pubbleys(
-                                                keys == 'extensionTypes' ? '' : (keys == 'lamports' ? '' : (keys == 'space' ? '' : (keys == 'decimals' ? '' : (keys == 'tokenAmount' ? '' : values))))
-                                            )">
-                                            {{ }}
-                                            {{ keys ==
-                                                'space' ?
-                                                'byts(s)' : '' }}
-                                            {{ keys == 'amount' ? come(values) : keys == 'extensionTypes' ? values[0] : (keys ==
-                                                'lamports' ?
-                                                toFexedStake(values)
-                                                :
-                                                (keys
-                                                    == 'tokenAmount' ? values.uiAmount : (keys == 'lockouts' ? 'data' :
-                                                        titleUrl(values).url))) }}
+                                            :class="typeof titleUrl(values).url == 'string' ? 'text-theme' : ''">
+                                            <text
+                                                :style="typeof titleUrl(values).url == 'string' ? 'cursor: pointer' : ''"
+                                                @click="pubbleys(
+                                                    keys == 'extensionTypes' ? '' : (keys == 'lamports' ? '' : (keys == 'space' ? '' : (keys == 'decimals' ? '' : (keys == 'tokenAmount' ? '' : values))))
+                                                )">{{ keys ==
+                                                    'space' ?
+                                                    'byts(s)' : '' }}
+                                                {{ keys == 'amount' ? come(values) : keys == 'extensionTypes' ?
+                                                    values[0] :
+                                                    (keys ==
+                                                        'lamports' ?
+                                                        toFexedStake(values)
+                                                        :
+                                                        (keys
+                                                            == 'tokenAmount' ? values.uiAmount : (keys == 'lockouts' ? 'data' :
+                                                                titleUrl(values).url))) }}
 
-                                            {{ keys == "lamports" ? '(BTG)' : '' }}
+                                                {{ keys == "lamports" ? '(BTG)' : '' }}</text>
+
                                             <img v-if="titleUrl(values).type && !titleUrl(values).assest"
                                                 v-for="(datas, indexs) in titleUrl(values).certificates" :key="indexs"
                                                 :src="datas.img" height="24" class="marginRight8" alt="">
@@ -108,16 +114,20 @@
                     <template v-if="item.accounts">
                         <tr v-if="item.programId">
                             <td>ProgramId</td>
-                            <td class="text-end text-theme " style="cursor: pointer" @click="item.programId">{{
-                                titleUrl(item.programId).url }}
+                            <td class="text-end text-theme ">
+                                <text style="cursor: pointer" @click="item.programId">{{
+                                    titleUrl(item.programId).url }}</text>
                             </td>
                         </tr>
 
                         <tr v-if="item.accounts.length != 0">
                             <td>Account</td>
                             <!-- {{ item.accounts[0] }} -->
-                            <td class="text-end text-theme " style="cursor: pointer" @click="item.accounts[0]">{{
-                                titleUrl(item.accounts[0]).url }}
+                            <td class="text-end text-theme ">
+                                <text style="cursor: pointer" @click="item.accounts[0]">
+                                    {{
+                                        titleUrl(item.accounts[0]).url }}
+                                </text>
                                 <img v-if="titleUrl(item.accounts[0]).type && !titleUrl(item.accounts[0]).assest"
                                     v-for="(datas, indexs) in titleUrl(item.accounts[0]).certificates" :key="indexs"
                                     :src="datas.img" height="24" class="marginRight8" alt="">
@@ -154,16 +164,19 @@
                                         {{ values }}
                                     </span>
                                 </td>
-                                <td class="text-end" :class="typeof titleUrl(value).url == 'string' ? 'text-theme' : ''"
-                                    :style="typeof titleUrl(value).url == 'string' ? 'cursor: pointer' : ''" @click="pubbleys(
-                                        key == 'extensionTypes' ? '' : (key == 'lamports' ? '' : (key == 'space' ? '' : (key == 'decimals' ? '' : (key == 'tokenAmount' ? '' : value))))
-                                    )">
-                                    {{ key == 'extensionTypes' ? value[0] : (key == 'lamports' ? toFexedStake(value)
-                                        :
-                                        (key
-                                            == 'tokenAmount' ? value.uiAmount : titleUrl(value).url)) }} {{ key == 'space' ?
-                                        'byts(s)' : '' }}
-                                    {{ key == "lamports" ? '(BTG)' : '' }}
+                                <td class="text-end"
+                                    :class="typeof titleUrl(value).url == 'string' ? 'text-theme' : ''">
+                                    <text :style="typeof titleUrl(value).url == 'string' ? 'cursor: pointer' : ''"
+                                        @click="pubbleys(
+                                            key == 'extensionTypes' ? '' : (key == 'lamports' ? '' : (key == 'space' ? '' : (key == 'decimals' ? '' : (key == 'tokenAmount' ? '' : value))))
+                                        )"> {{ key == 'extensionTypes' ? value[0] : (key == 'lamports' ?
+                                            toFexedStake(value)
+                                            :
+                                            (key
+                                                == 'tokenAmount' ? value.uiAmount : titleUrl(value).url)) }} {{ key == 'space' ?
+                                            'byts(s)' : '' }}
+                                        {{ key == "lamports" ? '(BTG)' : '' }}</text>
+
                                     <img v-if="titleUrl(value).type && !titleUrl(value).assest"
                                         v-for="(datas, indexs) in titleUrl(value).certificates" :key="indexs"
                                         :src="datas.img" height="24" class="marginRight8" alt="">
@@ -185,21 +198,22 @@
                                             </span>
                                         </td>
                                         <td class="text-end"
-                                            :class="typeof titleUrl(values).url == 'string' ? 'text-theme' : ''"
-                                            :style="typeof titleUrl(values).url == 'string' ? 'cursor: pointer' : ''"
-                                            @click="pubbleys(
-                                                keys == 'extensionTypes' ? '' : (keys == 'lamports' ? '' : (keys == 'space' ? '' : (keys == 'decimals' ? '' : (keys == 'tokenAmount' ? '' : values))))
-                                            )">
-                                            {{ keys == 'extensionTypes' ? values[0] : (keys == 'lamports' ?
+                                            :class="typeof titleUrl(values).url == 'string' ? 'text-theme' : ''">
+                                            <text
+                                                :style="typeof titleUrl(values).url == 'string' ? 'cursor: pointer' : ''"
+                                                @click="pubbleys(
+                                                    keys == 'extensionTypes' ? '' : (keys == 'lamports' ? '' : (keys == 'space' ? '' : (keys == 'decimals' ? '' : (keys == 'tokenAmount' ? '' : values))))
+                                                )"> {{ keys == 'extensionTypes' ? values[0] : (keys == 'lamports' ?
                                                 toFexedStake(values)
                                                 :
                                                 (keys
                                                     == 'tokenAmount' ? values.uiAmount : (keys == 'lockouts' ? 'data' :
                                                         titleUrl(values).url))) }}
-                                            {{ keys ==
-                                                'space' ?
-                                                'byts(s)' : '' }}
-                                            {{ keys == "lamports" ? '(BTG)' : '' }}
+                                                {{ keys ==
+                                                    'space' ?
+                                                    'byts(s)' : '' }}
+                                                {{ keys == "lamports" ? '(BTG)' : '' }}</text>
+
                                             <img v-if="titleUrl(values).type && !titleUrl(values).assest"
                                                 v-for="(datas, indexs) in titleUrl(values).certificates" :key="indexs"
                                                 :src="datas.img" height="24" class="marginRight8" alt="">

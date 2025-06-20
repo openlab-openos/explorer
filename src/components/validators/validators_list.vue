@@ -25,7 +25,7 @@
                                     </span>
                                 </td>
                                 <td style="text-align: left;height: 40px;" v-if="log.pubkey">
-                                    <span class="text-theme" style="cursor: pointer" @click="pubbleys(log.votepubkey)">
+                                    <span class="text-theme">
                                         <!-- {{
                                         stringcate(
                                             promaster[log.pubkey]
@@ -33,7 +33,9 @@
                                                 : log.pubkey
                                     )
                                     }} -->
-                                        {{ stringcate(log.votepubkey) }}
+                                        <text style="cursor: pointer" @click="pubbleys(log.votepubkey)">{{
+                                            stringcate(log.votepubkey)
+                                        }}</text>
                                     </span>
                                 </td>
                                 <td style="text-align: left; display: flex;height: 40px;">
@@ -114,22 +116,22 @@ const handlePageChange = (newPage) => {
 };
 
 let VoteAccounts = {
-        jsonrpc: "2.0",
-        id: 1,
-        method: "getVoteAccounts",
-        params: [],
-    };
+    jsonrpc: "2.0",
+    id: 1,
+    method: "getVoteAccounts",
+    params: [],
+};
 
 const getActivityLogData = async () => {
     let res = appStore.getvaildators;
-    
-    
+
+
     if (res.length !== 0) {
-        
-        
+
+
         let ClusterNodes_list = res[0].result;
         let ProgramAccounts_list = res[1].result;
-        let VoteAccounts_list =res[2].result;
+        let VoteAccounts_list = res[2].result;
         let list = [];
 
         for (let i in ProgramAccounts_list) {

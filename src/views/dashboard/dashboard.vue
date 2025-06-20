@@ -124,8 +124,8 @@ const getTime = (timestamp) => {
 
 
 const supplyRequest = async (epoch, slot, inepoch, solttime) => {
-  console.log();
-  if (!requestType.value) {
+  console.log(requestType.value);
+  if (requestType.value) {
     await chainRequest({
       jsonrpc: "2.0",
       id: 1,
@@ -135,6 +135,8 @@ const supplyRequest = async (epoch, slot, inepoch, solttime) => {
         stubly.value = (
           JSON.parse(JSON.stringify(res.result.value.total).slice(0, 9)) / 1000000
         ).toFixed(1);
+        console.log(res);
+
         appStore.setStubly(stubly.value);
         appStore.setStuBlys(res.result.value.total);
       })
@@ -143,10 +145,10 @@ const supplyRequest = async (epoch, slot, inepoch, solttime) => {
       });
     pubbley.value = appStore.pubbley;
 
+    // requestType.value = false;
 
   }
   server.value = getServerData(epoch, slot, inepoch, solttime);
-  // requestType.value = false;
 
 };
 
@@ -412,7 +414,9 @@ watchEffect(async () => {
   await performanceSamples();
   console.log(response.epoch, response.slotIndex, response.slotsInEpoch, solttime.value);
   if (response.epoch && response.slotIndex && response.slotsInEpoch && solttime.value) {
-    requestType.value = true;
+    if (!requestType.value) {
+      requestType.value = true;
+    }
     console.log(123);
 
   } else {

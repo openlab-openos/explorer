@@ -39,14 +39,14 @@
                             </tr>
                             <tr>
                                 <td>{{ $t("account.assigned_program_id") }} </td>
-                                <td class="text-end text-theme" style="cursor: pointer" @click="pubbtx(item.owner)">
-                                    {{ titleUrl(item.owner).url }}
+                                <td class="text-end text-theme">
+                                    <text style="cursor: pointer" @click="pubbtx(item.owner)"> {{
+                                        titleUrl(item.owner).url }}</text>
                                     <img v-if="titleUrl(item.owner).type && !titleUrl(item.owner).assest"
-                                        v-for="(datas, indexs) in titleUrl(item.owner).certificates"
-                                        :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
-                                    <text
-                                        v-for="items, indexs in titleUrl(item.owner).certificates"
-                                        :key="indexs" :style="'background-color: ' + items.backColor"
+                                        v-for="(datas, indexs) in titleUrl(item.owner).certificates" :key="indexs"
+                                        :src="datas.img" height="24" class="marginRight8" alt="">
+                                    <text v-for="items, indexs in titleUrl(item.owner).certificates" :key="indexs"
+                                        :style="'background-color: ' + items.backColor"
                                         style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                         {{ items.code }}
                                     </text>
@@ -86,8 +86,9 @@
                             </tr>
                             <tr>
                                 <td>{{ $t("account.assigned_program_id") }}</td>
-                                <td class="text-end text-theme" style="cursor: pointer">
-                                    {{ $t("account.native_label") }}</td>
+                                <td class="text-end text-theme" >
+                                    {{ $t("account.native_label") }}
+                                </td>
                             </tr>
                             <tr>
                                 <td>{{ $t("account.executable") }}</td>
@@ -113,7 +114,8 @@
                             :label="$t('transfer')" name="second">
                             <transfer-view :url="url" :type="true" v-if="activeName == 'second'"></transfer-view>
                         </el-tab-pane>
-                        <el-tab-pane v-if="transfersType.urlType == 'Formal' && type && !card_data[0].executable" :label="$t('pledge')" name="third">
+                        <el-tab-pane v-if="transfersType.urlType == 'Formal' && type && !card_data[0].executable"
+                            :label="$t('pledge')" name="third">
                             <pledgeView v-if="activeName == 'third'" :url="url" />
                         </el-tab-pane>
                     </el-tabs>
@@ -162,7 +164,7 @@ console.log(1111);
 
 onMounted(async () => {
     console.log(1111);
-    
+
     await pubbleys(props.url)
     await menufunction(props.url);
 
@@ -201,12 +203,12 @@ const pubbleys = async (url) => {
 }
 const requestList = async (object) => {
     console.log(1111);
-    
+
     try {
         const response = await chainRequest(object);
         // 解析和处理返回的数据
         console.log(response);
-        
+
         return response.result; // 现在这个函数会返回解析后的数据
     } catch (error) {
         return []; // 返回一个空数组或抛出错误取决于你的需求

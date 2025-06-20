@@ -18,11 +18,11 @@
             </tr>
             <template v-if="loading">
                 <tr v-for="(item, index) in paginatedHistoryData" :key="index">
-                    <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.signature)">
-                        {{ item.signature }}
+                    <td class="text-theme" >
+                        <text style="cursor: pointer" @click="pubbtx(item.signature)"> {{ item.signature }}</text>
                     </td>
-                    <td class="text-theme" style="cursor: pointer" @click="slot(item.slot)">
-                        {{ come(item.slot) }}
+                    <td class="text-theme">
+                        <text style="cursor: pointer" @click="slot(item.slot)">{{ come(item.slot) }}</text>
                     </td>
                     <td :class="item.err == null ? 'color0-255-179-1' : ''">
                         {{ item.err == null ? 'Success' : 'Failed' }}
@@ -49,12 +49,19 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watchEffect, computed } from "vue";
-import moment from "moment";
-import { order } from "../../request/order";
-import { chainRequest } from "../../request/chain";
-import { useRouter } from "vue-router";
-import LoadingVue from "../../components/block/loading.vue"
+import {
+  computed,
+  onMounted,
+  ref,
+  watchEffect,
+} from 'vue';
+
+import moment from 'moment';
+import { useRouter } from 'vue-router';
+
+import LoadingVue from '../../components/block/loading.vue';
+import { chainRequest } from '../../request/chain';
+import { order } from '../../request/order';
 
 const router = useRouter();
 const props = defineProps({

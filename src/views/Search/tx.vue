@@ -343,12 +343,14 @@ export default {
                       {{ $t("transaction.recent_blockhash") }}
                     </InfoTooltip>
                   </td>
-                  <td class="text-end text-theme" style="cursor: pointer"
-                    @click="pubbleys(historyData.transaction.message.accountKeys[0].pubkey)"> {{
-                      promaster[historyData.transaction.message.accountKeys[0].pubkey] ?
-                        promaster[historyData.transaction.message.accountKeys[0].pubkey].name
-                        : historyData.transaction.message.accountKeys[0].pubkey
-                    }} </td>
+                  <td class="text-end text-theme">
+                    <text style="cursor: pointer"
+                      @click="pubbleys(historyData.transaction.message.accountKeys[0].pubkey)">{{
+                        promaster[historyData.transaction.message.accountKeys[0].pubkey] ?
+                          promaster[historyData.transaction.message.accountKeys[0].pubkey].name
+                          : historyData.transaction.message.accountKeys[0].pubkey
+                      }}</text>
+                  </td>
                 </tr>
                 <tr>
                   <td>{{ $t("transaction.fee") }} (BTG)</td>
@@ -407,14 +409,13 @@ export default {
                     <td>
                       {{ index + 1 }}
                     </td>
-                    <td class="text-theme" style="cursor: pointer" @click="pubbleys(item.pubkey)">
-                      {{ titleUrl(item.pubkey).url }}
-                      <img
-                        v-if="titleUrl(item.pubkey).type && !titleUrl(item.pubkey).assest"
-                        v-for="(datas, indexs) in titleUrl(item.pubkey).certificates"
-                        :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
-                      <text v-for="items, indexs in titleUrl(item.pubkey).certificates"
-                        :key="indexs" :style="'background-color: ' + items.backColor"
+                    <td class="text-theme">
+                      <text style="cursor: pointer" @click="pubbleys(item.pubkey)">{{ titleUrl(item.pubkey).url }}</text>
+                      <img v-if="titleUrl(item.pubkey).type && !titleUrl(item.pubkey).assest"
+                        v-for="(datas, indexs) in titleUrl(item.pubkey).certificates" :key="indexs" :src="datas.img"
+                        height="24" class="marginRight8" alt="">
+                      <text v-for="items, indexs in titleUrl(item.pubkey).certificates" :key="indexs"
+                        :style="'background-color: ' + items.backColor"
                         style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                         {{ items.code }}
                       </text>

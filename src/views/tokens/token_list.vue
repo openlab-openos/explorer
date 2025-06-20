@@ -18,23 +18,28 @@
                         <th style=" text-align: left">{{ $t("tokens.supply") }}</th>
                     </tr>
                     <tr v-for="item, index in paginatedHistoryData" :key="index">
-                        <td class="text-theme" style="cursor: pointer;"@click="pubbleys(item.pubkey)">
-                            <text v-if="item.account.data.parsed.info.extensions">
-                                <span v-for="(items, indexs) in item.account.data.parsed.info.extensions " :key="indexs"
+                        <td class="text-theme">
+                            <text v-if="item.account.data.parsed.info.extensions" style="cursor: pointer;"
+                                @click="pubbleys(item.pubkey)">
+                                <span v-for="(items, indexs) in item.account.data.parsed.info.extensions" :key="indexs"
                                     class="colorfff">
-                                    <img v-if="items.state && items.state.uri != 'http://www.baidu.com'" :src="items.state.uri" width="32" alt="">
+                                    <img v-if="items.state && items.state.uri != 'http://www.baidu.com'"
+                                        :src="items.state.uri" width="32" alt="">
                                 </span>
                             </text>
                             <img v-else
                                 :src="item.pubkey == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' ? 'https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png' : ''"
                                 width="32" alt="">
                             <!-- B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz -->
-                            {{ titleUrl(item.pubkey).url }}
-                            <img v-if="titleUrl(item.pubkey).type" src="../../../src//assets//renzheng.png" height="24" alt=""> 
+                            <text style="cursor: pointer;" @click="pubbleys(item.pubkey)"> {{ titleUrl(item.pubkey).url
+                                }}</text>
+
+                            <img v-if="titleUrl(item.pubkey).type" src="../../../src//assets//renzheng.png" height="24"
+                                alt="">
                         </td>
                         <td>
                             <text v-if="item.account.data.parsed.info.extensions">
-                                <span v-for="(items, indexs) in item.account.data.parsed.info.extensions " :key="indexs"
+                                <span v-for="(items, indexs) in item.account.data.parsed.info.extensions" :key="indexs"
                                     class="colorfff">
                                     {{ items.extension == "tokenMetadata" ? items.state.name : "" }}
                                 </span>
@@ -42,27 +47,28 @@
                             <text v-else>
                                 <span>{{ item.pubkey == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' ? 'Native' :
                                     "N/A"
-                                    }}</span>
+                                }}</span>
                             </text>
                         </td>
                         <td>
                             <text v-if="item.account.data.parsed.info.extensions">
-                                <span v-for="(items, indexs) in item.account.data.parsed.info.extensions " :key="indexs"
+                                <span v-for="(items, indexs) in item.account.data.parsed.info.extensions" :key="indexs"
                                     class="colorfff">
                                     {{ items.extension == "tokenMetadata" ? items.state.symbol : "" }}
                                 </span>
                             </text>
                             <text v-else>
                                 <span>{{ item.pubkey == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' ? 'WBTG' : "N/A"
-                                    }}</span>
+                                }}</span>
                             </text>
                         </td>
                         <td>
                             <!-- {{ item.account.data.parsed.type }} -->
                             VRC20
                         </td>
-                        <td class="text-theme" style="cursor: pointer;" @click="pubbleys(item.account.owner)">
-                            {{ titleUrl(item.account.owner).url }}
+                        <td class="text-theme">
+                            <text style="cursor: pointer;" @click="pubbleys(item.account.owner)">{{
+                                titleUrl(item.account.owner).url }}</text>
                         </td>
                         <!-- <td>
                             {{ toFexedStake(item.account.lamports) }}

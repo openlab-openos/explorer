@@ -43,10 +43,17 @@
 
 
 <script setup>
-import { chainRequest } from "../../request/chain";
-import { useAppStore } from "../../stores/index";
-import { onMounted, ref, watchEffect } from "vue";
-import i18n from "@/i18n"
+import {
+  onMounted,
+  ref,
+  watchEffect,
+} from 'vue';
+
+import i18n from '@/i18n';
+
+import { chainRequest } from '../../request/chain';
+import { useAppStore } from '../../stores/index';
+
 const appStore = useAppStore();
 const data = ref();
 

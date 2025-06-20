@@ -35,13 +35,20 @@
 </template>
 
 <script setup>
-import numberAnimar from "../../components/CountFlop.vue";
-import apexchart from "@/components/plugins/Apexcharts.vue";
-import { chainRequest } from "../../request/chain";
-import { useAppVariableStore } from "@/stores/app-variable";
-import { useAppStore } from "../../stores/index";
-import { onMounted, ref, watchEffect } from "vue";
-import i18n from "@/i18n"
+import {
+  onMounted,
+  ref,
+  watchEffect,
+} from 'vue';
+
+import apexchart from '@/components/plugins/Apexcharts.vue';
+import i18n from '@/i18n';
+import { useAppVariableStore } from '@/stores/app-variable';
+
+import numberAnimar from '../../components/CountFlop.vue';
+import { chainRequest } from '../../request/chain';
+import { useAppStore } from '../../stores/index';
+
 const appStore = useAppStore();
 
 
@@ -101,7 +108,8 @@ onMounted(() => {
       // data.value = appStore.pubbley;
 
     }
-
+    console.log(appStore.stubly);
+    
     stubly.value = appStore.stubly;
 
 

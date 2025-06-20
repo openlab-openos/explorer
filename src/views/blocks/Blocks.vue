@@ -14,7 +14,7 @@
               <h5 class="text-theme" style="display: flex">
                 <count-up :startVal="initial[index].value" :end-val="stat.value" duration="2"
                   :decimalPlaces="index == 3 ? 1 : 0"></count-up>
-                <span v-show="stat.type"> {{ index== 3 ? "%" : "ms"  }}</span>
+                <span v-show="stat.type"> {{ index == 3 ? "%" : "ms" }}</span>
               </h5>
             </card-body>
           </card>
@@ -32,33 +32,33 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>{{$t("blocks.cluster_time")}}</td>
+                  <td>{{ $t("blocks.cluster_time") }}</td>
                   <td style="text-align: right">
                     {{ cluster }}
                   </td>
                 </tr>
                 <tr>
-                  <td>{{$t("blocks.slot_time")}} (1min average)</td>
+                  <td>{{ $t("blocks.slot_time") }} (1min average)</td>
                   <td style="text-align: right">400ms</td>
                 </tr>
                 <tr>
-                  <td>{{$t("blocks.slot_time")}} (1hr average)</td>
+                  <td>{{ $t("blocks.slot_time") }} (1hr average)</td>
                   <td style="text-align: right">400ms</td>
                 </tr>
                 <tr>
                   <td> {{ $t('epoch') }} </td>
-                  <td style="text-align: right; cursor: pointer" class="text-theme" @click="epochSkip(epoch)">
-                    {{ epoch }}
+                  <td style="text-align: right;" class="text-theme">
+                    <text style=" cursor: pointer" @click="epochSkip(epoch)"> {{ epoch }}</text>
                   </td>
                 </tr>
                 <tr>
-                  <td>{{$t("blocks.epoch_progress")}} </td>
+                  <td>{{ $t("blocks.epoch_progress") }} </td>
                   <td style="text-align: right" class="text-theme">
                     {{ progress }}%
                   </td>
                 </tr>
                 <tr>
-                  <td>{{$t('epoch_time_remaining')}}(approx.)</td>
+                  <td>{{ $t('epoch_time_remaining') }}(approx.)</td>
                   <td style="text-align: right" v-if="time">
                     {{ time }}
                   </td>
@@ -73,14 +73,22 @@
 </template>
 
 <script setup>
-import { useAppStore } from "../../stores/index";
-import { ref, onMounted, onUnmounted,watchEffect } from 'vue';
-import { chainRequest } from "../../request/chain";
-import CountUp from "vue-countup-v3";
-import moment from "moment";
-import { useRouter } from "vue-router";
-import numberAnimar from "../../components/CountFlop.vue";
-import i18n from "@/i18n"
+import {
+  onMounted,
+  onUnmounted,
+  ref,
+  watchEffect,
+} from 'vue';
+
+import moment from 'moment';
+import CountUp from 'vue-countup-v3';
+import { useRouter } from 'vue-router';
+
+import i18n from '@/i18n';
+
+import numberAnimar from '../../components/CountFlop.vue';
+import { chainRequest } from '../../request/chain';
+import { useAppStore } from '../../stores/index';
 
 const router = useRouter();
 const appStore = useAppStore();
@@ -112,11 +120,11 @@ const cluster = ref(null);
 
 
 // 语言
-function selectLanguage(indexValue){
+function selectLanguage(indexValue) {
   i18n.global.locale = indexValue;
 }
 
-watchEffect(()=>{
+watchEffect(() => {
   selectLanguage(appStore.$state.language);
 })
 

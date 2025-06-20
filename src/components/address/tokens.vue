@@ -24,13 +24,15 @@
                     </tr>
                     <template v-if="tokens.length != 0">
                         <tr v-for="(item, index) in paginatedHistoryData" :key="index">
-                            <td class="text-theme" style="cursor: pointer;line-height: 30px;"
-                                @click="pubbtx(item.account.data.parsed.info.mint)">
+                            <td class="text-theme" style="line-height: 30px;">
                                 <img v-if="item.img" :src="item.img" height="28" alt="">
                                 <img v-if="item.account.data.parsed.info.mint == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'"
                                     src="https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png"
                                     width="28" height="28" alt="">
-                                {{ titleUrl(item.account.data.parsed.info.mint).url }}
+                                <text style="cursor: pointer;" @click="pubbtx(item.account.data.parsed.info.mint)">
+                                    {{ titleUrl(item.account.data.parsed.info.mint).url }}
+                                </text>
+
                                 <text v-if="item.name">{{ '(' + item.name + ')' }}</text>
                                 <text
                                     v-if="item.account.data.parsed.info.mint == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'">(Native)</text>
@@ -45,8 +47,9 @@
                                     {{ items.code }}
                                 </text>
                             </td>
-                            <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.pubkey)">
-                                {{ titleUrl(item.pubkey).url }}
+                            <td class="text-theme">
+                                <text style="cursor: pointer" @click="pubbtx(item.pubkey)"> {{ titleUrl(item.pubkey).url }}</text>
+                               
                                 <img v-if="titleUrl(item.pubkey).type && !titleUrl(item.pubkey).assest"
                                     v-for="(datas, indexs) in titleUrl(item.pubkey).certificates" :key="indexs"
                                     :src="datas.img" height="24" class="marginRight8" alt="">
@@ -57,8 +60,8 @@
                                 </text>
                             </td>
 
-                            <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.account.owner)">
-                                {{ titleUrl(item.account.owner).url }}
+                            <td class="text-theme">
+                                <text style="cursor: pointer" @click="pubbtx(item.account.owner)">{{ titleUrl(item.account.owner).url }}</text>
                                 <img v-if="titleUrl(item.account.owner).type && !titleUrl(item.account.owner).assest"
                                     v-for="(datas, indexs) in titleUrl(item.account.owner).certificates" :key="indexs"
                                     :src="datas.img" height="24" class="marginRight8" alt="">

@@ -21,18 +21,22 @@
             </tr>
             <tr v-if="epochrequest">
               <td> {{ $t("epoch_page.next_slot") }} </td>
-              <td class="text-end text-theme" style="cursor: pointer">Epoch in progress</td>
+              <td class="text-end text-theme">Epoch in progress</td>
             </tr>
             <tr>
               <td> {{ $t("epoch_page.first_slot") }} </td>
-              <td class="text-end text-theme" style="cursor: pointer" @click="blockSkip(block)">
-                <count-up duration="3" :startVal="block" :end-val="block"></count-up>
+              <td class="text-end text-theme">
+                <text style="cursor: pointer" @click="blockSkip(block)">
+                  <count-up duration="3" :startVal="block" :end-val="block"></count-up>
+                </text>
               </td>
             </tr>
             <tr>
               <td> {{ $t("epoch_page.last_slot") }} </td>
-              <td class="text-end text-theme" style="cursor: pointer" @click="blockSkip(lastBlock)">
-                <count-up duration="3" :startVal="lastBlock" :end-val="lastBlock"></count-up>
+              <td class="text-end text-theme">
+                <text style="cursor: pointer" @click="blockSkip(lastBlock)">
+                  <count-up duration="3" :startVal="lastBlock" :end-val="lastBlock"></count-up>
+                </text>
               </td>
             </tr>
             <tr>
@@ -41,8 +45,10 @@
             </tr>
             <tr>
               <td> {{ $t("epoch_page.first_block") }} </td>
-              <td class="text-end text-theme" style="cursor: pointer" @click="blockSkip(block)">
-                <count-up duration="3" :startVal="block" :end-val="block"></count-up>
+              <td class="text-end text-theme">
+                <text style="cursor: pointer" @click="blockSkip(block)"><count-up duration="3" :startVal="block"
+                    :end-val="block"></count-up></text>
+
               </td>
             </tr>
             <tr>
@@ -63,14 +69,24 @@
 </template>
 
 <script setup>
-import { onMounted, ref,watchEffect } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { chainRequest } from "../../request/chain";
-import CountUp from "vue-countup-v3";
-import moment from "moment";
-import { useAppStore } from "../../stores/index";
-import LoadingVue from "../../components/block/loading.vue";
-import i18n from "@/i18n"
+import {
+  onMounted,
+  ref,
+  watchEffect,
+} from 'vue';
+
+import moment from 'moment';
+import CountUp from 'vue-countup-v3';
+import {
+  useRoute,
+  useRouter,
+} from 'vue-router';
+
+import i18n from '@/i18n';
+
+import LoadingVue from '../../components/block/loading.vue';
+import { chainRequest } from '../../request/chain';
+import { useAppStore } from '../../stores/index';
 
 const route = useRoute();
 const router = useRouter();
@@ -84,16 +100,16 @@ const lastBlock = ref(0);
 const blockTime = ref(0);
 
 // 语言
-function selectLanguage(indexValue){
+function selectLanguage(indexValue) {
   i18n.global.locale = indexValue;
 }
 
-watchEffect(()=>{
+watchEffect(() => {
   selectLanguage(appStore.$state.language);
 })
 const EpochRequest = async () => {
   try {
-    const response =appStore.getepochInfo;
+    const response = appStore.getepochInfo;
     epochrequest.value = response;
     block.value = response.blockHeight;
     lastBlock.value = block.value + response.slotsInEpoch - 1;

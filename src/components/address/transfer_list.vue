@@ -31,8 +31,8 @@
                 </tr>
                 <template v-if="loading">
                     <tr v-for="(item, index) in paginatedHistoryData" :key="index">
-                        <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.signature)">
-                            {{ stringcate(item.signature) }}
+                        <td class="text-theme">
+                            <text style="cursor: pointer" @click="pubbtx(item.signature)">{{ stringcate(item.signature) }}</text>
                         </td>
                         <td>
                             <button type="button" style="
@@ -53,11 +53,11 @@
                                 }}
                             </button>
                         </td>
-                        <td style=" text-align: left; cursor: pointer" :class="item.primaryType ? 'color0-255-179-1' : 'text-theme'
-                            " @click="slot(
+                        <td style=" text-align: left; " :class="item.primaryType ? 'color0-255-179-1' : 'text-theme'
+                            " >
+                            <text style="cursor: pointer" @click="slot(
                                 item.primary
-                            )">
-
+                            )"></text>
                             {{
                                 titleUrl(item.primary).url
 
@@ -78,13 +78,14 @@
                             </text>
 
                         </td>
-                        <td style=" text-align: left; cursor: pointer" :class="item.quantityType ? 'color0-255-179-1' : 'text-theme'
-                            " @click="slot(
+                        <td style=" text-align: left; " :class="item.quantityType ? 'color0-255-179-1' : 'text-theme'
+                            ">
+                            <text style="cursor: pointer" @click="slot(
                                 item.quantity
-                            )">
-                            {{
+                            )"> {{
                                 titleUrl(item.quantity).url
-                            }}
+                                }}</text>
+
 
                             <img v-if="titleUrl(quantity).type && titleUrl(item.quantity).assest"
                                 v-for="(datas, indexs) in titleUrl(item.quantity).certificates" :key="indexs"
@@ -95,10 +96,10 @@
                                 {{ items.code }}
                             </text>
                         </td>
-                        <td style=" text-align: left; cursor: pointer" class="text-theme" @click="slot(
-
-                            item.program
-                        )">
+                        <td style=" text-align: left;" class="text-theme">
+                            <text style=" cursor: pointer" @click="slot(
+                                item.program
+                            )"></text>
                             {{
                                 titleUrl(item.program).url
 
@@ -116,20 +117,22 @@
                         </td>
                         <td>
                             {{ come(smartFormatNumber(
-                                item.lamports/1000000000
+                                item.lamports / 1000000000
                             ))
                             }}
                         </td>
-                        <td style=" text-align: left; " :style="item.token ? 'cursor: pointer' : ''" class="text-theme" @click="slot(
+                        <td style=" text-align: left; ">
+                            <text :style="item.token ? 'cursor: pointer' : ''" class="text-theme" @click="slot(
                                 item.token
-                            )">
-                            {{
+                            )">{{
 
                                 item.token
 
-                            }}
-                            <img v-if="titleUrl(item.token).type && !titleUrl(item.token).assest" v-for="(datas, indexs) in titleUrl(item.token).certificates" :key="indexs" :src="datas.img" height="24"
-                                class="marginRight8" alt="">
+                                }}</text>
+
+                            <img v-if="titleUrl(item.token).type && !titleUrl(item.token).assest"
+                                v-for="(datas, indexs) in titleUrl(item.token).certificates" :key="indexs"
+                                :src="datas.img" height="24" class="marginRight8" alt="">
                             <text v-for="items, indexs in titleUrl(item.token).certificates" :key="indexs"
                                 :style="'background-color: ' + items.backColor"
                                 style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
@@ -137,8 +140,8 @@
                             </text>
                         </td>
 
-                        <td class="text-theme" style="cursor: pointer">
-                            {{ item.time}}
+                        <td class="text-theme">
+                            {{ item.time }}
                         </td>
                     </tr>
                 </template>
@@ -265,14 +268,14 @@ const HandleList = (listItem) => {
             let quantityType = false;
             if (instructions.length === 1) {
                 primary = firstInstruction?.parsed?.info?.source || '';
-                primaryType = props.type ? (firstInstruction?.parsed?.info?.source == props.url ? true : ((firstInstruction?.parsed?.info?.source ==firstInstruction?.parsed?.info?.destination ? true : false)) ) : false;
+                primaryType = props.type ? (firstInstruction?.parsed?.info?.source == props.url ? true : ((firstInstruction?.parsed?.info?.source == firstInstruction?.parsed?.info?.destination ? true : false))) : false;
                 quantity = firstInstruction?.parsed?.info?.destination || '';
                 quantityType = props.type ? (firstInstruction?.parsed?.info?.source == props.url ? ((firstInstruction?.parsed?.info?.destination == props.url ? true : false)) : true) : false;
                 program = firstInstruction?.programId || '';
                 lamports = firstInstruction?.parsed?.info?.tokenAmount ? firstInstruction?.parsed?.info?.tokenAmount?.amount : firstInstruction?.parsed?.info?.lamports;
             } else if (instructions.length >= 2) {
                 primary = instructions[1]?.parsed?.info?.source || '';
-                primaryType = props.type ? (instructions[1]?.parsed?.info?.source == props.url ? true : (instructions[1]?.parsed?.info?.source == instructions[1]?.parsed?.info?.destination ? true : false ) ) : false ;
+                primaryType = props.type ? (instructions[1]?.parsed?.info?.source == props.url ? true : (instructions[1]?.parsed?.info?.source == instructions[1]?.parsed?.info?.destination ? true : false)) : false;
                 quantity = instructions[1]?.parsed?.info?.destination || '';
                 quantityType = props.type ? (instructions[1]?.parsed?.info?.source == props.url ? (instructions[1]?.parsed?.info?.destination == props.url ? true : false) : true) : false;
                 program = instructions[1]?.programId || '';

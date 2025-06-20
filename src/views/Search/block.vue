@@ -5,7 +5,7 @@ import moment from "moment";
 import router from "../../router";
 import { getCurrentInstance, ref } from "vue";
 import LoadingVue from "../../components/block/loading.vue"
-import {solanapubbleys} from "../../components/method/solana"
+import { solanapubbleys } from "../../components/method/solana"
 
 const apps = getCurrentInstance()
 
@@ -145,9 +145,9 @@ export default {
       this.$router.push({
         name: "address",
         params: {
-            url: url,
+          url: url,
         },
-    })
+      })
     },
     soltResult(url) {
       this.$router
@@ -221,9 +221,16 @@ export default {
 };
 </script>
 <script setup>
-import { getCurrentInstance, ref, watchEffect } from "vue";
-import i18n from "@/i18n"
-import { useAppStore } from "../../stores/index";
+import {
+  getCurrentInstance,
+  ref,
+  watchEffect,
+} from 'vue';
+
+import i18n from '@/i18n';
+
+import { useAppStore } from '../../stores/index';
+
 const appStore = useAppStore();
 
 const apps = getCurrentInstance()
@@ -263,8 +270,9 @@ watchEffect(() => {
                 </tr>
                 <tr v-if="this.historyData">
                   <td>{{ $t("blocks.slot_leader") }} </td>
-                  <td class="text-end text-theme" style="cursor: pointer" @click="pubbleys(this.historyData[0])"> {{
-                    this.historyData[0] }}
+                  <td class="text-end text-theme">
+                    <text style="cursor: pointer" @click="pubbleys(this.historyData[0])"> {{
+                      this.historyData[0] }}</text>
                   </td>
                 </tr>
                 <tr>
@@ -273,28 +281,40 @@ watchEffect(() => {
                 </tr>
                 <tr>
                   <td>{{ $t("blocks.parent_blockhash") }}</td>
-                  <td class="text-end text-theme" style="cursor: pointer"
-                    @click="pubbleys(this.card.previousBlockhash)"> {{ this.card.previousBlockhash }} </td>
+                  <td class="text-end text-theme">
+                    <text style="cursor: pointer" @click="pubbleys(this.card.previousBlockhash)"> {{
+                      this.card.previousBlockhash }} </text>
+                  </td>
                 </tr>
                 <tr v-if="this.historyData">
                   <td>{{ $t("blocks.parent_slot") }}</td>
-                  <td class="text-end text-theme" style="cursor: pointer" @click="soltResult(JSON.parse(this.url) - 1)">
-                    {{ come(JSON.parse(this.url) - 1) }} </td>
+                  <td class="text-end text-theme">
+                    <text style="cursor: pointer" @click="soltResult(JSON.parse(this.url) - 1)">{{
+                      come(JSON.parse(this.url) - 1) }}</text>
+                  </td>
                 </tr>
                 <tr v-if="this.historyData">
                   <td>{{ $t("blocks.parent_slot_leader") }}</td>
-                  <td class="text-end text-theme" style="cursor: pointer" @click="pubbleys(this.historyData[1])">
-                    {{ this.historyData[1] }} </td>
+                  <td class="text-end text-theme">
+                    <text style="cursor: pointer" @click="pubbleys(this.historyData[1])"> {{ this.historyData[1] }}
+                    </text>
+                  </td>
                 </tr>
                 <tr>
                   <td>{{ $t("blocks.child_slot") }}</td>
-                  <td class="text-end text-theme" style="cursor: pointer" @click="soltResult(JSON.parse(this.url) + 1)">
-                    {{ come(JSON.parse(this.url) + 1) }}</td>
+                  <td class="text-end text-theme">
+
+                    <text style="cursor: pointer" @click="soltResult(JSON.parse(this.url) + 1)"> {{
+                      come(JSON.parse(this.url) + 1) }}</text>
+                  </td>
                 </tr>
                 <tr v-if="this.historyData">
                   <td>{{ $t("blocks.child_slot_leader") }}</td>
-                  <td class="text-end text-theme" style="cursor: pointer" @click="pubbleys(this.historyData[2])">
-                    {{ this.historyData[2] }}</td>
+                  <td class="text-end text-theme">
+
+                    <text style="cursor: pointer" @click="pubbleys(this.historyData[2])"> {{ this.historyData[2]
+                      }}</text>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -333,8 +353,9 @@ watchEffect(() => {
                           {{ item.meta.err == null ? "success" : "error" }}
                         </span>
                       </td>
-                      <td class="text-theme" style="cursor: pointer" @click="transtion(item.transaction.signatures[0])">
-                        {{ sliceSignature(item.transaction.signatures[0]) }}
+                      <td class="text-theme">
+                        <text style="cursor: pointer" @click="transtion(item.transaction.signatures[0])">{{
+                          sliceSignature(item.transaction.signatures[0]) }}</text>
                       </td>
                       <td>
                         {{ toFexedStake(item.meta.fee) }}

@@ -18,24 +18,23 @@
                             <th style=" text-align: left"> {{ $t("transactions.time") }} </th>
                         </tr>
                         <tr v-for="(item, index) in arrayData" :key="index" style="height: 35px">
-                            <td v-if="!props.boolean" style=" text-align: left; cursor: pointer" class="text-theme"
-                                @click="
-                                    pubbtx(
-                                        item.signature
-                                    )
-                                    ">
-                                {{
-                                    item.signature
-                                }}
-                            </td>
-                            <td v-else style=" text-align: left; cursor: pointer" class="text-theme" @click="
+                            <td v-if="!props.boolean" style=" text-align: left; " class="text-theme">
+                                <text style="cursor: pointer" @click="
                                 pubbtx(
                                     item.signature
                                 )
-                                ">
-                                {{
+                                ">{{
+                                    item.signature
+                                }}</text>
+                            </td>
+                            <td v-else style=" text-align: left;" class="text-theme">
+                                <text style="cursor: pointer" @click="
+                                    pubbtx(
+                                        item.signature
+                                    )
+                                    ">{{
                                     stringcate(item.signature)
-                                }}
+                                    }}</text>
                             </td>
                             <td style=" text-align: left">
                                 <button type="button" style="
@@ -52,14 +51,15 @@
                                     {{ textValue(item.type) }}
                                 </button>
                             </td>
-                            <td style=" text-align: left; cursor: pointer" class="text-theme" @click="
-                                pubbleys(
-                                    item.source
-                                )
-                                ">
-                                {{ stringcate(
-                                    titleUrl(item.source).url
-                                ) }}
+                            <td style=" text-align: left;" class="text-theme">
+
+                                <text style="cursor: pointer" @click="
+                                    pubbleys(
+                                        item.source
+                                    )
+                                    ">{{
+                                        stringcate(titleUrl(item.source).url)
+                                    }}</text>
                                 <img v-if="titleUrl(item.source).type && !titleUrl(item.source).assest"
                                     v-for="(datas, indexs) in titleUrl(item.source).certificates" :key="indexs"
                                     :src="datas.img" height="24" class="marginRight8" alt="">
@@ -69,15 +69,14 @@
                                     {{ items.code }}
                                 </text>
                             </td>
-                            <td style=" text-align: left; cursor: pointer" class="text-theme" @click="
-                                pubbleys(
-                                    item.destination
-                                )
-                                ">
-                                {{ stringcate(
-                                    titleUrl(item.destination).url
-                                )
-                                }}
+                            <td style=" text-align: left;" class="text-theme">
+                                <text style="cursor: pointer" @click="
+                                    pubbleys(
+                                        item.destination
+                                    )
+                                    ">{{
+                                        stringcate(titleUrl(item.destination).url)
+                                    }}</text>
                                 <img v-if="titleUrl(item.destination).type && !titleUrl(item.destination).assest"
                                     v-for="(datas, indexs) in titleUrl(item.destination).certificates" :key="indexs"
                                     :src="datas.img" height="24" class="marginRight8" alt="">

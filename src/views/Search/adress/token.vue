@@ -72,8 +72,9 @@
                             </tr> -->
                             <tr>
                                 <td>{{ $t("account.owner") }} </td>
-                                <td class="text-end text-theme" style="cursor: pointer" @click="pubbtx(paramsId)"> {{
-                                    titleUrl(paramsId).url }}
+                                <td class="text-end text-theme">
+                                    <text style="cursor: pointer" @click="pubbtx(paramsId)">{{
+                                        titleUrl(paramsId).url }}</text>
                                     <img v-if="titleUrl(paramsId).type && !titleUrl(paramsId).assest"
                                         v-for="(datas, indexs) in titleUrl(paramsId).certificates" :key="indexs"
                                         :src="datas.img" height="24" class="marginRight8" alt="">
@@ -99,15 +100,14 @@
                         <tbody v-if="tokenData">
                             <tr>
                                 <td>{{ $t("account.foundry_license") }} </td>
-                                <td class="text-end text-theme" :style="pubbleys ? 'cursor: pointer' : ''"
-                                    @click="pubbtx(pubbleys)"> {{
-                                        !pubbleys ? "N/A" : titleUrl(pubbleys).url }}
+                                <td class="text-end text-theme">
+                                    <text :style="pubbleys ? 'cursor: pointer' : ''" @click="pubbtx(pubbleys)"> {{
+                                        !pubbleys ? "N/A" : titleUrl(pubbleys).url }}</text>
                                     <img v-if="titleUrl(pubbleys).type && !titleUrl(pubbleys).assest"
-                                        v-for="(datas, indexs) in titleUrl(pubbleys).certificates"
-                                        :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
-                                    <text
-                                        v-for="items, indexs in titleUrl(pubbleys).certificates"
-                                        :key="indexs" :style="'background-color: ' + items.backColor"
+                                        v-for="(datas, indexs) in titleUrl(pubbleys).certificates" :key="indexs"
+                                        :src="datas.img" height="24" class="marginRight8" alt="">
+                                    <text v-for="items, indexs in titleUrl(pubbleys).certificates" :key="indexs"
+                                        :style="'background-color: ' + items.backColor"
                                         style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                         {{ items.code }}
                                     </text>

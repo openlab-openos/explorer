@@ -52,21 +52,24 @@
                         <td>
                             {{ come(smartFormatNumber(toFexedStake(item.amount))) }}
                         </td>
-                        <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.mint)">
-                            {{ titleUrl(item.mint).type ? titleUrl(item.mint).url :
-                                stringcate(item.mint) }}
+                        <td class="text-theme">
+                            <text style="cursor: pointer" @click="pubbtx(item.mint)">{{ titleUrl(item.mint).type ?
+                                titleUrl(item.mint).url :
+                                stringcate(item.mint) }}</text>
                             <img v-if="titleUrl(item.mint).type && !titleUrl(item.mint).assest"
-                                v-for="(datas, indexs) in titleUrl(item.mint).certificates"
-                                :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
-                            <text v-for="items, indexs in titleUrl(item.mint).certificates"
-                                :key="indexs" :style="'background-color: ' + items.backColor"
+                                v-for="(datas, indexs) in titleUrl(item.mint).certificates" :key="indexs"
+                                :src="datas.img" height="24" class="marginRight8" alt="">
+                            <text v-for="items, indexs in titleUrl(item.mint).certificates" :key="indexs"
+                                :style="'background-color: ' + items.backColor"
                                 style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                 {{ items.code }}
                             </text>
                         </td>
-                        <td class="text-theme" style="cursor: pointer" @click="pubbtx(item.owner)">
-                            {{ titleUrl(item.owner).type ? titleUrl(item.owner).url :
-                                stringcate(item.owner) }}
+                        <td class="text-theme">
+                            <text style="cursor: pointer" @click="pubbtx(item.owner)"> {{ titleUrl(item.owner).type ?
+                                titleUrl(item.owner).url :
+                                stringcate(item.owner) }}</text>
+
                             <img v-if="titleUrl(item.owner).type"
                                 v-for="item, index in titleUrl(item.owner).certificates" :src="item.img" :key="index"
                                 height="24" alt="" class="marginRight10">
