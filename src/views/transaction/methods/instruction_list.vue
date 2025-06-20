@@ -14,14 +14,14 @@
                     {{ dataDeal(items.log).type == "invoke" ? dataDeal(items.log).name + ' ' +
                         titleUrl(dataDeal(items.log).value).url : (dataDeal(items.log).type == "success" ?
                             dataDeal(items.log).name + ' ' +
-                            'returned' + ' ' + dataDeal(items.log).type  : items.log)}}
+                            'returned' + ' ' + dataDeal(items.log).type : items.log) }}
                 </li>
             </ul>
         </li>
     </ul>
 </template>
 <script setup>
-import { end } from '@popperjs/core';
+import { ref } from 'vue';
 
 import { titleUrl } from '../../../components/method/title_url';
 
@@ -48,6 +48,8 @@ const props = defineProps({
     }
 })
 
+const dataItem = ref([]);
+
 const dataDeal = (item) => {
     return {
         name: item.split(" ")[0],
@@ -55,7 +57,8 @@ const dataDeal = (item) => {
         type: item.split(" ")[2],
     };
 };
-
+const stareIndex = ref(0);
+const endIndex = ref(props.data.length);
 
 const extractLogsBetweenFirstAndLast = (data, item, index, lastprogramId) => {
     let startIndex = 0;
@@ -82,18 +85,28 @@ const extractLogsBetweenFirstAndLast = (data, item, index, lastprogramId) => {
             }
         }
 
-        const matchedLogs = data.slice(startIndex+1, endIndex + 1);
+        const matchedLogs = data.slice(startIndex + 1, endIndex + 1);
+        console.log(startIndex + 1, endIndex + 1);
+        // dataItem.value = data.slice(endIndex + 1, data.length)
         // 如果没有找到任何匹配项，返回空数组
+        stareIndex.value = endIndex + 1;
         return matchedLogs;
     } else {
-        for (let i = 0; i < data.length; i++) {
+        // for (let i = 0; i < data.length; i++) {
+        //     const parts = data[i].split(' ');
+        //     if (parts.length > 1 && parts[1] === lastprogramId && parts[2] == 'success') {
+        //         startIndex = i + 1;
+        //         break;
+        //     }
+        // }
+        for (let i = data.length - 1; i >= 0; i--) {
             const parts = data[i].split(' ');
-            if (parts.length > 1 && parts[1] === lastprogramId && parts[2] == 'success') {
-                startIndex = i+1;
+            if (parts.length > 1 && parts[1] === lastprogramId && parts[2] === 'success') {
+                startIndex = i + 1;
                 break;
             }
         }
-        // console.log(startIndex);
+
 
         for (let i = startIndex; i < data.length; i++) {
             const parts = data[i].split(' ');
@@ -102,8 +115,9 @@ const extractLogsBetweenFirstAndLast = (data, item, index, lastprogramId) => {
                 break; // 找到最后一个匹配项后退出循环
             }
         }
-  
-        const matchedLogs = data.slice(startIndex +1, endIndex + 1);
+
+        const matchedLogs = data.slice(startIndex + 1, endIndex + 1);
+        stareIndex.value = endIndex + 1;
         return matchedLogs;
     }
 
@@ -112,8 +126,17 @@ const extractLogsBetweenFirstAndLast = (data, item, index, lastprogramId) => {
 // 使用 liList 函数来展示如何调用 extractLogsBetweenFirstAndLast
 const liList = (data, item, index, lastprogramId) => {
     // console.log(data, item, index, lastprogramId);
+    // console.log(dataItem.value);
+    console.log(stareIndex.value);
+    console.log(endIndex.value);
+    // console.log(data.slice(stareIndex.value,endIndex.value));
+    // let dataArray = data.slice(stareIndex.value, endIndex.value);
+    // console.log(dataArray);
 
     const listData = extractLogsBetweenFirstAndLast(data, item, index, lastprogramId);
+    // console.log(listData);
+    // console.log(dataItem.value);
+
 
     const parsedData = buildLogTree(listData);
 

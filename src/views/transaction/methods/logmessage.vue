@@ -20,8 +20,8 @@
                         <div v-if="item.programId">
                             <instructionview :data="data.meta.logMessages"
                                 :innerInstructions="data.meta.innerInstructions" :programId="item.programId"
-                                :index="index" :instructions="data.transaction.message.instructions[index - 1] ?
-                                    data.transaction.message.instructions[index - 1].programId : null" />
+                                :index="index" :instructions="data.transaction.message.instructions[index-1] ?
+                                    data.transaction.message.instructions[index-1].programId : null" />
                         </div>
                     </div>
                 </div>
@@ -38,9 +38,14 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
-import { titleUrl } from "../../../components/method/title_url";
-import instructionview from './instruction_list.vue'
+import {
+  ref,
+  watch,
+} from 'vue';
+
+import { titleUrl } from '../../../components/method/title_url';
+import instructionview from './instruction_list.vue';
+
 const props = defineProps({
     data: {
         type: Object,

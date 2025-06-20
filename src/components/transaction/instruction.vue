@@ -33,11 +33,13 @@
                                     </span>
                                 </td>
                                 <td class="text-end"
-                                    :class="typeof titleUrl(value).url == 'string' ? 'text-theme' : ''">
-                                    <text :style="typeof titleUrl(value).url == 'string' ? 'cursor: pointer' : ''"
+                                    :class="typeof titleUrl(value).url == 'string' ?  (value.length > 43 ? 'text-theme' : '') : ''">
+                                    <text :style="typeof titleUrl(value).url == 'string' ?  (value.length > 43 ? 'cursor: pointer' : '')  : ''"
                                         @click="pubbleys(
-                                            key == 'extensionTypes' ? '' : (key == 'lamports' ? '' : (key == 'space' ? '' : (key == 'decimals' ? '' : (key == 'tokenAmount' ? '' : value))))
-                                        )">{{ key == 'extensionTypes' ? value[0] : (key == 'lamports' ?
+                                            value.length > 43 ? (key == 'extensionTypes' ? '' : (key == 'lamports' ? '' : (key == 'space' ? '' : (key == 'decimals' ? '' : (key == 'tokenAmount' ? '' : value))))
+                                            ) : ''
+                                        )">
+                                        {{ key == 'extensionTypes' ? value[0] : (key == 'lamports' ?
                                             toFexedStake(value)
                                             :
                                             (key
@@ -66,11 +68,12 @@
                                             </span>
                                         </td>
                                         <td class="text-end"
-                                            :class="typeof titleUrl(values).url == 'string' ? 'text-theme' : ''">
+                                            :class="typeof titleUrl(values).url == 'string' ?  (values.length > 43 ? 'text-theme' : '') : ''">
                                             <text
-                                                :style="typeof titleUrl(values).url == 'string' ? 'cursor: pointer' : ''"
+                                                :style="typeof titleUrl(values).url == 'string' ?  (values.length > 43 ? 'cursor: pointer' : '')  : ''"
                                                 @click="pubbleys(
-                                                    keys == 'extensionTypes' ? '' : (keys == 'lamports' ? '' : (keys == 'space' ? '' : (keys == 'decimals' ? '' : (keys == 'tokenAmount' ? '' : values))))
+                                                    values.length > 43 ? (keys == 'extensionTypes' ? '' : (keys == 'lamports' ? '' : (keys == 'space' ? '' : (keys == 'decimals' ? '' : (keys == 'tokenAmount' ? '' : values))))
+                                                    ) : ''
                                                 )">{{ keys ==
                                                     'space' ?
                                                     'byts(s)' : '' }}
@@ -165,10 +168,11 @@
                                     </span>
                                 </td>
                                 <td class="text-end"
-                                    :class="typeof titleUrl(value).url == 'string' ? 'text-theme' : ''">
-                                    <text :style="typeof titleUrl(value).url == 'string' ? 'cursor: pointer' : ''"
+                                    :class="typeof titleUrl(value).url == 'string' ?  (value.length > 43 ? 'text-theme' : '') : ''">
+                                    <text :style="typeof titleUrl(value).url == 'string' ?  (value.length > 43 ? 'cursor: pointer' : '')  : ''"
                                         @click="pubbleys(
-                                            key == 'extensionTypes' ? '' : (key == 'lamports' ? '' : (key == 'space' ? '' : (key == 'decimals' ? '' : (key == 'tokenAmount' ? '' : value))))
+                                            value.length > 43 ? (key == 'extensionTypes' ? '' : (key == 'lamports' ? '' : (key == 'space' ? '' : (key == 'decimals' ? '' : (key == 'tokenAmount' ? '' : value))))
+                                            ) : ''
                                         )"> {{ key == 'extensionTypes' ? value[0] : (key == 'lamports' ?
                                             toFexedStake(value)
                                             :
@@ -198,17 +202,18 @@
                                             </span>
                                         </td>
                                         <td class="text-end"
-                                            :class="typeof titleUrl(values).url == 'string' ? 'text-theme' : ''">
+                                            :class="typeof titleUrl(values).url == 'string' ?  (values.length > 43 ? 'text-theme' : '') : ''">
                                             <text
-                                                :style="typeof titleUrl(values).url == 'string' ? 'cursor: pointer' : ''"
+                                                :style="typeof titleUrl(values).url == 'string' ? (values.length > 43 ? 'cursor: pointer' : '') : ''"
                                                 @click="pubbleys(
-                                                    keys == 'extensionTypes' ? '' : (keys == 'lamports' ? '' : (keys == 'space' ? '' : (keys == 'decimals' ? '' : (keys == 'tokenAmount' ? '' : values))))
+                                                    values.length > 43 ? (keys == 'extensionTypes' ? '' : (keys == 'lamports' ? '' : (keys == 'space' ? '' : (keys == 'decimals' ? '' : (keys == 'tokenAmount' ? '' : values))))
+                                                    ) : ''
                                                 )"> {{ keys == 'extensionTypes' ? values[0] : (keys == 'lamports' ?
-                                                toFexedStake(values)
-                                                :
-                                                (keys
-                                                    == 'tokenAmount' ? values.uiAmount : (keys == 'lockouts' ? 'data' :
-                                                        titleUrl(values).url))) }}
+                                                    toFexedStake(values)
+                                                    :
+                                                    (keys
+                                                        == 'tokenAmount' ? values.uiAmount : (keys == 'lockouts' ? 'data' :
+                                                            titleUrl(values).url))) }}
                                                 {{ keys ==
                                                     'space' ?
                                                     'byts(s)' : '' }}

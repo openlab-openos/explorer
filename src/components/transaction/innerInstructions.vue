@@ -31,10 +31,15 @@
                             <td>{{ capitalize(key == "lamports" ? 'amount' : key) }}
                                 {{ key == "lamports" ? '(BTG)' : '' }}
                             </td>
-                            <td class="text-end" :class="typeof titleUrl(value).url == 'string' ? 'text-theme' : ''">
-                                <text :style="typeof titleUrl(value).url == 'string' ? 'cursor: pointer' : ''" @click="pubbleys(
-                                    key == 'extensionTypes' ? '' : (key == 'lamports' ? '' : (key == 'space' ? '' : (key == 'decimals' ? '' : (key == 'tokenAmount' ? '' : value))))
-                                )">{{ key == 'extensionTypes' ? value[0] : (key == 'lamports' ? toFexedStake(value) :
+                            <td class="text-end"
+                                :class="typeof titleUrl(value).url == 'string' ? (value.length > 43 ? 'text-theme' : '') : ''">
+                                <text
+                                    :style="typeof titleUrl(value).url == 'string' ? (value.length > 43 ? 'cursor: pointer' : '') : ''"
+                                    @click="pubbleys(
+                                        value.length > 43 ? (key == 'extensionTypes' ? '' : (key == 'lamports' ? '' : (key == 'space' ? '' : (key == 'decimals' ? '' : (key == 'tokenAmount' ? '' : value))))
+                                        ) : ''
+                                    )">{{ key == 'extensionTypes' ? value[0] : (key == 'lamports' ? toFexedStake(value)
+                                    :
                                     (key
                                         == 'tokenAmount' ? value.uiAmount : titleUrl(value).url)) }} {{ key == 'space' ?
                                         'byts(s)' : '' }}

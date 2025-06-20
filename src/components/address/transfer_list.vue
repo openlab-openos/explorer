@@ -32,7 +32,8 @@
                 <template v-if="loading">
                     <tr v-for="(item, index) in paginatedHistoryData" :key="index">
                         <td class="text-theme">
-                            <text style="cursor: pointer" @click="pubbtx(item.signature)">{{ stringcate(item.signature) }}</text>
+                            <text style="cursor: pointer" @click="pubbtx(item.signature)">{{ stringcate(item.signature)
+                                }}</text>
                         </td>
                         <td>
                             <button type="button" style="
@@ -54,14 +55,14 @@
                             </button>
                         </td>
                         <td style=" text-align: left; " :class="item.primaryType ? 'color0-255-179-1' : 'text-theme'
-                            " >
+                            ">
                             <text style="cursor: pointer" @click="slot(
                                 item.primary
-                            )"></text>
-                            {{
+                            )">{{
                                 titleUrl(item.primary).url
 
-                            }}
+                                }}</text>
+
                             <!-- <img v-if="titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
                                 .parsed.info.destination : item.result.transaction.message.instructions[1]
                                     .parsed.info.destination).type" v-for="(datas, indexs) in titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
@@ -84,7 +85,7 @@
                                 item.quantity
                             )"> {{
                                 titleUrl(item.quantity).url
-                                }}</text>
+                            }}</text>
 
 
                             <img v-if="titleUrl(quantity).type && titleUrl(item.quantity).assest"
@@ -99,11 +100,11 @@
                         <td style=" text-align: left;" class="text-theme">
                             <text style=" cursor: pointer" @click="slot(
                                 item.program
-                            )"></text>
-                            {{
+                            )">{{
                                 titleUrl(item.program).url
 
-                            }}
+                                }}</text>
+
                             <img v-if="
                                 !titleUrl(item.program).type && !titleUrl(program).assest" v-for="(datas, indexs) in
                                     titleUrl(item.program).certificates" :key="indexs" :src="datas.img" height="24"
@@ -128,7 +129,7 @@
 
                                 item.token
 
-                                }}</text>
+                            }}</text>
 
                             <img v-if="titleUrl(item.token).type && !titleUrl(item.token).assest"
                                 v-for="(datas, indexs) in titleUrl(item.token).certificates" :key="indexs"
@@ -236,6 +237,7 @@ onMounted(async () => {
 
     }
 });
+const ownerArray = ref([props.url]);
 
 const HandleList = (listItem) => {
     console.log('原始数据:', listItem);
@@ -255,7 +257,9 @@ const HandleList = (listItem) => {
 
             // 确保第一条指令存在且格式正确
             const firstInstruction = instructions?.[0];
-            const movementType = firstInstruction?.parsed?.type === "transfer"
+            console.log(firstInstruction?.parsed?.type === "transfer" && firstInstruction?.parsed?.programId == "11111111111111111111111111111111");
+
+            const movementType = firstInstruction?.parsed?.type === "transfer" && firstInstruction?.parsed?.programId == "11111111111111111111111111111111"
                 ? "Transfer"
                 : "token_transfer";
 
@@ -266,20 +270,27 @@ const HandleList = (listItem) => {
             let lamports = 0;
             let primaryType = false;
             let quantityType = false;
+            let owner = '';
             if (instructions.length === 1) {
                 primary = firstInstruction?.parsed?.info?.source || '';
-                primaryType = props.type ? (firstInstruction?.parsed?.info?.source == props.url ? true : ((firstInstruction?.parsed?.info?.source == firstInstruction?.parsed?.info?.destination ? true : false))) : false;
+                // primaryType = props.type ? (firstInstruction?.parsed?.info?.source == props.url ? true : ((firstInstruction?.parsed?.info?.source == firstInstruction?.parsed?.info?.destination ? true : false))) : false;
+                primaryType = false
                 quantity = firstInstruction?.parsed?.info?.destination || '';
-                quantityType = props.type ? (firstInstruction?.parsed?.info?.source == props.url ? ((firstInstruction?.parsed?.info?.destination == props.url ? true : false)) : true) : false;
+                // quantityType = props.type ? (firstInstruction?.parsed?.info?.source == props.url ? ((firstInstruction?.parsed?.info?.destination == props.url ? true : false)) : true) : false;
+                quantityType = false;
                 program = firstInstruction?.programId || '';
                 lamports = firstInstruction?.parsed?.info?.tokenAmount ? firstInstruction?.parsed?.info?.tokenAmount?.amount : firstInstruction?.parsed?.info?.lamports;
+                owner = firstInstruction?.parsed?.info?.source == firstInstruction?.parsed?.info?.destination ? firstInstruction?.parsed?.info?.destination : '';
             } else if (instructions.length >= 2) {
                 primary = instructions[1]?.parsed?.info?.source || '';
-                primaryType = props.type ? (instructions[1]?.parsed?.info?.source == props.url ? true : (instructions[1]?.parsed?.info?.source == instructions[1]?.parsed?.info?.destination ? true : false)) : false;
+                primaryType = false
+                // primaryType = props.type ? (instructions[1]?.parsed?.info?.source == props.url ? true : (instructions[1]?.parsed?.info?.source == instructions[1]?.parsed?.info?.destination ? true : false)) : false;
                 quantity = instructions[1]?.parsed?.info?.destination || '';
-                quantityType = props.type ? (instructions[1]?.parsed?.info?.source == props.url ? (instructions[1]?.parsed?.info?.destination == props.url ? true : false) : true) : false;
+                // quantityType = props.type ? (instructions[1]?.parsed?.info?.source == props.url ? (instructions[1]?.parsed?.info?.destination == props.url ? true : false) : true) : false;
+                quantityType = false;
                 program = instructions[1]?.programId || '';
                 lamports = instructions[1]?.parsed?.info?.tokenAmount ? instructions[1]?.parsed?.info?.tokenAmount?.amount : instructions[1]?.parsed?.info?.lamports;
+                owner = instructions[1]?.parsed?.info?.source == instructions[1]?.parsed?.info?.destination ? instructions[1]?.parsed?.info?.owner : '';
             }
             let token = firstInstruction.parsed.info.mint ? titleUrl(firstInstruction.parsed.info.mint).url : 'BTG'
             let time = timeSome(listItem[i].result.blockTime)
@@ -295,6 +306,7 @@ const HandleList = (listItem) => {
                 lamports,
                 token,
                 time,
+                owner
             };
 
             // console.log('处理后的项:', obj);
@@ -305,6 +317,27 @@ const HandleList = (listItem) => {
             continue; // 继续处理其他项
         }
     }
+    console.log(array);
+    for (let i in array) {
+        const owner = array[i].owner;
+        if (owner && !ownerArray.value.some(item => item === owner)) {
+            ownerArray.value.push(owner);
+        }
+    }
+    for (let j in array) {
+        for (let i in ownerArray.value) {
+            if (array[j].primary == ownerArray.value[i]) {
+                array[j].primaryType = true;
+            }
+            if (array[j].quantity == ownerArray.value[i]) {
+                array[j].quantityType = true;
+            }
+            if (!array[j].primaryType) {
+                array[j].quantityType = true;
+            }
+        }
+    }
+    console.log('ownerArray:', ownerArray.value);
 
     console.log('处理后的数组:', array);
     console.log('函数执行完成');
