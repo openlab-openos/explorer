@@ -244,7 +244,6 @@ const getActivityLogData = async () => {
         } else {
             map.value.addMarkers(mapArray.value);
 
-
             mapData.value = mapArray.value;
             console.log(mapArray.value);
 

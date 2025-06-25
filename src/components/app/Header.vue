@@ -35,6 +35,25 @@ const appOption = useAppOptionStore();
 const notificationData = [];
 const currentUrl = window.location.href;
 
+
+// @ts-ignore
+let app = JSON.parse(sessionStorage.getItem("app"));
+// @ts-ignore
+let GeturlType = JSON.parse(sessionStorage.getItem("urlType"));
+let url = currentUrl.includes("?cluster=devnet");
+
+// 初始化 urlType
+let urlType = app
+  ? GeturlType
+    ? GeturlType.urlType == "Test"
+      ? false
+      : app.chainType == "Test"
+        ? false
+        : true
+    : true
+  : url
+    ? false
+    : true;
 const searchcontent = ref("");
 const abbreviationLanguage = ref();
 const languages = ref([
@@ -165,7 +184,7 @@ const selsetClick = (index: number) => {
         urlType: item.requestType,
         url: item.url
       })); // @ts-ignore
-      sessionStorage.setItem('Dev', item.requestType == 'Test' ? 'Dev' : 'Mint' );
+      sessionStorage.setItem('Dev', item.requestType == 'Test' ? 'Dev' : 'Mint');
       window.location.reload();
 
     } else {
@@ -228,8 +247,9 @@ onMounted(() => {
           <span class="brand-img-text text-theme">H</span>
         </span> -->
         <img height="24px" src="https://cdn.openverse.network/brands/openverse/icon_128.png" alt="">
-        <span class="brand-text titleBox">OPENVERSE <span class="marks">LIVE</span> </span>
+        <span class="brand-text titleBox">OPENVERSE <span class="marks">LIVE</span>  </span>
       </RouterLink>
+      <span v-if="!urlType" style="margin-left: 2.3rem;" >(DEV)</span>
     </div>
     <!-- END brand -->
 
