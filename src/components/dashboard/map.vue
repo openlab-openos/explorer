@@ -46,7 +46,7 @@
                                         <table class="w-100 small mb-0 text-inverse text-opacity-60">
                                             <tbody>
                                                 <tr v-for="(source, index) in traffic.chainArray" :key="index">
-                                                    <template v-if="source.name != 'undefined'" >
+                                                    <template v-if="source.name != 'undefined'">
                                                         <td class="minification-size">
                                                             <div class="d-flex align-items-center">
                                                                 <div class="w-6px h-6px rounded-pill me-2"
@@ -166,13 +166,13 @@ const getActivityLogData = async () => {
         chainRequest(ClusterNodes),
         chainRequest(VoteAccounts),
     ]).then((res) => {
-        
-        
+
+
         appStore.setVaildators(res);
         let ClusterNodes_list = res[0].result;
         let ProgramAccounts_list = res[1].result;
         let VoteAccounts_list = res[2].result;
-        
+
         appStore.setminntAccount = res[2].result
         let list = [];
 
@@ -279,17 +279,22 @@ const renderMap = async () => {
                         country_name: ipData.country_name,
                     });
                 }
-                 else {
-                     let loc_lat = await getIPLocation(ActivityLogData.value[i].ip);
+                else {
+                    try {
+                        // let loc_lat = await getIPLocation('154.12.240.128');
+                        let loc_lat = await getIPLocation(ActivityLogData.value[i].ip);
 
-                    markers_data.push({
-                        name: "",
-                        coords: [loc_lat.latitude, loc_lat.longitude],
-                        try: loc_lat.country,
-                        code: loc_lat.continent_code,
-                        timezone: loc_lat.timezone,
-                        country_name: loc_lat.country_name,
-                    });
+                        markers_data.push({
+                            name: "",
+                            coords: [loc_lat.lat, loc_lat.lon],
+                            try: loc_lat.countryCode,
+                            code: loc_lat.region,
+                            timezone: loc_lat.timezone,
+                            country_name: loc_lat.country,
+                        });
+                    } catch (error) {
+                        console.log(error);
+                    }
                 }
             }
 
@@ -377,26 +382,48 @@ const renderMap = async () => {
 
     // appStore.setMarkersData(markers_data);
     map.value.addMarkers(markers_data);
-    
+
     mapData.value = markers_data;
     traffic.value = getTrafficData(markers_data);
 
 };
 
+// const getIPLocation = async (ip) => {
+//     const url = `/ip/${ip}/json`; // 使用你的访问令牌
+//     // const url = `https://ipapi.co/ip/${ip}/json`; // 使用你的访问令牌
+
+//     try {
+//         const response = await fetch(url);
+//         if (!response.ok) {
+//             throw new Error(`HTTP error! Status: ${response.status}`);
+//         }
+//         const data = await response.json();
+//         localStorage.setItem(ip, JSON.stringify(data));
+//         return data; // 返回包含地理位置信息的对象
+//     } catch (error) {
+//         // localStorage.setItem(ip, '');
+//         console.error("Error fetching location:", error);
+//         // return error; // 或抛出错误
+//     }
+// };
 const getIPLocation = async (ip) => {
-    const url = `https://ipapi.co/${ip}/json`; // 使用你的访问令牌
+    const url = `http://ip-api.com/json/${ip}`; // 使用你的访问令牌
+    // const url = `https://ipapi.co/ip/${ip}/json`; // 使用你的访问令牌
 
     try {
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
+        console.log(response);
+        
         const data = await response.json();
         localStorage.setItem(ip, JSON.stringify(data));
         return data; // 返回包含地理位置信息的对象
     } catch (error) {
+        // localStorage.setItem(ip, '');
         console.error("Error fetching location:", error);
-        return error; // 或抛出错误
+        // return error; // 或抛出错误
     }
 };
 const getTrafficData = (data) => {
@@ -408,7 +435,7 @@ const getTrafficData = (data) => {
     if (data) {
         let arrayData = uniqueArrayByProperty(data, "try");
         let country = uniqueArrayByProperty(data, "code");
-        
+
         for (let i = 0; i < 5; i++) {
             if (arrayData[i].value != undefined) {
                 coun.push({
