@@ -17,7 +17,7 @@
                         <tr v-if="item.programId">
                             <td>ProgramId</td>
                             <td class="text-end text-theme ">
-                                <text style="cursor: pointer" @click="item.programId">{{
+                                <text style="cursor: pointer" @click="pubbleys(item.programId)">{{
                                     titleUrl(item.programId).url }}</text>
                             </td>
                         </tr>
@@ -118,7 +118,7 @@
                         <tr v-if="item.programId">
                             <td>ProgramId</td>
                             <td class="text-end text-theme ">
-                                <text style="cursor: pointer" @click="item.programId">{{
+                                <text style="cursor: pointer" @click="pubbleys(item.programId)">{{
                                     titleUrl(item.programId).url }}</text>
                             </td>
                         </tr>

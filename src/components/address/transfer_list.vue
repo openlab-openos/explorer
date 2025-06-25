@@ -228,7 +228,7 @@ const requestList = async (object) => {
 onMounted(async () => {
     try {
         let res = await requestList('transactions/' + props.url);
-        historyData.value = HandleList(res)
+        historyData.value = HandleList(res);
         totalItems.value = historyData.value.length;
         loading.value = true;
         // console.log(historyData.value);
