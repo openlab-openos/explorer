@@ -495,7 +495,7 @@ const datas = ref();
 const Authentication = async () => {
   await axios
     .get(
-      `https://open.openverse.live/api/token/some?net=${urlType ? "mainnet" : "devnet"}`,
+      `https://open.openverse.live/api/token/hot`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -504,6 +504,8 @@ const Authentication = async () => {
     )
     .then((res) => {
       let data = Cretifucate(res.data.data);
+      console.log(data);
+      
       const transformedObject = data.reduce(
         (acc, item) => {
           acc[item.address] = item;
@@ -575,24 +577,26 @@ const TypebackColor = (type: string) => {
 };
 
 const Cretifucate = (data: Array<any>) => {
+  console.log(data);
+  
   let CretifucateArray = [];
   for (let i in data) {
     CretifucateArray.push({
-      address: data[i].address,
-      img: data[i].image_url,
-      name: data[i].name,
-      code: data[i].protocol_code,
-      symbol: data[i].symbol,
+      address: data[i].token.address,
+      img: data[i].token.image_url,
+      name: data[i].token.name,
+      code: data[i].token.protocol_code,
+      symbol: data[i].token.symbol,
       certificates: [],
     });
-    for (let j in data[i].certificates) {
+    for (let j in data[i].token.certificates) {
       // @ts-ignore
       CretifucateArray[i].certificates.push({
         // @ts-ignore
-        img: data[i].certificates[j].image_url,
+        img: data[i].token.certificates[j].image_url,
         // 'img': imageType(data[i].certificates[j].certificate_code),
-        code: data[i].certificates[j].certificate_code == 'USDStableCoin' ? 'Stablecoin' : data[i].certificates[j].certificate_code ,
-        backColor: TypebackColor(data[i].certificates[j].certificate_code),
+        code: data[i].token.certificates[j].certificate_code == 'USDStableCoin' ? 'Stablecoin' : data[i].token.certificates[j].certificate_code ,
+        backColor: TypebackColor(data[i].token.certificates[j].certificate_code),
       });
     }
   }

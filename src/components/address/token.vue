@@ -95,6 +95,7 @@
                 </table>
             </card-body>
         </card>
+       
     </div>
 </template>
 
@@ -152,7 +153,7 @@ const tokenRwquest = async () => {
         try {
             solanaRequest(url.value, res.result.value.owner).then(res => {
 
-                tokenData.value = res;
+                // tokenData.value = res;
 
                 if (res.mintAuthority) {
                     let mintAuthorit = res.mintAuthority._bn;

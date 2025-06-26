@@ -50,6 +50,7 @@ export const titleUrl = (url) => {
         };
     }
 
+    
     if (Authentications[url]) {
         return {
             url: Authentications[url].name,

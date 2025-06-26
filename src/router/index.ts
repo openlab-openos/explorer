@@ -232,24 +232,24 @@ console.log(sessionStorage.getItem("Dev"));
 let isProcessing = false;
 
 // 浅比较两个对象
-function shallowEqual(objA, objB) {
-  if (objA === objB) return true;
-  if (typeof objA !== 'object' || objA === null || 
-      typeof objB !== 'object' || objB === null) {
-    return false;
-  }
+// function shallowEqual(objA, objB) {
+//   if (objA === objB) return true;
+//   if (typeof objA !== 'object' || objA === null || 
+//       typeof objB !== 'object' || objB === null) {
+//     return false;
+//   }
   
-  const keysA = Object.keys(objA);
-  const keysB = Object.keys(objB);
+//   const keysA = Object.keys(objA);
+//   const keysB = Object.keys(objB);
   
-  if (keysA.length !== keysB.length) return false;
+//   if (keysA.length !== keysB.length) return false;
   
-  for (let key of keysA) {
-    if (objA[key] !== objB[key]) return false;
-  }
+//   for (let key of keysA) {
+//     if (objA[key] !== objB[key]) return false;
+//   }
   
-  return true;
-}
+//   return true;
+// }
 
 const router = createRouter({
   history: createWebHistory(),
@@ -380,7 +380,8 @@ router.beforeEach((to, from, next) => {
   }
 });
 
-// 添加更新 urlType 的方法
+// 添加更新 urlType 的方法 
+// @ts-ignore
 export function updateUrlType(newUrlType) {
   console.log("[更新 urlType]", urlType, "→", newUrlType);
   urlType = newUrlType;

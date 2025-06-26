@@ -90,7 +90,7 @@
                 </card-body>
             </card>
 
-            <card class="md-3 marginTOP-50">
+            <!-- <card class="md-3 marginTOP-50">
                 <card-body class="card-bodys ">
                     <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
                         <th>
@@ -125,7 +125,8 @@
                         </tbody>
                     </table>
                 </card-body>
-            </card>
+            </card> -->
+             <authorization v-if="address" :url="address" ></authorization>
         </div>
 
         <!-- <div class="tab-content marginTOP-50">
@@ -205,6 +206,7 @@ import {
 } from '../../../request/extension';
 import { solanaRequest } from '../../../request/solanaReques';
 import { metaRequest } from '../../../request/tokenMeta';
+import authorization from './components/authorization.vue';
 import cardView from './components/card.vue';
 
 // import {  checkAccountTransferability,getTokenTransferFeeMax } from "../../../request/extension";

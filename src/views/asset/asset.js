@@ -10,7 +10,8 @@ let urlType = app ? (GeturlType? (GeturlType.urlType == 'Test' ? false : (app.ch
 
 export function tokenList(data){
     return new Promise((resolve,reject)=>{
-        axios.get(`https://open.openverse.live/api/token/some?net=${urlType ? 'mainnet' : 'devnet'}`,data,{
+        axios.get(`https://open.openverse.live/api/token/hot`,data,{
+        // axios.get(`https://open.openverse.live/api/token/some?net=${urlType ? 'mainnet' : 'devnet'}`,data,{
         // axios.get("https://open.openverse.live/api/token/web",data,{
             headers:{
                 "Content-Type":"application/json"

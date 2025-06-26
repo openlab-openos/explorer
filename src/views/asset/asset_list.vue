@@ -21,32 +21,33 @@
                         </tr>
                         <tr v-for="item, index in paginatedHistoryData" :key="index">
                             <td class="text-theme">
-                                <img v-if="item.image_url" :src="item.image_url" height="24" alt=""
+                                <img v-if="item.token.image_url" :src="item.token.image_url" height="24" alt=""
                                     class="marginRight8">
                                 <img v-if="B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz"
-                                    :src="item.pubkey == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' ? 'https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png' : ''"
+                                    :src="item.token.pubkey == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' ? 'https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png' : ''"
                                     width="32" alt="" class="marginRight8">
                                 
-                                <text style="cursor: pointer;"  @click="pubbleys(item.address)">{{ titleUrl(item.address).url }}</text>
-                                <!-- <img v-if="titleUrl(item.pubkey).type" src="../../../src//assets//renzheng.png"
+                                <text style="cursor: pointer;"  @click="pubbleys(item.token.address)">{{ titleUrl(item.token.address).url }}</text>
+                                <!-- <img v-if="titleUrl(item.token.pubkey).type" src="../../../src//assets//renzheng.png"
                                     height="24" alt=""> -->
-                                <img v-if="titleUrl(item.pubkey).type"
-                                    v-for="(datas, indexs) in titleUrl(item.pubkey).certificates" :key="indexs"
+                                <img v-if="titleUrl(item.token.pubkey).type"
+                                    v-for="(datas, indexs) in titleUrl(item.token.pubkey).certificates" :key="indexs"
                                     :src="datas.img" height="24" class="marginRight8" alt="">
                             </td>
                             <td>
-                                {{ item.symbol }}
+                                {{ item.token.symbol }}11
                             </td>
-                            <template v-if="item.certificates.length == 0">
+                            
+                            <template v-if="item.token.certificates.length == 0">
                                 <td>N/A</td>
                             </template>
                             <template v-else>
                                 <td>
-                                    <!-- <img v-for="items, indexs in item.certificates" :key="indexs"
+                                    <!-- <img v-for="items, indexs in item.token.certificates" :key="indexs"
                                         :src="items.image_url" height="20" class="marginRight8"
                                         :title="items.certificate_code"> -->
                                     <div style="display: flex;">
-                                        <p v-for="items, indexs in item.certificates" :key="indexs" :style="'background-color: ' + items.backColor" style="border-radius: 5px;padding: 2px 4px;margin-right: 5px;margin-bottom: 0;font-weight: 500;">
+                                        <p v-for="items, indexs in item.token.certificates" :key="indexs" :style="'background-color: ' + items.backColor" style="border-radius: 5px;padding: 2px 4px;margin-right: 5px;margin-bottom: 0;font-weight: 500;">
                                             {{ items.certificate_code }}
                                         </p>
                                     </div>
@@ -55,20 +56,20 @@
 
 
                             <!-- <td>
-                                {{ item.symbol }}
+                                {{ item.token.symbol }}
                             </td> -->
                             <td>
-                                {{ item.protocol_code ? item.protocol_code : 'N/A' }}
+                                {{ item.token.protocol_code ? item.token.protocol_code : 'N/A' }}
                             </td>
                             <td>
-                                {{ item.holders }}
+                                {{ item.token.holders }}
                             </td>
                             <td>
-                                $ {{ come(item.market_cap) }}
+                                $ {{ come(item.token.market_cap) }}
                             </td>
                             <td>
-                                {{ item.price ? '$' : '' }} {{ item.price ? item.price : 'N/A' }}
-                                <img v-if="item.price_icon" :src="imgUrl + '/' + item.price_icon" height="24"
+                                {{ item.token.price ? '$' : '' }} {{ item.token.price ? item.token.price : 'N/A' }}
+                                <img v-if="item.token.price_icon" :src="imgUrl + '/' + item.token.price_icon" height="24"
                                     class="marginRight8" alt="">
                             </td>
                         </tr>
@@ -126,42 +127,46 @@ const loading = ref(false);
 const paginatedHistoryData = computed(() => {
     const start = (currentPage.value - 1) * pageSize.value;
     const end = start + pageSize.value;
+    console.log(historyData.value);
+    
     return historyData.value.slice(start, end);
 });
 tokenList().then((res) => {
 
 
-    let showData = res.data.filter(item => item.is_web == 1);
+    let showData = res.data;
 
     dataArray.value = showData;
     console.log(showData);
+    
+    console.log(showData);
     for (let i in showData) {
-        for (let j in showData[i].certificates) {
-            switch (showData[i].certificates[j].certificate_code) {
+        for (let j in showData[i].token.certificates) {
+            switch (showData[i].token.certificates[j].certificate_code) {
                 case 'Official':
-                    showData[i].certificates[j].backColor = '#229cF2'
+                    showData[i].token.certificates[j].backColor = '#229cF2'
                     break;
                 case 'Unknown':
-                    showData[i].certificates[j].backColor = '#d4d6d7'
+                    showData[i].token.certificates[j].backColor = '#d4d6d7'
                     break;
                 case 'Unsafe':
-                    showData[i].certificates[j].backColor = '#F61414'
+                    showData[i].token.certificates[j].backColor = '#F61414'
                     break;
                 case 'VRC10':
-                    showData[i].certificates[j].backColor = '#ffa06f'
+                    showData[i].token.certificates[j].backColor = '#ffa06f'
                     break;
                 case 'VRC11':
-                    showData[i].certificates[j].backColor = '#ffa06f'
+                    showData[i].token.certificates[j].backColor = '#ffa06f'
                     break;
                 case 'VRC12':
-                    showData[i].certificates[j].backColor = '#ffa06f'
+                    showData[i].token.certificates[j].backColor = '#ffa06f'
                     break;
                 case "USDStableCoin":
-                    showData[i].certificates[j].certificate_code = 'Stablecoin'
-                    showData[i].certificates[j].backColor = '#5ba556'
+                    showData[i].token.certificates[j].certificate_code = 'Stablecoin'
+                    showData[i].token.certificates[j].backColor = '#5ba556'
                     break;
                 case "Stablecoin":
-                    showData[i].certificates[j].backColor = '#5ba556'
+                    showData[i].token.certificates[j].backColor = '#5ba556'
                     break;
             }
         }
