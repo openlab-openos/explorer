@@ -35,7 +35,7 @@
                                     :src="datas.img" height="24" class="marginRight8" alt="">
                             </td>
                             <td>
-                                {{ item.token.symbol }}11
+                                {{ item.token.symbol }}
                             </td>
                             
                             <template v-if="item.token.certificates.length == 0">
