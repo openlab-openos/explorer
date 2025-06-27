@@ -10,11 +10,11 @@
                     <tr>
                         <td>{{ $t("account.foundry_license") }} </td>
                         <td class="text-end text-theme">
-                            <text :style="data.mint_auth_address ? 'cursor: pointer' : ''"
-                                @click="pubbtx(data.mint_auth_address)">{{
-                                    !data.mint_auth_address ? "N/A" : titleUrl(data.mint_auth_address).url }}</text>
-                            <img v-if="titleUrl(data.mint_auth_address).type"
-                                v-for="(datas, indexs) in titleUrl(data.mint_auth_address).certificates" :key="indexs"
+                            <text :style="MintData?.mintAuthority ? 'cursor: pointer' : ''"
+                                @click="pubbtx(MintData?.mintAuthority)">{{
+                                    !MintData?.mintAuthority ? "N/A" : titleUrl(MintData?.mintAuthority).url }}</text>
+                            <img v-if="titleUrl(MintData?.mintAuthority).type"
+                                v-for="(datas, indexs) in titleUrl(MintData?.mintAuthority).certificates" :key="indexs"
                                 :src="datas.img" height="24" class="marginRight8" alt="">
 
                         </td>
@@ -22,23 +22,30 @@
                     <tr>
                         <td>{{ $t("account.freeze_authorization") }} </td>
                         <td class="text-end text-theme">
-                            <text :style="data.freeze_auth_address ? 'cursor: pointer' : ''"
-                                @click="pubbtx(data.freeze_auth_address)">{{ data.freeze_auth_address == null ? "N/A" :
-                                    titleUrl(data.freeze_auth_address).url }}</text>
-                            <img v-if="titleUrl(data.freeze_auth_address).type"
-                                v-for="(datas, indexs) in titleUrl(data.freeze_auth_address).certificates" :key="indexs"
-                                :src="datas.img" height="24" class="marginRight8" alt="">
+                            <text :style="MintData?.freezeAuthority ? 'cursor: pointer' : ''"
+                                @click="pubbtx(MintData?.freezeAuthority)">{{ MintData?.freezeAuthority == null ? "N/A"
+                                    :
+                                    titleUrl(MintData?.freezeAuthority).url }}</text>
+                            <img v-if="titleUrl(MintData?.freezeAuthority).type"
+                                v-for="(datas, indexs) in titleUrl(MintData?.freezeAuthority).certificates"
+                                :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
                         </td>
                     </tr>
                     <tr>
                         <td>{{ $t("account.update_authorization") }} </td>
-                        <td class="text-end text-theme">
-                            <text :style="data.update_auth_address ? 'cursor: pointer' : ''"
-                                @click="pubbtx(data.update_auth_address)">{{ data.update_auth_address == null ? "N/A" :
-                                    titleUrl(data.update_auth_address).url }}</text>
-                            <img v-if="titleUrl(data.update_auth_address).type"
-                                v-for="(datas, indexs) in titleUrl(data.update_auth_address).certificates" :key="indexs"
-                                :src="datas.img" height="24" class="marginRight8" alt="">
+                        <td class="text-end text-theme" v-if="MintData">
+                            <template v-for="(item, index) in MintData.extensions" :key="index">
+                                <template v-if="item.state.updateAuthority">
+                                    <text>{{ item.state.updateAuthority ? titleUrl(item.state.updateAuthority).url :
+                                        'N/A' }}</text>
+                                    <img v-if="titleUrl(item.state.updateAuthority).type"
+                                        v-for="(datas, indexs) in titleUrl(item.state.updateAuthority).certificates"
+                                        :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
+                                </template>
+                            </template>
+                        </td>
+                        <td class="text-end text-theme" v-else>
+                            N/A
                         </td>
                     </tr>
                 </tbody>
@@ -56,27 +63,23 @@
                     <tr>
                         <td>{{ $t("account.transfer_fees") }} </td>
                         <td class="text-end ">
-                            {{ data.transfer_fees ? data.transfer_fees : 'N/A' }}
+                            {{ feeData?.fees }}
                         </td>
                     </tr>
                     <tr>
                         <td>{{ $t("account.Maximum_fees") }} </td>
-                        <td class="text-end"> {{ data.transfer_max_fees == null ? "N/A" :
-                            data.transfer_max_fees }}
+                        <td class="text-end"> {{ feeData?.maximum }}
                         </td>
                     </tr>
                     <tr>
                         <td>{{ $t("account.default_state") }} </td>
-                        <td class="text-end"> {{ data.default_account_state == null ? "N/A" :
-                            data.default_account_state }}
+                        <td class="text-end"> {{ feeData?.default ? "Unfrozen" :
+                            "Frozen" }}
                         </td>
                     </tr>
                     <tr>
                         <td>{{ $t("account.non_transterale") }} </td>
-                        <td class="text-end"> {{ data.no_transferable == 0 ? "Disable" : "Enable" }}
-                            <img v-if="titleUrl(data.update_auth_address).type"
-                                v-for="(datas, indexs) in titleUrl(data.update_auth_address).certificates" :key="indexs"
-                                :src="datas.img" height="24" class="marginRight8" alt="">
+                        <td class="text-end"> {{ feeData?.non ? "Disable" : "Enable" }}
                         </td>
                     </tr>
                 </tbody>
@@ -86,9 +89,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import {
+  onMounted,
+  ref,
+} from 'vue';
 
-import { titleUrl } from '../../../../components/method/title_url';
+import { titleUrl } from '../../../../components/method/title_url/';
+import { chainRequest } from '../../../../request/chain.js';
+import { getExtraData } from '../../../../request/extensions.js';
 import { tokenList } from './auth.js';
 
 const data = ref();
@@ -98,6 +106,43 @@ const props = defineProps({
         default: ''
     }
 })
+
+const MintData = ref();
+const updateAuthorization = ref();
+
+const method = {
+    jsonrpc: '2.0',
+    id: 1,
+    method: 'getProgramAccounts',
+    params: [
+        'Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c',
+        {
+            encoding: 'jsonParsed',
+            filters: [
+                {
+                    memcmp: {
+                        offset: 1,
+                        bytes: '1'
+                    }
+                }
+            ]
+        }
+    ]
+}
+const feeData = ref();
+
+onMounted(async () => {
+    const res = await chainRequest(method);
+    let response = res.result
+    const matchedToken = response.find((item) => item.pubkey === props.url)
+    if (matchedToken) {
+        MintData.value = matchedToken.account.data.parsed.info
+    }
+    const fee = await getExtraData(props.url);
+    console.log(fee);
+    feeData.value = fee;
+})
+
 
 
 tokenList(props.url).then(res => {

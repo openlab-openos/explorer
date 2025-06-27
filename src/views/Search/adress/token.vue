@@ -126,7 +126,7 @@
                     </table>
                 </card-body>
             </card> -->
-             <authorization v-if="address" :url="address" ></authorization>
+             <authorization v-if="url" :url="url" ></authorization>
         </div>
 
         <!-- <div class="tab-content marginTOP-50">
