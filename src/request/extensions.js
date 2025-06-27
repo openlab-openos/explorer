@@ -19,16 +19,16 @@ const connection = new Connection(
   "confirmed"
 );
 let fee = {
-    fees: 0,
-    maximum:0,
-    default:false,
-    non:false
-}
+  fees: 0,
+  maximum: 0,
+  default: false,
+  non: false,
+};
 export async function getExtraData(url) {
   console.log("--mintPubkey:", url);
   let mintPubkey = new PublicKey(url);
   console.log("--aa:", mintPubkey);
-  
+
   const mint = await getMint(
     connection,
     mintPubkey,
@@ -48,7 +48,8 @@ export async function getExtraData(url) {
   if (transferFeeConfig) {
     let metadataInfo = TransferFeeConfigLayout.decode(transferFeeConfig);
     console.log("--transferFeeConfig:", metadataInfo);
-    setFee(metadataInfo.newerTransferFee);
+    fee.fees = metadataInfo.newerTransferFee.transferFeeBasisPoints;
+    fee.maximum = metadataInfo.newerTransferFee.maximumFee;
   }
 
   //get NonTransferable
@@ -58,12 +59,12 @@ export async function getExtraData(url) {
   );
   if (!nonTransferableConfig) {
     console.log("No nonTransferableConfig found on this mint");
-    fee.non = false
+    fee.non = false;
   }
   if (nonTransferableConfig) {
     let metadataInfo = NonTransferableLayout.decode(nonTransferableConfig);
     console.log("--nonTransferableConfig:", metadataInfo);
-    fee.non = true
+    fee.non = true;
   }
 
   //get defaultAccountState
@@ -78,10 +79,10 @@ export async function getExtraData(url) {
     let metadataInfo = DefaultAccountStateLayout.decode(defaultAccountConfig);
     if (metadataInfo.state == 2) {
       console.log("--defaultAccountConfig: frozen");
-      fee.default = true
+      fee.default = true;
     } else {
       console.log("--defaultAccountConfig", metadataInfo);
-      fee.default = false
+      fee.default = false;
     }
   }
   return fee;
