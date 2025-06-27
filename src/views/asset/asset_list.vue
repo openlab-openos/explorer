@@ -68,7 +68,7 @@
                                 $ {{ come(item.token.market_cap) }}
                             </td>
                             <td>
-                                {{ item.token.price ? '$' : '' }} {{ item.price ? item.price : '0' }}
+                                {{ item.token.price ? '$' : '' }} {{ item.price ? item.price : item.token.price }}
                                 <img v-if="item.token.price_icon" :src="imgUrl + '/' + item.token.price_icon" height="24"
                                     class="marginRight8" alt="">
                             </td>
