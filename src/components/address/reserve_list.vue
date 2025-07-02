@@ -2,18 +2,18 @@
   <div>
     <div v-if="!reserveType" class="releasedBox">
       <div class="releasedChild">
-        <h3>{{ $t("not-been-released") }}</h3>
-        <h4>
+        <h5>{{ $t("not-been-released") }}</h5>
+        <h6>
           <p class="releasedAmount">{{ smartFormatNumber(amountReserve(historyData, false)) }} BTG</p>
-        </h4>
+        </h6>
       </div>
       <div class="releasedChild">
-        <h3>{{ $t("have-been-released") }}</h3>
-        <h4>
+        <h5>{{ $t("have-been-released") }}</h5>
+        <h6>
           <p class="releasedAmount">
             {{ smartFormatNumber(amountReserve(historyData, true)) }} BTG
           </p>
-        </h4>
+        </h6>
       </div>
     </div>
     <div style="width: 96%; margin: auto; display: flex; justify-content: end;">

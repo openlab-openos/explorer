@@ -11,10 +11,6 @@
                         <p>{{ $t("Requset-text") }}</p>
                     </div>
                     <div>
-                        <!-- <el-select disabled v-model="dennetType" placeholder="Select" style="width: 115px"
-                            :suffix-transition="false">
-
-                        </el-select> -->
                         <el-input v-model="dennetType" style="width: 115px" disabled placeholder="Please input" />
                     </div>
                 </div>
@@ -127,25 +123,20 @@ import {
   watchEffect,
 } from 'vue';
 
-import { ElMessage } from 'element-plus';
-import RadialProgressBar from 'vue-radial-progress';
 import Vcode from 'vue3-puzzle-vcode';
 
 import i18n from '@/i18n';
 import { useAppStore } from '@/stores/index';
-import { Upload } from '@element-plus/icons-vue';
 
 import { tokenList } from '../Faucet/assets.js';
 
 const inputNumber = ref('')
-const selectBTG = ref('BTG')
 const selectAddress = ref('BTG')
 const dialogVisible = ref(false)
 const disabledType = ref(true)
 const loading = ref(false)
 const successType = ref(false);
 const ErrorType = ref(false);
-const errorText = ref('');
 const faucetType = ref(true);
 const urlType = ref(JSON.parse(sessionStorage.getItem('urlType')));
 const currentUrl = window.location.href;
@@ -153,8 +144,6 @@ const backgroundColor = ref("");
 const buttonText = ref('');
 const dennetType = ref("Devent");
 const dialogTableVisible = ref(true);
-const submitType = ref(false);
-const SubmitError = ref(false);
 const Lingheight = ref();
 const WidthError = ref(400);
 setTimeout(() => {
@@ -162,10 +151,6 @@ setTimeout(() => {
     // submitType.value = true
 }, 2000)
 
-// setTimeout(() => {
-//     submitType.value = false
-//     SubmitError.value = true
-// }, 5000)
 
 let clusterType = currentUrl.includes('?cluster=devnet')
 const appStore = useAppStore();
@@ -173,8 +158,6 @@ onMounted(() => {
     faucetType.value = urlType.value == 'Test' ? true : (clusterType ? true : false);
 })
 
-const totalSteps = ref(10);
-const completedSteps = ref(0);
 
 function selectLanguage(indexValue) {
     i18n.global.locale = indexValue;
@@ -222,11 +205,6 @@ const onSuccess = () => {
                 backgroundColor.value = "#F56C6C";
                 Lingheight.value = '';
             }
-            // // ErrorType.value = true;
-            // buttonText.value = "Submitfailed";
-            // backgroundColor.value = "#ff0000";
-            // // backgroundColor.value = "#F56C6C";
-            // errorText.value = res.msg;
         }
         setTimeout(() => {
             successType.value = false;
@@ -259,14 +237,9 @@ const onSuccess = () => {
         console.error('Failed to fetch token list:', error);
     });
 };
-let a = '4QEDXnBEyw5D5w4xo52vNwuZvHEJiSUbmY16hyx4Qe7q';
-
 
 watch([inputNumber, selectAddress], () => {
-
-
     disabledType.value = !(inputNumber.value.length >= 44 && selectAddress.value !== "");
-
 });
 
 </script>

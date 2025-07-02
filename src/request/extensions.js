@@ -4,7 +4,7 @@ import {
   getMint,
   TOKEN_2022_PROGRAM_ID,
 } from 'open-token-web3';
-
+// import {Token} from '@solana/spl-token';
 import {
   Connection,
   PublicKey,
@@ -57,6 +57,10 @@ export async function getExtraData(url) {
     ExtensionType.NonTransferable,
     mint.tlvData
   );
+  console.log("--nonTransferableConfig:",mint);
+  // checkTokenAccountFrozen('5Nx2YgDDQ2mmmbYpCN5QY9y7obTqkYHVCzqJpcENdurh')
+  console.log("--nonTransferableConfig:", nonTransferableConfig);
+  
   if (!nonTransferableConfig) {
     console.log("No nonTransferableConfig found on this mint");
     fee.non = false;
@@ -74,6 +78,7 @@ export async function getExtraData(url) {
   );
   if (!defaultAccountConfig) {
     console.log("No defaultAccountConfig found on this mint");
+    fee.default = true;
   }
   if (defaultAccountConfig) {
     let metadataInfo = DefaultAccountStateLayout.decode(defaultAccountConfig);
@@ -87,3 +92,15 @@ export async function getExtraData(url) {
   }
   return fee;
 }
+
+// async function checkTokenAccountFrozen(tokenAccountPubkey) {
+//   const connection = new Connection('https://api.mainnet.openverse.network/');
+//   const tokenAccount = await Token.getAccountInfo(
+//     connection,
+//     new PublicKey(tokenAccountPubkey)
+//   );
+
+//   const isFrozen = tokenAccount.isFrozen;
+//   console.log(`代币账户冻结状态: ${isFrozen}`);
+//   return isFrozen;
+// }
