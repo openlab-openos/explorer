@@ -10,7 +10,7 @@ return !hostname.startsWith('devnet.');
 console.log(isProductionDomain());
 
 
-const solanaApiUrl = isProductionDomain() ? "https://api.mainnet.openverse.network" : "https://api.devnet.openverse.network";
+const solanaApiUrl = "https://api.mainnet.openverse.network";
 export function chainRequest(requestBody) {
   return new Promise((resolve, reject) => {
     axios

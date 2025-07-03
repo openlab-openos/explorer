@@ -195,41 +195,41 @@ import Tx from '../views/Search/tx.vue';
 import Transition from '../views/transaction/transactions.vue';
 import Validators from '../views/validators/validators.vue';
 
-const currentUrl = window.location.href;
+// const currentUrl = window.location.href;
 
-// @ts-ignore
-let app = JSON.parse(sessionStorage.getItem("app"));
-// @ts-ignore
-let GeturlType = JSON.parse(sessionStorage.getItem("urlType"));
-let url = currentUrl.includes("?cluster=devnet");
+// // @ts-ignore
+// let app = JSON.parse(sessionStorage.getItem("app"));
+// // @ts-ignore
+// let GeturlType = JSON.parse(sessionStorage.getItem("urlType"));
+// let url = currentUrl.includes("?cluster=devnet");
 
-// 初始化 urlType
-let urlType = app
-  ? GeturlType
-    ? GeturlType.urlType == "Test"
-      ? false
-      : app.chainType == "Test"
-        ? false
-        : true
-    : true
-  : url
-    ? false
-    : true;
+// // 初始化 urlType
+// let urlType = app
+//   ? GeturlType
+//     ? GeturlType.urlType == "Test"
+//       ? false
+//       : app.chainType == "Test"
+//         ? false
+//         : true
+//     : true
+//   : url
+//     ? false
+//     : true;
 
-console.log(urlType, "urlType");
-console.log(url);
+// console.log(urlType, "urlType");
+// console.log(url);
 
-// @ts-ignore
-let Dev = sessionStorage.getItem("Dev")
-  ? sessionStorage.getItem("Dev")
-  : url
-    ? "Dev"
-    : "Mint";
+// // @ts-ignore
+// let Dev = sessionStorage.getItem("Dev")
+//   ? sessionStorage.getItem("Dev")
+//   : url
+//     ? "Dev"
+//     : "Mint";
 
-console.log(sessionStorage.getItem("Dev"));
+// console.log(sessionStorage.getItem("Dev"));
 
-// 用于避免循环调用的标志
-let isProcessing = false;
+// // 用于避免循环调用的标志
+// let isProcessing = false;
 
 // 浅比较两个对象
 // function shallowEqual(objA, objB) {
@@ -312,101 +312,101 @@ const router = createRouter({
   ],
 });
 
-// 全局导航守卫
-router.beforeEach((to, from, next) => {
-  if (isProcessing) {
-    // 如果正在处理中，直接放行，避免死循环
-    isProcessing = false;
-    next();
-    return;
-  }
+// // 全局导航守卫
+// router.beforeEach((to, from, next) => {
+//   if (isProcessing) {
+//     // 如果正在处理中，直接放行，避免死循环
+//     isProcessing = false;
+//     next();
+//     return;
+//   }
 
-  try {
-    isProcessing = true;
+//   try {
+//     isProcessing = true;
     
-    // 克隆原有的查询参数对象
-    const existingQuery = { ...to.query };
-    let shouldRedirect = false;
+//     // 克隆原有的查询参数对象
+//     const existingQuery = { ...to.query };
+//     let shouldRedirect = false;
     
-    // 根路径不处理 cluster 参数
-    if (to.path === "/") {
-      if (existingQuery.cluster) {
-        delete existingQuery.cluster;
-        shouldRedirect = true;
-      }
-    } else {
-      // 非根路径处理 cluster 参数
-      if (!urlType && existingQuery.cluster !== "devnet") {
-        // 需要添加 cluster=devnet
-        existingQuery.cluster = "devnet";
-        shouldRedirect = true;
-      } else if (urlType && existingQuery.cluster) {
-        // 需要移除 cluster 参数
-        delete existingQuery.cluster;
-        shouldRedirect = true;
-      }
-    }
+//     // 根路径不处理 cluster 参数
+//     if (to.path === "/") {
+//       if (existingQuery.cluster) {
+//         delete existingQuery.cluster;
+//         shouldRedirect = true;
+//       }
+//     } else {
+//       // 非根路径处理 cluster 参数
+//       if (!urlType && existingQuery.cluster !== "devnet") {
+//         // 需要添加 cluster=devnet
+//         existingQuery.cluster = "devnet";
+//         shouldRedirect = true;
+//       } else if (urlType && existingQuery.cluster) {
+//         // 需要移除 cluster 参数
+//         delete existingQuery.cluster;
+//         shouldRedirect = true;
+//       }
+//     }
     
-    // 处理 Dev 和 UrlText 逻辑
-    let UrlText = url ? "Dev" : "Mint";
-    console.log("Dev:", Dev, "UrlText:", UrlText);
+//     // 处理 Dev 和 UrlText 逻辑
+//     let UrlText = url ? "Dev" : "Mint";
+//     console.log("Dev:", Dev, "UrlText:", UrlText);
     
-    if (shouldRedirect) {
-      if (Dev !== UrlText) {
-        // 构建新的路由对象
-        const newRoute = {
-          name: to.name,
-          params: to.params,
-          query: existingQuery
-        };
+//     if (shouldRedirect) {
+//       if (Dev !== UrlText) {
+//         // 构建新的路由对象
+//         const newRoute = {
+//           name: to.name,
+//           params: to.params,
+//           query: existingQuery
+//         };
         
-        console.log("[导航守卫] 重定向:", to.fullPath, "→", 
-                    router.resolve(newRoute).href);
+//         console.log("[导航守卫] 重定向:", to.fullPath, "→", 
+//                     router.resolve(newRoute).href);
         
-        // 使用 replace 避免历史记录冗余
-        next({ ...newRoute, replace: true });
-      } else {
-        console.log("[导航守卫] Dev !== UrlText，不重定向");
-        next();
-      }
-    } else {
-      next();
-    }
-  } catch (error) {
-    console.error("[导航守卫] 错误:", error);
-    next();
-  } finally {
-    isProcessing = false;
-  }
-});
+//         // 使用 replace 避免历史记录冗余
+//         next({ ...newRoute, replace: true });
+//       } else {
+//         console.log("[导航守卫] Dev !== UrlText，不重定向");
+//         next();
+//       }
+//     } else {
+//       next();
+//     }
+//   } catch (error) {
+//     console.error("[导航守卫] 错误:", error);
+//     next();
+//   } finally {
+//     isProcessing = false;
+//   }
+// });
 
-// 添加更新 urlType 的方法 
-// @ts-ignore
-export function updateUrlType(newUrlType) {
-  console.log("[更新 urlType]", urlType, "→", newUrlType);
-  urlType = newUrlType;
+// // 添加更新 urlType 的方法 
+// // @ts-ignore
+// export function updateUrlType(newUrlType) {
+//   console.log("[更新 urlType]", urlType, "→", newUrlType);
+//   urlType = newUrlType;
   
-  // 更新 sessionStorage
-  if (newUrlType) {
-    sessionStorage.setItem("Dev", "Mint");
-  } else {
-    sessionStorage.setItem("Dev", "Dev");
-  }
+//   // 更新 sessionStorage
+//   if (newUrlType) {
+//     sessionStorage.setItem("Dev", "Mint");
+//   } else {
+//     sessionStorage.setItem("Dev", "Dev");
+//   }
   
-  // 更新 url 变量
-  url = newUrlType ? false : currentUrl.includes("?cluster=devnet");
+//   // 更新 url 变量
+//   url = newUrlType ? false : currentUrl.includes("?cluster=devnet");
   
-  // 触发当前路由重新匹配
-  router.push({
-    name: router.currentRoute.value.name,
-    params: router.currentRoute.value.params,
-    query: router.currentRoute.value.query
-  });
-}
+//   // 触发当前路由重新匹配
+//   router.push({
+//     name: router.currentRoute.value.name,
+//     params: router.currentRoute.value.params,
+//     query: router.currentRoute.value.query
+//   });
+// }
 
-// 添加获取当前环境的方法
-export function getCurrentEnvironment() {
-  return urlType ? "Mint" : "Dev";
-}
+// // 添加获取当前环境的方法
+// export function getCurrentEnvironment() {
+//   return urlType ? "Mint" : "Dev";
+// }
 
 export default router;

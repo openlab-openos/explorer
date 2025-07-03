@@ -88,7 +88,7 @@ import apexchart from '@/components/plugins/Apexcharts.vue';
 import { useAppVariableStore } from '@/stores/app-variable';
 import { useAppStore } from '@/stores/index';
 
-import { chainRequest } from '../../request/minchain';
+import { chainRequest } from '../../request/minchains';
 import { ipAddresses } from './address';
 
 const country = ref();

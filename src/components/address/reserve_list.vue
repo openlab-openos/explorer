@@ -2,25 +2,53 @@
   <div>
     <div v-if="!reserveType" class="releasedBox">
       <div class="releasedChild">
-        <h5>{{ $t("not-been-released") }}</h5>
-        <h6>
-          <p class="releasedAmount">{{ smartFormatNumber(amountReserve(historyData, false)) }} BTG</p>
-        </h6>
+        <!-- <h5> -->
+        {{ $t("not-been-released") }}
+        <!-- </h5> -->
+        <!-- <h6> -->
+        <p class="releasedAmount">{{ smartFormatNumber(amountReserve(historyData, false)) }} BTG</p>
+        <!-- </h6> -->
       </div>
       <div class="releasedChild">
-        <h5>{{ $t("have-been-released") }}</h5>
-        <h6>
-          <p class="releasedAmount">
-            {{ smartFormatNumber(amountReserve(historyData, true)) }} BTG
-          </p>
-        </h6>
+        <!-- <h5> -->
+        {{ $t("have-been-released") }}
+        <!-- </h5> -->
+        <!-- <h6> -->
+        <p class="releasedAmount">
+          {{ smartFormatNumber(amountReserve(historyData, true)) }} BTG
+        </p>
+        <!-- </h6> -->
       </div>
     </div>
     <div style="width: 96%; margin: auto; display: flex; justify-content: end;">
-      <el-select v-model="selectAddress" placeholder="Select" style="width: 115px">
+      <!-- <el-select v-model="selectAddress" placeholder="Select" style="width: 115px">
         <el-option label="One month" value="30" />
         <el-option label="One year" value="365" />
-      </el-select>
+      </el-select> -->
+      <div class="menu-item dropdown dropdown-mobile-full">
+        <a href="#" data-bs-toggle="dropdown" data-bs-display="static" class="menu-link scales"
+          style="white-space: nowrap;text-decoration: none;color: #fff;">
+          {{ nameText }}
+          <!-- <img src="https://cdn.openverse.network/brands/openverse/icon_128.png" width="32" alt=""> -->
+          <i class="bi bi-chevron-down" style="margin: 5px;"></i>
+        </a>
+        <!-- <div class="dropdown-menu dropdown-menu-end me-lg-3 fs-11px mt-1">
+          <div class="dropdown-item align-items-center text-theme" style="cursor: pointer;text-align: center;">Openverse
+            Mainnet
+          </div>
+          <div style="text-align: center;padding: 6px 16px;cursor: pointer" class="dropdown-item align-items-center">
+            Openverse Devnet</div>
+          <div style="text-align: center;padding: 6px 16px;cursor: pointer" class="dropdown-item align-items-center">
+            Openverse Testnet </div>
+        </div> -->
+        <div class="dropdown-menu dropdown-menu-end me-lg-3 fs-11px mt-1">
+          <div class="dropdown-item align-items-center" :class="item.type ? 'text-theme' : ''"
+            style="cursor: pointer;text-align: center;" v-for="(item, index) in selectData" :key="index"
+            @click="selsetClick(index)">
+            {{ item.name }}
+          </div>
+        </div>
+      </div>
     </div>
     <div class="EChartsBox">
       <div id="main" style="width: 100%; height: 300px;"></div>
@@ -139,6 +167,21 @@ const paginatedHistoryData = computed(() => {
 });
 const router = useRouter();
 const totalItems = ref(0);
+const nameText = ref("One month");
+
+
+const selectData = ref([
+  { name: 'One Month', value: '30' },
+  // { name: 'Openverse RPC.SG', url: 'https://rpc6.openverse.network/api', type: false,requestType:'Formal' },
+  // { name: 'Openverse RPC.US', url: 'https://us-seattle.openverse.network/api', type: false,requestType:'Formal' },
+  { name: 'One Year',  value: '365' },
+])
+
+const selsetClick = (index)=>{
+  console.log(index);
+  nameText.value = selectData.value[index].name;
+  updateDateRange(selectData.value[index].value)
+}
 
 const handlePageChange = (newPage) => {
   currentPage.value = newPage;
@@ -450,5 +493,8 @@ const amountFunction = (data, boolean) => {
   width: 90%;
   margin: auto;
   padding: 4rem 2rem;
+}
+.releasedChild{
+  font-weight: bold;
 }
 </style>

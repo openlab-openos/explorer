@@ -117,10 +117,10 @@
 
 <script setup>
 import {
-  onMounted,
-  ref,
-  watch,
-  watchEffect,
+    onMounted,
+    ref,
+    watch,
+    watchEffect,
 } from 'vue';
 
 import Vcode from 'vue3-puzzle-vcode';
@@ -155,7 +155,13 @@ setTimeout(() => {
 let clusterType = currentUrl.includes('?cluster=devnet')
 const appStore = useAppStore();
 onMounted(() => {
-    faucetType.value = urlType.value == 'Test' ? true : (clusterType ? true : false);
+    // faucetType.value = urlType.value == 'Test' ? true : (clusterType ? true : false);
+    function isProductionDomain() {
+        const hostname = window.location.hostname;
+        // 检测是否包含 'devnet.' 前缀
+        return !hostname.startsWith('devnet.');
+    }
+    faucetType.value = !isProductionDomain();
 })
 
 

@@ -3,16 +3,25 @@ import bs58 from 'bs58';
 
 const chainStorg = JSON.parse(sessionStorage.getItem("app"));
 const chainData = chainStorg ? chainStorg.chain : '';
+function isProductionDomain() {
+    const hostname = window.location.hostname;
+    // 检测是否包含 'devnet.' 前缀
+  return !hostname.startsWith('devnet.');
+}
+console.log(isProductionDomain());
+
+const solanaApiUrl = isProductionDomain() ? "https://api.mainnet.openverse.network" : "https://api.devnet.openverse.network";
+
 
 export async function parseNFTMetadata(adress) {
-    const connection = new Connection(chainData ? chainData : "https://api.mainnet-beta.solana.com", "confirmed");
+    const connection = new Connection(solanaApiUrl, "confirmed");
     const metadataAccount = new PublicKey(adress);
 
     // 1. 获取账户数据
     const accountInfo = await connection.getAccountInfo(metadataAccount);
     if (!accountInfo) throw new Error('账户不存在');
     // console.log(accountInfo);
-    
+
     // 2. 直接使用 Uint8Array 数据，无需 Base58 解码
     const data = accountInfo.data;
 
@@ -53,12 +62,12 @@ export async function parseNFTMetadata(adress) {
 function extractString(data, offset) {
     // 前 2 字节是字符串长度（小端序 u16）
     const length = (data[offset + 1] << 8) | data[offset];
-    
+
     // 验证长度是否合理
     if (offset + 2 + length > data.length) {
         console.warn(`字符串长度超出数据范围：偏移=${offset}，长度=${length}，数据总长=${data.length}`);
         return '';
     }
-    
+
     return Buffer.from(data.slice(offset + 2, offset + 2 + length)).toString('utf8');
 }

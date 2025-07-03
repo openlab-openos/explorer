@@ -10,12 +10,20 @@ import {
   PublicKey,
 } from '@solana/web3.js';
 
-// import { Token, TOKEN_PROGRAM_ID } from '@solana/spl-token';
+// const solanaApiUrl = urlTypeData === 'Test' ? "https://api.devnet.openverse.network" : (chainData ? chainData : "https://api.mainnet.openverse.network");
+function isProductionDomain() {
+  const hostname = window.location.hostname;
+  // 检测是否包含 'devnet.' 前缀
+return !hostname.startsWith('devnet.');
+}
+const solanaApiUrl = isProductionDomain() ? "https://api.mainnet.openverse.network" : "https://api.devnet.openverse.network";
+console.log(isProductionDomain());
+
 
 const chainStorg = JSON.parse(sessionStorage.getItem("app"));
 const chainData = chainStorg ? chainStorg.chain : "";
 const connection = new Connection(
-  chainData ? chainData : "https://api.mainnet.openverse.network",
+  solanaApiUrl,
   "confirmed"
 );
 let fee = {
@@ -57,10 +65,10 @@ export async function getExtraData(url) {
     ExtensionType.NonTransferable,
     mint.tlvData
   );
-  console.log("--nonTransferableConfig:",mint);
+  console.log("--nonTransferableConfig:", mint);
   // checkTokenAccountFrozen('5Nx2YgDDQ2mmmbYpCN5QY9y7obTqkYHVCzqJpcENdurh')
   console.log("--nonTransferableConfig:", nonTransferableConfig);
-  
+
   if (!nonTransferableConfig) {
     console.log("No nonTransferableConfig found on this mint");
     fee.non = false;
