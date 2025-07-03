@@ -121,11 +121,13 @@ const performanceSamples = async () => {
 const getTime = (timestamp) => {
   return moment(JSON.parse(moment().format("x")) + timestamp * 400).fromNow();
 };
-
+const ReadyType = ref(true)
 
 const supplyRequest = async (epoch, slot, inepoch, solttime) => {
   console.log(requestType.value);
-  if (requestType.value) {
+  if (ReadyType.value) {
+    console.log(123456);
+    
     await chainRequest({
       jsonrpc: "2.0",
       id: 1,
@@ -144,7 +146,7 @@ const supplyRequest = async (epoch, slot, inepoch, solttime) => {
         console.log(err);
       });
     pubbley.value = appStore.pubbley;
-
+    ReadyType.value = false;
     // requestType.value = false;
 
   }
@@ -414,11 +416,11 @@ watchEffect(async () => {
   await performanceSamples();
   console.log(response.epoch, response.slotIndex, response.slotsInEpoch, solttime.value);
   if (response.epoch && response.slotIndex && response.slotsInEpoch && solttime.value) {
+    console.log(renderType.value);
     if (!requestType.value) {
       requestType.value = true;
     }
     console.log(123);
-
   } else {
     requestType.value = false;
     console.log(222);
