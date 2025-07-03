@@ -154,7 +154,7 @@ const selectLanguage = (language: any, abbreviation: any) => {
 
 // 节点切换
 const selectData = ref([
-  { name: 'Mainnet', url: 'http://www.openverse.live', type: UtlDevnetType, requestType: 'Formal' },
+  { name: 'Mainnet', url: 'https://www.openverse.live', type: UtlDevnetType, requestType: 'Formal' },
   { name: 'Devnet', url: 'http://devnet.openverse.live', type: !UtlDevnetType, requestType: 'Test' },
 ])
 
