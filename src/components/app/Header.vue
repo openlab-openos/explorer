@@ -155,15 +155,13 @@ const selectLanguage = (language: any, abbreviation: any) => {
 // 节点切换
 const selectData = ref([
   { name: 'Mainnet', url: 'http://www.openverse.live', type: UtlDevnetType, requestType: 'Formal' },
-  // { name: 'Openverse RPC.SG', url: 'https://rpc6.openverse.network/api', type: false,requestType:'Formal' },
-  // { name: 'Openverse RPC.US', url: 'https://us-seattle.openverse.network/api', type: false,requestType:'Formal' },
   { name: 'Devnet', url: 'http://devnet.openverse.live', type: !UtlDevnetType, requestType: 'Test' },
 ])
 
 const selsetClick = (index: number) => {
   selectData.value.map((item, i) => {
     if (i == index) {
-      item.type = true;
+      // item.type = true;
       window.location.href = item.url
     } else {
       item.type = false;
@@ -226,7 +224,7 @@ onMounted(() => {
         <img height="24px" src="https://cdn.openverse.network/brands/openverse/icon_128.png" alt="">
         <span class="brand-text titleBox">OPENVERSE <span class="marks">LIVE</span> </span>
       </RouterLink>
-      <span v-if="!urlType" style="margin-left: 2.3rem;">(DEV)</span>
+      <span v-if="!UtlDevnetType" style="margin-left: 2.3rem;">(DEV)</span>
     </div>
     <!-- END brand -->
 
