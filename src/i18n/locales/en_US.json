@@ -49,6 +49,10 @@
     "last_time": "Last Unlock Time",
     "stage": "Stage",
     "isUnlocked": "Is Unlocked",
+    "Frozen":"Frozen",
+    "Unfrozen":"Unfrozen",
+    "Disable":"Disable",
+    "Enable":"Enable",
     "navigation": {
         "title": "Navigation",
         "dashboard": "Dashboard",

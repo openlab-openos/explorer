@@ -49,6 +49,10 @@
     "last_time": "最終アンロック時間",
     "stage": "ステージ",
     "isUnlocked": "アンロック済み",
+    "Frozen": "凍結",
+    "Unfrozen": "未凍結",
+    "Disable": "無効",
+    "Enable": "有効",
     "navigation": {
         "title": "ナビゲーション",
         "dashboard": "ダッシュボード",

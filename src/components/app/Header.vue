@@ -298,7 +298,7 @@ onMounted(() => {
             Openverse Testnet </div>
         </div> -->
         <div class="dropdown-menu dropdown-menu-end me-lg-3 fs-11px mt-1">
-          <div class="dropdown-item align-items-center" :class="item.type ? 'text-theme' : ''"
+          <div class="dropdown-item align-items-center" 
             style="cursor: pointer;text-align: center;" v-for="(item, index) in selectData" :key="index"
             @click="selsetClick(index)">
             {{ item.name }}

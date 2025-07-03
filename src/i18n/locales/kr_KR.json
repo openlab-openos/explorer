@@ -49,6 +49,10 @@
     "last_time": "출금 시간",
     "stage": "단계",
     "isUnlocked": "잠금 해제됨",
+    "Frozen": "동결",
+    "Unfrozen": "해제됨",
+    "Disable": "비활성화",
+    "Enable": "활성화",
     "navigation": {
         "title": "네비게이션",
         "dashboard": "대시보드",

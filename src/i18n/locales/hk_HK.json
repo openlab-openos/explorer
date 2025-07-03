@@ -49,6 +49,10 @@
     "last_time": "最後解鎖時間",
     "stage": "階段",
     "isUnlocked": "是否解鎖",
+    "Frozen": "凍結",
+    "Unfrozen": "未凍結",
+    "Disable": "禁用",
+    "Enable": "啟用",
     "navigation": {
         "title": "導航",
         "dashboard": "儀表板",

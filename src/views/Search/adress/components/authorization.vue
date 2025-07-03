@@ -73,13 +73,13 @@
                     </tr>
                     <tr>
                         <td>{{ $t("account.default_state") }} </td>
-                        <td class="text-end"> {{ feeData?.default ? "Unfrozen" :
-                            "Frozen" }}
+                        <td class="text-end"> {{ feeData?.default ?  $t("Unfrozen")   :
+                             $t("Frozen")   }}
                         </td>
                     </tr>
                     <tr>
                         <td>{{ $t("account.non_transterale") }} </td>
-                        <td class="text-end"> {{ feeData?.non ? "Disable" : "Enable" }}
+                        <td class="text-end"> {{ feeData?.non ? $t("Disable")  : $t("Enable")  }}
                         </td>
                     </tr>
                 </tbody>
