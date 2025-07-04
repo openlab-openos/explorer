@@ -5,6 +5,7 @@ import { Vue3ProgressPlugin } from '@marcoschulte/vue3-progress';
 import PerfectScrollbar from 'vue3-perfect-scrollbar';
 import mitt from 'mitt';
 import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css';
+// @ts-ignore
 import i18n from './i18n';
 // import '@marcoschulte/vue3-progress/dist/index.css';
 // import '@fortawesome/fontawesome-free/scss/fontawesome.scss';
@@ -41,16 +42,16 @@ import CardImgOverlay from '@/components/bootstrap/CardImgOverlay.vue';
 import CardExpandToggler from '@/components/bootstrap/CardExpandToggler.vue';
 import * as buffer from "buffer"; //引入buffer
 import { useAppStore } from "@/stores/index";
+// import { useHead } from "../node_modules/@unhead/vue";
 
- 
 if (typeof (window as any).Buffer === "undefined") { // 判断当前环境是否有Buffer对象
 
     (window as any).Buffer = buffer.Buffer; // Buffer对象不存在则创建导入的buffer
 } else {
-    
+
 }
 
-onMounted(()=>{
+onMounted(() => {
 
 })
 
@@ -63,6 +64,7 @@ const app = createApp(App);
 console.log(router);
 
 app.config.globalProperties.$progream = PROGRAM_INFO_BY_ID;
+// @ts-ignore
 app.use(VueApexCharts);
 app.component('apexchart', VueApexCharts)
 
@@ -88,6 +90,5 @@ app.use(vueMatomo, {
     siteId: 7,
 })
 app.mount('#app');
-
+// @ts-ignore
 window._paq.push(['trackPageView']); //To track pageview
-

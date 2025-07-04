@@ -25,7 +25,7 @@
                         <text style="cursor: pointer" @click="slot(item.slot)">{{ come(item.slot) }}</text>
                     </td>
                     <td :class="item.err == null ? 'color0-255-179-1' : ''">
-                        {{ item.err == null ? 'Success' : 'Failed' }}
+                        {{ item.err == null ?  $t('Success') : $t('failed') }}
                     </td>
                     <td>
                         {{ timeSome(item.blockTime) }}

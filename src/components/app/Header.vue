@@ -224,7 +224,7 @@ onMounted(() => {
         <img height="24px" src="https://cdn.openverse.network/brands/openverse/icon_128.png" alt="">
         <span class="brand-text titleBox">OPENVERSE <span class="marks">LIVE</span> </span>
       </RouterLink>
-      <span v-if="!UtlDevnetType" style="margin-left: 2.3rem;">(DEV)</span>
+      <span v-if="!UtlDevnetType" style="margin-left: 2.3rem;">(Devnet)</span>
     </div>
     <!-- END brand -->
 

@@ -12,7 +12,15 @@
 <body>
   <div id="app"> </div>
   <script type="module" src="/src/main.ts"></script>
-  
+  <script>
+    function isProductionDomain() {
+      const hostname = window.location.hostname;
+      // 检测是否包含 'devnet.' 前缀
+      return !hostname.startsWith('devnet.');
+    }
+    const UtlDevnetType = isProductionDomain();
+    document.title = UtlDevnetType ? 'Openverse Explorer (Mainnet)' : 'Openverse Explorer (Devnet)';
+  </script>
   <!-- <script type="module" src="/src/entry-client.js"></script> -->
 </body>
 <style>

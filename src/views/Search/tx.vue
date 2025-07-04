@@ -317,7 +317,7 @@ export default {
                   <td class="text-end " :style="{ 'color': card.value[0].err == null ? '#26e97e' : 'red' }">
                     <span class="bagdge">
                       {{
-                        card.value[0].err == null ? 'Success' : 'Failed' }}
+                        card.value[0].err == null ? $t('success') : $t('failed') }}
                     </span>
                   </td>
                 </tr>
