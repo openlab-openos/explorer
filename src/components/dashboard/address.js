@@ -681,27 +681,69 @@ export const ipAddresses = {
       "code": "EU",
       "timezone": "Europe/Paris",
       "country_name": "France"
-    },{
+    }, {
       "ip": "217.182.172.93",
       "location": [50.6942, 3.1746],
       "try": "FR",
       "code": "EU",
       "timezone": "Europe/Paris",
       "country_name": "France"
-  },{
-    "ip": "147.135.11.239",
-    "location": [38.8318, -77.2888],
-    "try": "US",
-    "code": "NA",
-    "timezone": "America/New_York",
-    "country_name": "United States"
-},{
-  "ip": "145.239.68.140",
-  "location": [50.6942, 3.1746],
-  "try": "FR",
-  "code": "EU",
-  "timezone": "Europe/Paris",
-  "country_name": "France"
-}
+    }, {
+      "ip": "147.135.11.239",
+      "location": [38.8318, -77.2888],
+      "try": "US",
+      "code": "NA",
+      "timezone": "America/New_York",
+      "country_name": "United States"
+    }, {
+      "ip": "145.239.68.140",
+      "location": [50.6942, 3.1746],
+      "try": "FR",
+      "code": "EU",
+      "timezone": "Europe/Paris",
+      "country_name": "France"
+    }, {
+      "ip": "149.56.26.121",
+      "location": [45.5075, -73.5887],
+      "try": "CA",
+      "code": "NA",
+      "timezone": "America/Toronto",
+      "country_name": "Canada"
+    }, {
+      "ip": "149.56.27.143",
+      "location": [45.5075, -73.5887],
+      "try": "CA",
+      "code": "NA",
+      "timezone": "America/Toronto",
+      "country_name": "Canada"
+    }, {
+      "ip": "154.53.42.184",
+      "location": [38.6364, -90.1985],
+      "try": "US",
+      "code": "NA",
+      "timezone": "America/Chicago",
+      "country_name": "United States"
+    }, {
+      "ip": "158.220.94.228",
+      "location": [50.8514, -0.9903],
+      "try": "GB",
+      "code": "EU",
+      "timezone": "Europe/London",
+      "country_name": "United Kingdom"
+    }, {
+      "ip": "5.196.78.59",
+      "location": [50.6924, 3.20113],
+      "try": "FR",
+      "code": "EU",
+      "timezone": "Europe/Paris",
+      "country_name": "France"
+    }, {
+      "ip": "94.72.111.64",
+      "location": [50.8514, -0.9903],
+      "try": "GB",
+      "code": "EU",
+      "timezone": "Europe/London",
+      "country_name": "United Kingdom"
+    }
   ]
 };
