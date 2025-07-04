@@ -250,7 +250,7 @@ watchEffect(() => {
       <div>
         <h3> {{ $t("blocks.title") }} </h3>
         <!-- <table> -->
-        <caed class="md-3">
+        <card class="md-3">
           <card-body class="card-bodys">
             <table v-if="this.card"
               class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
@@ -319,7 +319,7 @@ watchEffect(() => {
               </tbody>
             </table>
           </card-body>
-        </caed>
+        </card>
       </div>
       <div style="margin-top:50px">
         <ul class="nav nav-pills mb-3" id="pills-tab">
