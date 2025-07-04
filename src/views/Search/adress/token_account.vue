@@ -92,7 +92,7 @@
                         <el-tab-pane :label="$t('navigation.transactions')" name="first">
                             <history-view :url="url"></history-view>
                         </el-tab-pane>
-                        <el-tab-pane v-if="transfersType.urlType == 'Formal'" :label="$t('transfer')" name="second">
+                        <el-tab-pane v-if="transfersType" :label="$t('transfer')" name="second">
                             <transfer-view :url="url" :type="true"></transfer-view>
                         </el-tab-pane>
                         <!-- <el-tab-pane :label="$t('account.holder')" name="third">
@@ -145,7 +145,12 @@ const program = ref();
 const data = ref();
 const activeName = ref('first')
 
-const transfersType = JSON.parse(sessionStorage.getItem('urlType'));
+function isProductionDomain() {
+  const hostname = window.location.hostname;
+  // 检测是否包含 'devnet.' 前缀
+  return !hostname.startsWith('devnet.');
+}
+const transfersType = isProductionDomain();
 
 const props = defineProps({
     url: {

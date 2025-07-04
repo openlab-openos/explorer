@@ -110,11 +110,11 @@
                         <el-tab-pane :label="$t('navigation.transactions')" name="first">
                             <history-view :url="url"></history-view>
                         </el-tab-pane>
-                        <el-tab-pane v-if="transfersType.urlType == 'Formal' && type && !card_data[0].executable"
+                        <el-tab-pane v-if="transfersType && type && !card_data[0].executable"
                             :label="$t('transfer')" name="second">
                             <transfer-view :url="url" :type="true" v-if="activeName == 'second'"></transfer-view>
                         </el-tab-pane>
-                        <el-tab-pane v-if="transfersType.urlType == 'Formal' && type && !card_data[0].executable"
+                        <el-tab-pane v-if="transfersType && type && !card_data[0].executable"
                             :label="$t('pledge')" name="third">
                             <pledgeView v-if="activeName == 'third'" :url="url" />
                         </el-tab-pane>
@@ -169,7 +169,12 @@ onMounted(async () => {
     await menufunction(props.url);
 
 })
-const transfersType = JSON.parse(sessionStorage.getItem('urlType'));
+function isProductionDomain() {
+  const hostname = window.location.hostname;
+  // 检测是否包含 'devnet.' 前缀
+  return !hostname.startsWith('devnet.');
+}
+const transfersType = isProductionDomain();
 
 const paramsId = ref([
     "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c",
