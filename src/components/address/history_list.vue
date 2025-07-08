@@ -14,7 +14,6 @@
                 <th>
                     {{ $t("account.age") }}
                 </th>
-
             </tr>
             <template v-if="loading">
                 <tr v-for="(item, index) in paginatedHistoryData" :key="index">
@@ -22,15 +21,14 @@
                         <text style="cursor: pointer" @click="pubbtx(item.signature)"> {{ item.signature }}</text>
                     </td>
                     <td class="text-theme">
-                        <text style="cursor: pointer" @click="slot(item.slot)">{{ come(item.slot) }}</text>
+                        <text>{{ come(item.slot) }}</text>
                     </td>
                     <td :class="item.err == null ? 'color0-255-179-1' : ''">
-                        {{ item.err == null ?  $t('Success') : $t('failed') }}
+                        {{ item.err == null ?  $t('success') : $t('failed') }}
                     </td>
                     <td>
                         {{ timeSome(item.blockTime) }}
                     </td>
-
                 </tr>
             </template>
         </tbody>

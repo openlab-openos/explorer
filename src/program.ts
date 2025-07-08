@@ -505,7 +505,7 @@ const Authentication = async () => {
     .then((res) => {
       let data = Cretifucate(res.data.data);
       console.log(data);
-      
+
       const transformedObject = data.reduce(
         (acc, item) => {
           acc[item.address] = item;
@@ -552,53 +552,56 @@ const TypebackColor = (type: string) => {
       return "#229cF2";
       break;
     case "Unknown":
-      return"#d4d6d7";
+      return "#d4d6d7";
       break;
     case "Unsafe":
-      return"#F61414";
+      return "#F61414";
       break;
     case "VRC10":
-      return"#ffa06f";
+      return "#ffa06f";
       break;
     case "VRC11":
-      return"#ffa06f";
+      return "#ffa06f";
       break;
     case "VRC12":
-      return"#ffa06f";
+      return "#ffa06f";
       break;
     case "USDStableCoin":
-    //   showData[i].certificates[j].certificate_code = "Stablecoin";
-      return"#5ba556";
+      //   showData[i].certificates[j].certificate_code = "Stablecoin";
+      return "#5ba556";
       break;
     case "Stablecoin":
-      return"#5ba556";
+      return "#5ba556";
       break;
   }
 };
 
 const Cretifucate = (data: Array<any>) => {
   console.log(data);
-  
+
   let CretifucateArray = [];
   for (let i in data) {
-    CretifucateArray.push({
-      address: data[i].token.address,
-      img: data[i].token.image_url,
-      name: data[i].token.name,
-      code: data[i].token.protocol_code,
-      symbol: data[i].token.symbol,
-      certificates: [],
-    });
-    for (let j in data[i].token.certificates) {
-      // @ts-ignore
-      CretifucateArray[i].certificates.push({
-        // @ts-ignore
-        img: data[i].token.certificates[j].image_url,
-        // 'img': imageType(data[i].certificates[j].certificate_code),
-        code: data[i].token.certificates[j].certificate_code == 'USDStableCoin' ? 'Stablecoin' : data[i].token.certificates[j].certificate_code ,
-        backColor: TypebackColor(data[i].token.certificates[j].certificate_code),
+    if (data[i].token) {
+      CretifucateArray.push({
+        address: data[i].token.address,
+        img: data[i].token.image_url,
+        name: data[i].token.name,
+        code: data[i].token.protocol_code,
+        symbol: data[i].token.symbol,
+        certificates: [],
       });
+      for (let j in data[i].token.certificates) {
+        // @ts-ignore
+        CretifucateArray[i].certificates.push({
+          // @ts-ignore
+          img: data[i].token.certificates[j].image_url,
+          // 'img': imageType(data[i].certificates[j].certificate_code),
+          code: data[i].token.certificates[j].certificate_code == 'USDStableCoin' ? 'Stablecoin' : data[i].token.certificates[j].certificate_code,
+          backColor: TypebackColor(data[i].token.certificates[j].certificate_code),
+        });
+      }
     }
+
   }
   return CretifucateArray;
 };

@@ -8,6 +8,8 @@
     "btg": "BTG",
     "type": "Type",
     "time": "Time",
+    "minAverage": "1min average",
+    "hrAverage": "1hr  average",
     "transfer": "Transfers",
     "success": "Success",
     "failed": "Failed",

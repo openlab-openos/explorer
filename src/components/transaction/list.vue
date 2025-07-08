@@ -167,7 +167,7 @@ const fetchOrderData = async () => {
                         type: "transfer",
                         signature: res[i].result.transaction.signatures[0],
                         source: etach[etach.length - 1].parsed.info.source,
-                        destination: etach[0].parsed.info.destination,
+                        destination: etach[etach.length - 1].parsed.info.destination,
                         uiAmount: etach[etach.length - 1].parsed.info.lamports,
                         mint: 'BTG',
                         blockTime: res[i].result.blockTime,
@@ -205,7 +205,7 @@ const fetchOrderData = async () => {
                         signature: res[i].result.transaction.signatures[0],
                         source: etach[etach.length - 1].parsed.info.stakeAuthority,
                         destination: etach[etach.length - 1].parsed.info.stakeAccount,
-                        uiAmount: etach[0].parsed.info.lamports ? etach[0].parsed.info.lamports : 'N/A',
+                        uiAmount: etach[etach.length - 1].parsed.info.lamports ? etach[etach.length - 1].parsed.info.lamports : 'N/A',
                         mint: 'BTG',
                         blockTime: res[i].result.blockTime,
                     }
@@ -308,8 +308,6 @@ const soltResult = (solt) => {
 
 
 const pubbleys = (url) => {
-
-
     if (url) {
         router.push({
             name: "address",

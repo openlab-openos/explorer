@@ -33,7 +33,7 @@
                     </tr>
                     <tr>
                         <td>{{ $t("account.update_authorization") }} </td>
-                        <td class="text-end text-theme" v-if="MintData">
+                        <td class="text-end" v-if="MintData">
                             <template v-for="(item, index) in MintData.extensions" :key="index">
                                 <template v-if="item.state.updateAuthority">
                                     <text>{{ item.state.updateAuthority ? titleUrl(item.state.updateAuthority).url :
@@ -98,7 +98,18 @@ import { titleUrl } from '../../../../components/method/title_url/';
 import { chainRequest } from '../../../../request/chain.js';
 import { getExtraData } from '../../../../request/extensions.js';
 import { tokenList } from './auth.js';
-
+import { useRouter } from 'vue-router';
+const router = useRouter();
+const pubbtx = (url) => {
+    if (url) {
+        router.push({
+            name: "address",
+            params: {
+                url: url,
+            },
+        })
+    }
+};
 const data = ref();
 const props = defineProps({
     url: {

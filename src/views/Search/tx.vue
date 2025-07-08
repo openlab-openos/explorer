@@ -6,6 +6,7 @@ import {
 } from 'vue';
 
 import i18n from '@/i18n';
+import { useRouter } from 'vue-router';
 
 import { solanapubbleys } from '../../components/method/solana';
 import { titleUrl } from '../../components/method/title_url';
@@ -23,10 +24,16 @@ const promaster = apps?.proxy?.$progream;
 function selectLanguage(indexValue) {
   i18n.global.locale = indexValue;
 }
+const router = useRouter();
+
 
 watchEffect(() => {
   selectLanguage(appStore.$state.language);
 })
+
+const blockSkip = (num) => {
+  router.push({ name: "block", params: { url: num } });
+};
 
 </script>
 <script>
@@ -345,11 +352,14 @@ export default {
                   </td>
                   <td class="text-end text-theme">
                     <text style="cursor: pointer"
-                      @click="pubbleys(historyData.transaction.message.accountKeys[0].pubkey)">{{
+                      @click="blockSkip(historyData.slot)">
+                      <!-- {{
                         promaster[historyData.transaction.message.accountKeys[0].pubkey] ?
                           promaster[historyData.transaction.message.accountKeys[0].pubkey].name
                           : historyData.transaction.message.accountKeys[0].pubkey
-                      }}</text>
+                      }} -->
+                          {{ historyData.transaction.message.recentBlockhash }}
+                      </text>
                   </td>
                 </tr>
                 <tr>

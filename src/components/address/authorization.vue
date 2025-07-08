@@ -35,6 +35,17 @@
 
 <script setup>
 import { ref } from 'vue';
-
+import { useRouter } from 'vue-router';
+const router = useRouter();
+const pubbtx = (url) => {
+    if (url) {
+        router.push({
+            name: "address",
+            params: {
+                url: url,
+            },
+        })
+    }
+};
 const data = ref();
 </script>

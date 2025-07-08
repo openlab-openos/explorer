@@ -26,8 +26,9 @@
                                 <img v-if="B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz"
                                     :src="item.token.pubkey == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' ? 'https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png' : ''"
                                     width="32" alt="" class="marginRight8">
-                                
-                                <text style="cursor: pointer;"  @click="pubbleys(item.token.address)">{{ titleUrl(item.token.address).url }}</text>
+
+                                <text style="cursor: pointer;" @click="pubbleys(item.token.address)">{{
+                                    titleUrl(item.token.address).url }}</text>
                                 <!-- <img v-if="titleUrl(item.token.pubkey).type" src="../../../src//assets//renzheng.png"
                                     height="24" alt=""> -->
                                 <img v-if="titleUrl(item.token.pubkey).type"
@@ -37,7 +38,7 @@
                             <td>
                                 {{ item.token.symbol }}
                             </td>
-                            
+
                             <template v-if="item.token.certificates.length == 0">
                                 <td>N/A</td>
                             </template>
@@ -47,7 +48,9 @@
                                         :src="items.image_url" height="20" class="marginRight8"
                                         :title="items.certificate_code"> -->
                                     <div style="display: flex;">
-                                        <p v-for="items, indexs in item.token.certificates" :key="indexs" :style="'background-color: ' + items.backColor" style="border-radius: 5px;padding: 2px 4px;margin-right: 5px;margin-bottom: 0;font-weight: 500;">
+                                        <p v-for="items, indexs in item.token.certificates" :key="indexs"
+                                            :style="'background-color: ' + items.backColor"
+                                            style="border-radius: 5px;padding: 2px 4px;margin-right: 5px;margin-bottom: 0;font-weight: 500;">
                                             {{ items.certificate_code }}
                                         </p>
                                     </div>
@@ -69,8 +72,8 @@
                             </td>
                             <td>
                                 {{ item.token.price ? '$' : '' }} {{ item.price ? item.price : item.token.price }}
-                                <img v-if="item.token.price_icon" :src="imgUrl + '/' + item.token.price_icon" height="24"
-                                    class="marginRight8" alt="">
+                                <img v-if="item.token.price_icon" :src="imgUrl + '/' + item.token.price_icon"
+                                    height="24" class="marginRight8" alt="">
                             </td>
                         </tr>
                     </tbody>
@@ -97,9 +100,9 @@
 </template>
 <script setup>
 import {
-  computed,
-  defineAsyncComponent,
-  ref,
+    computed,
+    defineAsyncComponent,
+    ref,
 } from 'vue'; // 假设这是在一个Vue组件中
 
 import { useRouter } from 'vue-router';
@@ -128,7 +131,6 @@ const paginatedHistoryData = computed(() => {
     const start = (currentPage.value - 1) * pageSize.value;
     const end = start + pageSize.value;
     console.log(historyData.value);
-    
     return historyData.value.slice(start, end);
 });
 tokenList().then((res) => {
@@ -138,42 +140,49 @@ tokenList().then((res) => {
 
     dataArray.value = showData;
     console.log(showData);
-    
+
     console.log(showData);
     for (let i in showData) {
-        for (let j in showData[i].token.certificates) {
-            switch (showData[i].token.certificates[j].certificate_code) {
-                case 'Official':
-                    showData[i].token.certificates[j].backColor = '#229cF2'
-                    break;
-                case 'Unknown':
-                    showData[i].token.certificates[j].backColor = '#d4d6d7'
-                    break;
-                case 'Unsafe':
-                    showData[i].token.certificates[j].backColor = '#F61414'
-                    break;
-                case 'VRC10':
-                    showData[i].token.certificates[j].backColor = '#ffa06f'
-                    break;
-                case 'VRC11':
-                    showData[i].token.certificates[j].backColor = '#ffa06f'
-                    break;
-                case 'VRC12':
-                    showData[i].token.certificates[j].backColor = '#ffa06f'
-                    break;
-                case "USDStableCoin":
-                    showData[i].token.certificates[j].certificate_code = 'Stablecoin'
-                    showData[i].token.certificates[j].backColor = '#5ba556'
-                    break;
-                case "Stablecoin":
-                    showData[i].token.certificates[j].backColor = '#5ba556'
-                    break;
+        if (showData[i].token) {
+            for (let j in showData[i].token.certificates) {
+                switch (showData[i].token.certificates[j].certificate_code) {
+                    case 'Official':
+                        showData[i].token.certificates[j].backColor = '#229cF2'
+                        break;
+                    case 'Unknown':
+                        showData[i].token.certificates[j].backColor = '#d4d6d7'
+                        break;
+                    case 'Unsafe':
+                        showData[i].token.certificates[j].backColor = '#F61414'
+                        break;
+                    case 'VRC10':
+                        showData[i].token.certificates[j].backColor = '#ffa06f'
+                        break;
+                    case 'VRC11':
+                        showData[i].token.certificates[j].backColor = '#ffa06f'
+                        break;
+                    case 'VRC12':
+                        showData[i].token.certificates[j].backColor = '#ffa06f'
+                        break;
+                    case "USDStableCoin":
+                        showData[i].token.certificates[j].certificate_code = 'Stablecoin'
+                        showData[i].token.certificates[j].backColor = '#5ba556'
+                        break;
+                    case "Stablecoin":
+                        showData[i].token.certificates[j].backColor = '#5ba556'
+                        break;
+                }
             }
         }
     }
-
-    historyData.value = showData;
-    totalItems.value = showData.length;
+    let array = [];
+    for(let i in showData){
+        if(showData[i].token){
+            array.push(showData[i])
+        }
+    }
+    historyData.value = array;
+    totalItems.value = array.length;
     loading.value = true;
 }).catch(error => {
     console.error('Failed to fetch token list:', error);
