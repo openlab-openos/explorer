@@ -45,7 +45,7 @@ const getInfo = async (url) => {
   };
   // try {
   const res = await chainRequest(method);
-  
+
   if (res.result.value) {
     programId.value = res.result.value.owner;
   }
@@ -62,11 +62,27 @@ onMounted(async () => {
 })
 watch(
   () => route.path,
-  (newPath, oldPath) => {
-    // 在这里添加你需要执行的操作
-    if (newPath != oldPath) {
-      window.location.reload();
+  async (newPath, oldPath) => {
+    console.log(newPath);
+    console.log(oldPath);
+    console.log(url);
+    const path = newPath;
+    const result = path.substring(path.indexOf('/address/') + '/address/'.length);
+    console.log(result);
+    url.value = result;
+    loading.value = false;
+    typeAddress.value = "";
+    await loadTypeAddress();
+    if (typeAddress.value == "address") {
+
+    } else {
+      await getInfo(url.value);
     }
+    loading.value = true;
+    // 在这里添加你需要执行的操作
+    // if (newPath != oldPath) {
+    //   window.location.reload();
+    // }
   }
 );
 
