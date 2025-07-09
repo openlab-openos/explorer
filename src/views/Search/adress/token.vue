@@ -384,8 +384,6 @@ const pubbtx = (url) => {
         params: {
             url: url,
         },
-    }).then(() => {
-        window.location.reload()
     })
 };
 </script>
