@@ -138,7 +138,7 @@ function searchMenu() {
         })
         .then(() => {
           searchcontent.value = "";
-          window.location.reload()
+          // window.location.reload()
         });
     }
   }

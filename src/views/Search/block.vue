@@ -297,7 +297,7 @@ watchEffect(() => {
                 <tr v-if="historyData">
                   <td>{{ $t("blocks.parent_slot_leader") }}</td>
                   <td class="text-end text-theme">
-                    <text style="cursor: pointer" @click="pubbleys(historyData[1])"> {{ historyData[1] }}
+                    <text style="cursor: pointer" @click="soltResult(JSON.parse(url) - 1)"> {{ historyData[1] }}
                     </text>
                   </td>
                 </tr>
@@ -313,7 +313,7 @@ watchEffect(() => {
                   <td>{{ $t("blocks.child_slot_leader") }}</td>
                   <td class="text-end text-theme">
 
-                    <text style="cursor: pointer" @click="pubbleys(historyData[2])"> {{ historyData[2]
+                    <text style="cursor: pointer" @click="soltResult(JSON.parse(url) + 1)"> {{ historyData[2]
                       }}</text>
                   </td>
                 </tr>
