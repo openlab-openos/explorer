@@ -16,7 +16,7 @@
     "error": "Error",
     "name": "Name",
     "developer": "Developer",
-    "placehold": "Search Address Account Transaction",
+    "placehold": "Search Address Account Transaction Token",
     "from": "Disburser",
     "token": "Token",
     "amount": "Amount",
@@ -155,7 +155,7 @@
     },
     "serch": {
         "title": "search",
-        "placeholder": "Search Address Account Transaction"
+        "placeholder": "Search Address Account Transaction Token"
     },
     "loading": "Loading……",
     "not_found": "No records found",

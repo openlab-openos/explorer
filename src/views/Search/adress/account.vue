@@ -129,8 +129,6 @@ import {
   getCurrentInstance,
   onMounted,
   ref,
-  watch,
-  watchEffect,
 } from 'vue';
 
 import { useRouter } from 'vue-router';

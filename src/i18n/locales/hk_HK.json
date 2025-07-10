@@ -14,7 +14,7 @@
     "error": "錯誤",
     "name": "名稱",
     "developer": "開發者",
-    "placehold": "搜尋地址/帳戶/交易",
+    "placehold": "搜尋地址、帳戶、交易、token",
     "from": "發放者",
     "token": "代幣",
     "amount": "數量",
@@ -153,7 +153,7 @@
     },
     "serch": {
         "title": "搜尋",
-        "placeholder": "搜尋地址/帳戶/交易"
+        "placeholder": "搜尋地址、帳戶、交易、token"
     },
     "loading": "載入中……",
     "not_found": "找不到記錄",
