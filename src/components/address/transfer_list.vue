@@ -258,7 +258,6 @@ const HandleList = (listItem) => {
             // 确保第一条指令存在且格式正确
             const firstInstruction = instructions?.[0];
             console.log(firstInstruction?.parsed?.type === "transfer" && firstInstruction?.parsed?.programId == "11111111111111111111111111111111");
-
             const movementType = firstInstruction?.parsed?.type === "transfer" && firstInstruction?.programId == "11111111111111111111111111111111"
                 ? "Transfer"
                 : "token_transfer";

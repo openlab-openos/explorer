@@ -158,7 +158,7 @@ export default {
           },
         })
         .then((res) => {
-          location.reload();
+          // location.reload();
         });
     },
     transtion(item) {
@@ -180,9 +180,9 @@ export default {
   },
 
   async created() {
-    window.addEventListener("popstate", (event) => {
-      location.reload();
-    });
+    // window.addEventListener("popstate", (event) => {
+    //   location.reload();
+    // });
     this.url = this.$route.params.url;
     this.card = await this.requestList({
       jsonrpc: "2.0",

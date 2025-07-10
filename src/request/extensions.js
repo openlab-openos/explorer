@@ -74,8 +74,8 @@ export async function getExtraData(url) {
     fee.non = false;
   }
   if (nonTransferableConfig) {
-    let metadataInfo = NonTransferableLayout.decode(nonTransferableConfig);
-    console.log("--nonTransferableConfig:", metadataInfo);
+    // let metadataInfo = NonTransferableLayout.decode(nonTransferableConfig);
+    // console.log("--nonTransferableConfig:", metadataInfo);
     fee.non = true;
   }
 

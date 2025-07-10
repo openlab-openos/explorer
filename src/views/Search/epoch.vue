@@ -53,8 +53,9 @@
             </tr>
             <tr>
               <td> {{ $t("epoch_page.last_block") }} </td>
-              <td class="text-end text-theme" v-if="epochrequest.epoch == epoch">Epoch in progress</td>
-              <td class="text-end text-theme" v-if="epochrequest.epoch != epoch" @click="epochSkip(progress(epoch))">
+              <td class="text-end text-theme" v-if="epochrequest.epoch != epoch">Epoch in progress</td>
+              <td class="text-end text-theme" v-if="epochrequest.epoch == epoch">
+              <!-- <td class="text-end text-theme" v-if="epochrequest.epoch == epoch" @click="epochSkip(progress(epoch))"> -->
                 {{ progress(epoch) }}
               </td>
             </tr>
@@ -132,11 +133,13 @@ onMounted(() => {
   EpochRequest();
 });
 
-const epochSkip = (num) => {
-  router.push({ name: "epoch", params: { num: num } })
-    .then(() => location.reload())
-    .catch((err) => console.error(err));
-};
+// const epochSkip = (num) => {
+//   router.push({ name: "epoch", params: { num: num } })
+//     .then(() => {
+//       EpochRequest();
+//     })
+//     .catch((err) => console.error(err));
+// };
 
 const blockSkip = (num) => {
   router.push({ name: "block", params: { url: num } });
@@ -151,9 +154,9 @@ const timestamp = () => {
 };
 
 // Handle browser back navigation
-window.addEventListener("popstate", () => {
-  location.reload();
-});
+// window.addEventListener("popstate", () => {
+//   location.reload();
+// });
 </script>
 
 <style scoped>

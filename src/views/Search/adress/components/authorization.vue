@@ -35,8 +35,8 @@
                         <td>{{ $t("account.update_authorization") }} </td>
                         <td class="text-end" v-if="MintData">
                             <template v-for="(item, index) in MintData.extensions" :key="index">
-                                <template v-if="item.state.updateAuthority">
-                                    <text>{{ item.state.updateAuthority ? titleUrl(item.state.updateAuthority).url :
+                                <template v-if="item.state?.updateAuthority">
+                                    <text>{{ item.state?.updateAuthority ? titleUrl(item.state.updateAuthority).url :
                                         'N/A' }}</text>
                                     <img v-if="titleUrl(item.state.updateAuthority).type"
                                         v-for="(datas, indexs) in titleUrl(item.state.updateAuthority).certificates"
@@ -79,7 +79,7 @@
                     </tr>
                     <tr>
                         <td>{{ $t("account.non_transterale") }} </td>
-                        <td class="text-end"> {{ feeData?.non ? $t("Disable")  : $t("Enable")  }}
+                        <td class="text-end"> {{ !feeData?.non ? $t("Disable")  : $t("Enable")  }}
                         </td>
                     </tr>
                 </tbody>
