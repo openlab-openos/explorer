@@ -166,18 +166,22 @@ onMounted(async () => {
         if (array[i].account.data.parsed.info.tokenAmount.uiAmount > 0) {
             // holder++;
             historyData.value.push(array[i]);
+            console.log(array[i]);
+            proportion_amount.value += JSON.parse(array[i].account.data.parsed.info.tokenAmount.uiAmount)
         }
     }
     totalItems.value = historyData.value.length;
     loading.value = false;
-
-    proportion_amount.value = await chainRequest(method).then(res => {
-
-        return res.result.value.uiAmount;
-    }).catch(err => {
-        console.log(err);
-        return 0;
-    });
+    console.log(proportion_amount.value);
+    
+    // proportion_amount.value = await chainRequest(method).then(res => {
+    //     console.log(res);
+        
+    //     return res.result.value.uiAmount;
+    // }).catch(err => {
+    //     console.log(err);
+    //     return 0;
+    // });
 });
 
 const come = (num) => {
@@ -194,7 +198,8 @@ const timeSome = (time) => {
 }
 
 const percent = (lod, nem) => {
-
+    console.log(lod, nem);
+    
     if (nem == 0) {
         return 0;
     }
