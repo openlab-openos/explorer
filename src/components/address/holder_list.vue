@@ -36,7 +36,7 @@
                     </td>
                     <td class="text-theme">
                         <text style="cursor: pointer" @click="pubbtx(item.pubkey)">{{ titleUrl(item.pubkey).url
-                            }}</text>
+                        }}</text>
                         <img v-if="titleUrl(item.pubkey).type && !titleUrl(item.pubkey).assest"
                             v-for="(datas, indexs) in titleUrl(item.pubkey).certificates" :key="indexs" :src="datas.img"
                             height="24" class="marginRight8" alt="">
@@ -71,9 +71,9 @@
 
 <script setup>
 import {
-  computed,
-  onMounted,
-  ref,
+    computed,
+    onMounted,
+    ref,
 } from 'vue';
 
 import moment from 'moment';
@@ -130,7 +130,7 @@ const requestList = async (object) => {
 
 
 onMounted(async () => {
-    historyData.value = await requestList({
+    let res = await requestList({
         "jsonrpc": "2.0",
         "id": 1,
         "method": "getProgramAccounts",
@@ -159,6 +159,15 @@ onMounted(async () => {
             props.url
         ]
     };
+    let array = res;
+    console.log(array);
+
+    for (let i in array) {
+        if (array[i].account.data.parsed.info.tokenAmount.uiAmount > 0) {
+            // holder++;
+            historyData.value.push(array[i]);
+        }
+    }
     totalItems.value = historyData.value.length;
     loading.value = false;
 

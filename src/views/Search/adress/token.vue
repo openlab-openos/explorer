@@ -47,7 +47,7 @@
                                 <td>{{ $t("account.symbol") }} </td>
                                 <td class="text-end"> {{ mintToken ? (mintToken.symbol ? mintToken.symbol : 'N/A') :
                                     'N/A'
-                                }} </td>
+                                    }} </td>
                                 <!-- <td class="text-end"> {{ mintToken.symbol ? mintToken.symbol : 'N/A' }} </td> -->
                             </tr>
                             <tr>
@@ -126,7 +126,7 @@
                     </table>
                 </card-body>
             </card> -->
-             <authorization v-if="url" :url="url" ></authorization>
+            <authorization v-if="url" :url="url"></authorization>
         </div>
 
         <!-- <div class="tab-content marginTOP-50">
@@ -184,8 +184,8 @@
 
 <script setup>
 import {
-  onMounted,
-  ref,
+    onMounted,
+    ref,
 } from 'vue';
 
 import { useRouter } from 'vue-router';
@@ -200,9 +200,9 @@ import transferView from '../../../components/address/transfer_list.vue';
 import { titleUrl } from '../../../components/method/title_url';
 import { chainRequest } from '../../../request/chain';
 import {
-  getAccountState,
-  getAddressTransactionFees,
-  getTokenPermanentDelegate,
+    getAccountState,
+    getAddressTransactionFees,
+    getTokenPermanentDelegate,
 } from '../../../request/extension';
 import { solanaRequest } from '../../../request/solanaReques';
 import { metaRequest } from '../../../request/tokenMeta';
@@ -220,9 +220,9 @@ const router = useRouter();
 const mintToken = ref();
 const activeName = ref('first');
 function isProductionDomain() {
-  const hostname = window.location.hostname;
-  // 检测是否包含 'devnet.' 前缀
-  return !hostname.startsWith('devnet.');
+    const hostname = window.location.hostname;
+    // 检测是否包含 'devnet.' 前缀
+    return !hostname.startsWith('devnet.');
 }
 const transfersType = isProductionDomain();
 
@@ -311,6 +311,7 @@ const tokenRwquest = async () => {
     }
     // });
 }
+console.log(paramsId.value);
 
 // defineEmits({ mintToken });
 const numberHeld = async () => {
@@ -342,7 +343,16 @@ const numberHeld = async () => {
         if (res.err) {
             holdNumber.value = 0;
         } else {
-            holdNumber.value = res.result.length;
+            let array = res.result;
+            let holder = 0;
+            console.log(array);
+
+            for (let i in array) {
+                if (array[i].account.data.parsed.info.tokenAmount.uiAmount > 0) {
+                    holder++;
+                }
+            }
+            holdNumber.value = holder;
         }
     }).catch(() => {
         holdNumber.value = 0;
