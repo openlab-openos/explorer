@@ -65,7 +65,8 @@
         "wallet": "Ví",
         "website": "Website",
         "tokens": "Tài sản",
-        "faucet": "Faucet"
+        "faucet": "Faucet",
+        "TokenTracker":"Theo dõi Token"
     },
     "dashboard": {
         "title": "Bảng điều khiển",

@@ -65,7 +65,8 @@
         "wallet": "Dompet",
         "website": "Laman Web",
         "tokens": "Aset",
-        "faucet": "Paip"
+        "faucet": "Paip",
+        "TokenTracker":"Pemantau Aset"
     },
     "dashboard": {
         "title": "Papan Pemuka",

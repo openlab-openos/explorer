@@ -1,10 +1,10 @@
 import {
-  Authentications,
-  LOADER_IDS,
-  PROGRAM_INFO_BY_ID,
-  SPECIAL_IDS,
-  SYSVAR_IDS,
-  TOKEN_IDS,
+    Authentications,
+    LOADER_IDS,
+    PROGRAM_INFO_BY_ID,
+    SPECIAL_IDS,
+    SYSVAR_IDS,
+    TOKEN_IDS,
 } from '../../program';
 
 export const titleUrl = (url) => {
@@ -14,7 +14,7 @@ export const titleUrl = (url) => {
             url: LOADER_IDS[url],
             type: auth,
             find: true,
-            assest:false
+            assest: false
         };
     }
     if (PROGRAM_INFO_BY_ID[url]) {
@@ -22,7 +22,7 @@ export const titleUrl = (url) => {
             url: PROGRAM_INFO_BY_ID[url].name,
             type: auth,
             find: true,
-            assest:false
+            assest: false
         };
     }
     if (SPECIAL_IDS[url]) {
@@ -30,7 +30,7 @@ export const titleUrl = (url) => {
             url: SPECIAL_IDS[url],
             type: auth,
             find: true,
-            assest:false
+            assest: false
         };
     }
     if (SYSVAR_IDS[url]) {
@@ -38,7 +38,7 @@ export const titleUrl = (url) => {
             url: SYSVAR_IDS[url],
             type: auth,
             find: true,
-            assest:false
+            assest: false
         };
     }
     if (TOKEN_IDS[url]) {
@@ -46,22 +46,30 @@ export const titleUrl = (url) => {
             url: TOKEN_IDS[url],
             type: auth,
             find: true,
-            assest:false
+            assest: false
         };
     }
 
-    
-    if (Authentications[url]) {
+
+    try {
+        if (Authentications[url]) {
+            return {
+                url: Authentications[url].name,
+                type: true,
+                find: true,
+                certificates: Authentications[url].certificates,
+                img: Authentications[url].img,
+                symbol: Authentications[url].symbol,
+                code: Authentications[url].code,
+                assest: true,
+                backColor: Authentications[url].backColor
+            };
+        }
+    } catch (error) {
         return {
-            url: Authentications[url].name,
-            type: true,
-            find: true,
-            certificates: Authentications[url].certificates,
-            img: Authentications[url].img,
-            symbol: Authentications[url].symbol,
-            code:Authentications[url].code,
-            assest:true,
-            backColor:Authentications[url].backColor
+            url: url,
+            type: auth,
+            find: false
         };
     }
     if (url == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz') {
@@ -70,9 +78,9 @@ export const titleUrl = (url) => {
             type: true,
             find: true,
             symbol: 'WBTG',
-            certificates: [{'img':'https://pic1.imgdb.cn/item/682da89b58cb8da5c80290c2.png'}],
-            img:'https://pic1.imgdb.cn/item/682da8a958cb8da5c8029118.png',
-            assest:false,
+            certificates: [{ 'img': 'https://pic1.imgdb.cn/item/682da89b58cb8da5c80290c2.png' }],
+            img: 'https://pic1.imgdb.cn/item/682da8a958cb8da5c8029118.png',
+            assest: false,
         };
     }
     return {

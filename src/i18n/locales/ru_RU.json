@@ -65,7 +65,8 @@
         "wallet": "Кошелек",
         "website": "Веб-сайт",
         "tokens": "Активы",
-        "faucet": "Кран"
+        "faucet": "Кран",
+        "TokenTracker":"Трекер"
     },
     "dashboard": {
         "title": "Панель управления",

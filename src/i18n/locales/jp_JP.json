@@ -65,6 +65,7 @@
         "wallet": "ウォレット",
         "website": "ウェブサイト",
         "tokens": "資産",
+        "TokenTracker":"トークン追跡",
         "faucet": "フォーセット"
     },
     "dashboard": {

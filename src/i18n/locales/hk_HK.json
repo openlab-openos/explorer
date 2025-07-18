@@ -65,6 +65,7 @@
         "wallet": "錢包",
         "website": "網站",
         "tokens": "資產",
+        "TokenTracker":"資產追蹤",
         "faucet": "水龍頭"
     },
     "dashboard": {

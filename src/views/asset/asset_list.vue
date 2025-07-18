@@ -93,6 +93,7 @@
                 </template>
             </card-body>
         </card>
+        <PROGRAMVIEW />
     </div>
     <div v-else>
         <loading-vue />
@@ -117,6 +118,7 @@ import vrc20 from '../../assets/assetsLogo/vrc20.png';
 import LoadingVue from '../../components/block/loading.vue';
 import { titleUrl } from '../../components/method/title_url';
 import { tokenList } from './asset';
+import PROGRAMVIEW from "./componects/ProgramList.vue"
 
 const loadingType = ref(false);
 const router = useRouter();
@@ -133,6 +135,9 @@ const paginatedHistoryData = computed(() => {
     console.log(historyData.value);
     return historyData.value.slice(start, end);
 });
+const handlePageChange = (newPage) => {
+    currentPage.value = newPage;
+};
 tokenList().then((res) => {
 
 
@@ -185,6 +190,7 @@ tokenList().then((res) => {
     totalItems.value = array.length;
     loading.value = true;
 }).catch(error => {
+    loadingType.value = true;
     console.error('Failed to fetch token list:', error);
 });
 const pubbleys = (url) => {

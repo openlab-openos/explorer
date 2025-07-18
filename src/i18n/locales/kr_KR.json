@@ -65,6 +65,7 @@
         "wallet": "지갑",
         "website": "웹사이트",
         "tokens": "자산",
+        "TokenTracker":"자산 추적",
         "faucet": "수도꼭지"
     },
     "dashboard": {

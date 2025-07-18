@@ -65,6 +65,7 @@
         "wallet": "钱包",
         "website": "网站",
         "tokens": "资产",
+        "TokenTracker": "代币追踪",
         "faucet": "水龙头"
     },
     "dashboard": {

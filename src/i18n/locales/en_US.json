@@ -67,6 +67,7 @@
         "wallet": "Wallet",
         "website": "Website",
         "tokens": "Assets",
+        "TokenTracker": "Token Tracker",
         "faucet": "Faucet"
     },
     "dashboard": {
