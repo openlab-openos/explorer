@@ -23,13 +23,8 @@
                         <!-- 数据列表 -->
                         <tr v-for="item in paginatedHistoryData" :key="item.state.mint">
                             <td class="text-theme">
-                                <img 
-                                    :src="item.imageUrl" 
-                                    @error="item.imageUrl = defaultImage" 
-                                    height="24" 
-                                    alt="" 
-                                    class="marginRight8"
-                                >
+                                <img :src="item.imageUrl" @error="item.imageUrl = defaultImage" height="24" alt=""
+                                    class="marginRight8">
                                 <text style="cursor: pointer;" @click="pubbleys(item.state.mint)">
                                     {{ item.state.name }}
                                 </text>
@@ -39,25 +34,22 @@
                             </td>
                             <td>
                                 <!-- 显示加载状态或实际数量 -->
-                                {{ holdersCache[item.state.mint] === null ? 'loading...' : holdersCache[item.state.mint] }}
+                                {{ holdersCache[item.state.mint] === null ? 'loading...' : holdersCache[item.state.mint]
+                                }}
                             </td>
                             <td>
-                                {{ come(smartFormatNumber(item.supply / item.decimals)) }}
+                                <!-- {{ item.supply / item.decimals }} -->
+                                  {{ come(smartFormatNumber(toFexedStake(item.supply, item.decimals))) }}
+                                <!-- {{ come(smartFormatNumber(JSON.parse(item.supply).toFixed(item.decimals))) }} -->
                             </td>
                         </tr>
                     </tbody>
                 </table>
                 <!-- 分页控件 -->
                 <div v-if="loading && totalItems > 0" class="justify-end padding-10">
-                    <el-pagination 
-                        background 
-                        layout="prev, pager, next" 
-                        :hide-on-single-page="false"
-                        :current-page="currentPage" 
-                        :page-size="pageSize" 
-                        :total="totalItems"
-                        @current-change="handlePageChange" 
-                    />
+                    <el-pagination background layout="prev, pager, next" :hide-on-single-page="false"
+                        :current-page="currentPage" :page-size="pageSize" :total="totalItems"
+                        @current-change="handlePageChange" />
                 </div>
                 <!-- 无数据状态 -->
                 <div v-if="loading && totalItems === 0" class="text-center">
@@ -98,14 +90,14 @@ const paginatedHistoryData = computed(() => {
 const fetchHolderCount = async (mint) => {
     // 已缓存则直接返回
     if (holdersCache.value[mint] !== undefined) return;
-    
+
     // 先标记为加载中
     holdersCache.value[mint] = null;
-    
+
     try {
         const res = await getTokenAccounts(mint);
-        console.log(res,'0000---000');
-        
+        console.log(res, '0000---000');
+
         holdersCache.value[mint] = res; // 假设res是账户数组，取长度
     } catch (error) {
         console.error(`获取${mint}持有人失败:`, error);
@@ -128,6 +120,17 @@ const handlePageChange = (newPage) => {
     fetchCurrentPageHolders();
 };
 
+const toFexedStake = (num, decimals) => {
+    if (num == null || decimals == null) {
+        console.error('Number and decimals must be provided.');
+        return 0;
+    }
+    const divisor = Math.pow(10, JSON.parse(decimals));
+
+    return (JSON.parse(num) / divisor).toFixed(2);;
+
+};
+
 // 图片加载错误处理
 const handleImageError = (item) => {
     item.imageUrl = defaultImage;
@@ -136,8 +139,8 @@ const handleImageError = (item) => {
 // 格式化数字（千分位）
 const come = (num) => {
     if (num === undefined || num === null) return '0';
-    const reg = num.toString().indexOf(".") > -1 
-        ? /(\d)(?=(\d{3})+\.)/g 
+    const reg = num.toString().indexOf(".") > -1
+        ? /(\d)(?=(\d{3})+\.)/g
         : /(\d)(?=(\d{3})+$)/g;
     return num.toString().replace(reg, "$1,");
 };
