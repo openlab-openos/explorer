@@ -420,7 +420,7 @@ export default {
                       {{ index + 1 }}
                     </td>
                     <td class="text-theme">
-                      <text style="cursor: pointer" @click="pubbleys(item.pubkey)">{{ titleUrl(item.pubkey).url }}</text>
+                      <text style="cursor: pointer;margin-right: 12px;" @click="pubbleys(item.pubkey)">{{ titleUrl(item.pubkey).url }}</text>
                       <img v-if="titleUrl(item.pubkey).type && !titleUrl(item.pubkey).assest"
                         v-for="(datas, indexs) in titleUrl(item.pubkey).certificates" :key="indexs" :src="datas.img"
                         height="24" class="marginRight8" alt="">

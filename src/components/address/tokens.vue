@@ -25,11 +25,11 @@
                     <template v-if="tokens.length != 0">
                         <tr v-for="(item, index) in paginatedHistoryData" :key="index">
                             <td class="text-theme" style="line-height: 30px;">
-                                <img v-if="item.img" :src="item.img" height="28" alt="">
+                                <img v-if="item.img" :src="item.img" height="28" alt="" style="margin-right: 12px;">
                                 <img v-if="item.account.data.parsed.info.mint == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'"
                                     src="https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png"
-                                    width="28" height="28" alt="">
-                                <text style="cursor: pointer;" @click="pubbtx(item.account.data.parsed.info.mint)">
+                                    width="28" height="28" alt="" style="margin-right: 12px;">
+                                <text style=" cursor: pointer;" @click="pubbtx(item.account.data.parsed.info.mint)">
                                     {{ titleUrl(item.account.data.parsed.info.mint).url }}
                                 </text>
 
@@ -48,8 +48,9 @@
                                 </text>
                             </td>
                             <td class="text-theme">
-                                <text style="cursor: pointer" @click="pubbtx(item.pubkey)"> {{ titleUrl(item.pubkey).url }}</text>
-                               
+                                <text style="cursor: pointer" @click="pubbtx(item.pubkey)"> {{ titleUrl(item.pubkey).url
+                                }}</text>
+
                                 <img v-if="titleUrl(item.pubkey).type && !titleUrl(item.pubkey).assest"
                                     v-for="(datas, indexs) in titleUrl(item.pubkey).certificates" :key="indexs"
                                     :src="datas.img" height="24" class="marginRight8" alt="">
@@ -61,7 +62,8 @@
                             </td>
 
                             <td class="text-theme">
-                                <text style="cursor: pointer" @click="pubbtx(item.account.owner)">{{ titleUrl(item.account.owner).url }}</text>
+                                <text style="cursor: pointer" @click="pubbtx(item.account.owner)">{{
+                                    titleUrl(item.account.owner).url }}</text>
                                 <img v-if="titleUrl(item.account.owner).type && !titleUrl(item.account.owner).assest"
                                     v-for="(datas, indexs) in titleUrl(item.account.owner).certificates" :key="indexs"
                                     :src="datas.img" height="24" class="marginRight8" alt="">
@@ -103,9 +105,9 @@
 
 <script setup>
 import {
-  computed,
-  onMounted,
-  ref,
+    computed,
+    onMounted,
+    ref,
 } from 'vue';
 
 import { useRouter } from 'vue-router';

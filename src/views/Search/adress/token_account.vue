@@ -41,7 +41,7 @@
                             <tr>
                                 <td>{{ $t("account.owning_token") }}</td>
                                 <td class="text-end text-theme">
-                                    <text @click="pubbtx(getMint)" style="cursor: pointer">{{
+                                    <text @click="pubbtx(getMint)" style="cursor: pointer;margin-right: 12px;">{{
                                         titleUrl(getMint).url }}</text>
                                     <img v-if="titleUrl(getMint).type && !titleUrl(getMint).assest"
                                         v-for="(datas, indexs) in titleUrl(getMint).certificates" :key="indexs"
