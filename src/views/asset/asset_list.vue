@@ -86,7 +86,7 @@
                 </div>
                 <template v-if="historyData.length > 10">
                     <div class="justify-end padding-10">
-                        <el-pagination background layout="prev, pager, next" :hide-on-single-page="true"
+                        <el-pagination background layout="prev, pager, next" :hide-on-single-page="false"
                             :current-page="currentPage" :page-size="pageSize" :total="totalItems"
                             @current-change="handlePageChange" />
                     </div>
