@@ -9,17 +9,14 @@
             <text>
                 {{ token_name ? (titleUrl(url).type ? titleUrl(url).url : (token_name == url ? 'Token' : token_name))
                     : 'Token' }}
-                <!-- {{ titleUrl(url).type }} -->
-                <!-- <img v-if="titleUrl(url).type" v-for="item, index in titleUrl(url).certificates" :src="item.img"
-                    :key="index" height="24" alt="" class="marginRight10"> -->
-                <img v-if="titleUrl(url).type && !titleUrl(url).assest"
-                    v-for="item, index in titleUrl(url).certificates" :src="item.img" :key="index" height="24" alt=""
-                    class="marginRight10">
-                <text v-for="items, indexs in titleUrl(url).certificates" :key="indexs"
+                <img v-if="titleUrl(url).type && titleUrl(url).assest"
+                    v-for="(datas, indexs) in titleUrl(url).certificates" :key="indexs" :src="datas.img"
+                    height="24" class="marginRight8" alt="">
+                <!-- <text v-for="items, indexs in titleUrl(url).certificates" :key="indexs"
                     :style="'background-color: ' + items.backColor"
                     style="border-radius: 5px;padding: 2px 4px;margin: 0px 5px 0 0;font-weight: 500;font-size: 16px;">
                     {{ items.code }}
-                </text>
+                </text> -->
             </text>
         </h3>
         <div class="marginTOP-50">
@@ -66,23 +63,10 @@
                                     </span>
                                 </td>
                             </tr>
-                            <!-- <tr>
-                                <td>{{ $t("account.number_held") }} </td>
-                                <td class="text-end"> {{ holdNumber }} </td>
-                            </tr> -->
                             <tr>
                                 <td>{{ $t("account.owner") }} </td>
                                 <td class="text-end text-theme">
-                                    <text style="cursor: pointer" @click="pubbtx(paramsId)">{{
-                                        titleUrl(paramsId).url }}</text>
-                                    <img v-if="titleUrl(paramsId).type && !titleUrl(paramsId).assest"
-                                        v-for="(datas, indexs) in titleUrl(paramsId).certificates" :key="indexs"
-                                        :src="datas.img" height="24" class="marginRight8" alt="">
-                                    <text v-for="items, indexs in titleUrl(paramsId).certificates" :key="indexs"
-                                        :style="'background-color: ' + items.backColor"
-                                        style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
-                                        {{ items.code }}
-                                    </text>
+                                    <RenderText :address="paramsId" />
                                 </td>
                             </tr>
                         </tbody>
@@ -191,7 +175,7 @@ import {
 import { useRouter } from 'vue-router';
 
 import { PublicKey } from '@solana/web3.js';
-
+import RenderText from "../../../components/Render/text.vue"
 import historyView from '../../../components/address/history_list.vue';
 import holderView from '../../../components/address/holder_list.vue';
 import pledgeView from '../../../components/address/pledge.vue';
@@ -387,13 +371,5 @@ const toFexedStake = (num, decimals) => {
 
     return (JSON.parse(num) / divisor).toFixed(2);
 
-};
-const pubbtx = (url) => {
-    router.push({
-        name: "address",
-        params: {
-            url: url,
-        },
-    })
 };
 </script>

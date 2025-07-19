@@ -23,11 +23,17 @@
                         <!-- 数据列表 -->
                         <tr v-for="item in paginatedHistoryData" :key="item.state.mint">
                             <td class="text-theme">
-                                <img :src="item.imageUrl" @error="item.imageUrl = defaultImage" height="24" alt=""
-                                    class="marginRight8">
-                                <text style="cursor: pointer;" @click="pubbleys(item.state.mint)">
-                                    {{ item.state.name }}
-                                </text>
+                                <div style="display: flex;">
+                                    <div style="width: 24px;height: 24px; overflow: hidden; " class="marginRight8">
+                                        <img :src="item.imageUrl"
+                                            style=" width: 100%; height: 100%; object-fit: cover;object-position: center;border-radius: 5px;"
+                                            @error="item.imageUrl = defaultImage" height="24" alt="">
+                                    </div>
+                                    <text style="cursor: pointer;display: flex;align-items: center;" @click="pubbleys(item.state.mint)">
+                                        {{ item.state.name }}
+                                    </text>
+                                </div>
+
                             </td>
                             <td>
                                 {{ item.state.symbol || 'N/A' }}
@@ -39,7 +45,7 @@
                             </td>
                             <td>
                                 <!-- {{ item.supply / item.decimals }} -->
-                                  {{ come(smartFormatNumber(toFexedStake(item.supply, item.decimals))) }}
+                                {{ come(smartFormatNumber(toFexedStake(item.supply, item.decimals))) }}
                                 <!-- {{ come(smartFormatNumber(JSON.parse(item.supply).toFixed(item.decimals))) }} -->
                             </td>
                         </tr>
@@ -96,9 +102,8 @@ const fetchHolderCount = async (mint) => {
 
     try {
         const res = await getTokenAccounts(mint);
-        console.log(res, '0000---000');
 
-        holdersCache.value[mint] = res; // 假设res是账户数组，取长度
+        holdersCache.value[mint] = res;
     } catch (error) {
         console.error(`获取${mint}持有人失败:`, error);
         holdersCache.value[mint] = 0; // 错误时返回0

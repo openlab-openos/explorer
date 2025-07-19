@@ -4,10 +4,10 @@
             <img :src="token_img ? token_img : ''" alt="" class="marginRight10 imgWigth25" v-if="token_img">
             <img v-if="titleUrl(token_name).type" :src="titleUrl(token_name).img" class="marginRight10 imgWigth25">
             <text> {{ $t("account.tokenAccount") }} {{ token_name ? (titleUrl(url).find ? titleUrl(url).url : '') : ''
-                }}
-                <img v-if="titleUrl(url).type" v-for="item, index in titleUrl(url).certificates" :src="item.img"
-                    :key="index" height="24" alt="" class="marginRight10">
+            }}
             </text>
+            <img v-if="titleUrl(url).type && titleUrl(url).assest" v-for="(datas, indexs) in titleUrl(url).certificates"
+                :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
         </h3>
 
         <div class=" marginTOP-50">
@@ -41,43 +41,25 @@
                             <tr>
                                 <td>{{ $t("account.owning_token") }}</td>
                                 <td class="text-end text-theme">
-                                    <text @click="pubbtx(getMint)" style="cursor: pointer;margin-right: 12px;">{{
-                                        titleUrl(getMint).url }}</text>
-                                    <img v-if="titleUrl(getMint).type && !titleUrl(getMint).assest"
-                                        v-for="(datas, indexs) in titleUrl(getMint).certificates" :key="indexs"
-                                        :src="datas.img" height="24" class="marginRight8" alt="">
-                                    <text v-for="items, indexs in titleUrl(getMint).certificates" :key="indexs"
-                                        :style="'background-color: ' + items.backColor"
-                                        style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
-                                        {{ items.code }}
-                                    </text>
-
+                                    <RenderText :address="getMint" />
                                 </td>
                             </tr>
                             <tr>
                                 <td>{{ $t("account.state") }} </td>
                                 <td class="text-end">{{ tokenData.isFrozen ? $t("account.frozen") :
                                     $t("account.initialize")
-                                }} </td>
+                                    }} </td>
                             </tr>
                             <tr>
                                 <td>{{ $t("account.Owner") }} </td>
                                 <td class="text-end text-theme">
-                                    <text @click="pubbtx(owners)" style="cursor: pointer">{{
-                                        titleUrl(owners).url }} </text>
-                                    <img v-if="titleUrl(owners).type"
-                                        v-for="(datas, indexs) in titleUrl(owners).certificates" :key="indexs"
-                                        :src="datas.img" height="24" class="marginRight8" alt="">
+                                    <RenderText v-if="owners" :address="owners" />
                                 </td>
                             </tr>
                             <tr>
                                 <td>{{ $t("transaction.program") }} </td>
                                 <td class="text-end text-theme">
-                                    <text @click="pubbtx(owner)" style="cursor: pointer">{{
-                                        titleUrl(owner).url }}</text>
-                                    <img v-if="titleUrl(owner).type"
-                                        v-for="(datas, indexs) in titleUrl(owner).certificates" :key="indexs"
-                                        :src="datas.img" height="24" class="marginRight8" alt="">
+                                    <RenderText v-if="owner" :address="owner" />
                                 </td>
                             </tr>
                         </tbody>
@@ -109,19 +91,19 @@
 </template>
 <script setup>
 import {
-  onMounted,
-  ref,
+    onMounted,
+    ref,
 } from 'vue';
 
 import {
-  ExtensionType,
-  getExtensionData,
+    ExtensionType,
+    getExtensionData,
 } from 'open-token-web3';
 import { useRouter } from 'vue-router';
-
+import RenderText from '../../../components/Render/text.vue';
 import {
-  Connection,
-  PublicKey,
+    Connection,
+    PublicKey,
 } from '@solana/web3.js';
 
 import historyView from '../../../components/address/history_list.vue';
@@ -146,9 +128,9 @@ const data = ref();
 const activeName = ref('first')
 
 function isProductionDomain() {
-  const hostname = window.location.hostname;
-  // 检测是否包含 'devnet.' 前缀
-  return !hostname.startsWith('devnet.');
+    const hostname = window.location.hostname;
+    // 检测是否包含 'devnet.' 前缀
+    return !hostname.startsWith('devnet.');
 }
 const transfersType = isProductionDomain();
 

@@ -20,12 +20,12 @@
                         <tr v-for="(item, index) in arrayData" :key="index" style="height: 35px">
                             <td v-if="!props.boolean" style=" text-align: left; " class="text-theme">
                                 <text style="cursor: pointer" @click="
-                                pubbtx(
-                                    item.signature
-                                )
-                                ">{{
-                                    item.signature
-                                }}</text>
+                                    pubbtx(
+                                        item.signature
+                                    )
+                                    ">{{
+                                        item.signature
+                                    }}</text>
                             </td>
                             <td v-else style=" text-align: left;" class="text-theme">
                                 <text style="cursor: pointer" @click="
@@ -33,7 +33,7 @@
                                         item.signature
                                     )
                                     ">{{
-                                    stringcate(item.signature)
+                                        stringcate(item.signature)
                                     }}</text>
                             </td>
                             <td style=" text-align: left">
@@ -53,7 +53,7 @@
                             </td>
                             <td style=" text-align: left;" class="text-theme">
 
-                                <text style="cursor: pointer" @click="
+                                <!-- <text style="cursor: pointer" @click="
                                     pubbleys(
                                         item.source
                                     )
@@ -67,10 +67,12 @@
                                     :style="'background-color: ' + items.backColor"
                                     style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                     {{ items.code }}
-                                </text>
+                                </text> -->
+                                <RenderText v-if="item.source" :address="item.source" />
+
                             </td>
                             <td style=" text-align: left;" class="text-theme">
-                                <text style="cursor: pointer" @click="
+                                <!-- <text style="cursor: pointer" @click="
                                     pubbleys(
                                         item.destination
                                     )
@@ -84,7 +86,8 @@
                                     :style="'background-color: ' + items.backColor"
                                     style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                     {{ items.code }}
-                                </text>
+                                </text> -->
+                                <RenderText v-if="item.destination" :address="item.destination" />
 
                             </td>
                             <td style=" text-align: left">
@@ -116,11 +119,11 @@
 
 <script setup>
 import {
-  getCurrentInstance,
-  onMounted,
-  ref,
+    getCurrentInstance,
+    onMounted,
+    ref,
 } from 'vue';
-
+import RenderText from "../Render/text.vue"
 import moment from 'moment';
 import CountUp from 'vue-countup-v3';
 import { useRouter } from 'vue-router';
@@ -161,7 +164,7 @@ const fetchOrderData = async () => {
             if (res[i].result) {
                 let etach = res[i].result.transaction.message.instructions;
                 console.log(etach[etach.length - 1].parsed.type == "transfer" && etach[etach.length - 1].programId == "11111111111111111111111111111111");
-                
+
                 if (etach[etach.length - 1].parsed.type == "transfer" && etach[etach.length - 1].programId == "11111111111111111111111111111111") {
                     let data = {
                         type: "transfer",

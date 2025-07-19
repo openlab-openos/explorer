@@ -10,12 +10,12 @@
                     <tr>
                         <td>{{ $t("account.foundry_license") }} </td>
                         <td class="text-end text-theme">
-                            <text :style="pubbleys ? 'cursor: pointer' : ''" @click="pubbtx(pubbleys)">{{
+                            <!-- <text :style="pubbleys ? 'cursor: pointer' : ''" @click="pubbtx(pubbleys)">{{
                                 !pubbleys ? "N/A" : titleUrl(pubbleys).url }}</text>
                             <img v-if="titleUrl(pubbleys).type"
                                 v-for="(datas, indexs) in titleUrl(pubbleys).certificates" :key="indexs"
-                                :src="datas.img" height="24" class="marginRight8" alt="">
-
+                                :src="datas.img" height="24" class="marginRight8" alt=""> -->
+                            <RenderText v-if="pubbleys" :address="pubbleys" />
                         </td>
                     </tr>
                     <tr>
@@ -36,6 +36,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import RenderText from "../method/text.vue"
 const router = useRouter();
 const pubbtx = (url) => {
     if (url) {

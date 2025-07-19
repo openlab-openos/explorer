@@ -40,7 +40,7 @@
                             <tr>
                                 <td>{{ $t("account.assigned_program_id") }} </td>
                                 <td class="text-end text-theme">
-                                    <text style="cursor: pointer" @click="pubbtx(item.owner)"> {{
+                                    <!-- <text style="cursor: pointer" @click="pubbtx(item.owner)"> {{
                                         titleUrl(item.owner).url }}</text>
                                     <img v-if="titleUrl(item.owner).type && !titleUrl(item.owner).assest"
                                         v-for="(datas, indexs) in titleUrl(item.owner).certificates" :key="indexs"
@@ -49,7 +49,8 @@
                                         :style="'background-color: ' + items.backColor"
                                         style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                         {{ items.code }}
-                                    </text>
+                                    </text> -->
+                                    <RenderText :address="item.owner" />
                                 </td>
                             </tr>
                             <tr>
@@ -132,7 +133,7 @@ import {
 } from 'vue';
 
 import { useRouter } from 'vue-router';
-
+import RenderText from "../../../components/Render/text.vue"
 import historyView from '../../../components/address/history_list.vue';
 import holderView from '../../../components/address/holder_list.vue';
 import pledgeView from '../../../components/address/pledge.vue';

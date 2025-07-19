@@ -29,8 +29,6 @@
 
                                 <text style="cursor: pointer;" @click="pubbleys(item.token.address)">{{
                                     titleUrl(item.token.address).url }}</text>
-                                <!-- <img v-if="titleUrl(item.token.pubkey).type" src="../../../src//assets//renzheng.png"
-                                    height="24" alt=""> -->
                                 <img v-if="titleUrl(item.token.pubkey).type"
                                     v-for="(datas, indexs) in titleUrl(item.token.pubkey).certificates" :key="indexs"
                                     :src="datas.img" height="24" class="marginRight8" alt="">
@@ -44,16 +42,16 @@
                             </template>
                             <template v-else>
                                 <td>
-                                    <!-- <img v-for="items, indexs in item.token.certificates" :key="indexs"
+                                    <img v-for="items, indexs in item.token.certificates" :key="indexs"
                                         :src="items.image_url" height="20" class="marginRight8"
-                                        :title="items.certificate_code"> -->
-                                    <div style="display: flex;">
+                                        :title="items.certificate_code">
+                                    <!-- <div style="display: flex;">
                                         <p v-for="items, indexs in item.token.certificates" :key="indexs"
                                             :style="'background-color: ' + items.backColor"
                                             style="border-radius: 5px;padding: 2px 4px;margin-right: 5px;margin-bottom: 0;font-weight: 500;">
                                             {{ items.certificate_code }}
                                         </p>
-                                    </div>
+                                    </div> -->
                                 </td>
                             </template>
 

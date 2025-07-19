@@ -7,7 +7,7 @@ import {
 
 import i18n from '@/i18n';
 import { useRouter } from 'vue-router';
-
+import RenderText from "../../components/Render/text.vue"
 import { solanapubbleys } from '../../components/method/solana';
 import { titleUrl } from '../../components/method/title_url';
 import { smartFormatNumber } from '../../components/number/smart.js';
@@ -351,15 +351,14 @@ export default {
                     </InfoTooltip>
                   </td>
                   <td class="text-end text-theme">
-                    <text style="cursor: pointer"
-                      @click="blockSkip(historyData.slot)">
+                    <text style="cursor: pointer" @click="blockSkip(historyData.slot)">
                       <!-- {{
                         promaster[historyData.transaction.message.accountKeys[0].pubkey] ?
                           promaster[historyData.transaction.message.accountKeys[0].pubkey].name
                           : historyData.transaction.message.accountKeys[0].pubkey
                       }} -->
-                          {{ historyData.transaction.message.recentBlockhash }}
-                      </text>
+                      {{ historyData.transaction.message.recentBlockhash }}
+                    </text>
                   </td>
                 </tr>
                 <tr>
@@ -420,7 +419,7 @@ export default {
                       {{ index + 1 }}
                     </td>
                     <td class="text-theme">
-                      <text style="cursor: pointer;margin-right: 12px;" @click="pubbleys(item.pubkey)">{{ titleUrl(item.pubkey).url }}</text>
+                      <!-- <text style="cursor: pointer;margin-right: 12px;" @click="pubbleys(item.pubkey)">{{ titleUrl(item.pubkey).url }}</text>
                       <img v-if="titleUrl(item.pubkey).type && !titleUrl(item.pubkey).assest"
                         v-for="(datas, indexs) in titleUrl(item.pubkey).certificates" :key="indexs" :src="datas.img"
                         height="24" class="marginRight8" alt="">
@@ -428,7 +427,9 @@ export default {
                         :style="'background-color: ' + items.backColor"
                         style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                         {{ items.code }}
-                      </text>
+                      </text> -->
+                      <RenderText v-if="item.pubkey" :address="item.pubkey" />
+
                     </td>
                     <td v-if="historyData.meta.postBalances">
                       <span class="symboldata" :style="styleSysmle(

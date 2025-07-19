@@ -21,10 +21,6 @@
       </div>
     </div>
     <div style="width: 96%; margin: auto; display: flex; justify-content: end;">
-      <!-- <el-select v-model="selectAddress" placeholder="Select" style="width: 115px">
-        <el-option label="One month" value="30" />
-        <el-option label="One year" value="365" />
-      </el-select> -->
       <div class="menu-item dropdown dropdown-mobile-full">
         <a href="#" data-bs-toggle="dropdown" data-bs-display="static" class="menu-link scales"
           style="white-space: nowrap;text-decoration: none;color: #fff;">
@@ -32,15 +28,6 @@
           <!-- <img src="https://cdn.openverse.network/brands/openverse/icon_128.png" width="32" alt=""> -->
           <i class="bi bi-chevron-down" style="margin: 5px;"></i>
         </a>
-        <!-- <div class="dropdown-menu dropdown-menu-end me-lg-3 fs-11px mt-1">
-          <div class="dropdown-item align-items-center text-theme" style="cursor: pointer;text-align: center;">Openverse
-            Mainnet
-          </div>
-          <div style="text-align: center;padding: 6px 16px;cursor: pointer" class="dropdown-item align-items-center">
-            Openverse Devnet</div>
-          <div style="text-align: center;padding: 6px 16px;cursor: pointer" class="dropdown-item align-items-center">
-            Openverse Testnet </div>
-        </div> -->
         <div class="dropdown-menu dropdown-menu-end me-lg-3 fs-11px mt-1">
           <div class="dropdown-item align-items-center" :class="item.type ? 'text-theme' : ''"
             style="cursor: pointer;text-align: center;" v-for="(item, index) in selectData" :key="index"
@@ -71,28 +58,11 @@
             <td>{{ item.futureCount + ' / ' + item.child.length }}</td>
             <td>{{ come(smartFormatNumber(toFexedStake(item.amount))) }}</td>
             <td class="text-theme" v-if="reserveType">
-              {{ titleUrl(item.child[0].mint).type ? titleUrl(item.child[0].mint).url : stringcate(item.child[0].mint)
-              }}
-              <img v-if="titleUrl(item.child[0].mint).type && !titleUrl(item.child[0].mint).assest"
-                v-for="(datas, indexs) in titleUrl(item.child[0].mint).certificates" :key="indexs" :src="datas.img"
-                height="24" class="marginRight8" alt="">
-              <text v-for="items, indexs in titleUrl(item.child[0].mint).certificates" :key="indexs"
-                :style="'background-color: ' + items.backColor"
-                style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
-                {{ items.code }}
-              </text>
+              <RenderText v-if="item.child[0].mint" :address="item.child[0].mint" />
             </td>
             <td class="text-theme" v-else>
-              {{ titleUrl(item.child[0].owner).type ? titleUrl(item.child[0].owner).url :
-                stringcate(item.child[0].owner) }}
-              <img v-if="titleUrl(item.child[0].owner).type && !titleUrl(item.child[0].owner).assest"
-                v-for="(datas, indexs) in titleUrl(item.child[0].owner).certificates" :key="indexs" :src="datas.img"
-                height="24" class="marginRight8" alt="">
-              <text v-for="items, indexs in titleUrl(item.child[0].owner).certificates" :key="indexs"
-                :style="'background-color: ' + items.backColor"
-                style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
-                {{ items.code }}
-              </text>
+              <RenderText v-if="item.child[0].owner" :address="item.child[0].owner" />
+
             </td>
           </tr>
         </template>
@@ -136,6 +106,7 @@ import { decodeLockAccount } from '../../request/record';
 // import { setData } from '../../views/Search/adress/components/event-bus';
 // import { proportionAmount } from '../method/proportion_account';
 import { titleUrl } from '../method/title_url';
+import RenderText from "../Render/text.vue"
 
 const props = defineProps({
   url: { type: String, default: '' },
@@ -174,10 +145,10 @@ const selectData = ref([
   { name: 'One Month', value: '30' },
   // { name: 'Openverse RPC.SG', url: 'https://rpc6.openverse.network/api', type: false,requestType:'Formal' },
   // { name: 'Openverse RPC.US', url: 'https://us-seattle.openverse.network/api', type: false,requestType:'Formal' },
-  { name: 'One Year',  value: '365' },
+  { name: 'One Year', value: '365' },
 ])
 
-const selsetClick = (index)=>{
+const selsetClick = (index) => {
   console.log(index);
   nameText.value = selectData.value[index].name;
   updateDateRange(selectData.value[index].value)
@@ -494,7 +465,8 @@ const amountFunction = (data, boolean) => {
   margin: auto;
   padding: 4rem 2rem;
 }
-.releasedChild{
+
+.releasedChild {
   font-weight: bold;
 }
 </style>

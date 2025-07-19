@@ -25,68 +25,18 @@
                     <template v-if="tokens.length != 0">
                         <tr v-for="(item, index) in paginatedHistoryData" :key="index">
                             <td class="text-theme" style="line-height: 30px;">
-                                <img v-if="item.img" :src="item.img" height="28" alt="" style="margin-right: 12px;">
-                                <img v-if="item.account.data.parsed.info.mint == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'"
-                                    src="https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png"
-                                    width="28" height="28" alt="" style="margin-right: 12px;">
-                                <text style=" cursor: pointer;" @click="pubbtx(item.account.data.parsed.info.mint)">
-                                    {{ titleUrl(item.account.data.parsed.info.mint).url }}
-                                </text>
-
-                                <text v-if="item.name">{{ '(' + item.name + ')' }}</text>
-                                <text
-                                    v-if="item.account.data.parsed.info.mint == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'">(Native)</text>
-                                &nbsp;
-
-                                <img v-if="titleUrl(item.account.data.parsed.info.mint).type && !titleUrl(item.account.data.parsed.info.mint).assest"
-                                    v-for="(datas, indexs) in titleUrl(item.account.data.parsed.info.mint).certificates"
-                                    :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
-                                <text v-for="items, indexs in titleUrl(item.account.data.parsed.info.mint).certificates"
-                                    :key="indexs" :style="'background-color: ' + items.backColor"
-                                    style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
-                                    {{ items.code }}
-                                </text>
+                                <RenderText :address="item.account.data.parsed.info.mint" />
                             </td>
                             <td class="text-theme">
-                                <text style="cursor: pointer" @click="pubbtx(item.pubkey)"> {{ titleUrl(item.pubkey).url
-                                }}</text>
-
-                                <img v-if="titleUrl(item.pubkey).type && !titleUrl(item.pubkey).assest"
-                                    v-for="(datas, indexs) in titleUrl(item.pubkey).certificates" :key="indexs"
-                                    :src="datas.img" height="24" class="marginRight8" alt="">
-                                <text v-for="items, indexs in titleUrl(item.pubkey).certificates" :key="indexs"
-                                    :style="'background-color: ' + items.backColor"
-                                    style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
-                                    {{ items.code }}
-                                </text>
+                                <RenderText :address="item.pubkey" />
                             </td>
 
                             <td class="text-theme">
-                                <text style="cursor: pointer" @click="pubbtx(item.account.owner)">{{
-                                    titleUrl(item.account.owner).url }}</text>
-                                <img v-if="titleUrl(item.account.owner).type && !titleUrl(item.account.owner).assest"
-                                    v-for="(datas, indexs) in titleUrl(item.account.owner).certificates" :key="indexs"
-                                    :src="datas.img" height="24" class="marginRight8" alt="">
-                                <text v-for="items, indexs in titleUrl(item.account.owner).certificates" :key="indexs"
-                                    :style="'background-color: ' + items.backColor"
-                                    style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
-                                    {{ items.code }}
-                                </text>
+                                <RenderText :address="item.account.owner" />
                             </td>
                             <td>
                                 {{ come(smartFormatNumber(item.account.data.parsed.info.tokenAmount.uiAmount)) }}
-                                <img v-if="titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).type && !titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).assest"
-                                    v-for="(datas, indexs) in titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).certificates"
-                                    :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
-                                <text
-                                    v-for="items, indexs in titleUrl(item.account.data.parsed.info.tokenAmount.uiAmountr).certificates"
-                                    :key="indexs" :style="'background-color: ' + items.backColor"
-                                    style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
-                                    {{ items.code }}
-                                </text>
                                 <text v-if="item.symbol"> {{ '(' + item.symbol + ')' }}</text>
-                                <text v-if="titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).symbol">({{
-                                    titleUrl(item.account.data.parsed.info.tokenAmount.uiAmount).symbol }})</text>
                             </td>
                         </tr>
                     </template>
@@ -109,7 +59,7 @@ import {
     onMounted,
     ref,
 } from 'vue';
-
+import RenderText from "../Render/text.vue"
 import { useRouter } from 'vue-router';
 
 import { titleUrl } from '../../components/method/title_url';

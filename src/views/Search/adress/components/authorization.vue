@@ -10,25 +10,28 @@
                     <tr>
                         <td>{{ $t("account.foundry_license") }} </td>
                         <td class="text-end text-theme">
-                            <text :style="MintData?.mintAuthority ? 'cursor: pointer' : ''"
+                            <!-- <text :style="MintData?.mintAuthority ? 'cursor: pointer' : ''"
                                 @click="pubbtx(MintData?.mintAuthority)">{{
                                     !MintData?.mintAuthority ? "N/A" : titleUrl(MintData?.mintAuthority).url }}</text>
                             <img v-if="titleUrl(MintData?.mintAuthority).type"
                                 v-for="(datas, indexs) in titleUrl(MintData?.mintAuthority).certificates" :key="indexs"
-                                :src="datas.img" height="24" class="marginRight8" alt="">
+                                :src="datas.img" height="24" class="marginRight8" alt=""> -->
+                            <RenderText v-if="MintData?.mintAuthority" :address="MintData?.mintAuthority" />
 
                         </td>
                     </tr>
                     <tr>
                         <td>{{ $t("account.freeze_authorization") }} </td>
                         <td class="text-end text-theme">
-                            <text :style="MintData?.freezeAuthority ? 'cursor: pointer' : ''"
+                            <!-- <text :style="MintData?.freezeAuthority ? 'cursor: pointer' : ''"
                                 @click="pubbtx(MintData?.freezeAuthority)">{{ MintData?.freezeAuthority == null ? "N/A"
                                     :
                                     titleUrl(MintData?.freezeAuthority).url }}</text>
                             <img v-if="titleUrl(MintData?.freezeAuthority).type"
                                 v-for="(datas, indexs) in titleUrl(MintData?.freezeAuthority).certificates"
-                                :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
+                                :key="indexs" :src="datas.img" height="24" class="marginRight8" alt=""> -->
+                            <RenderText v-if="MintData?.freezeAuthority" :address="MintData?.freezeAuthority" />
+
                         </td>
                     </tr>
                     <tr>
@@ -36,11 +39,14 @@
                         <td class="text-end" v-if="MintData">
                             <template v-for="(item, index) in MintData.extensions" :key="index">
                                 <template v-if="item.state?.updateAuthority">
-                                    <text>{{ item.state?.updateAuthority ? titleUrl(item.state.updateAuthority).url :
+                                    <!-- <text>{{ item.state?.updateAuthority ? titleUrl(item.state.updateAuthority).url :
                                         'N/A' }}</text>
                                     <img v-if="titleUrl(item.state.updateAuthority).type"
                                         v-for="(datas, indexs) in titleUrl(item.state.updateAuthority).certificates"
-                                        :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
+                                        :key="indexs" :src="datas.img" height="24" class="marginRight8" alt=""> -->
+                                    <RenderText v-if="item.state.updateAuthority"
+                                        :address="item.state.updateAuthority" />
+
                                 </template>
                             </template>
                         </td>
@@ -73,13 +79,13 @@
                     </tr>
                     <tr>
                         <td>{{ $t("account.default_state") }} </td>
-                        <td class="text-end"> {{ feeData?.default ?  $t("Unfrozen")   :
-                             $t("Frozen")   }}
+                        <td class="text-end"> {{ feeData?.default ? $t("Unfrozen") :
+                            $t("Frozen") }}
                         </td>
                     </tr>
                     <tr>
                         <td>{{ $t("account.non_transterale") }} </td>
-                        <td class="text-end"> {{ !feeData?.non ? $t("Disable")  : $t("Enable")  }}
+                        <td class="text-end"> {{ !feeData?.non ? $t("Disable") : $t("Enable") }}
                         </td>
                     </tr>
                 </tbody>
@@ -90,10 +96,10 @@
 
 <script setup>
 import {
-  onMounted,
-  ref,
+    onMounted,
+    ref,
 } from 'vue';
-
+import RenderText from "../../../../components/Render/text.vue"
 import { titleUrl } from '../../../../components/method/title_url/';
 import { chainRequest } from '../../../../request/chain.js';
 import { getExtraData } from '../../../../request/extensions.js';

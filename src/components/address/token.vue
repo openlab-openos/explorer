@@ -44,11 +44,8 @@
                         <tr>
                             <td>{{ $t("account.owner") }} </td>
                             <td class="text-end text-theme">
-                                <text style="cursor: pointer" @click="pubbleys(paramsId)">{{
+                                <!-- <text style="cursor: pointer" @click="pubbleys(paramsId)">{{
                                     titleUrl(paramsId).url }}</text>
-                                <!-- <img v-if="titleUrl(paramsId).type"
-                                    v-for="(datas, indexs) in titleUrl(paramsId).certificates" :key="indexs"
-                                    :src="datas.img" height="24" class="marginRight8" alt=""> -->
                                 <img v-if="titleUrl(paramsId).type && !titleUrl(paramsId).assest"
                                     v-for="(datas, indexs) in titleUrl(paramsId).certificates" :key="indexs"
                                     :src="datas.img" height="24" class="marginRight8" alt="">
@@ -56,7 +53,9 @@
                                     :style="'background-color: ' + items.backColor"
                                     style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                     {{ items.code }}
-                                </text>
+                                </text> -->
+                                <RenderText v-if="paramsId" :address="paramsId" />
+
                             </td>
                         </tr>
                     </tbody>
@@ -74,11 +73,12 @@
                         <tr>
                             <td>{{ $t("account.foundry_license") }} </td>
                             <td class="text-end text-theme">
-                                <text :style="pubbleys ? 'cursor: pointer' : ''" @click="pubbtx(pubbleys)">{{
+                                <!-- <text :style="pubbleys ? 'cursor: pointer' : ''" @click="pubbtx(pubbleys)">{{
                                     !pubbleys ? "N/A" : titleUrl(pubbleys).url }}</text>
                                 <img v-if="titleUrl(pubbleys).type"
                                     v-for="(datas, indexs) in titleUrl(pubbleys).certificates" :key="indexs"
-                                    :src="datas.img" height="24" class="marginRight8" alt="">
+                                    :src="datas.img" height="24" class="marginRight8" alt=""> -->
+                                <RenderText v-if="pubbleys" :address="pubbleys" />
 
                             </td>
                         </tr>
@@ -104,7 +104,7 @@ import {
   onMounted,
   ref,
 } from 'vue';
-
+import RenderText from "../Render/text.vue"
 import { useRouter } from 'vue-router';
 
 import { PublicKey } from '@solana/web3.js';

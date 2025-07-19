@@ -33,7 +33,7 @@
                     <tr v-for="(item, index) in paginatedHistoryData" :key="index">
                         <td class="text-theme">
                             <text style="cursor: pointer" @click="pubbtx(item.signature)">{{ stringcate(item.signature)
-                                }}</text>
+                            }}</text>
                         </td>
                         <td>
                             <button type="button" style="
@@ -56,19 +56,13 @@
                         </td>
                         <td style=" text-align: left; " :class="item.primaryType ? 'color0-255-179-1' : 'text-theme'
                             ">
-                            <text style="cursor: pointer" @click="slot(
+                            <!-- <text style="cursor: pointer" @click="slot(
                                 item.primary
                             )">{{
                                 titleUrl(item.primary).url
 
-                                }}</text>
+                            }}</text>
 
-                            <!-- <img v-if="titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
-                                .parsed.info.destination : item.result.transaction.message.instructions[1]
-                                    .parsed.info.destination).type" v-for="(datas, indexs) in titleUrl(item.result.transaction.message.instructions.length == 1 ? item.result.transaction.message.instructions[0]
-                                        .parsed.info.destination : item.result.transaction.message.instructions[1]
-                                            .parsed.info.destination).certificates" :key="indexs" :src="datas.img"
-                                height="24" class="marginRight8" alt=""> -->
                             <img v-if="titleUrl(item.primary).type && titleUrl(item.primary).assest"
                                 v-for="(datas, indexs) in titleUrl(item.primary).certificates" :key="indexs"
                                 :src="datas.img" height="24" class="marginRight8" alt="">
@@ -76,16 +70,18 @@
                                 :style="'background-color: ' + items.backColor"
                                 style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                 {{ items.code }}
-                            </text>
+                            </text> -->
+                            <RenderText v-if="item.primary" :address="item.primary" />
+
 
                         </td>
                         <td style=" text-align: left; " :class="item.quantityType ? 'color0-255-179-1' : 'text-theme'
                             ">
-                            <text style="cursor: pointer" @click="slot(
+                            <!-- <text style="cursor: pointer" @click="slot(
                                 item.quantity
                             )"> {{
                                 titleUrl(item.quantity).url
-                            }}</text>
+                                }}</text>
 
 
                             <img v-if="titleUrl(quantity).type && titleUrl(item.quantity).assest"
@@ -95,15 +91,17 @@
                                 :style="'background-color: ' + items.backColor"
                                 style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                 {{ items.code }}
-                            </text>
+                            </text> -->
+                            <RenderText v-if="item.quantity" :address="item.quantity" />
+
                         </td>
                         <td style=" text-align: left;" class="text-theme">
-                            <text style=" cursor: pointer" @click="slot(
+                            <!-- <text style=" cursor: pointer" @click="slot(
                                 item.program
                             )">{{
                                 titleUrl(item.program).url
 
-                                }}</text>
+                            }}</text>
 
                             <img v-if="
                                 !titleUrl(item.program).type && !titleUrl(program).assest" v-for="(datas, indexs) in
@@ -114,7 +112,9 @@
                                 :style="'background-color: ' + items.backColor"
                                 style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                 {{ items.code }}
-                            </text>
+                            </text> -->
+                            <RenderText v-if="item.program" :address="item.program" />
+
                         </td>
                         <td>
                             {{ come(smartFormatNumber(
@@ -123,7 +123,7 @@
                             }}
                         </td>
                         <td style=" text-align: left; ">
-                            <text :style="item.token ? 'cursor: pointer' : ''" class="text-theme" @click="slot(
+                            <!-- <text :style="item.token ? 'cursor: pointer' : ''" class="text-theme" @click="slot(
                                 item.token
                             )">{{
 
@@ -138,7 +138,9 @@
                                 :style="'background-color: ' + items.backColor"
                                 style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                 {{ items.code }}
-                            </text>
+                            </text> -->
+                            <RenderText v-if="item.token" :address="item.token" />
+
                         </td>
 
                         <td class="text-theme">
@@ -163,15 +165,15 @@
 
 <script setup>
 import {
-  computed,
-  onMounted,
-  ref,
-  watchEffect,
+    computed,
+    onMounted,
+    ref,
+    watchEffect,
 } from 'vue';
 
 import moment from 'moment';
 import { useRouter } from 'vue-router';
-
+import RenderText from "../Render/text.vue"
 import LoadingVue from '../../components/block/loading.vue';
 import { smartFormatNumber } from '../../components/number/smart.js';
 import { chainRequest } from '../../request/chain';

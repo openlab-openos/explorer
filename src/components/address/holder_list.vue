@@ -19,32 +19,14 @@
             <template v-if="historyData.length != 0">
                 <tr v-for="(item, index) in paginatedHistoryData" :key="index">
                     <td class="text-theme">
-
-                        <text style="cursor: pointer" @click="pubbtx(item.account.data.parsed.info.owner)"> {{
-                            titleUrl(item.account.data.parsed.info.owner).url }}</text>
                         <!-- <img v-if="titleUrl(item.account.data.parsed.info.owner).type"
                             v-for="item, index in titleUrl(item.account.data.parsed.info.owner).certificates"
                             :src="item.img" :key="index" height="24" alt="" class="marginRight10"> -->
-                        <img v-if="titleUrl(item.account.data.parsed.info.owner).type && !titleUrl(item.account.data.parsed.info.owner).assest"
-                            v-for="(datas, indexs) in titleUrl(item.account.data.parsed.info.owner).certificates"
-                            :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
-                        <text v-for="items, indexs in titleUrl(item.account.data.parsed.info.owner).certificates"
-                            :key="indexs" :style="'background-color: ' + items.backColor"
-                            style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
-                            {{ items.code }}
-                        </text>
+                        <RenderText v-if="item.account.data.parsed.info.owner" :address="item.account.data.parsed.info.owner" />
+
                     </td>
                     <td class="text-theme">
-                        <text style="cursor: pointer" @click="pubbtx(item.pubkey)">{{ titleUrl(item.pubkey).url
-                        }}</text>
-                        <img v-if="titleUrl(item.pubkey).type && !titleUrl(item.pubkey).assest"
-                            v-for="(datas, indexs) in titleUrl(item.pubkey).certificates" :key="indexs" :src="datas.img"
-                            height="24" class="marginRight8" alt="">
-                        <text v-for="items, indexs in titleUrl(item.pubkey).certificates" :key="indexs"
-                            :style="'background-color: ' + items.backColor"
-                            style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
-                            {{ items.code }}
-                        </text>
+                        <RenderText v-if="item.pubkey" :address="item.pubkey" />
                     </td>
                     <td>
                         {{ smartFormatNumber(item.account.data.parsed.info.tokenAmount.uiAmount) }}
@@ -85,7 +67,7 @@ import { smartFormatNumber } from '../../components/number/smart';
 import { chainRequest } from '../../request/chain';
 import { order } from '../../request/order';
 import { proportionAmount } from '../method/proportion_account';
-
+import RenderText from "../Render/text.vue"
 const loading = ref(true);
 
 const router = useRouter();

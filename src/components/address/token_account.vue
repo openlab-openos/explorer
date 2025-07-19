@@ -26,27 +26,25 @@
                         <tr>
                             <td>{{ $t("account.owning_token") }}</td>
                             <td class="text-end text-theme">
-                                <text @click="pubbtx(getMint)" style="cursor: pointer;margin-right: 12px;">{{
+                                <!-- <text @click="pubbtx(getMint)" style="cursor: pointer;margin-right: 12px;">{{
                                     titleUrl(getMint).url }}</text>
                                 <img v-if="titleUrl(getMint).type"
                                     v-for="(datas, indexs) in titleUrl(getMint).certificates" :src="datas.img"
-                                    :key="indexs" height="24" class="marginRight8" alt="">
+                                    :key="indexs" height="24" class="marginRight8" alt=""> -->
+                                <RenderText v-if="getMint" :address="getMint" />
                             </td>
                         </tr>
                         <tr>
                             <td>{{ $t("account.state") }} </td>
                             <td class="text-end">{{ tokenData.isFrozen ? $t("account.frozen") : $t("account.initialize")
-                                }} </td>
+                            }} </td>
                         </tr>
                         <tr>
                             <td>{{ $t("account.Owner") }} </td>
                             <td class="text-end text-theme">
-                                <text @click="pubbtx(owners)" style="cursor: pointer">{{
+                                <!-- <text @click="pubbtx(owners)" style="cursor: pointer">{{
                                     titleUrl(owners).url }}</text>
 
-                                <!-- <img v-if="titleUrl(owners).type"
-                                    v-for="(datas, indexs) in titleUrl(owners).certificates" :key="indexs"
-                                    :src="datas.img" height="24" class="marginRight8" alt=""> -->
                                 <img v-if="titleUrl(owners).type && !titleUrl(owners).assest"
                                     v-for="(datas, indexs) in titleUrl(owners).certificates" :key="indexs"
                                     :src="datas.img" height="24" class="marginRight8" alt="">
@@ -54,18 +52,17 @@
                                     :style="'background-color: ' + items.backColor"
                                     style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                     {{ items.code }}
-                                </text>
+                                </text> -->
+                                <RenderText v-if="owners" :address="owners" />
+
                             </td>
 
                         </tr>
                         <tr>
                             <td>{{ $t("transaction.program") }} </td>
                             <td class="text-end text-theme">
-                                <text @click="pubbtx(owners)" style="cursor: pointer">{{
+                                <!-- <text @click="pubbtx(owners)" style="cursor: pointer">{{
                                     titleUrl(program).url }}</text>
-                                <!-- <img v-if="titleUrl(program).type"
-                                    v-for="(datas, indexs) in titleUrl(program).certificates" :key="indexs"
-                                    :src="datas.img" height="24" class="marginRight8" alt=""> -->
                                 <img v-if="titleUrl(program).type && !titleUrl(program).assest"
                                     v-for="(datas, indexs) in titleUrl(program).certificates" :key="indexs"
                                     :src="datas.img" height="24" class="marginRight8" alt="">
@@ -73,7 +70,9 @@
                                     :style="'background-color: ' + items.backColor"
                                     style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                     {{ items.code }}
-                                </text>
+                                </text> -->
+                                <RenderText v-if="program" :address="program" />
+
                             </td>
                         </tr>
                     </tbody>
@@ -86,20 +85,21 @@
 
 <script setup>
 import {
-  onMounted,
-  ref,
+    onMounted,
+    ref,
 } from 'vue';
 
 import {
-  ExtensionType,
-  getExtensionData,
+    ExtensionType,
+    getExtensionData,
 } from 'open-token-web3';
 import { useRouter } from 'vue-router';
 
 import {
-  Connection,
-  PublicKey,
+    Connection,
+    PublicKey,
 } from '@solana/web3.js';
+import RenderText from "../Render/text.vue"
 
 import { chainRequest } from '../../request/chain';
 import { solanagetAccount } from '../../request/solanaGetaccount';
