@@ -6,7 +6,7 @@
             titleUrl(paramsId).url ? titleUrl(paramsId).url : 'N/A' }}</text>
         <img v-if="titleUrl(paramsId).type && titleUrl(paramsId).assest"
             v-for="(datas, indexs) in titleUrl(paramsId).certificates" :key="indexs" :src="datas.img" height="20"
-            class="marginRight8" alt="">
+            class="marginRight8" alt="" @click="pubbley" style="cursor: pointer;">
     </div>
 </template>
 
@@ -40,5 +40,11 @@ const pubbtx = (url) => {
             },
         })
     }
+};
+
+const pubbley = () => {
+    router.push({
+        name: "TokenReputation",
+    })
 };
 </script>

@@ -44,7 +44,7 @@
                                 <td>
                                     <img v-for="items, indexs in item.token.certificates" :key="indexs"
                                         :src="items.image_url" height="20" class="marginRight8"
-                                        :title="items.certificate_code">
+                                        :title="items.certificate_code" @click="pubbley" style="cursor: pointer;">
                                     <!-- <div style="display: flex;">
                                         <p v-for="items, indexs in item.token.certificates" :key="indexs"
                                             :style="'background-color: ' + items.backColor"
@@ -179,8 +179,8 @@ tokenList().then((res) => {
         }
     }
     let array = [];
-    for(let i in showData){
-        if(showData[i].token){
+    for (let i in showData) {
+        if (showData[i].token) {
             array.push(showData[i])
         }
     }
@@ -201,6 +201,11 @@ const pubbleys = (url) => {
         })
     }
 
+};
+const pubbley = () => {
+    router.push({
+        name: "TokenReputation",
+    })
 };
 loadingType.value = true;
 

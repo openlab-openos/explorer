@@ -52,10 +52,10 @@
     "last_time": "Last Unlock Time",
     "stage": "Stage",
     "isUnlocked": "Is Unlocked",
-    "Frozen":"Frozen",
-    "Unfrozen":"Unfrozen",
-    "Disable":"Disable",
-    "Enable":"Enable",
+    "Frozen": "Frozen",
+    "Unfrozen": "Unfrozen",
+    "Disable": "Disable",
+    "Enable": "Enable",
     "navigation": {
         "title": "Navigation",
         "dashboard": "Dashboard",
@@ -310,5 +310,21 @@
         "name": "Name",
         "symbol": "Symbol",
         "supply": "Supply"
+    },
+    "reputation": {
+        "title": "Token Reputation",
+        "center": "The Token Reputation is designed to help users make informed decisions while interacting with Token Contracts. The service will indicate the following when you visit the Token Tracker page by way of:",
+        "offical": " “Official” Reputation",
+        "officalCenter": "It is certified by the Openverse team, this project was released by the Openverse team.",
+        "Verified": " “Verified” Reputation",
+        "VerifiedCenter": "It is certified by the Openverse team and published by the project's official team.",
+        "StableCoin": " “StableCoin” Reputation",
+        "StableCoinCenter": "Openverse Team Endorses the Project as a Stablecoin Anchored to the U.S. Dollar.",
+        "VRC10": " “VRC10” Reputation",
+        "VRC10Center": "The Openverse team recognizes that the project meets the VRC10 protocol standards.",
+        "VRC11": " “VRC11” Reputation",
+        "VRC11Center": "The Openverse team recognizes that the project meets the VRCil protocol standards.",
+        "VRC12": " “VRC12” Reputation",
+        "VRC12Center": "The Openverse team recognizes that the project meets the VRC12 protocol standards."
     }
 }

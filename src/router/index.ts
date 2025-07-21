@@ -15,6 +15,7 @@ import Address from '../views/Search/search.vue';
 import Tx from '../views/Search/tx.vue';
 import Transition from '../views/transaction/transactions.vue';
 import Validators from '../views/validators/validators.vue';
+import TokenReputation from '@/views/reputation/tokenReputation.vue';
 
 // const currentUrl = window.location.href;
 
@@ -129,6 +130,11 @@ const router = createRouter({
       path: "/details",
       name: "details",
       component: Details,
+    },
+    {
+      path: "/token-reputation",
+      name: "TokenReputation",
+      component: TokenReputation,
     },
   ],
 });

@@ -11,7 +11,7 @@
                     : 'Token' }}
                 <img v-if="titleUrl(url).type && titleUrl(url).assest"
                     v-for="(datas, indexs) in titleUrl(url).certificates" :key="indexs" :src="datas.img"
-                    height="24" class="marginRight8" alt="">
+                    height="24" class="marginRight8" alt=""  @click="pubbley" style="cursor: pointer;">
                 <!-- <text v-for="items, indexs in titleUrl(url).certificates" :key="indexs"
                     :style="'background-color: ' + items.backColor"
                     style="border-radius: 5px;padding: 2px 4px;margin: 0px 5px 0 0;font-weight: 500;font-size: 16px;">
@@ -261,7 +261,11 @@ const tokenName = async (url, params) => {
         console.error("Error fetching token info:", error);
     }
 }
-
+const pubbley = () => {
+    router.push({
+        name: "TokenReputation",
+    })
+};
 const tokenRwquest = async () => {
 
     // await chainRequest(method).then(res => {

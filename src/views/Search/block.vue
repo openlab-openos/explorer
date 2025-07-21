@@ -196,7 +196,7 @@ export default {
         },
       ],
     });
-    this.transactionArray = this.card?.transactions.filter((item) => {
+    this.transactionArray = this.card?.transactions?.filter((item) => {
       return (
         !item.meta?.logMessages?.some((message) => message.includes("Vote")) ||
         !item.meta?.logMessages
