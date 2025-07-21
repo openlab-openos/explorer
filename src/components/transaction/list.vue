@@ -163,7 +163,6 @@ const fetchOrderData = async () => {
 
             if (res[i].result) {
                 let etach = res[i].result.transaction.message.instructions;
-                console.log(etach[etach.length - 1].parsed.type == "transfer" && etach[etach.length - 1].programId == "11111111111111111111111111111111");
 
                 if (etach[etach.length - 1].parsed.type == "transfer" && etach[etach.length - 1].programId == "11111111111111111111111111111111") {
                     let data = {

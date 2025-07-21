@@ -78,8 +78,9 @@ import 'jsvectormap/dist/maps/world.js';
 import 'jsvectormap/dist/jsvectormap.min.css';
 
 import {
-  onMounted,
-  ref,
+    onMounted,
+    ref,
+    onUnmounted
 } from 'vue';
 
 import jsVectorMap from 'jsvectormap';
@@ -94,11 +95,6 @@ import { ipAddresses } from './address';
 const country = ref();
 const source = ref();
 const series = ref();
-
-onMounted(() => {
-    getActivityLogData();
-    mapCreate();
-});
 const traffic = ref([]);
 const ActivityLogData = ref([]);
 const mapData = ref([]);
@@ -106,6 +102,18 @@ const appVariable = useAppVariableStore();
 const countLog = ref();
 const appStore = useAppStore();
 const mapArray = ref(appStore.getmarkersdata);
+const mapType = ref(sessionStorage.getItem('mapType'));
+
+if (!mapType.value) {
+    sessionStorage.setItem('mapType', true)
+}
+console.log(mapType.value);
+
+onMounted(() => {
+    getActivityLogData();
+    mapCreate();
+});
+
 const mapCreate = () => {
     map.value = new jsVectorMap({
         selector: "#map",
@@ -300,6 +308,7 @@ const renderMap = async () => {
     }
 
     const coordsCounts = new Map();
+    console.log(markers_data);
 
     markers_data.forEach((obj) => {
         const key = obj.coords[0];
@@ -312,41 +321,44 @@ const renderMap = async () => {
             obj.count = 1;
         }
     });
-    for (let i in markers_data) {
-        if (markers_data[i].count > 1) {
-            let lat = JSON.parse(markers_data[i].coords[0]); // 转换或默认为0
-            let lng = JSON.parse(markers_data[i].coords[1]); // 转换或默认为0
+    if (!mapType.value) {
+        for (let i in markers_data) {
+            if (markers_data[i].count > 1) {
+                let lat = JSON.parse(markers_data[i].coords[0]); // 转换或默认为0
+                let lng = JSON.parse(markers_data[i].coords[1]); // 转换或默认为0
 
-            // 现在进行数值加法
+                // 现在进行数值加法
 
-            if (i % 2 == 0) {
-                lat -= 1;
-            } else {
-                lat += 1;
+                if (i % 2 == 0) {
+                    lat -= 1;
+                } else {
+                    lat += 1;
+                }
+                lng += markers_data[i].count * 1.1; // 这可能是一个合理的经度偏移量
+                // 更新coords数组
+                markers_data[i].coords[0] = lat.toFixed(4);
+                markers_data[i].coords[1] = lng.toFixed(4);
             }
-            lng += markers_data[i].count * 1.1; // 这可能是一个合理的经度偏移量
-            // 更新coords数组
-            markers_data[i].coords[0] = lat.toFixed(4);
-            markers_data[i].coords[1] = lng.toFixed(4);
-        }
 
-        let currentLat = Number(markers_data[i].coords[0]);
-        for (let j = 0; j < markers_data.length; j++) {
-            if (j < markers_data.length) {
-                if (i != j) {
-                    let compareLat = Number(markers_data[j].coords[0]); // 比较项的纬度
+            let currentLat = Number(markers_data[i].coords[0]);
+            for (let j = 0; j < markers_data.length; j++) {
+                if (j < markers_data.length) {
+                    if (i != j) {
+                        let compareLat = Number(markers_data[j].coords[0]); // 比较项的纬度
 
-                    if (Math.abs(currentLat - compareLat) < 1) {
-                        // let lat = Number(markers_data[j].coords[0]) -= 1;
-                        // markers_data[j].coords[0] = lat.toFixed(4);
-                        let lat = (markers_data[j].coords[1] += 1);
-                        markers_data[j].coords[1] = lat;
-                        // markers_data[j].coords[1] += 1;
+                        if (Math.abs(currentLat - compareLat) < 1) {
+                            // let lat = Number(markers_data[j].coords[0]) -= 1;
+                            // markers_data[j].coords[0] = lat.toFixed(4);
+                            let lat = (markers_data[j].coords[1] += 1);
+                            markers_data[j].coords[1] = lat;
+                            // markers_data[j].coords[1] += 1;
+                        }
                     }
                 }
             }
         }
     }
+
     // for (let i in markers_data) {
     //     if (markers_data[i].count > 1) {
     //         let lat = Number(markers_data[i].coords[0]);
@@ -414,7 +426,7 @@ const getIPLocation = async (ip) => {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         console.log(response);
-        
+
         const data = await response.json();
         localStorage.setItem(ip, JSON.stringify(data));
         return data; // 返回包含地理位置信息的对象
@@ -540,5 +552,8 @@ function uniqueArrayByProperty(arr, key) {
         timezone: items[0].timezone,
     }));
 }
-
+onUnmounted(() => {
+    console.log(1111, '11111----1111');
+    mapData.value = null;
+})
 </script>

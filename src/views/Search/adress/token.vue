@@ -299,7 +299,7 @@ const tokenRwquest = async () => {
     }
     // });
 }
-console.log(paramsId.value);
+
 
 // defineEmits({ mintToken });
 const numberHeld = async () => {

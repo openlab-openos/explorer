@@ -29,7 +29,7 @@ const router = useRouter();
 
 const paramsId = ref(props.address)
 const propsType = ref(props.type)
-console.log(paramsId.value);
+
 
 const pubbtx = (url) => {
     if (url) {

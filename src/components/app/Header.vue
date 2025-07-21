@@ -40,7 +40,6 @@ function isProductionDomain() {
   return !hostname.startsWith('devnet.');
 }
 const UtlDevnetType = isProductionDomain();
-console.log(isProductionDomain());
 
 const searchcontent = ref("");
 const abbreviationLanguage = ref();

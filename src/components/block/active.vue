@@ -108,7 +108,7 @@ onMounted(() => {
       // data.value = appStore.pubbley;
 
     }
-    console.log(appStore.stubly);
+
     
     stubly.value = appStore.stubly;
 
