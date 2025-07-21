@@ -94,10 +94,10 @@ const array = ref([
 .ReputationItem {
     width: 30rem;
     border-radius: 10px;
-    background-color: #28303B;
-    /* background-color: rgba(255, 255, 255, 0.08); */
+    /* background-color: #28303B; */
+    background-color: rgba(255, 255, 255, 0.05);
     margin: 18px;
-    padding: 24px;
+    padding: 30px 26px 36px;
     box-shadow:28px  28px 30px rgba(0, 0, 0, 0.25);
 }
 

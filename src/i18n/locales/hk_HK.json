@@ -65,7 +65,7 @@
         "wallet": "錢包",
         "website": "網站",
         "tokens": "資產",
-        "TokenTracker":"資產追蹤",
+        "TokenTracker": "資產追蹤",
         "faucet": "水龍頭"
     },
     "dashboard": {
@@ -308,5 +308,21 @@
         "name": "名稱",
         "symbol": "符號",
         "supply": "供應量"
+    },
+    "reputation": {
+        "title": "通證聲譽",
+        "center": "令牌聲譽旨在幫助用戶在與令牌合約互動時做出明智決定。當你訪問令牌跟蹤器頁面時，該服務將通過以下方式顯示：",
+        "offical": "“Official” 聲譽",
+        "officalCenter": "該項目由 Openverse 團隊認證，該項目由 Openverse 團隊發布。",
+        "Verified": "“Verified” 聲譽",
+        "VerifiedCenter": "該項目由 Openverse 團隊認證，該項目並由項目官方團隊發布。",
+        "StableCoin": "“StableCoin” 聲譽",
+        "StableCoinCenter": "Openverse 團隊認可該項目為錨定美元的穩定幣。",
+        "VRC10": "“VRC10” 聲譽",
+        "VRC10Center": "Openverse 團隊確認該項目符合 VRC10 協議標準。",
+        "VRC11": "“VRC11” 聲譽",
+        "VRC11Center": "Openverse 團隊確認該項目符合 VRC11 協議標準。",
+        "VRC12": "“VRC12” 聲譽",
+        "VRC12Center": "Openverse 團隊確認該項目符合 VRC12 協議標準。"
     }
 }

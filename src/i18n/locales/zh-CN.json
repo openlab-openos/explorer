@@ -308,5 +308,21 @@
         "name": "名称",
         "symbol": "符号",
         "supply": "供应量"
+    },
+    "reputation": {
+        "title": "通证声誉",
+        "center": "令牌声誉旨在帮助用户在与令牌合约互动时做出明智决定。当你访问令牌跟踪器页面时，该服务将通过以下方式显示：",
+        "offical": "“Official” 声誉",
+        "officalCenter": "该项目由 Openverse 团队认证，该项目由 Openverse 团队发布。",
+        "Verified": "“Verified” 声誉",
+        "VerifiedCenter": "该项目由 Openverse 团队认证，该项目并由项目官方团队发布。",
+        "StableCoin": "“StableCoin” 声誉",
+        "StableCoinCenter": "Openverse 团队认可该项目为锚定美元的稳定币。",
+        "VRC10": "“VRC10” 声誉",
+        "VRC10Center": "Openverse 团队确认该项目符合 VRC10 协议标准。",
+        "VRC11": "“VRC11” 声誉",
+        "VRC11Center": "Openverse 团队确认该项目符合 VRC11 协议标准。",
+        "VRC12": "“VRC12” 声誉",
+        "VRC12Center": "Openverse 团队确认该项目符合 VRC12 协议标准。"
     }
 }

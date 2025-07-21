@@ -66,7 +66,7 @@
         "website": "Website",
         "tokens": "Tài sản",
         "faucet": "Faucet",
-        "TokenTracker":"Theo dõi Token"
+        "TokenTracker": "Theo dõi Token"
     },
     "dashboard": {
         "title": "Bảng điều khiển",
@@ -308,5 +308,21 @@
         "name": "Tên",
         "symbol": "Ký hiệu",
         "supply": "Nguồn cung"
+    },
+    "reputation": {
+        "title": "Danh tiếng Token",
+        "center": "Danh tiếng Token được thiết kế để giúp người dùng đưa ra quyết định sáng suốt khi tương tác với Hợp đồng Token. Dịch vụ này sẽ hiển thị những nội dung sau khi bạn truy cập trang Theo dõi Token theo cách:",
+        "offical": " Danh tiếng “Chính thức”",
+        "officalCenter": "Nó được chứng nhận bởi đội ngũ Openverse, dự án này được phát hành bởi đội ngũ Openverse.",
+        "Verified": " Danh tiếng “Đã xác minh”",
+        "VerifiedCenter": "Nó được chứng nhận bởi đội ngũ Openverse và được phát hành bởi đội ngũ chính thức của dự án.",
+        "StableCoin": " Danh tiếng “StableCoin”",
+        "StableCoinCenter": "Đội ngũ Openverse hỗ trợ Dự án này như một Đồng ổn định được gắn liền với Đô la Mỹ.",
+        "VRC10": " Danh tiếng “VRC10”",
+        "VRC10Center": "Đội ngũ Openverse công nhận rằng dự án này đáp ứng các tiêu chuẩn giao thức VRC10.",
+        "VRC11": " Danh tiếng “VRC11”",
+        "VRC11Center": "Đội ngũ Openverse công nhận rằng dự án này đáp ứng các tiêu chuẩn giao thức VRC11.",
+        "VRC12": " Danh tiếng “VRC12”",
+        "VRC12Center": "Đội ngũ Openverse công nhận rằng dự án này đáp ứng các tiêu chuẩn giao thức VRC12."
     }
 }

@@ -65,7 +65,7 @@
         "wallet": "지갑",
         "website": "웹사이트",
         "tokens": "자산",
-        "TokenTracker":"자산 추적",
+        "TokenTracker": "자산 추적",
         "faucet": "수도꼭지"
     },
     "dashboard": {
@@ -308,5 +308,21 @@
         "name": "이름",
         "symbol": "심볼",
         "supply": "공급량"
+    },
+    "reputation": {
+        "title": "토큰 신뢰도",
+        "center": "토큰 신뢰도는 사용자가 토큰 컨트랙트와 상호 작용할 때 합리적인 결정을 내릴 수 있도록 설계되었습니다. 토큰 추적기 페이지를 방문하면 서비스가 다음을 표시합니다.",
+        "offical": " “공식” 신뢰도",
+        "officalCenter": "Openverse 팀에 의해 인증되었으며 Openverse 팀에서 출시한 프로젝트입니다.",
+        "Verified": " “검증됨” 신뢰도",
+        "VerifiedCenter": "Openverse 팀에 의해 인증되었으며 프로젝트의 공식 팀에서 출시한 프로젝트입니다.",
+        "StableCoin": " “스테이블 코인” 신뢰도",
+        "StableCoinCenter": "Openverse 팀은 이 프로젝트를 미국 달러와 연계된 스테이블 코인으로 인정합니다.",
+        "VRC10": " “VRC10” 신뢰도",
+        "VRC10Center": "Openverse 팀은 이 프로젝트가 VRC10 프로토콜 표준을 충족한다고 인식합니다.",
+        "VRC11": " “VRC11” 신뢰도",
+        "VRC11Center": "Openverse 팀은 이 프로젝트가 VRC11 프로토콜 표준을 충족한다고 인식합니다.",
+        "VRC12": " “VRC12” 신뢰도",
+        "VRC12Center": "Openverse 팀은 이 프로젝트가 VRC12 프로토콜 표준을 충족한다고 인식합니다."
     }
 }

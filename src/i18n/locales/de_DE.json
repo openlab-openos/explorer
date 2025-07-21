@@ -61,7 +61,7 @@
         "wallet": "Wallet",
         "website": "Webseite",
         "tokens": "Vermögenswerte",
-        "TokenTracker":"Token Tracker",
+        "TokenTracker": "Token Tracker",
         "faucet": "Faucet"
     },
     "dashboard": {
@@ -304,5 +304,21 @@
         "name": "Name",
         "symbol": "Symbol",
         "supply": "Angebot"
+    },
+    "reputation": {
+        "title": "Token Reputation",
+        "center": "Die Token-Reputation soll Benutzern helfen, fundierte Entscheidungen zu treffen, wenn sie mit Token-Smart Contracts interagieren. Der Service zeigt Folgendes an, wenn Sie die Token-Tracker-Seite besuchen:",
+        "offical": " „Offiziell“ Reputation",
+        "officalCenter": "Dieses Projekt wird von Openverse-Zertifiziert und von dem Openverse-Team veröffentlicht.",
+        "Verified": " „Verifiziert“ Reputation",
+        "VerifiedCenter": "Dieses Projekt wird von Openverse-Zertifiziert und von dem offizielle Team des Projekts veröffentlicht.",
+        "StableCoin": " „StableCoin“ Reputation",
+        "StableCoinCenter": "Das Openverse-Team befürwortet das Projekt als Stablecoin, das an den US-Dollar angebunden ist.",
+        "VRC10": " „VRC10“ Reputation",
+        "VRC10Center": "Das Openverse-Team erkennt an, dass das Projekt den VRC10-Protokollstandards entspricht.",
+        "VRC11": " „VRC11“ Reputation",
+        "VRC11Center": "Das Openverse-Team erkennt an, dass das Projekt den VRC11-Protokollstandards entspricht.",
+        "VRC12": " „VRC12“ Reputation",
+        "VRC12Center": "Das Openverse-Team erkennt an, dass das Projekt den VRC12-Protokollstandards entspricht."
     }
 }
