@@ -24,29 +24,37 @@ export async function tokenList() {
         ]
     }
 
+    const firstArray = [
+        '6YAFesA4VLWzWaxir5Gf1S9LAa6LEXantPVnwZa4UMQJ',
+        'J9adqnYhHtoMUkdEzznNuY9H4pzv4sRHmZ9CDBiJVb6e',
+        '9rbyJYkHJMprnbyEDgK4kNKwvzru1w7AJnoEAGS8oDta',
+        'GnYNT6N14SyBYboSFiJk6TjYUMeKXwh6cwuH2jU27pnP',
+        'GQRUQnJcRMSpNMPZdb9Sz5msy9pa9ypGwgBuwvDzfoqV',
+        'G9NpvA87jtSvEfAqU4EFo2nkYgBifoYHiwQqmdfySKpJ',
+        '2w7axKNBYaedtjamoNoxxGt14peh5pFcXcnunzGYohtu',
+        'GQRUQnJcRMSpNMPZdb9Sz5msy9pa9ypGwgBuwvDzfoqV',
+    ]
+
     try {
         const res = await chainRequest(method);
         console.log(res);
         let array = res.result;
-        // 按 lamports 降序，若相同则按 supply 降序
-        const sortedRes = array.sort((a, b) => {
-            // 第一条件：比较 lamports（降序）
-            const lamportsA = Number(a.account?.lamports) || 0;
-            const lamportsB = Number(b.account?.lamports) || 0;
-            const lamportsDiff = lamportsB - lamportsA;
+        const firstSet = new Set(firstArray);
 
-            // 如果 lamports 相同，则比较 supply
-            if (lamportsDiff === 0) {
-                const supplyA = Number(a.account?.data?.parsed?.info?.supply) || 0;
-                const supplyB = Number(b.account?.data?.parsed?.info?.supply) || 0;
-                return supplyB - supplyA; // 降序
+        // 自定义排序函数
+        array.sort((a, b) => {
+            const aInFirst = firstSet.has(a.pubkey);
+            const bInFirst = firstSet.has(b.pubkey);
+
+            if (aInFirst && !bInFirst) {
+                return -1; // a 应该排在 b 前面
+            } else if (!aInFirst && bInFirst) {
+                return 1;  // a 应该排在 b 后面
+            } else {
+                return 0;  // 保持原有顺序
             }
-
-            return lamportsDiff;
         });
-        console.log(sortedRes);
-
-        return sortedRes;
+        return array;
     } catch (err) {
         console.error(`Error fetching accounts for ${token}:`, err);
         return [];
@@ -95,3 +103,23 @@ const amount = (array) => {
     }
     return holder;
 }
+
+// 按 lamports 降序，若相同则按 supply 降序
+// const sortedRes = array.sort((a, b) => {
+//     // 第一条件：比较 lamports（降序）
+//     const lamportsA = Number(a.account?.lamports) || 0;
+//     const lamportsB = Number(b.account?.lamports) || 0;
+//     const lamportsDiff = lamportsB - lamportsA;
+
+//     // 如果 lamports 相同，则比较 supply
+//     if (lamportsDiff === 0) {
+//         const supplyA = Number(a.account?.data?.parsed?.info?.supply) || 0;
+//         const supplyB = Number(b.account?.data?.parsed?.info?.supply) || 0;
+//         return supplyB - supplyA; // 降序
+//     }
+
+//     return lamportsDiff;
+// });
+// console.log(sortedRes);
+
+// return sortedRes;

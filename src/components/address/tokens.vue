@@ -22,7 +22,7 @@
                             {{ $t("account.uiamount") }}
                         </th>
                     </tr>
-                    <template v-if="tokens.length != 0">
+                    <template v-if="tokens.length != 0 && type">
                         <tr v-for="(item, index) in paginatedHistoryData" :key="index">
                             <td class="text-theme" style="line-height: 30px;">
                                 <RenderText :address="item.account.data.parsed.info.mint" />
@@ -80,8 +80,13 @@ const paginatedHistoryData = computed(() => {
     const end = start + pageSize.value;
     return props.tokens.slice(start, end);
 });
+const type = ref(true);
 const handlePageChange = (newPage) => {
+    type.value = false;
     currentPage.value = newPage;
+    setTimeout(() => {
+        type.value = true;
+    }, 1);
 };
 const tokenList = async () => {
     let method = {

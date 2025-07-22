@@ -92,7 +92,11 @@ export default {
       }
     },
     textValue(text) {
-      return text.toUpperCase();
+      if (typeof text == 'string') {
+        return text.toUpperCase();
+      } else {
+        return text
+      }
     },
     timeSome(time) {
       let nowInSeconds = Math.floor(moment().format("x") / 1000);
@@ -241,6 +245,8 @@ export default {
         },
       ],
     });
+    console.log(this.historyData);
+
     if (this.historyData) {
       this.instruction = this.historyData.transaction.message.instructions;
       this.innerInstructions = this.historyData.meta.innerInstructions;

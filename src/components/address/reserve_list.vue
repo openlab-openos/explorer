@@ -50,7 +50,7 @@
           <th v-if="reserveType">{{ $t("mint") }}</th>
           <th v-else>{{ $t("account.Owner") }}</th>
         </tr>
-        <template v-if="historyData.length != 0">
+        <template v-if="historyData.length != 0 && type">
           <tr v-for="(item, index) in paginatedHistoryData" :key="index" style="cursor: pointer"
             @click="detailsFunction(item.child)">
             <td>{{ formatTimestamp(item.startTime) }}</td>
@@ -154,8 +154,13 @@ const selsetClick = (index) => {
   updateDateRange(selectData.value[index].value)
 }
 
+const type = ref(true);
 const handlePageChange = (newPage) => {
-  currentPage.value = newPage;
+    type.value = false;
+    currentPage.value = newPage;
+    setTimeout(() => {
+        type.value = true;
+    }, 1);
 };
 
 const requestList = async (object) => {

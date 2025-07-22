@@ -16,7 +16,7 @@
 
                             <th style="text-align: left">{{ $t("validators.status") }}</th>
                         </tr>
-                        <template v-if="ActivityLogData">
+                        <template v-if="ActivityLogData && type">
                             <tr v-for="(log, index) in paginatedHistoryData" :key="index">
                                 <td style="height: 40px;">
                                     <span class="d-flex align-items-center">
@@ -111,8 +111,13 @@ const paginatedHistoryData = computed(() => {
     const end = start + pageSize.value;
     return ActivityLogData.value.slice(start, end);
 });
+const type = ref(true);
 const handlePageChange = (newPage) => {
+    type.value = false;
     currentPage.value = newPage;
+    setTimeout(() => {
+        type.value = true;
+    }, 1);
 };
 
 let VoteAccounts = {

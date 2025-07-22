@@ -121,8 +121,14 @@ const paginatedHistoryData = computed(() => {
     const end = start + pageSize.value;
     return historyData.value.slice(start, end);
 });
+const type = ref(true);
+
 const handlePageChange = (newPage) => {
+    type.value = false;
     currentPage.value = newPage;
+    setTimeout(() => {
+        type.value = true;
+    }, 1);
 };
 
 tokenList().then((data) => {

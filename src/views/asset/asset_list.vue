@@ -19,61 +19,63 @@
                             <th style=" text-align: left"> {{ $t("market_cap") }} </th>
                             <th style=" text-align: left"> {{ $t("price") }}</th>
                         </tr>
-                        <tr v-for="item, index in paginatedHistoryData" :key="index">
-                            <td class="text-theme">
-                                <img v-if="item.token.image_url" :src="item.token.image_url" height="24" alt=""
-                                    class="marginRight8">
-                                <img v-if="B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz"
-                                    :src="item.token.pubkey == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' ? 'https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png' : ''"
-                                    width="32" alt="" class="marginRight8">
+                        <template v-if="type">
+                            <tr v-for="item, index in paginatedHistoryData" :key="index">
+                                <td class="text-theme">
+                                    <img v-if="item.token.image_url" :src="item.token.image_url" height="24" alt=""
+                                        class="marginRight8">
+                                    <img v-if="B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz"
+                                        :src="item.token.pubkey == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' ? 'https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png' : ''"
+                                        width="32" alt="" class="marginRight8">
 
-                                <text style="cursor: pointer;" @click="pubbleys(item.token.address)">{{
-                                    titleUrl(item.token.address).url }}</text>
-                                <img v-if="titleUrl(item.token.pubkey).type"
-                                    v-for="(datas, indexs) in titleUrl(item.token.pubkey).certificates" :key="indexs"
-                                    :src="datas.img" height="24" class="marginRight8" alt="">
-                            </td>
-                            <td>
-                                {{ item.token.symbol }}
-                            </td>
-
-                            <template v-if="item.token.certificates.length == 0">
-                                <td>N/A</td>
-                            </template>
-                            <template v-else>
+                                    <text style="cursor: pointer;" @click="pubbleys(item.token.address)">{{
+                                        titleUrl(item.token.address).url }}</text>
+                                    <img v-if="titleUrl(item.token.pubkey).type"
+                                        v-for="(datas, indexs) in titleUrl(item.token.pubkey).certificates"
+                                        :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
+                                </td>
                                 <td>
-                                    <img v-for="items, indexs in item.token.certificates" :key="indexs"
-                                        :src="items.image_url" height="20" class="marginRight8"
-                                        :title="items.certificate_code" @click="pubbley" style="cursor: pointer;">
-                                    <!-- <div style="display: flex;">
+                                    {{ item.token.symbol }}
+                                </td>
+
+                                <template v-if="item.token.certificates.length == 0">
+                                    <td>N/A</td>
+                                </template>
+                                <template v-else>
+                                    <td>
+                                        <img v-for="items, indexs in item.token.certificates" :key="indexs"
+                                            :src="items.image_url" height="20" class="marginRight8"
+                                            :title="items.certificate_code" @click="pubbley" style="cursor: pointer;">
+                                        <!-- <div style="display: flex;">
                                         <p v-for="items, indexs in item.token.certificates" :key="indexs"
                                             :style="'background-color: ' + items.backColor"
                                             style="border-radius: 5px;padding: 2px 4px;margin-right: 5px;margin-bottom: 0;font-weight: 500;">
                                             {{ items.certificate_code }}
                                         </p>
                                     </div> -->
-                                </td>
-                            </template>
+                                    </td>
+                                </template>
 
 
-                            <!-- <td>
+                                <!-- <td>
                                 {{ item.token.symbol }}
                             </td> -->
-                            <td>
-                                {{ item.token.protocol_code ? item.token.protocol_code : 'N/A' }}
-                            </td>
-                            <td>
-                                {{ item.token.holders }}
-                            </td>
-                            <td>
-                                $ {{ come(item.token.market_cap) }}
-                            </td>
-                            <td>
-                                {{ item.token.price ? '$' : '' }} {{ item.price ? item.price : item.token.price }}
-                                <img v-if="item.token.price_icon" :src="imgUrl + '/' + item.token.price_icon"
-                                    height="24" class="marginRight8" alt="">
-                            </td>
-                        </tr>
+                                <td>
+                                    {{ item.token.protocol_code ? item.token.protocol_code : 'N/A' }}
+                                </td>
+                                <td>
+                                    {{ item.token.holders }}
+                                </td>
+                                <td>
+                                    $ {{ come(item.token.market_cap) }}
+                                </td>
+                                <td>
+                                    {{ item.token.price ? '$' : '' }} {{ item.price ? item.price : item.token.price }}
+                                    <img v-if="item.token.price_icon" :src="imgUrl + '/' + item.token.price_icon"
+                                        height="24" class="marginRight8" alt="">
+                                </td>
+                            </tr>
+                        </template>
                     </tbody>
                 </table>
                 <div v-if="!loading" class="text-center">
@@ -133,8 +135,13 @@ const paginatedHistoryData = computed(() => {
     console.log(historyData.value);
     return historyData.value.slice(start, end);
 });
+const type = ref(true);
 const handlePageChange = (newPage) => {
+    type.value = false;
     currentPage.value = newPage;
+    setTimeout(() => {
+        type.value = true;
+    }, 1);
 };
 tokenList().then((res) => {
 

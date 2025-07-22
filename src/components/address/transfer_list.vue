@@ -29,7 +29,7 @@
                         {{ $t("account.time") }}
                     </th>
                 </tr>
-                <template v-if="loading">
+                <template v-if="loading && type">
                     <tr v-for="(item, index) in paginatedHistoryData" :key="index">
                         <td class="text-theme">
                             <text style="cursor: pointer" @click="pubbtx(item.signature)">{{ stringcate(item.signature)
@@ -207,8 +207,13 @@ const paginatedHistoryData = computed(() => {
 });
 const totalItems = ref(0);
 
+const type = ref(true);
 const handlePageChange = (newPage) => {
+    type.value = false;
     currentPage.value = newPage;
+    setTimeout(() => {
+        type.value = true;
+    }, 1);
 };
 const toFexedStake = (num) => {
     if (num) {

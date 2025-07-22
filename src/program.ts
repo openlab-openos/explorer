@@ -491,11 +491,17 @@ export const TOKEN_IDS: { [key: string]: string } = {
   TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA: "Token Program",
   Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c: "Token-2022 Program",
 } as const;
+function isProductionDomain() {
+  const hostname = window.location.hostname;
+  // 检测是否包含 'devnet.' 前缀
+  return !hostname.startsWith('test.');
+}
+const UtlDevnetType = isProductionDomain();
 const datas = ref();
 const Authentication = async () => {
   await axios
     .get(
-      `https://open.openverse.live/api/token/hot`,
+      UtlDevnetType ? `https://open.openverse.live/api/token/hot` : `https://test-open.openverse.live/api/token/hot`,
       {
         headers: {
           "Content-Type": "application/json",

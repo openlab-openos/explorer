@@ -16,7 +16,7 @@
                     {{ $t("account.proportion") }}
                 </th>
             </tr>
-            <template v-if="historyData.length != 0">
+            <template v-if="historyData.length != 0 && type">
                 <tr v-for="(item, index) in paginatedHistoryData" :key="index">
                     <td class="text-theme">
                         <!-- <img v-if="titleUrl(item.account.data.parsed.info.owner).type"
@@ -94,8 +94,13 @@ const paginatedHistoryData = computed(() => {
 
 const totalItems = ref(0);
 
+const type = ref(true);
 const handlePageChange = (newPage) => {
+    type.value = false;
     currentPage.value = newPage;
+    setTimeout(() => {
+        type.value = true;
+    }, 1);
 };
 
 const requestList = async (object) => {

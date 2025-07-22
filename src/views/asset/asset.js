@@ -1,25 +1,26 @@
 import axios from 'axios';
 
-const currentUrl = window.location.href;
-let app = JSON.parse(sessionStorage.getItem('app'));
+function isProductionDomain() {
+    const hostname = window.location.hostname;
+    // 检测是否包含 'devnet.' 前缀
+    return !hostname.startsWith('test.');
+}
+const UtlDevnetType = isProductionDomain();
+console.log('UtlDevnetType',UtlDevnetType);
 
-const GeturlType = JSON.parse(sessionStorage.getItem('urlType'));
-let url = currentUrl.includes('?cluster=devnet')
-console.log(url);
-let urlType = app ? (GeturlType? (GeturlType.urlType == 'Test' ? false : (app.chainType == 'Test' ? false : true)) : true ) : (url? false : true) ;
-
-export function tokenList(data){
-    return new Promise((resolve,reject)=>{
-        axios.get(`https://open.openverse.live/api/token/hot`,data,{
-        // axios.get(`https://open.openverse.live/api/token/some?net=${urlType ? 'mainnet' : 'devnet'}`,data,{
-        // axios.get("https://open.openverse.live/api/token/web",data,{
-            headers:{
-                "Content-Type":"application/json"
+export function tokenList(data) {
+    return new Promise((resolve, reject) => {
+        axios.get(UtlDevnetType ? `https://open.openverse.live/api/token/hot` : `https://test-open.openverse.live/api/token/hot`, data, {
+            // axios.get(`https://test-open.openverse.live/api/token/hot`,data,{
+            // axios.get(`https://open.openverse.live/api/token/some?net=${urlType ? 'mainnet' : 'devnet'}`,data,{
+            // axios.get("https://open.openverse.live/api/token/web",data,{
+            headers: {
+                "Content-Type": "application/json"
             }
-        }).then(res=>{
-            
+        }).then(res => {
+
             resolve(res.data);
-        }).catch(err=>{
+        }).catch(err => {
             reject(err);
         })
     })
