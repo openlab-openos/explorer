@@ -1,7 +1,7 @@
 <template>
     <div>
         <img v-if="titleUrl(paramsId).type && propsType" :src="titleUrl(paramsId).img" height="20"
-            class="marginRight10 imgWigth25">
+            class="marginRight10">
         <text v-if="propsType" style="cursor: pointer" @click="pubbtx(paramsId)" class="marginRight10">{{
             titleUrl(paramsId).url ? titleUrl(paramsId).url : 'N/A' }}</text>
         <img v-if="titleUrl(paramsId).type && titleUrl(paramsId).assest"
