@@ -4,7 +4,7 @@
             <card-body class="card-bodys">
                 <div class="d-flex fw-bold small mb-3">
                     <span class="flex-grow-1"> {{ $t("navigation.TokenTracker") }} </span>
-                    <card-expand-toggler />
+                    <!-- <card-expand-toggler /> -->
                 </div>
                 <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
                     <tbody>
@@ -29,7 +29,8 @@
                                             style=" width: 100%; height: 100%; object-fit: cover;object-position: center;border-radius: 5px;"
                                             @error="item.imageUrl = defaultImage" height="24" alt="">
                                     </div>
-                                    <text style="cursor: pointer;display: flex;align-items: center;" @click="pubbleys(item.state.mint)">
+                                    <text style="cursor: pointer;display: flex;align-items: center;"
+                                        @click="pubbleys(item.state.mint)">
                                         {{ item.state.name }}
                                     </text>
                                 </div>
@@ -40,8 +41,9 @@
                             </td>
                             <td>
                                 <!-- 显示加载状态或实际数量 -->
-                                {{ holdersCache[item.state.mint] === null ? 'loading...' : holdersCache[item.state.mint]
-                                }}
+                                <!-- {{ holdersCache[item.state.mint] === null ? 'loading...' : holdersCache[item.state.mint]
+                                }} -->
+                                {{ item.holders }}
                             </td>
                             <td>
                                 <!-- {{ item.supply / item.decimals }} -->
@@ -111,18 +113,18 @@ const fetchHolderCount = async (mint) => {
 };
 
 // 批量获取当前页数据的持有人数量
-const fetchCurrentPageHolders = () => {
-    const currentItems = paginatedHistoryData.value;
-    currentItems.forEach(item => {
-        fetchHolderCount(item.state.mint);
-    });
-};
+// const fetchCurrentPageHolders = () => {
+//     const currentItems = paginatedHistoryData.value;
+//     currentItems.forEach(item => {
+//         fetchHolderCount(item.state.mint);
+//     });
+// };
 
 // 页码变化处理
 const handlePageChange = (newPage) => {
     currentPage.value = newPage;
     // 页码变化后，重新获取当前页的持有人数据
-    fetchCurrentPageHolders();
+    // fetchCurrentPageHolders();
 };
 
 const toFexedStake = (num, decimals) => {
@@ -153,10 +155,9 @@ const come = (num) => {
 // 初始化数据加载
 watchEffect(async () => {
     try {
-        loading.value = false; // 开始加载
         const res = await tokenList();
         console.log("原始tokenList数据:", res);
-
+        let dataArray = []
         if (!res.error) {
             const tokenList = [];
             // 解析数据，提取需要的字段
@@ -178,10 +179,23 @@ watchEffect(async () => {
                 }
             });
             // 截取前100条数据
-            historyData.value = tokenList.slice(0, 100);
-            totalItems.value = historyData.value.length;
-            // 加载当前页的持有人数据
-            fetchCurrentPageHolders();
+            dataArray = tokenList.slice(0, 100);
+            totalItems.value = dataArray.length;
+            console.log(dataArray);
+
+            for (let i in dataArray) {
+                // 初始化持有人数量缓存
+                let holdeNumber = await getTokenAccounts(dataArray[i].state.mint);
+                dataArray[i].holders = holdeNumber;
+            }
+            dataArray.sort((a, b) => {
+                return b.holders - a.holders;
+            });
+            console.log(dataArray);
+            loading.value = false; // 开始加载
+            historyData.value = dataArray; // 更新数据列表
+            // // 加载当前页的持有人数据
+            // fetchCurrentPageHolders();
         }
     } catch (error) {
         console.error("数据加载失败:", error);
@@ -201,7 +215,4 @@ const pubbleys = (url) => {
         });
     }
 };
-
-// 初始加载时触发一次当前页数据获取
-fetchCurrentPageHolders();
 </script>
