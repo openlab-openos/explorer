@@ -163,15 +163,17 @@ const fetchOrderData = async () => {
         const nullData = ref([]);
         for (let i in res) {
 
+
             if (res[i].result) {
                 let etach = res[i].result.transaction.message.instructions;
                 let index = 0;
+                console.log(res[i].result);
                 for (let h in etach) {
-                    if (etach[h].parsed.type == "transfer" && etach[h].programId == "11111111111111111111111111111111") {
+                    if (etach[h].parsed?.type == "transfer" && etach[h].programId == "11111111111111111111111111111111") {
                         index = h;
                         break;
                     }
-                    if (etach[h].parsed.type == "transferChecked" && etach[h].programId == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" || etach[index].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c") {
+                    if (etach[h].parsed?.type == "transferChecked" && etach[h].programId == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" || etach[index].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c") {
                         index = h;
                         break;
                     }
@@ -179,7 +181,7 @@ const fetchOrderData = async () => {
                 }
 
 
-                if (etach[index].parsed.type == "transfer" && etach[index].programId == "11111111111111111111111111111111") {
+                if (etach[index].parsed?.type == "transfer" && etach[index].programId == "11111111111111111111111111111111") {
                     let data = {
                         type: "transfer",
                         signature: res[i].result.transaction.signatures[0],
@@ -190,7 +192,7 @@ const fetchOrderData = async () => {
                         blockTime: res[i].result.blockTime,
                     }
                     arrayData.value.push(data);
-                } else if (etach[index].parsed.type == "transferChecked" && etach[index].programId == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" || etach[index].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c") {
+                } else if (etach[index].parsed?.type == "transferChecked" && etach[index].programId == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" || etach[index].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c") {
 
                     let data = {
                         type: "token_transfer",
@@ -202,7 +204,7 @@ const fetchOrderData = async () => {
                         blockTime: res[i].result.blockTime,
                     }
                     arrayData.value.push(data);
-                } else if (etach[index].parsed.type == "transfer" && etach[index].programId == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" || etach[index].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c") {
+                } else if (etach[index].parsed?.type == "transfer" && etach[index].programId == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" || etach[index].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c") {
                     console.log(etach);
 
                     let data = {
@@ -215,7 +217,7 @@ const fetchOrderData = async () => {
                         blockTime: res[i].result.blockTime,
                     }
                     arrayData.value.push(data);
-                } else if (etach[index].parsed.type == "delegate" && etach[index].programId == "Stake11111111111111111111111111111111111111") {
+                } else if (etach[index].parsed?.type == "delegate" && etach[index].programId == "Stake11111111111111111111111111111111111111") {
                     let data = {
                         type: "stake",
                         signature: res[i].result.transaction.signatures[0],
@@ -226,7 +228,7 @@ const fetchOrderData = async () => {
                         blockTime: res[i].result.blockTime,
                     }
                     arrayData.value.push(data);
-                } else if (etach[index].parsed.type == "deactivate") {
+                } else if (etach[index].parsed?.type == "deactivate") {
                     let data = {
                         type: "unstake",
                         signature: res[i].result.transaction.signatures[0],
@@ -237,7 +239,7 @@ const fetchOrderData = async () => {
                         blockTime: res[i].result.blockTime,
                     }
                     arrayData.value.push(data);
-                } else if (etach[index].parsed.type == "withdraw") {
+                } else if (etach[index].parsed?.type == "withdraw") {
                     let data = {
                         type: "withdraw",
                         signature: res[i].result.transaction.signatures[0],
