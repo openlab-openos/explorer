@@ -68,7 +68,8 @@
                                     style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                     {{ items.code }}
                                 </text> -->
-                                <RenderText v-if="item.source" :address="item.source" />
+                                <RenderText v-if="item.source" :address="item.source"
+                                    :transactionType="!props.boolean" />
 
                             </td>
                             <td style=" text-align: left;" class="text-theme">
@@ -87,7 +88,8 @@
                                     style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                     {{ items.code }}
                                 </text> -->
-                                <RenderText v-if="item.destination" :address="item.destination" />
+                                <RenderText v-if="item.destination" :address="item.destination"
+                                    :transactionType="!props.boolean" />
 
                             </td>
                             <td style=" text-align: left">
@@ -163,73 +165,85 @@ const fetchOrderData = async () => {
 
             if (res[i].result) {
                 let etach = res[i].result.transaction.message.instructions;
+                let index = 0;
+                for (let h in etach) {
+                    if (etach[h].parsed.type == "transfer" && etach[h].programId == "11111111111111111111111111111111") {
+                        index = h;
+                        break;
+                    }
+                    if (etach[h].parsed.type == "transferChecked" && etach[h].programId == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" || etach[index].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c") {
+                        index = h;
+                        break;
+                    }
+                    index = etach.length - 1
+                }
 
-                if (etach[etach.length - 1].parsed.type == "transfer" && etach[etach.length - 1].programId == "11111111111111111111111111111111") {
+
+                if (etach[index].parsed.type == "transfer" && etach[index].programId == "11111111111111111111111111111111") {
                     let data = {
                         type: "transfer",
                         signature: res[i].result.transaction.signatures[0],
-                        source: etach[etach.length - 1].parsed.info.source,
-                        destination: etach[etach.length - 1].parsed.info.destination,
-                        uiAmount: etach[etach.length - 1].parsed.info.lamports,
+                        source: etach[index].parsed.info.source,
+                        destination: etach[index].parsed.info.destination,
+                        uiAmount: etach[index].parsed.info.lamports,
                         mint: 'BTG',
                         blockTime: res[i].result.blockTime,
                     }
                     arrayData.value.push(data);
-                } else if (etach[etach.length - 1].parsed.type == "transferChecked" && etach[etach.length - 1].programId == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" || etach[etach.length - 1].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c") {
+                } else if (etach[index].parsed.type == "transferChecked" && etach[index].programId == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" || etach[index].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c") {
+
+                    let data = {
+                        type: "token_transfer",
+                        signature: res[i].result.transaction.signatures[0],
+                        source: etach[index].parsed.info.source,
+                        destination: etach[index].parsed.info.destination,
+                        uiAmount: etach[index].parsed.info.tokenAmount ? etach[index].parsed.info.tokenAmount.uiAmount : 0,
+                        mint: etach[index].parsed.info.mint,
+                        blockTime: res[i].result.blockTime,
+                    }
+                    arrayData.value.push(data);
+                } else if (etach[index].parsed.type == "transfer" && etach[index].programId == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" || etach[index].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c") {
                     console.log(etach);
 
                     let data = {
                         type: "token_transfer",
                         signature: res[i].result.transaction.signatures[0],
-                        source: etach[etach.length - 1].parsed.info.source,
-                        destination: etach[etach.length - 1].parsed.info.destination,
-                        uiAmount: etach[etach.length - 1].parsed.info.tokenAmount ? etach[etach.length - 1].parsed.info.tokenAmount.uiAmount : 0,
-                        mint: etach[etach.length - 1].parsed.info.mint,
+                        source: etach[index].parsed.info.source,
+                        destination: etach[index].parsed.info.destination,
+                        uiAmount: etach[index].parsed.info.tokenAmount ? etach[index].parsed.info.tokenAmount.uiAmount : 0,
+                        mint: etach[index].parsed.info.mint,
                         blockTime: res[i].result.blockTime,
                     }
                     arrayData.value.push(data);
-                } else if (etach[etach.length - 1].parsed.type == "transfer" && etach[etach.length - 1].programId == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" || etach[etach.length - 1].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c") {
-                    console.log(etach);
-
-                    let data = {
-                        type: "token_transfer",
-                        signature: res[i].result.transaction.signatures[0],
-                        source: etach[etach.length - 1].parsed.info.source,
-                        destination: etach[etach.length - 1].parsed.info.destination,
-                        uiAmount: etach[etach.length - 1].parsed.info.tokenAmount ? etach[etach.length - 1].parsed.info.tokenAmount.uiAmount : 0,
-                        mint: etach[etach.length - 1].parsed.info.mint,
-                        blockTime: res[i].result.blockTime,
-                    }
-                    arrayData.value.push(data);
-                } else if (etach[etach.length - 1].parsed.type == "delegate" && etach[etach.length - 1].programId == "Stake11111111111111111111111111111111111111") {
+                } else if (etach[index].parsed.type == "delegate" && etach[index].programId == "Stake11111111111111111111111111111111111111") {
                     let data = {
                         type: "stake",
                         signature: res[i].result.transaction.signatures[0],
-                        source: etach[etach.length - 1].parsed.info.stakeAuthority,
-                        destination: etach[etach.length - 1].parsed.info.stakeAccount,
-                        uiAmount: etach[etach.length - 1].parsed.info.lamports ? etach[etach.length - 1].parsed.info.lamports : 'N/A',
+                        source: etach[index].parsed.info.stakeAuthority,
+                        destination: etach[index].parsed.info.stakeAccount,
+                        uiAmount: etach[index].parsed.info.lamports ? etach[index].parsed.info.lamports : 'N/A',
                         mint: 'BTG',
                         blockTime: res[i].result.blockTime,
                     }
                     arrayData.value.push(data);
-                } else if (etach[etach.length - 1].parsed.type == "deactivate") {
+                } else if (etach[index].parsed.type == "deactivate") {
                     let data = {
                         type: "unstake",
                         signature: res[i].result.transaction.signatures[0],
-                        source: etach[etach.length - 1].parsed.info.stakeAuthority,
-                        destination: etach[etach.length - 1].parsed.info.stakeAccount,
+                        source: etach[index].parsed.info.stakeAuthority,
+                        destination: etach[index].parsed.info.stakeAccount,
                         uiAmount: "N/A",
                         mint: 'BTG',
                         blockTime: res[i].result.blockTime,
                     }
                     arrayData.value.push(data);
-                } else if (etach[etach.length - 1].parsed.type == "withdraw") {
+                } else if (etach[index].parsed.type == "withdraw") {
                     let data = {
                         type: "withdraw",
                         signature: res[i].result.transaction.signatures[0],
-                        source: etach[etach.length - 1].parsed.info.withdrawAuthority,
-                        destination: etach[etach.length - 1].parsed.info.destination,
-                        uiAmount: (etach[etach.length - 1].parsed.info.lamports),
+                        source: etach[index].parsed.info.withdrawAuthority,
+                        destination: etach[index].parsed.info.destination,
+                        uiAmount: (etach[index].parsed.info.lamports),
                         mint: 'BTG',
                         blockTime: res[i].result.blockTime,
                     }

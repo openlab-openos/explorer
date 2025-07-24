@@ -261,10 +261,20 @@ const HandleList = (listItem) => {
 
             // 确保签名存在
             const signature = signatures?.[0];
-
+            let index = 0;
+            for(let i in instructions){
+                if(instructions[i]?.parsed?.type == 'transfer'){
+                    index = i;
+                    break;
+                }
+                if(instructions[i]?.parsed?.type == 'transferChecked'){
+                    index = i;
+                    break;
+                }
+            }
+            
             // 确保第一条指令存在且格式正确
-            const firstInstruction = instructions?.[0];
-            console.log(firstInstruction?.parsed?.type === "transfer" && firstInstruction?.parsed?.programId == "11111111111111111111111111111111");
+            const firstInstruction = instructions?.[index];
             const movementType = firstInstruction?.parsed?.type === "transfer" && firstInstruction?.programId == "11111111111111111111111111111111"
                 ? "Transfer"
                 : "token_transfer";
