@@ -17,7 +17,7 @@ function isProductionDomain() {
 return !hostname.startsWith('devnet.');
 }
 const solanaApiUrl = isProductionDomain() ? "https://api.mainnet.openverse.network" : "https://api.devnet.openverse.network";
-console.log(isProductionDomain());
+// console.log(isProductionDomain());
 
 
 const chainStorg = JSON.parse(sessionStorage.getItem("app"));
@@ -33,9 +33,9 @@ let fee = {
   non: false,
 };
 export async function getExtraData(url) {
-  console.log("--mintPubkey:", url);
+  // console.log("--mintPubkey:", url);
   let mintPubkey = new PublicKey(url);
-  console.log("--aa:", mintPubkey);
+  // console.log("--aa:", mintPubkey);
 
   const mint = await getMint(
     connection,
@@ -43,7 +43,7 @@ export async function getExtraData(url) {
     undefined,
     TOKEN_2022_PROGRAM_ID
   );
-  console.log("--mint:", mint);
+  // console.log("--mint:", mint);
 
   //get fee
   const transferFeeConfig = getExtensionData(
@@ -51,11 +51,11 @@ export async function getExtraData(url) {
     mint.tlvData
   );
   if (!transferFeeConfig) {
-    console.log("No TransferFeeConfig found on this mint");
+    // console.log("No TransferFeeConfig found on this mint");
   }
   if (transferFeeConfig) {
     let metadataInfo = TransferFeeConfigLayout.decode(transferFeeConfig);
-    console.log("--transferFeeConfig:", metadataInfo);
+    // console.log("--transferFeeConfig:", metadataInfo);
     fee.fees = metadataInfo.newerTransferFee.transferFeeBasisPoints;
     fee.maximum = metadataInfo.newerTransferFee.maximumFee;
   }
@@ -65,17 +65,17 @@ export async function getExtraData(url) {
     ExtensionType.NonTransferable,
     mint.tlvData
   );
-  console.log("--nonTransferableConfig:", mint);
+  // console.log("--nonTransferableConfig:", mint);
   // checkTokenAccountFrozen('5Nx2YgDDQ2mmmbYpCN5QY9y7obTqkYHVCzqJpcENdurh')
-  console.log("--nonTransferableConfig:", nonTransferableConfig);
+  // console.log("--nonTransferableConfig:", nonTransferableConfig);
 
   if (!nonTransferableConfig) {
-    console.log("No nonTransferableConfig found on this mint");
+    // console.log("No nonTransferableConfig found on this mint");
     fee.non = false;
   }
   if (nonTransferableConfig) {
     // let metadataInfo = NonTransferableLayout.decode(nonTransferableConfig);
-    // console.log("--nonTransferableConfig:", metadataInfo);
+    // // console.log("--nonTransferableConfig:", metadataInfo);
     fee.non = true;
   }
 
@@ -85,16 +85,16 @@ export async function getExtraData(url) {
     mint.tlvData
   );
   if (!defaultAccountConfig) {
-    console.log("No defaultAccountConfig found on this mint");
+    // console.log("No defaultAccountConfig found on this mint");
     fee.default = true;
   }
   if (defaultAccountConfig) {
     let metadataInfo = DefaultAccountStateLayout.decode(defaultAccountConfig);
     if (metadataInfo.state == 2) {
-      console.log("--defaultAccountConfig: frozen");
+      // console.log("--defaultAccountConfig: frozen");
       fee.default = true;
     } else {
-      console.log("--defaultAccountConfig", metadataInfo);
+      // console.log("--defaultAccountConfig", metadataInfo);
       fee.default = false;
     }
   }
@@ -109,6 +109,6 @@ export async function getExtraData(url) {
 //   );
 
 //   const isFrozen = tokenAccount.isFrozen;
-//   console.log(`代币账户冻结状态: ${isFrozen}`);
+//   // console.log(`代币账户冻结状态: ${isFrozen}`);
 //   return isFrozen;
 // }

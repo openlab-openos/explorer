@@ -21,7 +21,7 @@ export function order(url) {
                 resolve(jsonResponse);
             })
             .catch((error) => {
-                console.log(error);
+                // console.log(error);
                 
                 reject(error);
                 console.error("Error fetching data:", error);

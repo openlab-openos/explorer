@@ -8,7 +8,7 @@ let tokenArray = [
 ];
 
 export const tokenList = async () => {
-    console.log(123);
+    // console.log(123);
     let arrayList = [];
 
     // 并发执行所有RPC请求

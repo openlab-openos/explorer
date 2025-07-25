@@ -8,7 +8,7 @@ function isProductionDomain() {
     // 检测是否包含 'devnet.' 前缀
   return !hostname.startsWith('devnet.');
 }
-console.log(isProductionDomain());
+// console.log(isProductionDomain());
 
 const solanaApiUrl = isProductionDomain() ? "https://api.mainnet.openverse.network" : "https://api.devnet.openverse.network";
 
@@ -20,7 +20,7 @@ export async function parseNFTMetadata(adress) {
     // 1. 获取账户数据
     const accountInfo = await connection.getAccountInfo(metadataAccount);
     if (!accountInfo) throw new Error('账户不存在');
-    // console.log(accountInfo);
+    // // console.log(accountInfo);
 
     // 2. 直接使用 Uint8Array 数据，无需 Base58 解码
     const data = accountInfo.data;
@@ -54,7 +54,7 @@ export async function parseNFTMetadata(adress) {
         sellerFeeBasisPoints: (data[146] << 8) | data[145], // 小端序 u16
     };
 
-    // console.log('解析结果:', metadata);
+    // // console.log('解析结果:', metadata);
     return metadata;
 }
 

@@ -1,13 +1,13 @@
 import axios from 'axios';
 
 const currentUrl = window.location.href;
-console.log(currentUrl);
+// console.log(currentUrl);
 function isProductionDomain() {
   const hostname = window.location.hostname;
   // 检测是否包含 'devnet.' 前缀
 return !hostname.startsWith('devnet.');
 }
-console.log(isProductionDomain());
+// console.log(isProductionDomain());
 
 
 const solanaApiUrl = isProductionDomain() ? "https://api.mainnet.openverse.network" : "https://api.devnet.openverse.network";

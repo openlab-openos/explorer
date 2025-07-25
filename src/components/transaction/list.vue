@@ -167,7 +167,7 @@ const fetchOrderData = async () => {
             if (res[i].result) {
                 let etach = res[i].result.transaction.message.instructions;
                 let index = 0;
-                console.log(res[i].result);
+                // console.log(res[i].result);
                 for (let h in etach) {
                     if (etach[h].parsed?.type == "transferChecked" && etach[h].programId == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" || etach[index].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c") {
                         index = h;
@@ -205,7 +205,7 @@ const fetchOrderData = async () => {
                     }
                     arrayData.value.push(data);
                 } else if (etach[index].parsed?.type == "transfer" && etach[index].programId == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" || etach[index].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c") {
-                    console.log(etach);
+                    // console.log(etach);
 
                     let data = {
                         type: "token_transfer",
@@ -259,7 +259,7 @@ const fetchOrderData = async () => {
 
             // }
         }
-        console.log(arrayData.value);
+        // // console.log(arrayData.value);
 
         appStore.setTransaction(JSON.stringify(arrayData.value));
     } catch (err) {

@@ -63,12 +63,12 @@ onMounted(async () => {
 watch(
   () => route.path,
   async (newPath, oldPath) => {
-    console.log(newPath);
-    console.log(oldPath);
-    console.log(url);
+    // console.log(newPath);
+    // console.log(oldPath);
+    // console.log(url);
     const path = newPath;
     const result = path.substring(path.indexOf('/address/') + '/address/'.length);
-    console.log(result);
+    // console.log(result);
     url.value = result;
     loading.value = false;
     typeAddress.value = "";

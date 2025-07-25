@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export function tokenList(data) {
-    console.log(data);
+    // console.log(data);
     
     return new Promise((resolve, reject) => {
         axios.get(`https://open.openverse.live/api/token/info?address=${data}`)

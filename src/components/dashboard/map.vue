@@ -107,7 +107,7 @@ const mapType = ref(sessionStorage.getItem('mapType'));
 if (!mapType.value) {
     sessionStorage.setItem('mapType', true)
 }
-console.log(mapType.value);
+// console.log(mapType.value);
 
 onMounted(() => {
     getActivityLogData();
@@ -253,14 +253,14 @@ const getActivityLogData = async () => {
             map.value.addMarkers(mapArray.value);
 
             mapData.value = mapArray.value;
-            console.log(mapArray.value);
+            // console.log(mapArray.value);
 
             traffic.value = getTrafficData(mapArray.value);
         }
         //         for(let i in aaaaa){
-        //             console.log(aaaaa[i]);
+        //             // console.log(aaaaa[i]);
 
-        //             // console.log(JSON.parse(aaaaa[i]));
+        //             // // console.log(JSON.parse(aaaaa[i]));
         //         }
     });
 };
@@ -300,7 +300,7 @@ const renderMap = async () => {
                             country_name: loc_lat.country,
                         });
                     } catch (error) {
-                        console.log(error);
+                        // console.log(error);
                     }
                 }
             }
@@ -308,7 +308,7 @@ const renderMap = async () => {
     }
 
     const coordsCounts = new Map();
-    console.log(markers_data);
+    // console.log(markers_data);
 
     markers_data.forEach((obj) => {
         const key = obj.coords[0];
@@ -425,7 +425,7 @@ const getIPLocation = async (ip) => {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        console.log(response);
+        // console.log(response);
 
         const data = await response.json();
         localStorage.setItem(ip, JSON.stringify(data));
@@ -553,7 +553,7 @@ function uniqueArrayByProperty(arr, key) {
     }));
 }
 onUnmounted(() => {
-    console.log(1111, '11111----1111');
+    // console.log(1111, '11111----1111');
     mapData.value = null;
 })
 </script>

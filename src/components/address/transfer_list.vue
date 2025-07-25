@@ -201,7 +201,7 @@ const pageSize = ref(20);
 const paginatedHistoryData = computed(() => {
     const start = (currentPage.value - 1) * pageSize.value;
     const end = start + pageSize.value;
-    console.log(historyData.value[0]);
+    // console.log(historyData.value[0]);
 
     return historyData.value.slice(start, end);
 });
@@ -238,7 +238,7 @@ onMounted(async () => {
         historyData.value = HandleList(res);
         totalItems.value = historyData.value.length;
         loading.value = true;
-        // console.log(historyData.value);
+        // // console.log(historyData.value);
         paginatedHistoryFunction(historyData.value);
     } catch {
 
@@ -247,7 +247,7 @@ onMounted(async () => {
 const ownerArray = ref([props.url]);
 
 const HandleList = (listItem) => {
-    console.log('原始数据:', listItem);
+    // console.log('原始数据:', listItem);
     let array = [];
 
     for (let i in listItem) {
@@ -326,7 +326,7 @@ const HandleList = (listItem) => {
                 owner
             };
 
-            // console.log('处理后的项:', obj);
+            // // console.log('处理后的项:', obj);
             array.push(obj);
 
         } catch (error) {
@@ -334,7 +334,7 @@ const HandleList = (listItem) => {
             continue; // 继续处理其他项
         }
     }
-    console.log(array);
+    // console.log(array);
     for (let i in array) {
         const owner = array[i].owner;
         if (owner && !ownerArray.value.some(item => item === owner)) {
@@ -354,10 +354,10 @@ const HandleList = (listItem) => {
             }
         }
     }
-    console.log('ownerArray:', ownerArray.value);
+    // console.log('ownerArray:', ownerArray.value);
 
-    console.log('处理后的数组:', array);
-    console.log('函数执行完成');
+    // console.log('处理后的数组:', array);
+    // console.log('函数执行完成');
     return array; // 返回处理后的数组
 }
 

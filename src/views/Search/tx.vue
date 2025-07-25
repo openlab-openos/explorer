@@ -245,7 +245,7 @@ export default {
         },
       ],
     });
-    console.log(this.historyData);
+    // console.log(this.historyData);
 
     if (this.historyData) {
       this.instruction = this.historyData.transaction.message.instructions;
@@ -263,8 +263,8 @@ export default {
   watch: {
 
     async $route(to, from) {
-      console.log('变化');
-      console.log(this.$route.params.item);
+      // console.log('变化');
+      // console.log(this.$route.params.item);
 
       this.laoding = false
       this.url = this.$route.params.item;

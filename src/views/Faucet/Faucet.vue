@@ -200,7 +200,7 @@ const onSuccess = () => {
             backgroundColor.value = "#67C23A";
         } else {
             ErrorType.value = true;
-            console.log(res.message);
+            // console.log(res.message);
 
             if (!res.data.message) {
                 backgroundColor.value = "#F56C6C";
@@ -221,7 +221,7 @@ const onSuccess = () => {
             backgroundColor.value = "";
         }, 3000);
     }).catch(error => {
-        console.log(error);
+        // console.log(error);
 
         dialogTableVisible.value = false;
         loading.value = false;

@@ -74,7 +74,7 @@ const extractLogsBetweenFirstAndLast = (data, item, index, lastprogramId) => {
         }
 
         for (let i = 1; i < data.length; i++) {
-            // console.log(data);
+            // // console.log(data);
 
             const parts = data[i].split(' ');
 
@@ -86,7 +86,7 @@ const extractLogsBetweenFirstAndLast = (data, item, index, lastprogramId) => {
         }
 
         const matchedLogs = data.slice(startIndex + 1, endIndex + 1);
-        console.log(startIndex + 1, endIndex + 1);
+        // console.log(startIndex + 1, endIndex + 1);
         // dataItem.value = data.slice(endIndex + 1, data.length)
         // 如果没有找到任何匹配项，返回空数组
         stareIndex.value = endIndex + 1;
@@ -125,17 +125,17 @@ const extractLogsBetweenFirstAndLast = (data, item, index, lastprogramId) => {
 
 // 使用 liList 函数来展示如何调用 extractLogsBetweenFirstAndLast
 const liList = (data, item, index, lastprogramId) => {
-    // console.log(data, item, index, lastprogramId);
-    // console.log(dataItem.value);
-    console.log(stareIndex.value);
-    console.log(endIndex.value);
-    // console.log(data.slice(stareIndex.value,endIndex.value));
+    // // console.log(data, item, index, lastprogramId);
+    // // console.log(dataItem.value);
+    // console.log(stareIndex.value);
+    // console.log(endIndex.value);
+    // // console.log(data.slice(stareIndex.value,endIndex.value));
     // let dataArray = data.slice(stareIndex.value, endIndex.value);
-    // console.log(dataArray);
+    // // console.log(dataArray);
 
     const listData = extractLogsBetweenFirstAndLast(data, item, index, lastprogramId);
-    // console.log(listData);
-    // console.log(dataItem.value);
+    // // console.log(listData);
+    // // console.log(dataItem.value);
 
 
     const parsedData = buildLogTree(listData);

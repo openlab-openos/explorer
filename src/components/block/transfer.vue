@@ -95,7 +95,7 @@ const timeout = () => {
 };
 
 const toFexedStake = (num) => {
-  console.log(num);
+  // console.log(num);
 
   if (typeof num == "number" && num != 'Infinity') {
     return JSON.parse((num / 1000000000).toFixed(2));
@@ -151,7 +151,7 @@ const rendered = (data) => {
 };
 
 onMounted(() => {
-  // console.log(appStore.Transaction);
+  // // console.log(appStore.Transaction);
 
   watchEffect(() => {
     if (appStore.Transaction.length != 0) {
@@ -175,7 +175,7 @@ onMounted(() => {
 
 
           }
-          console.log(dataArray);
+          // console.log(dataArray);
 
           if (dataArray.length != 0) {
             rendered(dataArray);

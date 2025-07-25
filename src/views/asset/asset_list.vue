@@ -44,7 +44,7 @@
                                 <template v-else>
                                     <td>
                                         <img v-for="items, indexs in item.token.certificates" :key="indexs"
-                                            :src="items.image_url" height="20" class="marginRight8"
+                                            :src="items.image_url" height="24" class="marginRight8"
                                             :title="items.certificate_code" @click="pubbley" style="cursor: pointer;">
                                         <!-- <div style="display: flex;">
                                         <p v-for="items, indexs in item.token.certificates" :key="indexs"
@@ -132,7 +132,7 @@ const loading = ref(false);
 const paginatedHistoryData = computed(() => {
     const start = (currentPage.value - 1) * pageSize.value;
     const end = start + pageSize.value;
-    console.log(historyData.value);
+    // console.log(historyData.value);
     return historyData.value.slice(start, end);
 });
 const type = ref(true);
@@ -149,9 +149,9 @@ tokenList().then((res) => {
     let showData = res.data;
 
     dataArray.value = showData;
-    console.log(showData);
+    // console.log(showData);
 
-    console.log(showData);
+    // console.log(showData);
     for (let i in showData) {
         if (showData[i].token) {
             for (let j in showData[i].token.certificates) {

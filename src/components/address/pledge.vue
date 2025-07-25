@@ -184,13 +184,13 @@ const stateFunction = async (url) => {
 
         return res.state;
     } catch (err) {
-        console.log(err);
+        // console.log(err);
     }
 }
 const fetchData = async () => {
     try {
         solttime.value = appStore.getepochTime;
-        console.log(solttime.value);
+        // console.log(solttime.value);
         return solttime.value;
     } catch (error) {
         console.error("Error fetching epoch info:", error);

@@ -105,7 +105,7 @@ const infoRender = () => {
     appStore.datarate.updated_at == null
       ? "a day ago"
       : appStore.datarate.updated_at;
-  console.log(appStore.datarate);
+  // console.log(appStore.datarate);
 
   info.value = [
     {

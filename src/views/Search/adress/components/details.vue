@@ -101,9 +101,9 @@ const detailsData = ref(null);
 onMounted(() => {
     detailsData.value = JSON.parse(sessionStorage.getItem('details'))
 
-    console.log(detailsData.value);
+    // console.log(detailsData.value);
     historyData.value = detailsData.value;
-    console.log(historyData.value);
+    // console.log(historyData.value);
 
     if (!detailsData.value) {
         router.push({

@@ -510,7 +510,7 @@ const Authentication = async () => {
     )
     .then((res) => {
       let data = Cretifucate(res.data.data);
-      console.log(data);
+      // console.log(data);
 
       const transformedObject = data.reduce(
         (acc, item) => {
@@ -523,7 +523,7 @@ const Authentication = async () => {
       return transformedObject;
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
     });
 };
 
@@ -583,7 +583,7 @@ const TypebackColor = (type: string) => {
 };
 
 const Cretifucate = (data: Array<any>) => {
-  console.log(data);
+  // console.log(data);
 
   let CretifucateArray = [];
   for (let i in data) {

@@ -236,9 +236,9 @@ const TransactionFee = ref("");
 onMounted(async () => {
     AccountType.value = await getAccountState(props.url);
     // PermanentDelegate.value = await checkAccountTransferability(props.url);
-    // console.log(PermanentDelegate.value);
+    // // console.log(PermanentDelegate.value);
     // TokenTransferFeeMax.value = await getTokenTransferFeeMax(props.url);
-    // console.log(TokenTransferFeeMax.value);
+    // // console.log(TokenTransferFeeMax.value);
     TokenPermanentDelegate.value = await getTokenPermanentDelegate(url.value, paramsId.value);
     TransactionFee.value = await getAddressTransactionFees(url.value);
 });
@@ -295,7 +295,7 @@ const tokenRwquest = async () => {
             mintToken.value = res;
         });
     } catch (err) {
-        console.log(err);
+        // console.log(err);
     }
     // });
 }
@@ -333,7 +333,7 @@ const numberHeld = async () => {
         } else {
             let array = res.result;
             let holder = 0;
-            console.log(array);
+            // console.log(array);
 
             for (let i in array) {
                 if (array[i].account.data.parsed.info.tokenAmount.uiAmount > 0) {

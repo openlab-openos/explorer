@@ -176,7 +176,7 @@ const tokenRwquest = async () => {
                 mintToken.value = res;
             });
         } catch (err) {
-            console.log(err);
+            // console.log(err);
         }
     });
 }

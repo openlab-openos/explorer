@@ -213,11 +213,11 @@ const mintReauest = async (url) => {
 
     try {
         // await solanaRequest(url, owner.value).then(res => {
-        //     console.log(res);
+        //     // console.log(res);
 
         //     mintData.value = res;
         // });
-        console.log(url);
+        // console.log(url);
 
         await chainRequest({
             "jsonrpc": "2.0",
@@ -227,16 +227,16 @@ const mintReauest = async (url) => {
                 props.url
             ]
         }).then(res => {
-            console.log(res);
+            // console.log(res);
             mintData.value = res.result;
         });
         await metaRequest(url, owner.value).then(res => {
-            console.log(res);
+            // console.log(res);
 
             price.value = res;
         });
     } catch (err) {
-        console.log(err);
+        // console.log(err);
     }
     // });
 };

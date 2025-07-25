@@ -132,7 +132,7 @@ const handlePageChange = (newPage) => {
 };
 
 tokenList().then((data) => {
-    console.log(data);
+    // console.log(data);
     historyData.value = data;
     totalItems.value = data.length;
 }).catch(error => {

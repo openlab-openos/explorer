@@ -6,7 +6,7 @@ function isProductionDomain() {
     return !hostname.startsWith('test.');
 }
 const UtlDevnetType = isProductionDomain();
-console.log('UtlDevnetType',UtlDevnetType);
+// console.log('UtlDevnetType',UtlDevnetType);
 
 export function tokenList(data) {
     return new Promise((resolve, reject) => {

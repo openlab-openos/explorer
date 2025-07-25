@@ -12,7 +12,7 @@ export const proportionAmount = async (url) => {
     chainRequest(method).then(res => {
         return res.result.value.uiAmount;
     }).catch(err => {
-        console.log(err);
+        // console.log(err);
         return 0;
     });
 };

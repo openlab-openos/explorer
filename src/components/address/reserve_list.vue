@@ -149,7 +149,7 @@ const selectData = ref([
 ])
 
 const selsetClick = (index) => {
-  console.log(index);
+  // console.log(index);
   nameText.value = selectData.value[index].name;
   updateDateRange(selectData.value[index].value)
 }
@@ -201,7 +201,7 @@ onMounted(async () => {
   for (let i = 0; i < data.length; i++) {
     data[i].metadata = decodeLockAccount(data[i].account.data);
   }
-  console.log(data);
+  // console.log(data);
 
 
   historyData.value = groupBySerialNumber(data);

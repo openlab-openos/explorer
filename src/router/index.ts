@@ -1,7 +1,7 @@
 
 import {
-  createRouter,
-  createWebHistory,
+    createRouter,
+    createWebHistory,
 } from 'vue-router';
 
 import Tokens from '../views/asset/asset_list.vue';
@@ -38,8 +38,8 @@ import TokenReputation from '@/views/reputation/tokenReputation.vue';
 //     ? false
 //     : true;
 
-// console.log(urlType, "urlType");
-// console.log(url);
+// // console.log(urlType, "urlType");
+// // console.log(url);
 
 // // @ts-ignore
 // let Dev = sessionStorage.getItem("Dev")
@@ -48,7 +48,7 @@ import TokenReputation from '@/views/reputation/tokenReputation.vue';
 //     ? "Dev"
 //     : "Mint";
 
-// console.log(sessionStorage.getItem("Dev"));
+// // console.log(sessionStorage.getItem("Dev"));
 
 // // 用于避免循环调用的标志
 // let isProcessing = false;

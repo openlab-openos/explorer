@@ -148,7 +148,7 @@ const getBlock = async (requestBody) => {
       cards.value.push({ number: count });
     }
   } catch (err) {
-    console.log(err);
+    // console.log(err);
   }
 };
 

@@ -156,14 +156,14 @@ onMounted(async () => {
         MintData.value = matchedToken.account.data.parsed.info
     }
     const fee = await getExtraData(props.url);
-    console.log(fee);
+    // console.log(fee);
     feeData.value = fee;
 })
 
 
 
 tokenList(props.url).then(res => {
-    console.log(res.data);
+    // console.log(res.data);
     data.value = res.data;
 }).catch(error => {
 });

@@ -140,7 +140,7 @@ const supplyRequest = async (epoch, slot, inepoch, solttime) => {
         appStore.setStuBlys(res.result.value.total);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
     pubbley.value = appStore.pubbley;
     ReadyType.value = false;

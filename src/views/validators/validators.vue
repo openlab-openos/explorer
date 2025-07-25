@@ -74,7 +74,7 @@ watchEffect(() => {
 const ActivityLogData = ref([]);
 ActivityLogData.value = appStore.Validators;
 
-console.log(ActivityLogData.value);
+// console.log(ActivityLogData.value);
 
 if(ActivityLogData.value.length == 0){
   router.push({

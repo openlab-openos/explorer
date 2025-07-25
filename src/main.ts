@@ -21,10 +21,9 @@ import VueApexCharts from "vue3-apexcharts";
 
 // import { createApp } from 'vue';
 import vueMatomo from "vue-matomo";
-import ElementPlus from 'element-plus'
-import 'element-plus/dist/index.css'
-import axios from 'axios';
-import { PROGRAM_NAMES, LOADER_IDS, PROGRAM_INFO_BY_ID } from "../src/program";
+import ElementPlus from 'element-plus';
+import 'element-plus/dist/index.css';
+import { PROGRAM_INFO_BY_ID } from "../src/program";
 
 
 import 'bootstrap';
@@ -61,7 +60,7 @@ let paini = createPinia();
 paini.use(piniaPersist);
 
 const app = createApp(App);
-console.log(router);
+// console.log(router);
 
 app.config.globalProperties.$progream = PROGRAM_INFO_BY_ID;
 // @ts-ignore

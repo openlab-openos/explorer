@@ -100,7 +100,7 @@ onMounted(() => {
         appStore.setBtgcount(btgcount);
         appStore.setVoteAccount(res);
       }).catch((err) => {
-        console.log(err);
+        // console.log(err);
         data.value = 0;
       });
 

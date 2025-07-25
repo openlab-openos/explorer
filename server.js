@@ -34,7 +34,7 @@ async function dataServer() {
     })
 
     app.listen(POST, () => {
-        console.log('渲染成功');
+        // console.log('渲染成功');
     })
 }
 

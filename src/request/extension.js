@@ -6,7 +6,7 @@ import {
   PublicKey,
 } from '@solana/web3.js';
 const currentUrl = window.location.href;
-console.log(currentUrl);
+// console.log(currentUrl);
 
 
 // import { Token, TOKEN_PROGRAM_ID } from '@solana/spl-token';
@@ -19,7 +19,7 @@ function isProductionDomain() {
   // 检测是否包含 'devnet.' 前缀
 return !hostname.startsWith('devnet.');
 }
-console.log(isProductionDomain());
+// console.log(isProductionDomain());
 
 const solanaApiUrl = isProductionDomain() ? "https://api.mainnet.openverse.network" : "https://api.devnet.openverse.network";
 export function AccountPublicKey(AccountPublicKey, Program) {
@@ -74,12 +74,12 @@ export async function getAccountState(accountAddress) {
 //         const state = await getAccountState(accountAddress);
 
 //         if (state === 'frozen') {
-//             console.log(`账户 ${accountAddress} 被冻结，不支持转账`);
+//             // console.log(`账户 ${accountAddress} 被冻结，不支持转账`);
 //             return 'frozen';
 //         }
 
 //         if (state === 'uninitialized') {
-//             console.log(`账户 ${accountAddress} 未初始化，不支持转账`);
+//             // console.log(`账户 ${accountAddress} 未初始化，不支持转账`);
 //             return 'uninitialized';
 //         }
 
@@ -89,11 +89,11 @@ export async function getAccountState(accountAddress) {
 //         const fee = await getTransactionFee();
 
 //         if (balance < fee) {
-//             console.log(`账户 ${accountAddress} 余额不足，无法支付转账手续费`);
+//             // console.log(`账户 ${accountAddress} 余额不足，无法支付转账手续费`);
 //             return false;
 //         }
 
-//         console.log(`账户 ${accountAddress} 支持转账`);
+//         // console.log(`账户 ${accountAddress} 支持转账`);
 //         return true;
 //     } catch (error) {
 //         console.error('检查账户转账能力时出错:', error);
@@ -109,15 +109,15 @@ export async function getAccountState(accountAddress) {
 
 //     // 获取代币的转账手续费配置
 //     const transferFeeConfig = getTransferFeeConfig(connection, tokenAddress);
-//     console.log(transferFeeConfig);
+//     // console.log(transferFeeConfig);
 
 //     if (transferFeeConfig) {
-//         console.log(`代币 ${tokenAddress.toBase58()} 的转账手续费上限:`);
-//         console.log(`- 基础手续费: ${transferFeeConfig.feeBasisPoints} 基点`);
-//         console.log(`- 最大手续费: ${transferFeeConfig.maxFee / LAMPORTS_PER_SOL} SOL`);
+//         // console.log(`代币 ${tokenAddress.toBase58()} 的转账手续费上限:`);
+//         // console.log(`- 基础手续费: ${transferFeeConfig.feeBasisPoints} 基点`);
+//         // console.log(`- 最大手续费: ${transferFeeConfig.maxFee / LAMPORTS_PER_SOL} SOL`);
 //         return transferFeeConfig.maxFee;
 //     } else {
-//         console.log(`代币 ${tokenAddress.toBase58()} 没有设置转账手续费上限`);
+//         // console.log(`代币 ${tokenAddress.toBase58()} 没有设置转账手续费上限`);
 //         return null;
 //     }
 //     // } catch (error) {
@@ -166,7 +166,7 @@ export async function getAddressTransactionFees(address, limit = 1000) {
         transactionCount++;
         
         if (transactionCount % 50 === 0) {
-          console.log(`已处理 ${transactionCount} 笔交易，累计手续费: ${totalFee} 拉普特`);
+          // console.log(`已处理 ${transactionCount} 笔交易，累计手续费: ${totalFee} 拉普特`);
         }
       }
     }

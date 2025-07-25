@@ -262,7 +262,7 @@ const props = defineProps({
 })
 const instruction = ref(props.data);
 const innerInstructions = ref(props.child)
-console.log(233333);
+// console.log(233333);
 const come = (num) => {
     let reg =
         num.toString().indexOf(".") > -1

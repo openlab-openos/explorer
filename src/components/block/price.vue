@@ -88,7 +88,7 @@ const skateRequest = async () => {
     method: "getInflationRate",
   }).then((res) => {
     skate.value = res.result;
-    console.log(stubly.value, pubbley.value);
+    // console.log(stubly.value, pubbley.value);
     data.value = (
       (JSON.parse(stubly.value) / JSON.parse(pubbley.value)) *
       skate.value.validator *

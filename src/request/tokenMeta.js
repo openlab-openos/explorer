@@ -8,7 +8,7 @@ import {
 const chainStorg =  JSON.parse(sessionStorage.getItem("app"))
 const chainData =chainStorg ? chainStorg.chain : '';
 const currentUrl = window.location.href;
-console.log(currentUrl);
+// console.log(currentUrl);
 
 
 // import { Token, TOKEN_PROGRAM_ID } from '@solana/spl-token';
@@ -17,7 +17,7 @@ function isProductionDomain() {
     // 检测是否包含 'devnet.' 前缀
   return !hostname.startsWith('devnet.');
 }
-console.log(isProductionDomain());
+// console.log(isProductionDomain());
 
 const solanaApiUrl = isProductionDomain() ? "https://api.mainnet.openverse.network" : "https://api.devnet.openverse.network";
 

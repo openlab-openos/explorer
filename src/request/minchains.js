@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const currentUrl = window.location.href;
-console.log(currentUrl);
+// console.log(currentUrl);
 
 
 // import { Token, TOKEN_PROGRAM_ID } from '@solana/spl-token';
@@ -10,7 +10,7 @@ function isProductionDomain() {
   // 检测是否包含 'devnet.' 前缀
 return !hostname.startsWith('devnet.');
 }
-console.log(isProductionDomain());
+// console.log(isProductionDomain());
 
 const solanaApiUrl = "https://api.mainnet.openverse.network";
 
