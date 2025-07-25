@@ -169,11 +169,11 @@ const fetchOrderData = async () => {
                 let index = 0;
                 console.log(res[i].result);
                 for (let h in etach) {
-                    if (etach[h].parsed?.type == "transfer" && etach[h].programId == "11111111111111111111111111111111") {
+                    if (etach[h].parsed?.type == "transferChecked" && etach[h].programId == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" || etach[index].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c") {
                         index = h;
                         break;
                     }
-                    if (etach[h].parsed?.type == "transferChecked" && etach[h].programId == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" || etach[index].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c") {
+                    if (etach[h].parsed?.type == "transfer" && etach[h].programId == "11111111111111111111111111111111") {
                         index = h;
                         break;
                     }
