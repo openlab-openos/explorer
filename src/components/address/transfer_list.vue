@@ -75,8 +75,27 @@
 
 
                         </td>
-                        <td style=" text-align: left; " :class="item.quantityType ? 'color0-255-179-1' : 'text-theme'
+                        <td v-if="props.toType" style=" text-align: left; " :class="item.quantityType ? 'color0-255-179-1' : 'text-theme'
                             ">
+                            <!-- <text style="cursor: pointer" @click="slot(
+                                item.quantity
+                            )"> {{
+                                titleUrl(item.quantity).url
+                                }}</text>
+
+
+                            <img v-if="titleUrl(quantity).type && titleUrl(item.quantity).assest"
+                                v-for="(datas, indexs) in titleUrl(item.quantity).certificates" :key="indexs"
+                                :src="datas.img" height="24" class="marginRight8" alt="">
+                            <text v-for="items, indexs in titleUrl(item.quantity).certificates" :key="indexs"
+                                :style="'background-color: ' + items.backColor"
+                                style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
+                                {{ items.code }}
+                            </text> -->
+                            <RenderText v-if="item.quantity" :address="item.quantity" />
+
+                        </td>
+                        <td v-else style=" text-align: left;" class="text-theme">
                             <!-- <text style="cursor: pointer" @click="slot(
                                 item.quantity
                             )"> {{
@@ -190,6 +209,10 @@ const props = defineProps({
     type: {
         type: String,
         default: ""
+    },
+    toType: {
+        type: Boolean,
+        default: true
     }
 })
 
@@ -288,27 +311,30 @@ const HandleList = (listItem) => {
             let primaryType = false;
             let quantityType = false;
             let owner = '';
-            if (instructions.length === 1) {
-                primary = firstInstruction?.parsed?.info?.source || '';
-                // primaryType = props.type ? (firstInstruction?.parsed?.info?.source == props.url ? true : ((firstInstruction?.parsed?.info?.source == firstInstruction?.parsed?.info?.destination ? true : false))) : false;
-                primaryType = false
-                quantity = firstInstruction?.parsed?.info?.destination || '';
-                // quantityType = props.type ? (firstInstruction?.parsed?.info?.source == props.url ? ((firstInstruction?.parsed?.info?.destination == props.url ? true : false)) : true) : false;
-                quantityType = false;
-                program = firstInstruction?.programId || '';
-                lamports = firstInstruction?.parsed?.info?.tokenAmount ? firstInstruction?.parsed?.info?.tokenAmount?.amount : firstInstruction?.parsed?.info?.lamports;
-                owner = firstInstruction?.parsed?.info?.source == firstInstruction?.parsed?.info?.destination ? firstInstruction?.parsed?.info?.destination : '';
-            } else if (instructions.length >= 2) {
-                primary = instructions[1]?.parsed?.info?.source || '';
-                primaryType = false
-                // primaryType = props.type ? (instructions[1]?.parsed?.info?.source == props.url ? true : (instructions[1]?.parsed?.info?.source == instructions[1]?.parsed?.info?.destination ? true : false)) : false;
-                quantity = instructions[1]?.parsed?.info?.destination || '';
-                // quantityType = props.type ? (instructions[1]?.parsed?.info?.source == props.url ? (instructions[1]?.parsed?.info?.destination == props.url ? true : false) : true) : false;
-                quantityType = false;
-                program = instructions[1]?.programId || '';
-                lamports = instructions[1]?.parsed?.info?.tokenAmount ? instructions[1]?.parsed?.info?.tokenAmount?.amount : instructions[1]?.parsed?.info?.lamports;
-                owner = instructions[1]?.parsed?.info?.source == instructions[1]?.parsed?.info?.destination ? instructions[1]?.parsed?.info?.owner : '';
-            }
+            let authority = '';
+            // if (instructions.length === 1) {
+            primary = firstInstruction?.parsed?.info?.source || '';
+            // primaryType = props.type ? (firstInstruction?.parsed?.info?.source == props.url ? true : ((firstInstruction?.parsed?.info?.source == firstInstruction?.parsed?.info?.destination ? true : false))) : false;
+            primaryType = false
+            quantity = firstInstruction?.parsed?.info?.destination || '';
+            // quantityType = props.type ? (firstInstruction?.parsed?.info?.source == props.url ? ((firstInstruction?.parsed?.info?.destination == props.url ? true : false)) : true) : false;
+            quantityType = false;
+            program = firstInstruction?.programId || '';
+            lamports = firstInstruction?.parsed?.info?.tokenAmount ? firstInstruction?.parsed?.info?.tokenAmount?.amount : firstInstruction?.parsed?.info?.lamports;
+            owner = firstInstruction?.parsed?.info?.source == firstInstruction?.parsed?.info?.destination ? firstInstruction?.parsed?.info?.destination : '';
+            authority = firstInstruction?.parsed?.info?.authority || '';
+            // } 
+            // else if (instructions.length >= 2) {
+            //     primary = instructions[1]?.parsed?.info?.source || '';
+            //     primaryType = false
+            //     // primaryType = props.type ? (instructions[1]?.parsed?.info?.source == props.url ? true : (instructions[1]?.parsed?.info?.source == instructions[1]?.parsed?.info?.destination ? true : false)) : false;
+            //     quantity = instructions[1]?.parsed?.info?.destination || '';
+            //     // quantityType = props.type ? (instructions[1]?.parsed?.info?.source == props.url ? (instructions[1]?.parsed?.info?.destination == props.url ? true : false) : true) : false;
+            //     quantityType = false;
+            //     program = instructions[1]?.programId || '';
+            //     lamports = instructions[1]?.parsed?.info?.tokenAmount ? instructions[1]?.parsed?.info?.tokenAmount?.amount : instructions[1]?.parsed?.info?.lamports;
+            //     owner = instructions[1]?.parsed?.info?.source == instructions[1]?.parsed?.info?.destination ? instructions[1]?.parsed?.info?.owner : '';
+            // }
             let token = firstInstruction.parsed.info.mint ? titleUrl(firstInstruction.parsed.info.mint).url : 'BTG'
             let time = timeSome(listItem[i].result.blockTime)
             // 创建对象
@@ -323,7 +349,8 @@ const HandleList = (listItem) => {
                 lamports,
                 token,
                 time,
-                owner
+                owner,
+                authority
             };
 
             // // console.log('处理后的项:', obj);
@@ -341,8 +368,12 @@ const HandleList = (listItem) => {
             ownerArray.value.push(owner);
         }
     }
+
     for (let j in array) {
         for (let i in ownerArray.value) {
+            if (array[j].authority == ownerArray.value[i]) {
+                array[j].primaryType = true;
+            }
             if (array[j].primary == ownerArray.value[i]) {
                 array[j].primaryType = true;
             }

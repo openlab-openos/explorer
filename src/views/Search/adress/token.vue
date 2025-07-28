@@ -150,7 +150,7 @@
                             <history-view :url="url"></history-view>
                         </el-tab-pane>
                         <el-tab-pane v-if="transfersType" :label="$t('transfer')" name="second">
-                            <transfer-view :url="url" :type="false" v-if="activeName == 'second'"></transfer-view>
+                            <transfer-view :url="url" :type="false" :toType="false" v-if="activeName == 'second'"></transfer-view>
                         </el-tab-pane>
                         <el-tab-pane :label="$t('account.holder') + ' ' + '(' + holdNumber + ')'" name="third">
                             <holder-view :url="url" :paramsId="paramsId" v-if="activeName == 'third'"></holder-view>
