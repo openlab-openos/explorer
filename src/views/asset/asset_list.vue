@@ -102,19 +102,19 @@
 <script setup>
 import {
     computed,
-    defineAsyncComponent,
+    // defineAsyncComponent,
     ref,
 } from 'vue'; // 假设这是在一个Vue组件中
 
 import { useRouter } from 'vue-router';
 
-import stable from '../../assets/assetsLogo/stable.png';
-import unknown from '../../assets/assetsLogo/unknown.png';
-import unsafe from '../../assets/assetsLogo/unsafe.png';
-import vrc10 from '../../assets/assetsLogo/vrc10.png';
-import vrc11 from '../../assets/assetsLogo/vrc11.png';
-import vrc12 from '../../assets/assetsLogo/vrc12.png';
-import vrc20 from '../../assets/assetsLogo/vrc20.png';
+// import stable from '../../assets/assetsLogo/stable.png';
+// import unknown from '../../assets/assetsLogo/unknown.png';
+// import unsafe from '../../assets/assetsLogo/unsafe.png';
+// import vrc10 from '../../assets/assetsLogo/vrc10.png';
+// import vrc11 from '../../assets/assetsLogo/vrc11.png';
+// import vrc12 from '../../assets/assetsLogo/vrc12.png';
+// import vrc20 from '../../assets/assetsLogo/vrc20.png';
 import LoadingVue from '../../components/block/loading.vue';
 import { titleUrl } from '../../components/method/title_url';
 import { tokenList } from './asset';
@@ -146,15 +146,15 @@ const handlePageChange = (newPage) => {
 tokenList().then((res) => {
 
 
-    let showData = res.data;
+    const showData = res.data;
 
     dataArray.value = showData;
     // console.log(showData);
 
     // console.log(showData);
-    for (let i in showData) {
+    for (const i in showData) {
         if (showData[i].token) {
-            for (let j in showData[i].token.certificates) {
+            for (const j in showData[i].token.certificates) {
                 switch (showData[i].token.certificates[j].certificate_code) {
                     case 'Official':
                         showData[i].token.certificates[j].backColor = '#229cF2'
@@ -185,8 +185,8 @@ tokenList().then((res) => {
             }
         }
     }
-    let array = [];
-    for (let i in showData) {
+    const array = [];
+    for (const i in showData) {
         if (showData[i].token) {
             array.push(showData[i])
         }
@@ -216,31 +216,26 @@ const pubbley = () => {
 };
 loadingType.value = true;
 
-const imageType = (type) => {
-    switch (type) {
-        case 'unknown':
-            return unknown
-            break;
-        case 'stable':
-            return stable
-            break;
-        case 'unsafe':
-            return unsafe
-            break;
-        case 'vrc10':
-            return vrc10
-            break;
-        case 'vrc11':
-            return vrc11
-            break;
-        case 'vrc12':
-            return vrc12
-        case 'vrc20':
-            return vrc20
-    }
-}
+// const imageType = (type) => {
+//     switch (type) {
+//         case 'unknown':
+//             return unknown
+//         case 'stable':
+//             return stable
+//         case 'unsafe':
+//             return unsafe
+//         case 'vrc10':
+//             return vrc10
+//         case 'vrc11':
+//             return vrc11
+//         case 'vrc12':
+//             return vrc12
+//         case 'vrc20':
+//             return vrc20
+//     }
+// }
 const come = (num) => {
-    let reg =
+    const reg =
         num.toString().indexOf(".") > -1
             ? /(\d)(?=(\d{3})+\.)/g
             : /(\d)(?=(\d{3})+$)/g;
