@@ -180,6 +180,9 @@ watchEffect(async () => {
             //     }
             // });
             // 截取前100条数据
+            tokenList.sort((a, b) => {
+                return b.holders - a.holders;
+            });
             dataArray = tokenList.slice(0, 100);
             totalItems.value = dataArray.length;
             // console.log(dataArray);
@@ -189,9 +192,7 @@ watchEffect(async () => {
             //     let holdeNumber = await getTokenAccounts(dataArray[i].state.mint);
             //     dataArray[i].holders = holdeNumber;
             // }
-            dataArray.sort((a, b) => {
-                return b.holders - a.holders;
-            });
+
             // console.log(dataArray);
             loading.value = false; // 开始加载
             historyData.value = dataArray; // 更新数据列表
