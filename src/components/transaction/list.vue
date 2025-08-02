@@ -168,19 +168,24 @@ const fetchOrderData = async () => {
                 let etach = res[i].result.transaction.message.instructions;
                 let index = 0;
                 // console.log(res[i].result);
-                for (let h in etach) {
-                    if (etach[h].parsed?.type == "transferChecked" && etach[h].programId == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" || etach[index].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c") {
+                console.log(etach);
+
+                for (let h = 0 ; h < etach.length ; h ++) {
+                    if (etach[h].parsed?.type == "transferChecked" && etach[h].programId == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" || etach[h].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c") {
                         index = h;
-                        break;
-                    }
-                    if (etach[h].parsed?.type == "transfer" && etach[h].programId == "11111111111111111111111111111111") {
+                        // break;
+                    } else if (etach[h].parsed?.type == "transfer" && etach[h].programId == "11111111111111111111111111111111") {
                         index = h;
-                        break;
+                        // break;
                     }
-                    index = etach.length - 1
                 }
 
+            //     console.log(index);
+            //     console.log(etach[index]);
+            //     console.log(etach[1].parsed?.type);
 
+            //    console.log( etach[index].parsed?.type == "transferChecked");
+               
                 if (etach[index].parsed?.type == "transfer" && etach[index].programId == "11111111111111111111111111111111") {
                     let data = {
                         type: "transfer",
@@ -192,7 +197,8 @@ const fetchOrderData = async () => {
                         blockTime: res[i].result.blockTime,
                     }
                     arrayData.value.push(data);
-                } else if (etach[index].parsed?.type == "transferChecked" && etach[index].programId == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" || etach[index].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c") {
+                } else if (etach[index].parsed?.type == "transferChecked") {
+                    console.log(123);
 
                     let data = {
                         type: "token_transfer",
