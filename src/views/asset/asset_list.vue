@@ -69,10 +69,11 @@
                                     {{ item ? item.holders : 0 }}
                                 </td>
                                 <td>
-                                    $ {{ come(item.market_value ? item.market_value : '0') }}
+                                    $ {{ come(smartFormatNumber(item.market_value ? item.market_value : '0'))  }}
                                 </td>
                                 <td>
-                                    {{ item.price ? '$' : '' }} {{ item.price ? item.price : 0 }}
+                                    {{ item.price ? '$' : '' }} 
+                                    {{ come(smartFormatNumber(item.price ? item.price : '0'))  }}
                                     <img v-if="item.price_icon" :src="imgUrl + '/' + item.price_icon" height="24"
                                         class="marginRight8" alt="">
                                 </td>
@@ -153,19 +154,14 @@ const handlePageChange = (newPage) => {
 };
 watchEffect(async () => {
     try {
-        const assets = await tokenList();
-        const res = await tokenProgram();
-        res.sort((a, b) => {
-            return b.holders - a.holders;
-        });
-        const combined = [...new Set([...assets, ...res])];
-        const uniqueArray = Array.from(
-            combined.reduce((map, item) => map.set(item.address, item), new Map()).values()
-        );
+        const assets = await tokenList(1);
+        // const res = await tokenProgram(1);
+        console.log('assets', assets);
+        
         // const uniqueArray = [...combined,...combined,...combined]
         // console.log(uniqueArray);
-        historyData.value = uniqueArray;
-        totalItems.value = uniqueArray.length;
+        historyData.value = assets.data;
+        totalItems.value =assets.data.length;
         loading.value = true;
     } catch (error) {
         console.error('Error in watchEffect:', error);

@@ -33,7 +33,7 @@
                     <tr v-for="(item, index) in paginatedHistoryData" :key="index">
                         <td class="text-theme">
                             <text style="cursor: pointer" @click="pubbtx(item.signature)">{{ stringcate(item.signature)
-                                }}</text>
+                            }}</text>
                         </td>
                         <td>
                             <button type="button" style="
@@ -136,8 +136,8 @@
 
                         </td>
                         <td>
-                            {{ come(smartFormatNumber(
-                                item.lamports / 1000000000
+                            {{ come((
+                                item.lamports
                             ))
                             }}
                         </td>
@@ -320,7 +320,7 @@ const HandleList = (listItem) => {
             // quantityType = props.type ? (firstInstruction?.parsed?.info?.source == props.url ? ((firstInstruction?.parsed?.info?.destination == props.url ? true : false)) : true) : false;
             quantityType = false;
             program = firstInstruction?.programId || '';
-            lamports = firstInstruction?.parsed?.info?.tokenAmount ? firstInstruction?.parsed?.info?.tokenAmount?.amount : firstInstruction?.parsed?.info?.lamports;
+            lamports = firstInstruction?.parsed?.info?.tokenAmount ? firstInstruction?.parsed?.info?.tokenAmount?.uiAmount : firstInstruction?.parsed?.info?.lamports;
             owner = firstInstruction?.parsed?.info?.source == firstInstruction?.parsed?.info?.destination ? firstInstruction?.parsed?.info?.destination : '';
             authority = firstInstruction?.parsed?.info?.authority || '';
             // } 
