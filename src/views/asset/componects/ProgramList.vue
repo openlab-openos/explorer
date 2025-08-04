@@ -156,7 +156,7 @@ const come = (num) => {
 watchEffect(async () => {
     try {
         const res = await tokenList();
-        console.log("原始tokenList数据:", res);
+        // console.log("原始tokenList数据:", res);
         let dataArray = []
         if (!res.error) {
             const tokenList = [];
@@ -181,7 +181,7 @@ watchEffect(async () => {
             // 截取前100条数据
             dataArray = tokenList.slice(0, 100);
             totalItems.value = dataArray.length;
-            console.log(dataArray);
+            // console.log(dataArray);
 
             // for (let i in dataArray) {
             //     // 初始化持有人数量缓存
@@ -191,7 +191,7 @@ watchEffect(async () => {
             // dataArray.sort((a, b) => {
             //     return b.holders - a.holders;
             // });
-            console.log(dataArray);
+            // console.log(dataArray);
             loading.value = false; // 开始加载
             historyData.value = dataArray; // 更新数据列表
             // // 加载当前页的持有人数据

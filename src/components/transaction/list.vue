@@ -168,19 +168,20 @@ const fetchOrderData = async () => {
                 let etach = res[i].result.transaction.message.instructions;
                 let index = 0;
                 // console.log(res[i].result);
+                // console.log(etach);
                 console.log(etach);
-
+                
                 for (let h = 0 ; h < etach.length ; h ++) {
                     if (etach[h].parsed?.type == "transferChecked" && etach[h].programId == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" || etach[h].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c") {
                         index = h;
-                        // break;
+                        break;
                     } else if (etach[h].parsed?.type == "transfer" && etach[h].programId == "11111111111111111111111111111111") {
                         index = h;
-                        // break;
+                        break;
                     }
                 }
 
-            //     console.log(index);
+                console.log(index);
             //     console.log(etach[index]);
             //     console.log(etach[1].parsed?.type);
 
@@ -198,7 +199,7 @@ const fetchOrderData = async () => {
                     }
                     arrayData.value.push(data);
                 } else if (etach[index].parsed?.type == "transferChecked") {
-                    console.log(123);
+                    // console.log(123);
 
                     let data = {
                         type: "token_transfer",

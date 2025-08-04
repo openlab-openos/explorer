@@ -43,7 +43,7 @@ export async function tokenList() {
 
     try {
         const res = await chainRequest(method);
-        console.log(res);
+        // console.log(res);
         let array = res.result;
         const firstSet = new Set(firstArray);
 
