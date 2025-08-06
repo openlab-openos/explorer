@@ -10,8 +10,8 @@
                 {{ token_name ? (titleUrl(url).type ? titleUrl(url).url : (token_name == url ? 'Token' : token_name))
                     : 'Token' }}
                 <img v-if="titleUrl(url).type && titleUrl(url).assest"
-                    v-for="(datas, indexs) in titleUrl(url).certificates" :key="indexs" :src="datas.img"
-                    height="24" class="marginRight8" alt=""  @click="pubbley" style="cursor: pointer;">
+                    v-for="(datas, indexs) in titleUrl(url).certificates" :key="indexs" :src="datas.img" height="24"
+                    class="marginRight8" alt="" @click="pubbley" style="cursor: pointer;">
                 <!-- <text v-for="items, indexs in titleUrl(url).certificates" :key="indexs"
                     :style="'background-color: ' + items.backColor"
                     style="border-radius: 5px;padding: 2px 4px;margin: 0px 5px 0 0;font-weight: 500;font-size: 16px;">
@@ -44,7 +44,7 @@
                                 <td>{{ $t("account.symbol") }} </td>
                                 <td class="text-end"> {{ mintToken ? (mintToken.symbol ? mintToken.symbol : 'N/A') :
                                     'N/A'
-                                    }} </td>
+                                }} </td>
                                 <!-- <td class="text-end"> {{ mintToken.symbol ? mintToken.symbol : 'N/A' }} </td> -->
                             </tr>
                             <tr>
@@ -150,16 +150,37 @@
                             <history-view :url="url"></history-view>
                         </el-tab-pane>
                         <el-tab-pane v-if="transfersType" :label="$t('transfer')" name="second">
-                            <transfer-view :url="url" :type="false" :toType="false" v-if="activeName == 'second'"></transfer-view>
+                            <transfer-view :url="url" :type="false" :toType="false"
+                                v-if="activeName == 'second'"></transfer-view>
                         </el-tab-pane>
                         <el-tab-pane :label="$t('account.holder') + ' ' + '(' + holdNumber + ')'" name="third">
                             <holder-view :url="url" :paramsId="paramsId" v-if="activeName == 'third'"></holder-view>
                         </el-tab-pane>
                         <el-tab-pane :label="$t('Margin-record')" name="fourth">
-                            <ReserveView :url="url" :paramsId="paramsId" v-if="activeName == 'fourth'" :type="false">
+                            <ReserveView :url="url" ref="reserveViewRef" :paramsId="paramsId"
+                                v-if="activeName == 'fourth'" :type="false">
                             </ReserveView>
                         </el-tab-pane>
                     </el-tabs>
+                    <div style="position: absolute;top: 0px;right: 0px;z-index: 9999999;" v-if="activeName == 'fourth'">
+                        <div style="padding: 16px 16px 0 0 ;">
+                            <div class="menu-item dropdown dropdown-mobile-full">
+                                <a href="#" data-bs-toggle="dropdown" data-bs-display="static" class="menu-link scales"
+                                    style="white-space: nowrap;text-decoration: none;color: #fff;">
+                                    {{ nameText }}
+                                    <!-- <img src="https://cdn.openverse.network/brands/openverse/icon_128.png" width="32" alt=""> -->
+                                    <i class="bi bi-chevron-down" style="margin: 5px;"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end me-lg-3 fs-11px mt-1">
+                                    <div class="dropdown-item align-items-center" :class="item.type ? 'text-theme' : ''"
+                                        style="cursor: pointer;text-align: center;" v-for="(item, index) in selectData"
+                                        :key="index" @click="selsetClick(index)">
+                                        {{ item.name }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </card-body>
             </card>
         </div>
@@ -203,6 +224,25 @@ const holdNumber = ref();
 const router = useRouter();
 const mintToken = ref();
 const activeName = ref('first');
+// const activeName = ref('fourth');
+const nameText = ref("One month");
+
+const selectData = ref([
+    { name: 'One Month', value: 'month' },
+    { name: 'One Year', value: 'year' },
+])
+const reserveViewRef = ref(null)
+
+const selsetClick = (index) => {
+    // console.log(index);
+    nameText.value = selectData.value[index].name;
+    console.log(index);
+    
+    if (reserveViewRef.value) {
+        console.log('reserveViewRef.value', reserveViewRef.value);
+        reserveViewRef.value.handleSelect(selectData.value[index].value);
+    }
+}
 function isProductionDomain() {
     const hostname = window.location.hostname;
     // 检测是否包含 'devnet.' 前缀
@@ -220,7 +260,6 @@ const props = defineProps({
         default: ''
     }
 });
-
 
 // const url = ref("AmXJDzPZoXJX2buwbeg9aL1WUH7CwoNMw2JYFwk2LbKD");
 const url = ref(props.url);
@@ -377,3 +416,43 @@ const toFexedStake = (num, decimals) => {
 
 };
 </script>
+
+<style scoped>
+::v-deep .el-tabs__active-bar {
+    display: none !important;
+}
+
+::v-deep .el-tabs__item {
+    /* background-color: #34434f; */
+    /* background-color: rgba(255, 255, 255, 0.1); */
+    margin-left: 10px;
+    text-align: center;
+    padding: 0 !important;
+    padding: 0 12px !important;
+    border-radius: 10px;
+    /* box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.2); */
+    box-shadow: 6px 6px 6px 0px rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.08);
+
+}
+
+.dropdown-mobile-full {
+    height: 40px;
+    line-height: 40px;
+    background-color: rgba(255, 255, 255, 0.08);
+    margin-left: 10px;
+    text-align: center;
+    padding: 0 !important;
+    padding: 0 12px !important;
+    border-radius: 10px;
+    box-shadow: 6px 6px 8px #00000014;
+}
+
+::v-deep .el-tabs__nav {
+    width: 100%;
+}
+
+::v-deep .el-tabs__item.is-top:last-child {
+    float: right;
+}
+</style>

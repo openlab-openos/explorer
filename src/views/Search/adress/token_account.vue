@@ -4,7 +4,7 @@
             <img :src="token_img ? token_img : ''" alt="" class="marginRight10 imgWigth25" v-if="token_img">
             <img v-if="titleUrl(token_name).type" :src="titleUrl(token_name).img" class="marginRight10 imgWigth25">
             <text> {{ $t("account.tokenAccount") }} {{ token_name ? (titleUrl(url).find ? titleUrl(url).url : '') : ''
-            }}
+                }}
             </text>
             <img v-if="titleUrl(url).type && titleUrl(url).assest" v-for="(datas, indexs) in titleUrl(url).certificates"
                 :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
@@ -48,7 +48,7 @@
                                 <td>{{ $t("account.state") }} </td>
                                 <td class="text-end">{{ tokenData.isFrozen ? $t("account.frozen") :
                                     $t("account.initialize")
-                                    }} </td>
+                                }} </td>
                             </tr>
                             <tr>
                                 <td>{{ $t("account.Owner") }} </td>
@@ -272,3 +272,15 @@ const pubbtx = (url) => {
 }
 
 </script>
+
+<style scoped>
+::v-deep .el-tabs__item {
+    background-color: rgba(255, 255, 255, 0.08);
+    margin-left: 10px;
+    text-align: center;
+    padding: 0 !important;
+    padding: 0 12px !important;
+    border-radius: 10px;
+    box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.08);
+}
+</style>
