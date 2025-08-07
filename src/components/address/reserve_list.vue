@@ -2,10 +2,10 @@
   <div>
     <div class="segment">
       <div class="segment-item">
-        <div class="segment-first">{{ newSegment[0] }} —— {{ newSegment[newSegment.length - 1] }}</div>
+        <div class="segment-first">{{ newSegmented[0] }} —— {{ newSegmented[newSegmented.length - 1] }}</div>
         <div class="segment-second">
           <div><span class="Unlocked">Unlocked Reserve</span></div>
-          <div><span class="Withdrawable">Withdrawable Reserve</span></div>
+          <div><span class="Withdrawable">Locked Reserve</span></div>
         </div>
       </div>
       <div class="segment-item">
@@ -13,9 +13,9 @@
           smartFormatNumber(amountReserve(historyData,
             false))
             }}</text> BTG </div>
-        <div class="segment-fourth segment-price">{{ $t("have-been-released") }} <text> {{
+        <!-- <div class="segment-fourth segment-price">{{ $t("have-been-released") }} <text> {{
           smartFormatNumber(amountReserve(historyData,
-            true)) }}</text> BTG </div>
+            true)) }}</text> BTG </div> -->
       </div>
     </div>
     <!-- <div v-if="!reserveType" class="releasedBox">
@@ -94,17 +94,18 @@
 import {
   computed,
   defineProps,
+  nextTick,
   onMounted,
   onUnmounted,
   ref,
   watch,
-  nextTick
 } from 'vue';
-import TimeData from "./timeData.vue"
+
+import dayjs from 'dayjs';
+// import TimeData from "./timeData.vue"
 import * as echarts from 'echarts';
 import moment from 'moment';
 import { useRouter } from 'vue-router';
-import { toggleView, currentView, newSegment, dateRange } from "./calculation.js"
 
 import { useAppVariableStore } from '@/stores/app-variable';
 
@@ -117,7 +118,14 @@ import { decodeLockAccount } from '../../request/record';
 // import { setData } from '../../views/Search/adress/components/event-bus';
 // import { proportionAmount } from '../method/proportion_account';
 import { titleUrl } from '../method/title_url';
-import RenderText from "../Render/text.vue"
+import RenderText from '../Render/text.vue';
+import {
+  currentView,
+  dateRange,
+  newSegment,
+  toggleView,
+  newSegmented
+} from './calculation.js';
 
 const props = defineProps({
   url: { type: String, default: '' },
@@ -289,13 +297,6 @@ const groupBySerialNumber = (arr) => {
     unmergedReleasedArray.push(...group.unreleasedArray);
   });
 
-
-  // releasedArray.value = mergedReleasedArray;
-  // unreleasedArray.value = unmergedReleasedArray;
-  // echartReleased.value = amountFunction(mergedReleasedArray, true);
-  // echartReleased.value = amountFunction(unmergedReleasedArray, true);
-  // echartUnreleased.value = amountFunction(unmergedReleasedArray, false);
-
   return Object.values(grouped);
 };
 
@@ -386,49 +387,103 @@ const initChart = () => {
 const updateDateRange = (value) => {
   updateChart();
 };
-
+const endPercent = ref((6 / newSegment.value.length) * 100);
 const updateChart = () => {
   if (!chartInstance.value) return;
 
   chartInstance.value.setOption({
     title: { show: false },
-    tooltip: {},
+    tooltip: {
+      trigger: 'item',
+      // confine: true,
+       backgroundColor: "rgba(52, 67, 79, 0.8)",
+      formatter: function (params) {
+        return `<div style="color: white;padding: 5px; " >  
+           <div style="padding-bottom:12px" ><span class="Unlocked">  ${params.seriesName} </span></div>
+          <div> ${params.name}&nbsp;<text style="color:${params.color} " >${params.value}</text> BTG</div>
+          </div>`;
+      },
+    },
+    grid: {
+      tooltip: {
+        borderColor: "rgba(51, 51, 51, 0)"
+      }
+    },
     xAxis: {
       axisTick: {
-        alignWithLabel: true
+        alignWithLabel: true,
       },
-      data: newSegment.value
+      data: newSegment.value,
+      axisLabel: {
+        // interval: 0,
+        lineStyle: {
+          // color: 'rgba(255, 255, 255, 0.8)' // X轴标签颜色（例如白色半透明）
+        },
+      },
+      axisLine: {
+        lineStyle: {
+          color: function (params) {
+            if (dayjs().format('MMM. Do') == params) {
+              // console.log(params);
+              return 'rgba(255, 183, 0, 1)';
+            }
+            if (dayjs().format('MMM. YYYY') == params) {
+              return 'rgba(255, 183, 0, 1)';
+            }
+            return 'rgba(255, 255, 255, 0.4)';
+          }
+        }
+      },
+
     },
     yAxis: {
+      name: '(BTG)',
       show: true,
       splitLine: {
         lineStyle: {
           color: 'rgba(255, 255, 255, 0.2)' // 网格线颜色（例如淡灰色半透明）
-        }
+          // color: 'rgba(255, 255, 255, 0.2)' // 网格线颜色（例如淡灰色半透明）
+        },
       },
       axisLine: {
         lineStyle: {
           color: 'rgba(255, 255, 255, 0.8)' // Y轴线颜色（例如淡灰色半透明）
         }
+      },
+      axisLabel: {
+        formatter: function (value) {
+          return value + ' ' + 'BTG';
+        },
       }
     },
     series: [
       {
-        name: 'reserve',
-        type: 'bar',
-        // data: [13, 23, 4, 5, 2, 2, 4, 2, 41, 4, 52, 45],
-        data: echartReleased.value,
-        color: `rgba(0, 255, 179, 1)`
-        // color: `rgba(${appVariable.color.themeRgb}, 0.4)`
-      },
-      {
-        name: 'redemption',
+        name: 'Locked Reserve',
         type: 'bar',
         data: echartUnreleased.value,
         // data: [13, 4, 5, 62, 3, 5, 1, 3, 5, 6, 5, 35, 6],
-        color: 'rgba(34, 156, 242, 1)'
+        color: 'rgba(34, 156, 242, 1)',
+        itemStyle: {
+          normal: {
+            barBorderRadius: [8, 8, 0, 0]
+          }
+        }
         // color: `rgba(${appVariable.color.themeRgb}, 0.8)`
-      }
+      },
+      {
+        name: 'Unlocked Reserve',
+        type: 'bar',
+        // data: [13, 23, 4, 5, 2, 2, 4, 2, 41, 4, 52, 45],
+        data: echartReleased.value,
+        color: `rgba(0, 255, 179, 1)`,
+        itemStyle: {
+          normal: {
+            barBorderRadius: [8, 8, 0, 0],
+          }
+        }
+        // color: `rgba(${appVariable.color.themeRgb}, 0.4)`
+      },
+
     ]
   });
 };
@@ -445,6 +500,7 @@ const handleSelect = async (index) => {
   toggleView(index);
   await nextTick();
   updateDateRange(newSegment.value)
+  endPercent.value = (6 / newSegment.value.length) * 100;
   mouthReleased.value = Array(Object.keys(newSegment.value).length).fill(0);
   mouthUnreleased.value = Array(Object.keys(newSegment.value).length).fill(0);
   DataProcessing(index)
@@ -466,11 +522,97 @@ const DataProcessing = (newSegment) => {
   }
   if (newSegment == 'month') {
     processData()
-
-  } else {
+  }
+  if (newSegment == 'year') {
     MonthprocessData()
   }
+  // 新增处理 newSegment == 'all' 的逻辑
+  if (newSegment == 'all') {
+    if (historyData.value.length === 0) {
+      return;
+    }
+    // 获取第一条数据的开始时间和最后一条数据的结束时间
+    const firstItem = historyData.value[0];
+    const lastItem = historyData.value[historyData.value.length - 1];
+    const firstStartTime = Number(firstItem.startTime);
+    const lastEndTime = Number(lastItem.endTime);
+
+    // 转换为月份数
+    const firstStartMonth = new Date(firstStartTime * 1000).getMonth();
+    const lastEndMonth = new Date(lastEndTime * 1000).getMonth();
+    const currentMonth = new Date().getMonth();
+
+    // 计算间隔月份
+    const monthDiff = Math.abs(lastEndMonth - firstStartMonth);
+
+    // 判断是否为本月的前8个月或后4个月
+    const isWithinRange = (
+      (firstStartMonth <= currentMonth && firstStartMonth >= currentMonth - 8) ||
+      (lastEndMonth >= currentMonth && lastEndMonth <= currentMonth + 4)
+    );
+
+    if (isWithinRange || monthDiff <= 12) {
+      // 如果在范围内或间隔小于等于12个月，使用MonthprocessData
+      MonthprocessData();
+    } else {
+      // 否则，以开始时间月份为始，结束时间月份为尾绘制表格
+      CustomMonthRangeProcess(firstStartTime, lastEndTime);
+    }
+  }
 };
+
+// 添加自定义月份范围处理函数
+function CustomMonthRangeProcess(startTime, endTime) {
+  // 重置数组
+  mouthReleased.value = [];
+  mouthUnreleased.value = [];
+
+  // 获取开始和结束的月份范围
+  const startDate = new Date(startTime * 1000);
+  const endDate = new Date(endTime * 1000);
+
+  // 生成开始月份到结束月份的所有月份
+  const months = [];
+  let currentDate = new Date(startDate);
+  currentDate.setDate(1); // 确保从月份第一天开始
+
+  while (currentDate <= endDate) {
+    const monthStr = formatTimeToMonth(currentDate.getTime() / 1000);
+    months.push(monthStr);
+    currentDate.setMonth(currentDate.getMonth() + 1);
+  }
+
+  // 更新newSegment.value为自定义范围
+  newSegment.value = months;
+
+  // 重置数据数组
+  mouthReleased.value = Array(months.length).fill(0);
+  mouthUnreleased.value = Array(months.length).fill(0);
+
+  // 处理数据
+  historyData.value.forEach(item => {
+    const amount = Number(item.amount) || 0;
+
+    // 处理startTime
+    const startMonthStr = formatTimeToMonth(item.startTime);
+    const startIndex = months.findIndex(month => month === startMonthStr);
+    if (startIndex !== -1) {
+      mouthReleased.value[startIndex] += amount / 1000000000;
+    }
+
+    // 处理endTime
+    const endMonthStr = formatTimeToMonth(item.endTime);
+    const endIndex = months.findIndex(month => month === endMonthStr);
+    if (endIndex !== -1) {
+      mouthUnreleased.value[endIndex] += amount / 1000000000;
+    }
+  });
+
+  echartReleased.value = mouthReleased.value;
+  echartUnreleased.value = mouthUnreleased.value;
+
+  updateDateRange(newSegment.value);
+}
 
 function formatTimeToDay(timestamp) {
   const date = new Date(Number(timestamp) * 1000);
@@ -522,7 +664,6 @@ function processData() {
   updateDateRange(newSegment.value)
 
 }
-
 // 月份时间处理
 
 function formatTimeToMonth(timestamp) {
@@ -589,7 +730,7 @@ function MonthprocessData() {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  padding: 0 3%;
+  padding: 0 5%;
 }
 
 .segment-first {
@@ -607,15 +748,17 @@ function MonthprocessData() {
 .segment-price {
   font-size: 18px;
   font-weight: 500;
+  text-align: end;
 }
 
-.segment-third {}
+.segment-price {
+  font-size: 16px;
+}
+
 
 .segment-third text {
   color: #4C9AEB;
 }
-
-.segment-fourth {}
 
 .segment-fourth text {
   color: rgba(0, 255, 179, 1);
@@ -633,7 +776,7 @@ function MonthprocessData() {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: #28a745;
+  background-color: rgba(0, 255, 179, 1);
   margin-right: 6px;
   vertical-align: middle;
 }

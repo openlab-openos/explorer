@@ -34,6 +34,14 @@ function formatDate(date) {
     // return `${month} ${day}${suffix}, ${year}`;
     return `${month} ${day}${suffix}`;
 }
+function formatDates(date) {
+    const month = months[date.getMonth()];
+    const day = date.getDate();
+    const suffix = getOrdinalSuffix(day);
+    const year = date.getFullYear();
+    return `${month} ${day}${suffix}, ${year}`;
+    // return `${month} ${day}${suffix}`;
+}
 
 /**
  * 计算时间范围
@@ -77,13 +85,16 @@ const formattedRange = computed(() => {
 const timeSegments = computed(() => {
     const { start, end } = dateRange.value;
     const segments = [];
+    const segment = [];
 
     if (currentView.value === 'month') {
         // 月视图：按天生成
         const current = new Date(start);
         while (current <= end) {
             segments.push(formatDate(new Date(current)));
+            segment.push(formatDates(new Date(current)));
             current.setDate(current.getDate() + 1);
+            // current.setDate(current.getDate() + 1);
         }
     } else {
         // 年视图：按月生成
@@ -91,27 +102,36 @@ const timeSegments = computed(() => {
         while (current <= end) {
             const year = current.getFullYear();
             const month = months[current.getMonth()];
-            segments.push(`${month} ${year}`);
+            // segments.push(`${month} ${year}`);
+            // segment.push(`${month} ${year}`);
+            segments.push(formatDate(new Date(current)));
+            segment.push(formatDates(new Date(current)));
             current.setMonth(current.getMonth() + 1);
         }
     }
 
-    return segments;
+    return { segments, segment };
 });
 
 /**
  * 切换视图模式
  */
 const toggleView = (view) => {
-    
+
     currentView.value = view;
 };
 
 const newSegment = ref([]);
+const newSegmented = ref([]);
 
 // 监听时间范围变化，在控制台打印时间段数组
 watch(timeSegments, (newSegments) => {
-    newSegment.value = newSegments;
+    console.log(newSegments);
+
+    newSegment.value = newSegments.segments;
+    newSegmented.value = newSegments.segment;
+    console.log(newSegmented.value);
+
 }, { immediate: true });
 
-export { currentView, toggleView, timeSegments, formattedRange, newSegment,dateRange };
+export { currentView, toggleView, timeSegments, formattedRange, newSegment, dateRange, newSegmented };

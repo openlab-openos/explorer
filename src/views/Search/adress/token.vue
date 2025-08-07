@@ -44,7 +44,7 @@
                                 <td>{{ $t("account.symbol") }} </td>
                                 <td class="text-end"> {{ mintToken ? (mintToken.symbol ? mintToken.symbol : 'N/A') :
                                     'N/A'
-                                }} </td>
+                                    }} </td>
                                 <!-- <td class="text-end"> {{ mintToken.symbol ? mintToken.symbol : 'N/A' }} </td> -->
                             </tr>
                             <tr>
@@ -228,16 +228,16 @@ const activeName = ref('first');
 const nameText = ref("One month");
 
 const selectData = ref([
-    { name: 'One Month', value: 'month' },
-    { name: 'One Year', value: 'year' },
+    { name: 'All', value: 'all' },
+    { name: 'Per Year', value: 'year' },
+    { name: 'Per Month', value: 'month' },
 ])
 const reserveViewRef = ref(null)
 
 const selsetClick = (index) => {
     // console.log(index);
     nameText.value = selectData.value[index].name;
-    console.log(index);
-    
+
     if (reserveViewRef.value) {
         console.log('reserveViewRef.value', reserveViewRef.value);
         reserveViewRef.value.handleSelect(selectData.value[index].value);
