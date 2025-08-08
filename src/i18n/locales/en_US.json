@@ -284,7 +284,10 @@
         "pubkey": "Pubkey",
         "timeRemaining": "Time Remaining",
         "Amount": "Amount",
-        "type": "Status"
+        "type": "Status",
+        "All":"All",
+        "PerYear":"Per Year",
+        "PerMonth":"Per Month"
     },
     "nede": {
         "openverse_mainnet": "Openverse Mainnet",

@@ -2,6 +2,7 @@
   <div>
     <div class="segment">
       <div class="segment-item">
+        {{ newSegmented.length}}
         <div class="segment-first">{{ newSegmented[0] }} —— {{ newSegmented[newSegmented.length - 1] }}</div>
         <div class="segment-second">
           <div><span class="Unlocked">Unlocked Reserve</span></div>
@@ -126,6 +127,7 @@ import {
   toggleView,
   newSegmented
 } from './calculation.js';
+// console.log(newSegmented.value);
 
 const props = defineProps({
   url: { type: String, default: '' },
@@ -143,10 +145,11 @@ const paramsId = ref(props.paramsId);
 const reserveType = ref(props.type);
 const releasedArray = ref([]);
 const unreleasedArray = ref([]);
+const dataList = ref([]);
 
 const echartReleased = ref([]);
 const echartUnreleased = ref([]);
-const selectAddress = ref('One month'); // 初始值设为value
+const selectAddress = ref('Per Month'); // 初始值设为value
 const weekArray = ref([]);
 const chartInstance = ref(null); // 保存ECharts实例
 
@@ -159,11 +162,11 @@ const paginatedHistoryData = computed(() => {
 });
 const router = useRouter();
 const totalItems = ref(0);
-const nameText = ref("One month");
+const nameText = ref("Per Month");
 
 
 const selectData = ref([
-  { name: 'One Month', value: '30' },
+  { name: 'Per Month', value: '30' },
   { name: 'One Year', value: '365' },
 ])
 
@@ -396,7 +399,7 @@ const updateChart = () => {
     tooltip: {
       trigger: 'item',
       // confine: true,
-       backgroundColor: "rgba(52, 67, 79, 0.8)",
+      backgroundColor: "rgba(52, 67, 79, 0.8)",
       formatter: function (params) {
         return `<div style="color: white;padding: 5px; " >  
            <div style="padding-bottom:12px" ><span class="Unlocked">  ${params.seriesName} </span></div>
@@ -424,7 +427,6 @@ const updateChart = () => {
         lineStyle: {
           color: function (params) {
             if (dayjs().format('MMM. Do') == params) {
-              // console.log(params);
               return 'rgba(255, 183, 0, 1)';
             }
             if (dayjs().format('MMM. YYYY') == params) {
@@ -493,6 +495,16 @@ onUnmounted(() => {
     chartInstance.value.dispose();
     chartInstance.value = null;
   }
+});
+
+onMounted(async () => {
+  toggleView('month');
+  await nextTick();
+  updateDateRange(newSegment.value)
+  endPercent.value = (6 / newSegment.value.length) * 100;
+  mouthReleased.value = Array(Object.keys(newSegment.value).length).fill(0);
+  mouthUnreleased.value = Array(Object.keys(newSegment.value).length).fill(0);
+  DataProcessing('month')
 });
 
 // 父组件调用
@@ -681,7 +693,6 @@ function MonthprocessData() {
   // 重置数组（避免重复累加）
   mouthReleased.value = Array.from({ length: newSegment.value.length }, () => 0);
   mouthUnreleased.value = Array.from({ length: newSegment.value.length }, () => 0);
-
   historyData.value.forEach(item => {
     const amount = Number(item.amount) || 0; // 转换金额为数字
 
@@ -702,7 +713,6 @@ function MonthprocessData() {
   echartReleased.value = mouthReleased.value;
   echartUnreleased.value = mouthUnreleased.value;
   updateDateRange(newSegment.value)
-
 }
 
 </script>

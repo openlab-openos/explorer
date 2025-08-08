@@ -282,7 +282,10 @@
         "pubkey": "质押地址",
         "Amount": "数量",
         "type": "状态",
-        "Payer": "付款人"
+        "Payer": "付款人",
+        "All":"全部",
+        "PerYear":"按年",
+        "PerMonth":"按月"
     },
     "nede": {
         "openverse_mainnet": "Openverse 主网",

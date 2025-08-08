@@ -145,7 +145,7 @@
         <div class="tab-content marginTOP-50">
             <card class="md-3">
                 <card-body class="card-bodys">
-                    <el-tabs v-model="activeName" class="demo-tabs">
+                    <el-tabs v-model="activeName" class="demo-tabs" @tab-click="tabClick">
                         <el-tab-pane :label="$t('navigation.transactions')" name="first">
                             <history-view :url="url"></history-view>
                         </el-tab-pane>
@@ -167,7 +167,7 @@
                             <div class="menu-item dropdown dropdown-mobile-full">
                                 <a href="#" data-bs-toggle="dropdown" data-bs-display="static" class="menu-link scales"
                                     style="white-space: nowrap;text-decoration: none;color: #fff;">
-                                    {{ nameText }}
+                                    {{ $t(nameText) }}
                                     <!-- <img src="https://cdn.openverse.network/brands/openverse/icon_128.png" width="32" alt=""> -->
                                     <i class="bi bi-chevron-down" style="margin: 5px;"></i>
                                 </a>
@@ -175,7 +175,7 @@
                                     <div class="dropdown-item align-items-center" :class="item.type ? 'text-theme' : ''"
                                         style="cursor: pointer;text-align: center;" v-for="(item, index) in selectData"
                                         :key="index" @click="selsetClick(index)">
-                                        {{ item.name }}
+                                        {{ $t(item.name) }}
                                     </div>
                                 </div>
                             </div>
@@ -225,12 +225,15 @@ const router = useRouter();
 const mintToken = ref();
 const activeName = ref('first');
 // const activeName = ref('fourth');
-const nameText = ref("One month");
+const nameText = ref("account.PerMonth");
 
 const selectData = ref([
-    { name: 'All', value: 'all' },
-    { name: 'Per Year', value: 'year' },
-    { name: 'Per Month', value: 'month' },
+    { name: 'account.All', value: 'all' },
+    { name: 'account.PerYear', value: 'year' },
+    { name: 'account.PerMonth', value: 'month' },
+    // { name: 'All', value: 'all' },
+    // { name: 'Per Year', value: 'year' },
+    // { name: 'Per Month', value: 'month' },
 ])
 const reserveViewRef = ref(null)
 
@@ -239,7 +242,7 @@ const selsetClick = (index) => {
     nameText.value = selectData.value[index].name;
 
     if (reserveViewRef.value) {
-        console.log('reserveViewRef.value', reserveViewRef.value);
+        // console.log('reserveViewRef.value', reserveViewRef.value);
         reserveViewRef.value.handleSelect(selectData.value[index].value);
     }
 }
@@ -415,6 +418,16 @@ const toFexedStake = (num, decimals) => {
     return (JSON.parse(num) / divisor).toFixed(2);
 
 };
+
+const tabClick = () => {
+
+    console.log(123);
+    if (activeName.value !== 'fourth') {
+        nameText.value = "account.PerMonth"
+    }
+
+}
+
 </script>
 
 <style scoped>

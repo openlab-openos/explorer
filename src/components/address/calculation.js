@@ -73,8 +73,16 @@ const dateRange = computed(() => {
 /**
  * 格式化显示的时间范围
  */
+// const formattedRange = computed(() => {
+//     return `${formatDate(dateRange.value.start)} —— ${formatDate(dateRange.value.end)}`;
+// });
 const formattedRange = computed(() => {
-    return `${formatDate(dateRange.value.start)} —— ${formatDate(dateRange.value.end)}`;
+    if (currentView.value === 'month') {
+        return `${formatDate(dateRange.value.start)} —— ${formatDate(dateRange.value.end)}`;
+    } else {
+        // 年视图显示完整日期信息（月、日、年）
+        return `${formatDates(dateRange.value.start)} —— ${formatDates(dateRange.value.end)}`;
+    }
 });
 
 /**
@@ -102,9 +110,9 @@ const timeSegments = computed(() => {
         while (current <= end) {
             const year = current.getFullYear();
             const month = months[current.getMonth()];
-            // segments.push(`${month} ${year}`);
-            // segment.push(`${month} ${year}`);
-            segments.push(formatDate(new Date(current)));
+            segments.push(`${month} ${year}`);
+            segment.push(`${month} ${year}`);
+            // segments.push(formatDate(new Date(current)));
             segment.push(formatDates(new Date(current)));
             current.setMonth(current.getMonth() + 1);
         }
@@ -126,11 +134,14 @@ const newSegmented = ref([]);
 
 // 监听时间范围变化，在控制台打印时间段数组
 watch(timeSegments, (newSegments) => {
-    console.log(newSegments);
-
     newSegment.value = newSegments.segments;
-    newSegmented.value = newSegments.segment;
-    console.log(newSegmented.value);
+    const excludeDates = Object.values(newSegment.value);
+    // newSegmented.value = newSegments.segment;
+    newSegmented.value = Object.values(newSegments.segment).filter(date => {
+        // 只保留不在 excludeDates 中的日期
+        return !excludeDates.includes(date);
+    });
+    // console.log(newSegmented.value);
 
 }, { immediate: true });
 
