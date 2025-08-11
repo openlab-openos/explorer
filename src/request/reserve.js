@@ -1,16 +1,17 @@
 import { Connection, PublicKey } from '@solana/web3.js';
 import bs58 from 'bs58';
+import solanaApiUrl from "./axiosUrl"
 
-const chainStorg = JSON.parse(sessionStorage.getItem("app"));
-const chainData = chainStorg ? chainStorg.chain : '';
-function isProductionDomain() {
-    const hostname = window.location.hostname;
-    // 检测是否包含 'devnet.' 前缀
-  return !hostname.startsWith('devnet.');
-}
-// console.log(isProductionDomain());
+// const chainStorg = JSON.parse(sessionStorage.getItem("app"));
+// const chainData = chainStorg ? chainStorg.chain : '';
+// function isProductionDomain() {
+//     const hostname = window.location.hostname;
+//     // 检测是否包含 'devnet.' 前缀
+//   return !hostname.startsWith('devnet.');
+// }
+// // console.log(isProductionDomain());
 
-const solanaApiUrl = isProductionDomain() ? "https://api.mainnet.openverse.network" : "https://api.devnet.openverse.network";
+// const solanaApiUrl = isProductionDomain() ? "https://api.mainnet.openverse.network" : "https://api.devnet.openverse.network";
 
 
 export async function parseNFTMetadata(adress) {

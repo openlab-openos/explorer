@@ -281,3 +281,14 @@ const pubbtx = (url) => {
     })
 };
 </script>
+<style scoped>
+::v-deep .el-tabs__item {
+    background-color: rgba(255, 255, 255, 0.08);
+    margin-left: 10px;
+    text-align: center;
+    padding: 0 !important;
+    padding: 0 12px !important;
+    border-radius: 10px;
+    box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.08);
+}
+</style>

@@ -14,40 +14,41 @@
                             <th style=" text-align: left">{{ $t('certificates') }}</th>
 
                             <!-- <th style=" text-align: left"> {{ $t("tokens.symbol") }} </th> -->
-                            <th style=" text-align: left"> {{ $t("protocol") }}</th>
+                            <!-- <th style=" text-align: left"> {{ $t("protocol") }}</th> -->
                             <th style=" text-align: left"> {{ $t("holders") }}</th>
                             <th style=" text-align: left"> {{ $t("market_cap") }} </th>
                             <th style=" text-align: left"> {{ $t("price") }}</th>
+                            <th style="text-align: left"> {{ $t("dashboard.supply") }}</th>
                         </tr>
                         <template v-if="type">
                             <tr v-for="item, index in paginatedHistoryData" :key="index">
                                 <td class="text-theme">
-                                    <img v-if="item.token.image_url" :src="item.token.image_url" height="24" alt=""
+                                    <img v-if="item.image_url" :src="item.image_url" height="24" alt=""
                                         class="marginRight8">
                                     <img v-if="B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz"
-                                        :src="item.token.pubkey == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' ? 'https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png' : ''"
+                                        :src="item.pubkey == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' ? 'https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png' : ''"
                                         width="32" alt="" class="marginRight8">
 
-                                    <text style="cursor: pointer;" @click="pubbleys(item.token.address)">{{
-                                        titleUrl(item.token.address).url }}</text>
-                                    <img v-if="titleUrl(item.token.pubkey).type"
-                                        v-for="(datas, indexs) in titleUrl(item.token.pubkey).certificates"
-                                        :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
+                                    <text style="cursor: pointer;" @click="pubbleys(item.address)">{{
+                                        item.name ? item.name : item.address }}</text>
+                                    <img v-if="titleUrl(item.pubkey).type"
+                                        v-for="(datas, indexs) in titleUrl(item.pubkey).certificates" :key="indexs"
+                                        :src="datas.img" height="24" class="marginRight8" alt="">
                                 </td>
                                 <td>
-                                    {{ item.token.symbol }}
+                                    {{ item.symbol ? item.symbol : 'N/A' }}
                                 </td>
 
-                                <template v-if="item.token.certificates.length == 0">
+                                <template v-if="item.certificates.length == 0">
                                     <td>N/A</td>
                                 </template>
                                 <template v-else>
                                     <td>
-                                        <img v-for="items, indexs in item.token.certificates" :key="indexs"
+                                        <img v-for="items, indexs in item.certificates" :key="indexs"
                                             :src="items.image_url" height="24" class="marginRight8"
                                             :title="items.certificate_code" @click="pubbley" style="cursor: pointer;">
                                         <!-- <div style="display: flex;">
-                                        <p v-for="items, indexs in item.token.certificates" :key="indexs"
+                                        <p v-for="items, indexs in item.certificates" :key="indexs"
                                             :style="'background-color: ' + items.backColor"
                                             style="border-radius: 5px;padding: 2px 4px;margin-right: 5px;margin-bottom: 0;font-weight: 500;">
                                             {{ items.certificate_code }}
@@ -58,21 +59,26 @@
 
 
                                 <!-- <td>
-                                {{ item.token.symbol }}
+                                {{ item.symbol }}
                             </td> -->
+                                <!-- <td>
+                                    {{ item.protocol_code ? item.protocol_code : 'N/A' }}
+                                </td> -->
                                 <td>
-                                    {{ item.token.protocol_code ? item.token.protocol_code : 'N/A' }}
+                                    <!-- {{ item.token_all[0] }} -->
+                                    {{ item ? item.holders : 0 }}
                                 </td>
                                 <td>
-                                    {{ item.token.holders }}
+                                    $ {{ come(smartFormatNumber(item.market_value ? item.market_value : '0'))  }}
                                 </td>
                                 <td>
-                                    $ {{ come(item.token.market_cap) }}
+                                    {{ item.price ? '$' : '' }} 
+                                    {{ come(smartFormatNumber(item.price ? item.price : '0'))  }}
+                                    <img v-if="item.price_icon" :src="imgUrl + '/' + item.price_icon" height="24"
+                                        class="marginRight8" alt="">
                                 </td>
                                 <td>
-                                    {{ item.token.price ? '$' : '' }} {{ item.price ? item.price : item.token.price }}
-                                    <img v-if="item.token.price_icon" :src="imgUrl + '/' + item.token.price_icon"
-                                        height="24" class="marginRight8" alt="">
+                                    {{ come(smartFormatNumber(toFexedStake(item.supply, item.decimals))) }}
                                 </td>
                             </tr>
                         </template>
@@ -93,7 +99,7 @@
                 </template>
             </card-body>
         </card>
-        <PROGRAMVIEW />
+        <!-- <PROGRAMVIEW /> -->
     </div>
     <div v-else>
         <loading-vue />
@@ -104,6 +110,7 @@ import {
     computed,
     // defineAsyncComponent,
     ref,
+    watchEffect
 } from 'vue'; // 假设这是在一个Vue组件中
 
 import { useRouter } from 'vue-router';
@@ -118,7 +125,9 @@ import { useRouter } from 'vue-router';
 import LoadingVue from '../../components/block/loading.vue';
 import { titleUrl } from '../../components/method/title_url';
 import { tokenList } from './asset';
-import PROGRAMVIEW from "./componects/ProgramList.vue"
+// import PROGRAMVIEW from "./componects/ProgramList.vue"
+import { tokenList as tokenProgram } from './componects/Program.js';
+import { smartFormatNumber } from '../../components/number/smart';
 
 const loadingType = ref(false);
 const router = useRouter();
@@ -126,13 +135,13 @@ const imgUrl = ref('https://open.openverse.live');
 const dataArray = ref()
 const historyData = ref([]);
 const currentPage = ref(1);
-const pageSize = ref(30);
+const pageSize = ref(20);
 const totalItems = ref(0);
 const loading = ref(false);
 const paginatedHistoryData = computed(() => {
     const start = (currentPage.value - 1) * pageSize.value;
     const end = start + pageSize.value;
-    // console.log(historyData.value);
+    console.log(historyData.value);
     return historyData.value.slice(start, end);
 });
 const type = ref(true);
@@ -143,61 +152,32 @@ const handlePageChange = (newPage) => {
         type.value = true;
     }, 1);
 };
-tokenList().then((res) => {
-
-
-    const showData = res.data;
-
-    dataArray.value = showData;
-    // console.log(showData);
-
-    // console.log(showData);
-    for (const i in showData) {
-        if (showData[i].token) {
-            for (const j in showData[i].token.certificates) {
-                switch (showData[i].token.certificates[j].certificate_code) {
-                    case 'Official':
-                        showData[i].token.certificates[j].backColor = '#229cF2'
-                        break;
-                    case 'Unknown':
-                        showData[i].token.certificates[j].backColor = '#d4d6d7'
-                        break;
-                    case 'Unsafe':
-                        showData[i].token.certificates[j].backColor = '#F61414'
-                        break;
-                    case 'VRC10':
-                        showData[i].token.certificates[j].backColor = '#ffa06f'
-                        break;
-                    case 'VRC11':
-                        showData[i].token.certificates[j].backColor = '#ffa06f'
-                        break;
-                    case 'VRC12':
-                        showData[i].token.certificates[j].backColor = '#ffa06f'
-                        break;
-                    case "USDStableCoin":
-                        showData[i].token.certificates[j].certificate_code = 'Stablecoin'
-                        showData[i].token.certificates[j].backColor = '#5ba556'
-                        break;
-                    case "Stablecoin":
-                        showData[i].token.certificates[j].backColor = '#5ba556'
-                        break;
-                }
-            }
-        }
+watchEffect(async () => {
+    try {
+        const assets = await tokenList(1);
+        // const res = await tokenProgram(1);
+        console.log('assets', assets);
+        
+        // const uniqueArray = [...combined,...combined,...combined]
+        // console.log(uniqueArray);
+        historyData.value = assets.data;
+        totalItems.value =assets.data.length;
+        loading.value = true;
+    } catch (error) {
+        console.error('Error in watchEffect:', error);
     }
-    const array = [];
-    for (const i in showData) {
-        if (showData[i].token) {
-            array.push(showData[i])
-        }
-    }
-    historyData.value = array;
-    totalItems.value = array.length;
-    loading.value = true;
-}).catch(error => {
-    loadingType.value = true;
-    console.error('Failed to fetch token list:', error);
 });
+// tokenList().then((res) => {
+//     console.log(res);
+//     const showData = res;
+//     dataArray.value = showData;
+//     historyData.value = showData;
+//     totalItems.value = showData.length;
+//     loading.value = true;
+// }).catch(error => {
+//     loadingType.value = true;
+//     console.error('Failed to fetch token list:', error);
+// });
 const pubbleys = (url) => {
     if (url) {
         router.push({
@@ -234,12 +214,24 @@ loadingType.value = true;
 //             return vrc20
 //     }
 // }
-const come = (num) => {
-    const reg =
-        num.toString().indexOf(".") > -1
-            ? /(\d)(?=(\d{3})+\.)/g
-            : /(\d)(?=(\d{3})+$)/g;
+const toFexedStake = (num, decimals) => {
+    if (num == null || decimals == null) {
+        console.error('Number and decimals must be provided.');
+        return 0;
+    }
+    const divisor = Math.pow(10, JSON.parse(decimals));
 
-    return num.toString().replace(reg, "$1,");
+    return (JSON.parse(num) / divisor).toFixed(2);;
+
+};
+const come = (num) => {
+    if (num) {
+        const reg =
+            num.toString().indexOf(".") > -1
+                ? /(\d)(?=(\d{3})+\.)/g
+                : /(\d)(?=(\d{3})+$)/g;
+
+        return num.toString().replace(reg, "$1,");
+    }
 }
 </script>

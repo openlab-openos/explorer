@@ -1,16 +1,18 @@
 import axios from 'axios';
+import solanaApiUrl from "./axiosUrl"
 
-const currentUrl = window.location.href;
+// const currentUrl = window.location.href;
 // console.log(currentUrl);
-function isProductionDomain() {
-  const hostname = window.location.hostname;
-  // 检测是否包含 'devnet.' 前缀
-return !hostname.startsWith('devnet.');
-}
-// console.log(isProductionDomain());
+// function isProductionDomain() {
+//   const hostname = window.location.hostname;
+//   // 检测是否包含 'devnet.' 前缀
+// return !hostname.startsWith('devnet.');
+// }
+// // console.log(isProductionDomain());
+console.log(solanaApiUrl);
 
 
-const solanaApiUrl = isProductionDomain() ? "https://api.mainnet.openverse.network" : "https://api.devnet.openverse.network";
+// const solanaApiUrl = isProductionDomain() ? "https://api.mainnet.openverse.network" : "https://api.devnet.openverse.network";
 export function chainRequest(requestBody) {
   return new Promise((resolve, reject) => {
     axios

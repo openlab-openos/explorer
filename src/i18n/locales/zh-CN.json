@@ -44,7 +44,7 @@
     "Requset-text": "每 8 小时最多 1 次请求",
     "ConfirmAirdrop": "确认空投",
     "Margin-record": "储备金记录",
-    "not-been-released": "未释放储备金",
+    "not-been-released": "当前储备金总锁仓量",
     "have-been-released": "已释放待赎回储备金",
     "stakeTime": "质押开始时间",
     "last_time": "释放时间",
@@ -282,7 +282,12 @@
         "pubkey": "质押地址",
         "Amount": "数量",
         "type": "状态",
-        "Payer": "付款人"
+        "Payer": "付款人",
+        "All":"全部",
+        "PerYear":"按年",
+        "PerMonth":"按月",
+        "Locked":"储备金锁仓量",
+        "Unlocked":"储备金释放量"
     },
     "nede": {
         "openverse_mainnet": "Openverse 主网",

@@ -42,5 +42,5 @@ export function smartFormatNumber(num) {
 
 
   // 默认情况：没有小数部分或全是0
-  return number < 1 ? number.toString() : number.toFixed(2);
+  return number < 1 ? number.toString() : number.toFixed(0);
 }

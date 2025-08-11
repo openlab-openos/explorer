@@ -60,7 +60,7 @@
                 <tr>
                   <td>{{ $t('epoch_time_remaining') }}(approx.)</td>
                   <td style="text-align: right" v-if="time">
-                    {{ time }}
+                    {{ time.day != 0 ? time :'' }}
                   </td>
                 </tr>
               </tbody>

@@ -9,15 +9,16 @@ import {
   Connection,
   PublicKey,
 } from '@solana/web3.js';
+import solanaApiUrl from "./axiosUrl"
 
 // const solanaApiUrl = urlTypeData === 'Test' ? "https://api.devnet.openverse.network" : (chainData ? chainData : "https://api.mainnet.openverse.network");
-function isProductionDomain() {
-  const hostname = window.location.hostname;
-  // 检测是否包含 'devnet.' 前缀
-return !hostname.startsWith('devnet.');
-}
-const solanaApiUrl = isProductionDomain() ? "https://api.mainnet.openverse.network" : "https://api.devnet.openverse.network";
-// console.log(isProductionDomain());
+// function isProductionDomain() {
+//   const hostname = window.location.hostname;
+//   // 检测是否包含 'devnet.' 前缀
+// return !hostname.startsWith('devnet.');
+// }
+// const solanaApiUrl = isProductionDomain() ? "https://api.mainnet.openverse.network" : "https://api.devnet.openverse.network";
+// // console.log(isProductionDomain());
 
 
 const chainStorg = JSON.parse(sessionStorage.getItem("app"));
