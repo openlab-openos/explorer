@@ -473,19 +473,19 @@ const currentUrl = window.location.href;
 // @ts-ignore
 let app = JSON.parse(sessionStorage.getItem("app"));
 // @ts-ignore
-const GeturlType = JSON.parse(sessionStorage.getItem("urlType"));
-let url = currentUrl.includes("?cluster=devnet");
-let urlType = app
-  ? GeturlType
-    ? GeturlType.urlType == "Test"
-      ? false
-      : app.chainType == "Test"
-        ? false
-        : true
-    : true
-  : url
-    ? false
-    : true;
+// const GeturlType = JSON.parse(sessionStorage.getItem("urlType"));
+// let url = currentUrl.includes("?cluster=devnet");
+// let urlType = app
+//   ? GeturlType
+//     ? GeturlType.urlType == "Test"
+//       ? false
+//       : app.chainType == "Test"
+//         ? false
+//         : true
+//     : true
+//   : url
+//     ? false
+//     : true;
 
 export const TOKEN_IDS: { [key: string]: string } = {
   TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA: "Token Program",

@@ -75,7 +75,7 @@ const validatorsVue = defineAsyncComponent(() =>
   import("../../components/validators/validators_list.vue")
 );
 
-const Gettype = JSON.parse(sessionStorage.getItem("urlType"))
+// const Gettype = JSON.parse(sessionStorage.getItem("urlType"))
 
 // 语言
 function selectLanguage(indexValue) {
@@ -223,7 +223,8 @@ const getServerData = (epoch, slot, inepoch, solttime) => {
           cssClass: "apexcharts-xaxis-label",
         },
       },
-      min: Gettype ? (Gettype.urlType == 'Formal' ? 3000 : 0) : 3000,
+      min:  3000,
+      // min: Gettype ? (Gettype.urlType == 'Formal' ? 3000 : 0) : 3000,
     },
   };
   return {

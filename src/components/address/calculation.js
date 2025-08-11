@@ -1,4 +1,8 @@
-import { ref, computed, watch } from 'vue';
+import {
+    computed,
+    ref,
+    watch,
+} from 'vue';
 
 // 当前视图模式：month 或 year
 const currentView = ref('month');
@@ -43,28 +47,44 @@ function formatDates(date) {
     // return `${month} ${day}${suffix}`;
 }
 
+function formatMonthYear(date) {
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    return `${month} ${year}`;
+}
+
 /**
  * 计算时间范围
  */
 const dateRange = computed(() => {
     const now = new Date();
 
-    if (currentView.value === 'month') {
-        // 月视图：过去20天至未来10天
+    // 添加all视图的判断
+    if (currentView.value === 'all') {
+        // all视图：前3年至后10年
         const start = new Date(now);
-        start.setDate(start.getDate() - 20);
+        start.setFullYear(start.getFullYear() - 3);
 
         const end = new Date(now);
-        end.setDate(end.getDate() + 10);
+        end.setFullYear(end.getFullYear() + 10);
+
+        return { start, end };
+    } else if (currentView.value === 'month') {
+        // 月视图：过去20天至未来10天
+        const start = new Date(now);
+        start.setDate(start.getDate() - 10);
+
+        const end = new Date(now);
+        end.setDate(end.getDate() + 20);
 
         return { start, end };
     } else {
         // 年视图：过去8个月至未来4个月
         const start = new Date(now);
-        start.setMonth(start.getMonth() - 8); // 过去8个月
+        start.setMonth(start.getMonth() - 4); // 过去8个月
 
         const end = new Date(now);
-        end.setMonth(end.getMonth() + 4); // 未来4个月
+        end.setMonth(end.getMonth() + 8); // 未来4个月
 
         return { start, end };
     }
@@ -73,15 +93,15 @@ const dateRange = computed(() => {
 /**
  * 格式化显示的时间范围
  */
-// const formattedRange = computed(() => {
-//     return `${formatDate(dateRange.value.start)} —— ${formatDate(dateRange.value.end)}`;
-// });
 const formattedRange = computed(() => {
     if (currentView.value === 'month') {
         return `${formatDate(dateRange.value.start)} —— ${formatDate(dateRange.value.end)}`;
-    } else {
+    } else if (currentView.value === 'year') {
         // 年视图显示完整日期信息（月、日、年）
         return `${formatDates(dateRange.value.start)} —— ${formatDates(dateRange.value.end)}`;
+    } else {
+        // all视图显示年份范围
+        return `${dateRange.value.start.getFullYear()} —— ${dateRange.value.end.getFullYear()}`;
     }
 });
 
@@ -89,6 +109,7 @@ const formattedRange = computed(() => {
  * 生成时间段数组
  * 月视图：以天为单位
  * 年视图：以月为单位
+ * all视图：以年为单位
  */
 const timeSegments = computed(() => {
     const { start, end } = dateRange.value;
@@ -102,19 +123,24 @@ const timeSegments = computed(() => {
             segments.push(formatDate(new Date(current)));
             segment.push(formatDates(new Date(current)));
             current.setDate(current.getDate() + 1);
-            // current.setDate(current.getDate() + 1);
         }
-    } else {
+    } else if (currentView.value === 'year') {
         // 年视图：按月生成
         const current = new Date(start);
         while (current <= end) {
-            const year = current.getFullYear();
-            const month = months[current.getMonth()];
-            segments.push(`${month} ${year}`);
-            segment.push(`${month} ${year}`);
-            // segments.push(formatDate(new Date(current)));
+            segments.push(formatMonthYear(new Date(current)));
             segment.push(formatDates(new Date(current)));
             current.setMonth(current.getMonth() + 1);
+        }
+    } else {
+        // all视图：按年生成
+        const current = new Date(start);
+        while (current <= end) {
+            const year = current.getFullYear();
+            segments.push(year.toString());
+            segment.push(year.toString());
+            segment.push(formatDates(new Date(current)));
+            current.setFullYear(current.getFullYear() + 1);
         }
     }
 
@@ -135,14 +161,29 @@ const newSegmented = ref([]);
 // 监听时间范围变化，在控制台打印时间段数组
 watch(timeSegments, (newSegments) => {
     newSegment.value = newSegments.segments;
+    // console.log(newSegments);
+    
     const excludeDates = Object.values(newSegment.value);
-    // newSegmented.value = newSegments.segment;
-    newSegmented.value = Object.values(newSegments.segment).filter(date => {
-        // 只保留不在 excludeDates 中的日期
-        return !excludeDates.includes(date);
-    });
+    // if (currentView.value === 'all') {
+    //     newSegmented.value = newSegments.segment;
+    // } else {
+        // newSegmented.value = newSegments.segment;
+        newSegmented.value = Object.values(newSegments.segment).filter(date => {
+            // 只保留不在 excludeDates 中的日期
+            return !excludeDates.includes(date);
+        });
+    // }
+
     // console.log(newSegmented.value);
 
 }, { immediate: true });
 
-export { currentView, toggleView, timeSegments, formattedRange, newSegment, dateRange, newSegmented };
+export {
+    currentView,
+    dateRange,
+    formattedRange,
+    newSegment,
+    newSegmented,
+    timeSegments,
+    toggleView,
+};

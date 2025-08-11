@@ -2,11 +2,10 @@
   <div>
     <div class="segment">
       <div class="segment-item">
-        {{ newSegmented.length}}
         <div class="segment-first">{{ newSegmented[0] }} —— {{ newSegmented[newSegmented.length - 1] }}</div>
         <div class="segment-second">
-          <div><span class="Unlocked">Unlocked Reserve</span></div>
-          <div><span class="Withdrawable">Locked Reserve</span></div>
+          <div><span class="Unlocked">{{ $t("account.Unlocked") }}</span></div>
+          <div><span class="Withdrawable">{{ $t("account.Locked") }}</span></div>
         </div>
       </div>
       <div class="segment-item">
@@ -109,7 +108,7 @@ import moment from 'moment';
 import { useRouter } from 'vue-router';
 
 import { useAppVariableStore } from '@/stores/app-variable';
-
+import i18n from '@/i18n';
 import LoadingVue from '../../components/block/loading.vue';
 import { smartFormatNumber } from '../../components/number/smart';
 import { chainRequest } from '../../request/chain';
@@ -138,6 +137,7 @@ const props = defineProps({
 const loading = ref(true);
 const appVariable = useAppVariableStore();
 const historyData = ref([]);
+const allChildren = ref([]);
 const currentPage = ref(1);
 const pageSize = ref(25);
 const url = ref(props.url);
@@ -164,7 +164,7 @@ const router = useRouter();
 const totalItems = ref(0);
 const nameText = ref("Per Month");
 
-
+// const { t } = useI18n()
 const selectData = ref([
   { name: 'Per Month', value: '30' },
   { name: 'One Year', value: '365' },
@@ -222,13 +222,93 @@ onMounted(async () => {
   }
 
   historyData.value = groupBySerialNumber(data);
-
+  historyData.value = historyData.value.sort((a, b) => {
+    return b.startTime - a.startTime;
+  })
   initChart();
   totalItems.value = historyData.value.length;
+  allChildren.value = historyData.value?.flatMap(group => group.child) || [];
+  // console.log(allChildren.value);
+
   processData()
   loading.value = false;
 
 });
+
+// const groupBySerialNumber = (arr) => {
+//   const grouped = {};
+//   const currentTime = Math.floor(Date.now() / 1000);
+
+
+//   arr.forEach(item => {
+//     console.log(item);
+//     const key = item.metadata.serialNumber;
+//     if (!grouped[key]) {
+//       grouped[key] = {
+//         serial: key,
+//         startTime: item.metadata.startTime,
+//         endTime: item.metadata.endTime,
+//         child: [],
+//         amount: 0,
+//         futureCount: 0,
+//         released: 0,
+//         unreleased: 0,
+//         releasedArray: [],
+//         unreleasedArray: []
+//       };
+//     }
+
+//     grouped[key].child.push(item.metadata);
+//     grouped[key].amount += parseFloat(item.metadata.amount) || 0;
+
+//     if (parseInt(item.metadata.endTime) > currentTime) {
+//       grouped[key].released += parseFloat(item.metadata.amount) || 0;
+//       grouped[key].releasedArray.push({
+//         amount: item.metadata.amount,
+//         startTime: item.metadata.startTime,
+//         endTime: item.metadata.endTime,
+//         startDay: timeSome(item.metadata.startTime),
+//         endDay: timeSome(item.metadata.endTime)
+//       });
+//       grouped[key].unreleasedArray.push({
+//         amount: 0,
+//         startTime: item.metadata.startTime,
+//         endTime: item.metadata.endTime,
+//         startDay: timeSome(item.metadata.startTime),
+//         endDay: timeSome(item.metadata.endTime)
+//       });
+//     } else {
+//       grouped[key].futureCount++;
+//       grouped[key].releasedArray.push({
+//         amount: 0,
+//         startTime: item.metadata.startTime,
+//         endTime: item.metadata.endTime,
+//         startDay: timeSome(item.metadata.startTime),
+//         endDay: timeSome(item.metadata.startTime)
+//       });
+//       grouped[key].unreleasedArray.push({
+//         amount: item.metadata.amount,
+//         startTime: item.metadata.startTime,
+//         endTime: item.metadata.endTime,
+//         startDay: timeSome(item.metadata.startTime),
+//         endDay: timeSome(item.metadata.endTime)
+//       });
+
+//       if (!item.metadata.isUnlocked) {
+//         grouped[key].unreleased += parseFloat(item.metadata.amount) || 0;
+//       }
+//     }
+//   });
+
+//   const mergedReleasedArray = [];
+//   const unmergedReleasedArray = [];
+//   Object.values(grouped).forEach(group => {
+//     mergedReleasedArray.push(...group.releasedArray);
+//     unmergedReleasedArray.push(...group.unreleasedArray);
+//   });
+
+//   return Object.values(grouped);
+// };
 
 const groupBySerialNumber = (arr) => {
   const grouped = {};
@@ -236,11 +316,16 @@ const groupBySerialNumber = (arr) => {
 
   arr.forEach(item => {
     const key = item.metadata.serialNumber;
+    // 解析当前 item 的开始/结束时间（转为数字便于比较）
+    const itemStartTime = parseInt(item.metadata.startTime);
+    const itemEndTime = parseInt(item.metadata.endTime);
+
     if (!grouped[key]) {
+      // 初始化分组时，用当前 item 的时间作为初始值
       grouped[key] = {
         serial: key,
-        startTime: item.metadata.startTime,
-        endTime: item.metadata.endTime,
+        startTime: itemStartTime, // 初始为当前 item 的开始时间
+        endTime: itemEndTime,     // 初始为当前 item 的结束时间
         child: [],
         amount: 0,
         futureCount: 0,
@@ -249,12 +334,18 @@ const groupBySerialNumber = (arr) => {
         releasedArray: [],
         unreleasedArray: []
       };
+    } else {
+      // 若分组已存在，更新结束时间为「当前分组结束时间」和「当前 item 结束时间」中的最大值
+      grouped[key].endTime = Math.max(grouped[key].endTime, itemEndTime);
+      // 可选：如果需要开始时间为最早时间，也可以类似处理
+      grouped[key].startTime = Math.min(grouped[key].startTime, itemStartTime);
     }
 
+    // 以下是原有逻辑（保持不变）
     grouped[key].child.push(item.metadata);
     grouped[key].amount += parseFloat(item.metadata.amount) || 0;
 
-    if (parseInt(item.metadata.endTime) > currentTime) {
+    if (itemEndTime > currentTime) {
       grouped[key].released += parseFloat(item.metadata.amount) || 0;
       grouped[key].releasedArray.push({
         amount: item.metadata.amount,
@@ -393,7 +484,7 @@ const updateDateRange = (value) => {
 const endPercent = ref((6 / newSegment.value.length) * 100);
 const updateChart = () => {
   if (!chartInstance.value) return;
-
+  const t = i18n.global.t;
   chartInstance.value.setOption({
     title: { show: false },
     tooltip: {
@@ -402,7 +493,7 @@ const updateChart = () => {
       backgroundColor: "rgba(52, 67, 79, 0.8)",
       formatter: function (params) {
         return `<div style="color: white;padding: 5px; " >  
-           <div style="padding-bottom:12px" ><span class="Unlocked">  ${params.seriesName} </span></div>
+           <div style="padding-bottom:12px" ><span class="Unlocked">  ${t(params.seriesName)} </span></div>
           <div> ${params.name}&nbsp;<text style="color:${params.color} " >${params.value}</text> BTG</div>
           </div>`;
       },
@@ -460,11 +551,12 @@ const updateChart = () => {
     },
     series: [
       {
-        name: 'Locked Reserve',
+        name: 'account.Locked',
         type: 'bar',
         data: echartUnreleased.value,
         // data: [13, 4, 5, 62, 3, 5, 1, 3, 5, 6, 5, 35, 6],
-        color: 'rgba(34, 156, 242, 1)',
+        // color: 'rgba(34, 156, 242, 1)',
+        color: `rgba(0, 255, 179, 1)`,
         itemStyle: {
           normal: {
             barBorderRadius: [8, 8, 0, 0]
@@ -473,11 +565,11 @@ const updateChart = () => {
         // color: `rgba(${appVariable.color.themeRgb}, 0.8)`
       },
       {
-        name: 'Unlocked Reserve',
+        name: 'account.Unlocked',
         type: 'bar',
         // data: [13, 23, 4, 5, 2, 2, 4, 2, 41, 4, 52, 45],
         data: echartReleased.value,
-        color: `rgba(0, 255, 179, 1)`,
+        color: 'rgba(34, 156, 242, 1)',
         itemStyle: {
           normal: {
             barBorderRadius: [8, 8, 0, 0],
@@ -526,105 +618,153 @@ defineExpose({
 // 数据处理
 
 const DataProcessing = (newSegment) => {
-  let array = [];
-  for (let i in historyData.value) {
-    for (let j in historyData.value[i].child) {
-      array.push(historyData.value[i].child[j]);
-    }
-  }
+  // console.log(newSegmented.value);
+
   if (newSegment == 'month') {
     processData()
   }
   if (newSegment == 'year') {
     MonthprocessData()
   }
-  // 新增处理 newSegment == 'all' 的逻辑
   if (newSegment == 'all') {
-    if (historyData.value.length === 0) {
-      return;
-    }
-    // 获取第一条数据的开始时间和最后一条数据的结束时间
-    const firstItem = historyData.value[0];
-    const lastItem = historyData.value[historyData.value.length - 1];
-    const firstStartTime = Number(firstItem.startTime);
-    const lastEndTime = Number(lastItem.endTime);
-
-    // 转换为月份数
-    const firstStartMonth = new Date(firstStartTime * 1000).getMonth();
-    const lastEndMonth = new Date(lastEndTime * 1000).getMonth();
-    const currentMonth = new Date().getMonth();
-
-    // 计算间隔月份
-    const monthDiff = Math.abs(lastEndMonth - firstStartMonth);
-
-    // 判断是否为本月的前8个月或后4个月
-    const isWithinRange = (
-      (firstStartMonth <= currentMonth && firstStartMonth >= currentMonth - 8) ||
-      (lastEndMonth >= currentMonth && lastEndMonth <= currentMonth + 4)
-    );
-
-    if (isWithinRange || monthDiff <= 12) {
-      // 如果在范围内或间隔小于等于12个月，使用MonthprocessData
-      MonthprocessData();
-    } else {
-      // 否则，以开始时间月份为始，结束时间月份为尾绘制表格
-      CustomMonthRangeProcess(firstStartTime, lastEndTime);
-    }
+    AllprocessData()
   }
+
+  // 新增处理 newSegment == 'all' 的逻辑
+  // if (newSegment == 'all') {
+  //   if (allChildren.value.length === 0) {
+  //     return;
+  //   }
+  //   // 获取第一条数据的开始时间和最后一条数据的结束时间
+  //   const firstItem = allChildren.value[0];
+  //   const lastItem = allChildren.value[allChildren.value.length - 1];
+  //   const firstStartTime = Number(firstItem.startTime);
+  //   const lastEndTime = Number(lastItem.endTime);
+
+  //   // 转换为月份数
+  //   const firstStartMonth = new Date(firstStartTime * 1000).getMonth();
+  //   const lastEndMonth = new Date(lastEndTime * 1000).getMonth();
+  //   const currentMonth = new Date().getMonth();
+
+  //   // 计算间隔月份
+  //   const monthDiff = Math.abs(lastEndMonth - firstStartMonth);
+
+  //   // 判断是否为本月的前8个月或后4个月
+  //   const isWithinRange = (
+  //     (firstStartMonth <= currentMonth && firstStartMonth >= currentMonth - 8) ||
+  //     (lastEndMonth >= currentMonth && lastEndMonth <= currentMonth + 4)
+  //   );
+
+  //   if (isWithinRange || monthDiff <= 12) {
+  //     // 如果在范围内或间隔小于等于12个月，使用MonthprocessData
+  //     MonthprocessData();
+  //   } else {
+  //     // 否则，以开始时间月份为始，结束时间月份为尾绘制表格
+  //     CustomMonthRangeProcess(firstStartTime, lastEndTime);
+  //   }
+  // }
 };
 
-// 添加自定义月份范围处理函数
-function CustomMonthRangeProcess(startTime, endTime) {
-  // 重置数组
+
+// 新增按年处理数据函数
+function AllprocessData() {
+  // 重置数据数组
   mouthReleased.value = [];
   mouthUnreleased.value = [];
 
-  // 获取开始和结束的月份范围
-  const startDate = new Date(startTime * 1000);
-  const endDate = new Date(endTime * 1000);
+  // 获取年份列表（从newSegment.value中提取，因为在all视图下它包含年份）
+  const years = newSegment.value;
 
-  // 生成开始月份到结束月份的所有月份
-  const months = [];
-  let currentDate = new Date(startDate);
-  currentDate.setDate(1); // 确保从月份第一天开始
-
-  while (currentDate <= endDate) {
-    const monthStr = formatTimeToMonth(currentDate.getTime() / 1000);
-    months.push(monthStr);
-    currentDate.setMonth(currentDate.getMonth() + 1);
-  }
-
-  // 更新newSegment.value为自定义范围
-  newSegment.value = months;
-
-  // 重置数据数组
-  mouthReleased.value = Array(months.length).fill(0);
-  mouthUnreleased.value = Array(months.length).fill(0);
+  // 初始化数据数组
+  mouthReleased.value = Array(years.length).fill(0);
+  mouthUnreleased.value = Array(years.length).fill(0);
 
   // 处理数据
-  historyData.value.forEach(item => {
+  allChildren.value.forEach(item => {
     const amount = Number(item.amount) || 0;
 
-    // 处理startTime
-    const startMonthStr = formatTimeToMonth(item.startTime);
-    const startIndex = months.findIndex(month => month === startMonthStr);
+    // 处理startTime - 按年份
+    const startYear = new Date(Number(item.startTime) * 1000).getFullYear();
+    const startIndex = years.findIndex(year => Number(year) === startYear);
     if (startIndex !== -1) {
       mouthReleased.value[startIndex] += amount / 1000000000;
     }
 
-    // 处理endTime
-    const endMonthStr = formatTimeToMonth(item.endTime);
-    const endIndex = months.findIndex(month => month === endMonthStr);
+    // 处理endTime - 按年份
+    const endYear = new Date(Number(item.endTime) * 1000).getFullYear();
+    const endIndex = years.findIndex(year => Number(year) === endYear);
     if (endIndex !== -1) {
       mouthUnreleased.value[endIndex] += amount / 1000000000;
     }
   });
 
+  // 更新图表数据
   echartReleased.value = mouthReleased.value;
   echartUnreleased.value = mouthUnreleased.value;
 
+  // 更新日期范围
   updateDateRange(newSegment.value);
 }
+
+// 添加格式化时间为年份的函数
+function formatTimeToYear(timestamp) {
+  const date = new Date(Number(timestamp) * 1000);
+  return date.getFullYear().toString();
+}
+
+
+// // 添加自定义月份范围处理函数
+// function CustomMonthRangeProcess(startTime, endTime) {
+//   // 重置数组
+//   mouthReleased.value = [];
+//   mouthUnreleased.value = [];
+
+//   // 获取开始和结束的月份范围
+//   const startDate = new Date(startTime * 1000);
+//   const endDate = new Date(endTime * 1000);
+
+//   // 生成开始月份到结束月份的所有月份
+//   const months = [];
+//   let currentDate = new Date(startDate);
+//   currentDate.setDate(1); // 确保从月份第一天开始
+
+//   while (currentDate <= endDate) {
+//     const monthStr = formatTimeToMonth(currentDate.getTime() / 1000);
+//     months.push(monthStr);
+//     currentDate.setMonth(currentDate.getMonth() + 1);
+//   }
+
+//   // 更新newSegment.value为自定义范围
+//   newSegment.value = months;
+
+//   // 重置数据数组
+//   mouthReleased.value = Array(months.length).fill(0);
+//   mouthUnreleased.value = Array(months.length).fill(0);
+
+//   // 处理数据
+//   allChildren.value.forEach(item => {
+//     const amount = Number(item.amount) || 0;
+
+//     // 处理startTime
+//     const startMonthStr = formatTimeToMonth(item.startTime);
+//     const startIndex = months.findIndex(month => month === startMonthStr);
+//     if (startIndex !== -1) {
+//       mouthReleased.value[startIndex] += amount / 1000000000;
+//     }
+
+//     // 处理endTime
+//     const endMonthStr = formatTimeToMonth(item.endTime);
+//     const endIndex = months.findIndex(month => month === endMonthStr);
+//     if (endIndex !== -1) {
+//       mouthUnreleased.value[endIndex] += amount / 1000000000;
+//     }
+//   });
+
+//   echartReleased.value = mouthReleased.value;
+//   echartUnreleased.value = mouthUnreleased.value;
+
+//   updateDateRange(newSegment.value);
+// }
 
 function formatTimeToDay(timestamp) {
   const date = new Date(Number(timestamp) * 1000);
@@ -653,8 +793,11 @@ function processData() {
   // 重置数组
   mouthReleased.value = Array.from({ length: newSegment.value.length }, () => 0);
   mouthUnreleased.value = Array.from({ length: newSegment.value.length }, () => 0);
-
-  historyData.value.forEach(item => {
+  // console.log(mouthReleased.value);
+  // console.log(mouthUnreleased.value);
+  // console.log(allChildren.value);
+  
+  allChildren.value.forEach(item => {
     const amount = Number(item.amount) || 0;
 
     // 处理startTime
@@ -693,11 +836,19 @@ function MonthprocessData() {
   // 重置数组（避免重复累加）
   mouthReleased.value = Array.from({ length: newSegment.value.length }, () => 0);
   mouthUnreleased.value = Array.from({ length: newSegment.value.length }, () => 0);
-  historyData.value.forEach(item => {
+  // console.log(newSegment.value);
+
+  // console.log(mouthReleased.value);
+  // console.log(mouthUnreleased.value);
+  // console.log(allChildren.value);
+
+  allChildren.value.forEach(item => {
     const amount = Number(item.amount) || 0; // 转换金额为数字
 
     // 处理startTime：匹配月份数组，累加至echartReleased
     const startMonthStr = formatTimeToMonth(item.startTime);
+    // console.log(startMonthStr);
+    
     const startIndex = newSegment.value.findIndex(month => month === startMonthStr);
     if (startIndex !== -1) { // 找到匹配的月份
       mouthReleased.value[startIndex] += amount / 1000000000;
@@ -712,6 +863,9 @@ function MonthprocessData() {
   });
   echartReleased.value = mouthReleased.value;
   echartUnreleased.value = mouthUnreleased.value;
+  // console.log(echartReleased.value);
+  // console.log(echartUnreleased.value);
+
   updateDateRange(newSegment.value)
 }
 

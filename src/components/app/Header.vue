@@ -85,6 +85,29 @@ watchEffect(() => {
   selectLanguages(appStore.$state.language);
 })
 
+const ScanName = ref("");
+
+const ArchiveType = sessionStorage.getItem("ArchiveType");
+const urlType = sessionStorage.getItem("urlType");
+// console.log(UtlDevnetType, 'UtlDevnetType');
+if (UtlDevnetType) {
+  if (ArchiveType) {
+    console.log(1234);
+    console.log(ArchiveType);
+    
+    if (ArchiveType == "Archive1") {
+      ScanName.value = "Mainnet Archive1";
+    } else if (ArchiveType == "Archive2") {
+      ScanName.value = "Mainnet Archive2";
+    }
+  } else {
+    ScanName.value = "Mainnet Archive1";
+  }
+
+} else {
+  ScanName.value = "Devnet";
+}
+// console.log(ScanName.value);
 
 
 function toggleAppSidebarCollapsed() {
@@ -150,18 +173,41 @@ const selectLanguage = (language: any, abbreviation: any) => {
   appStore.setLanguage(abbreviation);
 
 };
+// https://archive1.openverse.network/
 
 // 节点切换
 const selectData = ref([
-  { name: 'Mainnet', url: 'https://www.openverse.live', type: UtlDevnetType, requestType: 'Formal' },
-  { name: 'Devnet', url: 'https://devnet.openverse.live', type: !UtlDevnetType, requestType: 'Test' },
+  { name: 'Mainnet Archive1', url: 'https://www.openverse.live', type: UtlDevnetType, requestType: 'Formal',ArchiveType:'Archive1', requestUrl: "https://archive1.openverse.network/" },
+  { name: 'Mainnet Archive2', url: 'https://www.openverse.live', type: UtlDevnetType, requestType: 'Formal',ArchiveType:'Archive2', requestUrl: "https://archive2.openverse.network/" },
+  { name: 'Devnet', url: 'https://devnet.openverse.live', type: !UtlDevnetType,ArchiveType:'', requestType: 'Test' },
 ])
 
 const selsetClick = (index: number) => {
+  let type = sessionStorage.getItem("ArchiveType")
   selectData.value.map((item, i) => {
     if (i == index) {
-      // item.type = true;
-      window.location.href = item.url
+      ScanName.value = selectData.value[i].name;
+      if(selectData.value[i].requestType == 'Test' ){
+        sessionStorage.setItem("urlType",selectData.value[i].requestType);
+        window.location.href = item.url
+      } else {
+        sessionStorage.setItem("ArchiveType",item.ArchiveType);
+        sessionStorage.setItem("urlType",selectData.value[i].requestType);
+
+        if(type !== item.ArchiveType ){
+          window.location.reload()
+        }
+        if(urlType == 'Test'){
+          window.location.href = item.url
+        }
+
+      }
+      // // item.type = true;
+      // if (UtlDevnetType == item.type) {
+      //   sessionStorage.setItem("ArchiveType",item.ArchiveType);
+      // } else {
+      //   // window.location.href = item.url
+      // }
     } else {
       item.type = false;
     }
@@ -173,7 +219,7 @@ onMounted(() => {
   // @ts-ignore
   const chainStorg = JSON.parse(sessionStorage.getItem("app"));
   // @ts-ignore
-  const urlType = JSON.parse(sessionStorage.getItem("urlType"));
+  // const urlType = JSON.parse(sessionStorage.getItem("urlType"));
 
 
   const chainData = chainStorg ? (chainStorg.chain ? chainStorg.chain : (urlType ? urlType.url : '')) : (urlType ? urlType.url : '');
@@ -283,7 +329,8 @@ onMounted(() => {
       <div class="menu-item dropdown dropdown-mobile-full">
         <a href="#" data-bs-toggle="dropdown" data-bs-display="static" class="menu-link scales"
           style="white-space: nowrap;">
-          {{ UtlDevnetType ? 'Mainnet' : 'Devnet' }}
+          <!-- {{ UtlDevnetType ? 'Mainnet Archive1' : 'Devnet' }} -->
+          {{ ScanName }}
           <!-- <img src="https://cdn.openverse.network/brands/openverse/icon_128.png" width="32" alt=""> -->
           <i class="bi bi-chevron-down" style="margin: 5px;"></i>
         </a>
@@ -297,9 +344,8 @@ onMounted(() => {
             Openverse Testnet </div>
         </div> -->
         <div class="dropdown-menu dropdown-menu-end me-lg-3 fs-11px mt-1">
-          <div class="dropdown-item align-items-center" 
-            style="cursor: pointer;text-align: center;" v-for="(item, index) in selectData" :key="index"
-            @click="selsetClick(index)">
+          <div class="dropdown-item align-items-center" style="cursor: pointer;text-align: center;"
+            v-for="(item, index) in selectData" :key="index" @click="selsetClick(index)">
             {{ item.name }}
           </div>
         </div>

@@ -1,23 +1,23 @@
 import { defineStore } from 'pinia';
 
-const currentUrl = window.location.href;
-// @ts-ignore
-let app = JSON.parse(sessionStorage.getItem("app"));
-// @ts-ignore
-let GeturlType = JSON.parse(sessionStorage.getItem("urlType"));
-let url = currentUrl.includes("?cluster=devnet");
-// 假设 urlType 是一个全局状态变量，这里先定义为 false 作为示例
-let urlType = app
-  ? GeturlType
-    ? GeturlType.urlType == "Test"
-      ? false
-      : app.chainType == "Test"
-        ? false
-        : true
-    : true
-  : url
-    ? false
-    : true;
+// const currentUrl = window.location.href;
+// // @ts-ignore
+// let app = JSON.parse(sessionStorage.getItem("app"));
+// // @ts-ignore
+// let GeturlType = JSON.parse(sessionStorage.getItem("urlType"));
+// let url = currentUrl.includes("?cluster=devnet");
+// // 假设 urlType 是一个全局状态变量，这里先定义为 false 作为示例
+// let urlType = app
+//   ? GeturlType
+//     ? GeturlType.urlType == "Test"
+//       ? false
+//       : app.chainType == "Test"
+//         ? false
+//         : true
+//     : true
+//   : url
+//     ? false
+//     : true;
 export const useAppSidebarMenuStore = defineStore({
   id: "appSidebarMenu",
   state: () => {

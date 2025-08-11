@@ -44,7 +44,7 @@
     "Submitsuccess": "Submit Success",
     "Submitfailed": "Submit Failed",
     "Request-Airdrop": "Request Airdrop",
-    "Margin-record": "Reserve fund record",
+    "Margin-record": "Reserve",
     "Requset-text": "Maximum of 1 request every 8 hours",
     "not-been-released": "Total Locked Reserve",
     "have-been-released": "The reserve funds awaiting redemption have been released",
@@ -286,8 +286,10 @@
         "Amount": "Amount",
         "type": "Status",
         "All":"All",
-        "PerYear":"Per Year",
-        "PerMonth":"Per Month"
+        "PerYear":"Year",
+        "PerMonth":"Month",
+        "Locked":"Locked Reserve",
+        "Unlocked":"Unlocked Reserve"
     },
     "nede": {
         "openverse_mainnet": "Openverse Mainnet",

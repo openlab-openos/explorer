@@ -4,6 +4,8 @@ import {
   Connection,
   PublicKey,
 } from '@solana/web3.js';
+import solanaApiUrl from "./axiosUrl"
+
 
 const chainStorg =  JSON.parse(sessionStorage.getItem("app"))
 const chainData =chainStorg ? chainStorg.chain : '';
@@ -12,14 +14,14 @@ const currentUrl = window.location.href;
 
 
 // import { Token, TOKEN_PROGRAM_ID } from '@solana/spl-token';
-function isProductionDomain() {
-    const hostname = window.location.hostname;
-    // 检测是否包含 'devnet.' 前缀
-  return !hostname.startsWith('devnet.');
-}
-// console.log(isProductionDomain());
+// function isProductionDomain() {
+//     const hostname = window.location.hostname;
+//     // 检测是否包含 'devnet.' 前缀
+//   return !hostname.startsWith('devnet.');
+// }
+// // console.log(isProductionDomain());
 
-const solanaApiUrl = isProductionDomain() ? "https://api.mainnet.openverse.network" : "https://api.devnet.openverse.network";
+// const solanaApiUrl = isProductionDomain() ? "https://api.mainnet.openverse.network" : "https://api.devnet.openverse.network";
 
 export function metaRequest(AccountPublicKey, Program) {
 
