@@ -320,7 +320,7 @@ const HandleList = (listItem) => {
             // quantityType = props.type ? (firstInstruction?.parsed?.info?.source == props.url ? ((firstInstruction?.parsed?.info?.destination == props.url ? true : false)) : true) : false;
             quantityType = false;
             program = firstInstruction?.programId || '';
-            lamports = firstInstruction?.parsed?.info?.tokenAmount ? firstInstruction?.parsed?.info?.tokenAmount?.uiAmount : firstInstruction?.parsed?.info?.lamports;
+            lamports = firstInstruction?.parsed?.info?.tokenAmount ? firstInstruction?.parsed?.info?.tokenAmount?.uiAmount :( firstInstruction?.parsed?.info?.lamports / 1000000000);
             owner = firstInstruction?.parsed?.info?.source == firstInstruction?.parsed?.info?.destination ? firstInstruction?.parsed?.info?.destination : '';
             authority = firstInstruction?.parsed?.info?.authority || '';
             // } 
