@@ -282,7 +282,12 @@
         "pubkey": "스테이크 주소",
         "Amount": "수량",
         "type": "상태",
-        "Payer": "지불자"
+        "Payer": "지불자",
+        "All": "전부",
+        "PerYear": "매년",
+        "PerMonth": "매월",
+        "Locked": "준비금 잠긴 양",
+        "Unlocked": "준비금 해제된 양"
     },
     "nede": {
         "openverse_mainnet": "Openverse 메인넷",

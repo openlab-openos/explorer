@@ -282,7 +282,13 @@
         "pubkey": "公開鍵",
         "timeRemaining": "残り時間",
         "Amount": "数量",
-        "type": "ステータス"
+        "type": "ステータス",
+        "Payer": "支払人",
+        "All": "全て",
+        "PerYear": "毎年",
+        "PerMonth": "毎月",
+        "Locked": "準備金のロック量",
+        "Unlocked": "準備金のアンロック量"
     },
     "nede": {
         "openverse_mainnet": "Openverseメインネット",

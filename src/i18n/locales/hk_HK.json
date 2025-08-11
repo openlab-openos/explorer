@@ -282,7 +282,13 @@
         "pubkey": "公鑰",
         "timeRemaining": "剩餘時間",
         "Amount": "數量",
-        "type": "狀態"
+        "type": "狀態",
+        "Payer": "付款人",
+        "All": "全部",
+        "PerYear": "按年",
+        "PerMonth": "按月",
+        "Locked": "儲備金鎖倉量",
+        "Unlocked": "儲備金釋放量"
     },
     "nede": {
         "openverse_mainnet": "Openverse 主網",

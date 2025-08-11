@@ -282,7 +282,12 @@
         "pubkey": "Địa chỉ staking",
         "Amount": "Số lượng",
         "type": "Trạng thái",
-        "Payer": "Người thanh toán"
+        "Payer": "Người thanh toán",
+        "All": "Tất cả",
+        "PerYear": "Theo năm",
+        "PerMonth": "Theo tháng",
+        "Locked": "Lượng tiền dự trữ bị khóa kho",
+        "Unlocked": "Lượng tiền dự trữ được giải phóng"
     },
     "nede": {
         "openverse_mainnet": "Openverse Mainnet",

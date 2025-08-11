@@ -278,7 +278,13 @@
         "pubkey": "Pubkey",
         "timeRemaining": "Verbleibende Zeit",
         "Amount": "Betrag",
-        "type": "Status"
+        "type": "Status",
+        "Payer": "Zahler",
+        "All": "Alle",
+        "PerYear": "Pro Jahr",
+        "PerMonth": "Pro Monat",
+        "Locked": "Menge der gesperrten Reserven",
+        "Unlocked": "Menge der entsperrten Reserven"
     },
     "nede": {
         "openverse_mainnet": "Openverse Mainnet",

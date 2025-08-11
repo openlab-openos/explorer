@@ -282,7 +282,12 @@
         "pubkey": "Alamat Staking",
         "Amount": "Kuantiti",
         "type": "Status",
-        "Payer": "Pembayar"
+        "Payer": "Pembayar",
+        "All": "Semua",
+        "PerYear": "Setiap Tahun",
+        "PerMonth": "Setiap Bulan",
+        "Locked": "Jumlah Wang Simpanan Terkunci",
+        "Unlocked": "Jumlah Wang Simpanan Dilepaskan"
     },
     "nede": {
         "openverse_mainnet": "Openverse Mainnet",
