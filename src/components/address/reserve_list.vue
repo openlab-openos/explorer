@@ -107,8 +107,9 @@ import * as echarts from 'echarts';
 import moment from 'moment';
 import { useRouter } from 'vue-router';
 
-import { useAppVariableStore } from '@/stores/app-variable';
 import i18n from '@/i18n';
+import { useAppVariableStore } from '@/stores/app-variable';
+
 import LoadingVue from '../../components/block/loading.vue';
 import { smartFormatNumber } from '../../components/number/smart';
 import { chainRequest } from '../../request/chain';
@@ -123,9 +124,10 @@ import {
   currentView,
   dateRange,
   newSegment,
+  newSegmented,
   toggleView,
-  newSegmented
 } from './calculation.js';
+
 // console.log(newSegmented.value);
 
 const props = defineProps({
@@ -768,25 +770,31 @@ function formatTimeToYear(timestamp) {
 
 function formatTimeToDay(timestamp) {
   const date = new Date(Number(timestamp) * 1000);
-  const months = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May.', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];
+  // const months = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May.', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];
 
-  const month = months[date.getMonth()];
-  const day = date.getDate();
+  // const month = months[date.getMonth()];
+  // const day = date.getDate();
 
-  // 获取序数词后缀
-  let suffix;
-  if (day >= 11 && day <= 13) {
-    suffix = 'th';
-  } else {
-    switch (day % 10) {
-      case 1: suffix = 'st'; break;
-      case 2: suffix = 'nd'; break;
-      case 3: suffix = 'rd'; break;
-      default: suffix = 'th';
-    }
-  }
+  // // 获取序数词后缀
+  // let suffix;
+  // if (day >= 11 && day <= 13) {
+  //   suffix = 'th';
+  // } else {
+  //   switch (day % 10) {
+  //     case 1: suffix = 'st'; break;
+  //     case 2: suffix = 'nd'; break;
+  //     case 3: suffix = 'rd'; break;
+  //     default: suffix = 'th';
+  //   }
+  // }
 
-  return `${month} ${day}${suffix}`;
+  // return `${month} ${day}${suffix}`;
+  
+  // 获取月份和日期，并格式化为两位数
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // 月份从0开始，需要+1
+  const day = String(date.getDate()).padStart(2, '0');
+  
+  return `${month}/${day}`;
 }
 
 function processData() {
@@ -796,12 +804,14 @@ function processData() {
   // console.log(mouthReleased.value);
   // console.log(mouthUnreleased.value);
   // console.log(allChildren.value);
-  
+
   allChildren.value.forEach(item => {
     const amount = Number(item.amount) || 0;
 
     // 处理startTime
     const startDateStr = formatTimeToDay(item.startTime);
+    // console.log(startDateStr);
+
     const startIndex = newSegment.value.findIndex(day => day === startDateStr);
     if (startIndex !== -1) {
       mouthReleased.value[startIndex] += amount / 1000000000;
@@ -822,14 +832,18 @@ function processData() {
 // 月份时间处理
 
 function formatTimeToMonth(timestamp) {
+  // const date = new Date(Number(timestamp) * 1000);
+  // const months = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May.', 'Jun.',
+  //   'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];
+
+  // const month = months[date.getMonth()]; // 获取月份缩写
+  // const year = date.getFullYear(); // 获取四位年份
+
+  // return `${month} ${year}`;
   const date = new Date(Number(timestamp) * 1000);
-  const months = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May.', 'Jun.',
-    'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];
-
-  const month = months[date.getMonth()]; // 获取月份缩写
-  const year = date.getFullYear(); // 获取四位年份
-
-  return `${month} ${year}`;
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // 月份从0开始，需要+1
+  const year = date.getFullYear();
+  return `${year}/${month}`;
 }
 
 function MonthprocessData() {
@@ -848,7 +862,7 @@ function MonthprocessData() {
     // 处理startTime：匹配月份数组，累加至echartReleased
     const startMonthStr = formatTimeToMonth(item.startTime);
     // console.log(startMonthStr);
-    
+
     const startIndex = newSegment.value.findIndex(month => month === startMonthStr);
     if (startIndex !== -1) { // 找到匹配的月份
       mouthReleased.value[startIndex] += amount / 1000000000;
