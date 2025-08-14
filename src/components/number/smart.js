@@ -16,20 +16,20 @@ export function smartFormatNumber(num) {
   // 情况2：整数部分大于等于0
   if (decimalPartStr) {
     // 确保小数部分至少有两位（不足则补0）
-    const paddedDecimal = decimalPartStr.padEnd(2, '0');
+    // const paddedDecimal = decimalPartStr.padEnd(2, '0');
 
-    // 如果小数点后第二位大于0，保留两位小数
-    if (parseInt(paddedDecimal[1]) > 0) {
-      return number.toFixed(2);
-    }
+    // // 如果小数点后第二位大于0，保留两位小数
+    // if (parseInt(paddedDecimal[1]) > 0) {
+    //   return number.toFixed(2);
+    // }
 
-    const firstNonZeroIndex = decimalPartStr.split('').findIndex(digit => digit !== '0');
+    // const firstNonZeroIndex = decimalPartStr.split('').findIndex(digit => digit !== '0');
 
-    if (firstNonZeroIndex !== -1) {
-      // 保留的位数 = 第一个非零数字的位置 + 1（索引从0开始）
-      const precision = firstNonZeroIndex + 1;
-      return number.toFixed(precision);
-    }
+    // if (firstNonZeroIndex !== -1) {
+    //   // 保留的位数 = 第一个非零数字的位置 + 1（索引从0开始）
+    //   const precision = firstNonZeroIndex + 1;
+    //   return number.toFixed(precision);
+    // }
 
     // 否则，动态保留到最后一个非零位
     const lastNonZeroIndex = decimalPartStr.split('').reduce((lastIndex, digit, index) => {

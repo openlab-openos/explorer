@@ -23,17 +23,17 @@
                         <template v-if="type">
                             <tr v-for="item, index in paginatedHistoryData" :key="index">
                                 <td class="text-theme">
-                                    <img v-if="item.image_url" :src="item.image_url" height="24" alt=""
-                                        class="marginRight8">
+                                    <img v-if="item.image_url" :src="item.image_url" height="20" alt=""
+                                        class="marginRight8 imgCenter">
                                     <img v-if="B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz"
                                         :src="item.pubkey == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' ? 'https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png' : ''"
-                                        width="32" alt="" class="marginRight8">
+                                        width="20" alt="" class="marginRight8">
 
                                     <text style="cursor: pointer;" @click="pubbleys(item.address)">{{
                                         item.name ? item.name : item.address }}</text>
                                     <img v-if="titleUrl(item.pubkey).type"
                                         v-for="(datas, indexs) in titleUrl(item.pubkey).certificates" :key="indexs"
-                                        :src="datas.img" height="24" class="marginRight8" alt="">
+                                        :src="datas.img" height="20" class="marginRight8" alt="">
                                 </td>
                                 <td>
                                     {{ item.symbol ? item.symbol : 'N/A' }}
@@ -45,7 +45,7 @@
                                 <template v-else>
                                     <td>
                                         <img v-for="items, indexs in item.certificates" :key="indexs"
-                                            :src="items.image_url" height="24" class="marginRight8"
+                                            :src="items.image_url" height="20" class="marginRight8"
                                             :title="items.certificate_code" @click="pubbley" style="cursor: pointer;">
                                         <!-- <div style="display: flex;">
                                         <p v-for="items, indexs in item.certificates" :key="indexs"
@@ -69,7 +69,7 @@
                                     {{ item ? item.holders : 0 }}
                                 </td>
                                 <td>
-                                    $ {{ come(smartFormatNumber(item.market_value ? item.market_value : '0'))  }}
+                                    $ {{ come(smartFormatNumber( toFexedStake(item.market_value,item.decimals)))  }}
                                 </td>
                                 <td>
                                     {{ item.price ? '$' : '' }} 
@@ -107,10 +107,9 @@
 </template>
 <script setup>
 import {
-    computed,
-    // defineAsyncComponent,
-    ref,
-    watchEffect
+  computed,
+  ref,
+  watchEffect,
 } from 'vue'; // 假设这是在一个Vue组件中
 
 import { useRouter } from 'vue-router';
@@ -124,10 +123,10 @@ import { useRouter } from 'vue-router';
 // import vrc20 from '../../assets/assetsLogo/vrc20.png';
 import LoadingVue from '../../components/block/loading.vue';
 import { titleUrl } from '../../components/method/title_url';
+import { smartFormatNumber } from '../../components/number/smart';
 import { tokenList } from './asset';
 // import PROGRAMVIEW from "./componects/ProgramList.vue"
 import { tokenList as tokenProgram } from './componects/Program.js';
-import { smartFormatNumber } from '../../components/number/smart';
 
 const loadingType = ref(false);
 const router = useRouter();

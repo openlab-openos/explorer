@@ -1,80 +1,134 @@
 <!-- 通证 -->
 <template>
-    <div>
-        <h3 class="align-center">
-            <!-- acquiesce -->
-            <img :src="token_img ? token_img : ''" alt="" class="marginRight10 imgWigth25" v-if="token_img">
-            <img v-if="titleUrl(token_name).type" :src="titleUrl(token_name).img" class="marginRight10 imgWigth25">
-            <!-- <text> {{ token_name ? titleUrl(token_name).url : '' }} {{ $t("account.token") }} -->
-            <text>
-                {{ token_name ? (titleUrl(url).type ? titleUrl(url).url : (token_name == url ? 'Token' : token_name))
-                    : 'Token' }}
-                <img v-if="titleUrl(url).type && titleUrl(url).assest"
+  <div>
+    <h3 class="align-center displayAlign">
+      <!-- acquiesce -->
+      <img
+        :src="token_img ? token_img : ''"
+        alt=""
+        class="marginRight10 imgWigth40"
+        v-if="token_img"
+      />
+      <img
+        v-if="titleUrl(token_name).type"
+        :src="titleUrl(token_name).img"
+        class="marginRight10 imgWigth25"
+      />
+      <!-- <text> {{ token_name ? titleUrl(token_name).url : '' }} {{ $t("account.token") }} -->
+      <div>
+        <div>
+          <text>
+            {{
+              token_name
+                ? titleUrl(url).type
+                  ? titleUrl(url).url
+                  : token_name == url
+                    ? "Token"
+                    : token_name
+                : "Token"
+            }}
+          </text>
+        </div>
+        <div>
+          <img
+            v-if="titleUrl(url).type && titleUrl(url).assest"
+            v-for="(datas, indexs) in titleUrl(url).certificates"
+            :key="indexs"
+            :src="datas.img"
+            height="20"
+            class="marginRight10"
+            alt=""
+            @click="pubbley"
+            style="cursor: pointer"
+          />
+        </div>
+      </div>
+      <!-- <text>
+        {{
+          token_name
+            ? titleUrl(url).type
+              ? titleUrl(url).url
+              : token_name == url
+                ? "Token"
+                : token_name
+            : "Token"
+        }}
+        <img v-if="titleUrl(url).type && titleUrl(url).assest"
                     v-for="(datas, indexs) in titleUrl(url).certificates" :key="indexs" :src="datas.img" height="24"
-                    class="marginRight8" alt="" @click="pubbley" style="cursor: pointer;">
-                <!-- <text v-for="items, indexs in titleUrl(url).certificates" :key="indexs"
-                    :style="'background-color: ' + items.backColor"
-                    style="border-radius: 5px;padding: 2px 4px;margin: 0px 5px 0 0;font-weight: 500;font-size: 16px;">
-                    {{ items.code }}
-                </text> -->
-            </text>
-        </h3>
-        <div class="marginTOP-50">
-            <card class="md-3">
-                <card-body class="card-bodys ">
-                    <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
-                        <tr>
-                            <th>{{ $t("account.general_situation") }}</th>
-                            <th class="text-end"></th>
-                        </tr>
-                        <tbody v-if="tokenData">
-                            <tr>
-                                <td>{{ $t("account.token_account") }} </td>
-                                <td class="text-end"> {{ address == "" ? "" : address }} </td>
-                            </tr>
-                            <tr v-if="mintToken">
-                                <td>{{ $t("account.address_label") }} </td>
-                                <td class="text-end"> {{ mintToken.name ? mintToken.name : 'N/A' }} </td>
-                            </tr>
-                            <tr v-else>
-                                <td>{{ $t("account.address_label") }} </td>
-                                <td class="text-end">{{ titleUrl(url).find ? titleUrl(url).url : 'N/A' }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ $t("account.symbol") }} </td>
-                                <td class="text-end"> {{ mintToken ? (mintToken.symbol ? mintToken.symbol : 'N/A') :
-                                    'N/A'
-                                    }} </td>
-                                <!-- <td class="text-end"> {{ mintToken.symbol ? mintToken.symbol : 'N/A' }} </td> -->
-                            </tr>
-                            <tr>
-                                <td>{{ $t("transaction.Decimals") }} </td>
-                                <td class="text-end"> {{ tokenData.decimals }} </td>
-                            </tr>
+                    class="marginLeft10" alt="" @click="pubbley" style="cursor: pointer;">
+      </text> -->
+    </h3>
+    <div class="marginTOP-50">
+      <card class="md-3">
+        <card-body class="card-bodys">
+          <table
+            class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small"
+          >
+            <tr>
+              <th>{{ $t("account.general_situation") }}</th>
+              <th class="text-end"></th>
+            </tr>
+            <tbody v-if="tokenData">
+              <tr>
+                <td>{{ $t("account.token_account") }}</td>
+                <td class="text-end">{{ address == "" ? "" : address }}</td>
+              </tr>
+              <tr v-if="mintToken">
+                <td>{{ $t("account.address_label") }}</td>
+                <td class="text-end">
+                  {{ mintToken.name ? mintToken.name : "N/A" }}
+                </td>
+              </tr>
+              <tr v-else>
+                <td>{{ $t("account.address_label") }}</td>
+                <td class="text-end">
+                  {{ titleUrl(url).find ? titleUrl(url).url : "N/A" }}
+                </td>
+              </tr>
+              <tr>
+                <td>{{ $t("account.symbol") }}</td>
+                <td class="text-end">
+                  {{
+                    mintToken
+                      ? mintToken.symbol
+                        ? mintToken.symbol
+                        : "N/A"
+                      : "N/A"
+                  }}
+                </td>
+                <!-- <td class="text-end"> {{ mintToken.symbol ? mintToken.symbol : 'N/A' }} </td> -->
+              </tr>
+              <tr>
+                <td>{{ $t("transaction.Decimals") }}</td>
+                <td class="text-end">{{ tokenData.decimals }}</td>
+              </tr>
 
-                            <tr>
-                                <td>{{ $t("account.supply") }} </td>
-                                <td class="text-end"> {{ come(toFexedStake(tokenData.supply, tokenData.decimals)) }}
-                                    <span v-if="mintToken">
-                                        {{ mintToken.symbol ? "(" + mintToken.symbol + ")" : "" }}
-                                    </span>
-                                    <span v-if="url == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'">
-                                        ( WBTG )
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>{{ $t("account.owner") }} </td>
-                                <td class="text-end text-theme">
-                                    <RenderText :address="paramsId" />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </card-body>
-            </card>
+              <tr>
+                <td>{{ $t("account.supply") }}</td>
+                <td class="text-end">
+                  {{ come(toFexedStake(tokenData.supply, tokenData.decimals)) }}
+                  <span v-if="mintToken">
+                    {{ mintToken.symbol ? "(" + mintToken.symbol + ")" : "" }}
+                  </span>
+                  <span
+                    v-if="url == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'"
+                  >
+                    ( WBTG )
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td>{{ $t("account.owner") }}</td>
+                <td class="text-end text-theme">
+                  <RenderText :address="paramsId" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </card-body>
+      </card>
 
-            <!-- <card class="md-3 marginTOP-50">
+      <!-- <card class="md-3 marginTOP-50">
                 <card-body class="card-bodys ">
                     <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
                         <th>
@@ -110,10 +164,10 @@
                     </table>
                 </card-body>
             </card> -->
-            <authorization v-if="url" :url="url"></authorization>
-        </div>
+      <authorization v-if="url" :url="url"></authorization>
+    </div>
 
-        <!-- <div class="tab-content marginTOP-50">
+    <!-- <div class="tab-content marginTOP-50">
             <card class="md-3">
                 <card-body class="card-bodys">
                     <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
@@ -141,73 +195,113 @@
                 </card-body>
             </card>
         </div> -->
-        <!-- <cardView v-if="url" :url="url" /> -->
-        <div class="tab-content marginTOP-50">
-            <card class="md-3">
-                <card-body class="card-bodys">
-                    <el-tabs v-model="activeName" class="demo-tabs" @tab-click="tabClick">
-                        <el-tab-pane :label="$t('navigation.transactions')" name="first">
-                            <history-view :url="url"></history-view>
-                        </el-tab-pane>
-                        <el-tab-pane v-if="transfersType" :label="$t('transfer')" name="second">
-                            <transfer-view :url="url" :type="false" :toType="false"
-                                v-if="activeName == 'second'"></transfer-view>
-                        </el-tab-pane>
-                        <el-tab-pane :label="$t('account.holder') + ' ' + '(' + holdNumber + ')'" name="third">
-                            <holder-view :url="url" :paramsId="paramsId" v-if="activeName == 'third'"></holder-view>
-                        </el-tab-pane>
-                        <el-tab-pane :label="$t('Margin-record')" name="fourth">
-                            <ReserveView :url="url" ref="reserveViewRef" :paramsId="paramsId"
-                                v-if="activeName == 'fourth'" :type="false">
-                            </ReserveView>
-                        </el-tab-pane>
-                    </el-tabs>
-                    <div style="position: absolute;top: 0px;right: 0px;z-index: 9999999;" v-if="activeName == 'fourth'">
-                        <div style="padding: 16px 16px 0 0 ;">
-                            <div class="menu-item dropdown dropdown-mobile-full">
-                                <a href="#" data-bs-toggle="dropdown" data-bs-display="static" class="menu-link scales"
-                                    style="white-space: nowrap;text-decoration: none;color: #fff;">
-                                    {{ $t(nameText) }}
-                                    <!-- <img src="https://cdn.openverse.network/brands/openverse/icon_128.png" width="32" alt=""> -->
-                                    <i class="bi bi-chevron-down" style="margin: 5px;"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end me-lg-3 fs-11px mt-1">
-                                    <div class="dropdown-item align-items-center" :class="item.type ? 'text-theme' : ''"
-                                        style="cursor: pointer;text-align: center;" v-for="(item, index) in selectData"
-                                        :key="index" @click="selsetClick(index)">
-                                        {{ $t(item.name) }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </card-body>
-            </card>
-        </div>
+    <!-- <cardView v-if="url" :url="url" /> -->
+    <div class="tab-content marginTOP-50">
+      <card class="md-3">
+        <card-body class="card-bodys">
+          <el-tabs v-model="activeName" class="demo-tabs" @tab-click="tabClick">
+            <el-tab-pane :label="$t('navigation.transactions')" name="first">
+              <history-view :url="url"></history-view>
+            </el-tab-pane>
+            <el-tab-pane
+              v-if="transfersType"
+              :label="$t('transfer')"
+              name="second"
+            >
+              <transfer-view
+                :url="url"
+                :type="false"
+                :toType="false"
+                v-if="activeName == 'second'"
+              ></transfer-view>
+            </el-tab-pane>
+            <el-tab-pane
+              :label="$t('account.holder') + ' ' + '(' + holdNumber + ')'"
+              name="third"
+            >
+              <holder-view
+                :url="url"
+                :paramsId="paramsId"
+                v-if="activeName == 'third'"
+              ></holder-view>
+            </el-tab-pane>
+            <el-tab-pane :label="$t('Margin-record')" name="fourth">
+              <ReserveView
+                :url="url"
+                ref="reserveViewRef"
+                :paramsId="paramsId"
+                v-if="activeName == 'fourth'"
+                :type="false"
+              >
+              </ReserveView>
+            </el-tab-pane>
+          </el-tabs>
+          <div
+            style="position: absolute; top: 0px; right: 0px; z-index: 9999999"
+            v-if="activeName == 'fourth'"
+          >
+            <div style="padding: 16px 16px 0 0">
+              <div class="menu-item dropdown dropdown-mobile-full">
+                <a
+                  href="#"
+                  data-bs-toggle="dropdown"
+                  data-bs-display="static"
+                  class="menu-link scales"
+                  style="
+                    white-space: nowrap;
+                    text-decoration: none;
+                    color: #fff;
+                  "
+                >
+                  {{ $t(nameText) }}
+                  <!-- <img src="https://cdn.openverse.network/brands/openverse/icon_128.png" width="32" alt=""> -->
+                  <i class="bi bi-chevron-down" style="margin: 5px"></i>
+                </a>
+                <div
+                  class="dropdown-menu dropdown-menu-end me-lg-3 fs-11px mt-1"
+                >
+                  <div
+                    class="dropdown-item align-items-center"
+                    :class="item.type ? 'text-theme' : ''"
+                    style="cursor: pointer; text-align: center"
+                    v-for="(item, index) in selectData"
+                    :key="index"
+                    @click="selsetClick(index)"
+                  >
+                    {{ $t(item.name) }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </card-body>
+      </card>
     </div>
+  </div>
 </template>
 
 <script setup>
 import {
-    onMounted,
-    ref,
+  onMounted,
+  ref,
 } from 'vue';
 
 import { useRouter } from 'vue-router';
 
 import { PublicKey } from '@solana/web3.js';
-import RenderText from "../../../components/Render/text.vue"
+
 import historyView from '../../../components/address/history_list.vue';
 import holderView from '../../../components/address/holder_list.vue';
 import pledgeView from '../../../components/address/pledge.vue';
 import ReserveView from '../../../components/address/reserve_list.vue';
 import transferView from '../../../components/address/transfer_list.vue';
 import { titleUrl } from '../../../components/method/title_url';
+import RenderText from '../../../components/Render/text.vue';
 import { chainRequest } from '../../../request/chain';
 import {
-    getAccountState,
-    getAddressTransactionFees,
-    getTokenPermanentDelegate,
+  getAccountState,
+  getAddressTransactionFees,
+  getTokenPermanentDelegate,
 } from '../../../request/extension';
 import { solanaRequest } from '../../../request/solanaReques';
 import { metaRequest } from '../../../request/tokenMeta';
@@ -216,52 +310,51 @@ import cardView from './components/card.vue';
 
 // import {  checkAccountTransferability,getTokenTransferFeeMax } from "../../../request/extension";
 
-
 const tokenData = ref();
 const pubbleys = ref("");
 const address = ref();
 const holdNumber = ref();
 const router = useRouter();
 const mintToken = ref();
-const activeName = ref('first');
+const activeName = ref("first");
 // const activeName = ref('fourth');
 const nameText = ref("account.PerMonth");
 
 const selectData = ref([
-    { name: 'account.All', value: 'all' },
-    { name: 'account.PerYear', value: 'year' },
-    { name: 'account.PerMonth', value: 'month' },
-    // { name: 'All', value: 'all' },
-    // { name: 'Per Year', value: 'year' },
-    // { name: 'Per Month', value: 'month' },
-])
-const reserveViewRef = ref(null)
+  { name: "account.All", value: "all" },
+  { name: "account.PerYear", value: "year" },
+  { name: "account.PerMonth", value: "month" },
+  // { name: 'All', value: 'all' },
+  // { name: 'Per Year', value: 'year' },
+  // { name: 'Per Month', value: 'month' },
+]);
+const reserveViewRef = ref(null);
 
 const selsetClick = (index) => {
-    // console.log(index);
-    nameText.value = selectData.value[index].name;
+  // console.log(index);
+  nameText.value = selectData.value[index].name;
 
-    if (reserveViewRef.value) {
-        // console.log('reserveViewRef.value', reserveViewRef.value);
-        reserveViewRef.value.handleSelect(selectData.value[index].value);
-    }
-}
+  if (reserveViewRef.value) {
+    // console.log('reserveViewRef.value', reserveViewRef.value);
+    reserveViewRef.value.handleSelect(selectData.value[index].value);
+  }
+};
 function isProductionDomain() {
-    const hostname = window.location.hostname;
-    // 检测是否包含 'devnet.' 前缀
-    return !hostname.startsWith('devnet.');
+  const hostname = window.location.hostname;
+  // 检测是否包含 'devnet.' 前缀
+  return !hostname.startsWith("devnet.");
 }
 const transfersType = isProductionDomain();
 
 const props = defineProps({
-    url: {
-        typeof: String,
-        default: ''
-    },
-    paramsId: {
-        typeof: String,
-        default: ''
-    }
+  url: {
+    typeof: String,
+    default: "",
+  },
+  paramsId: {
+    typeof: String,
+    default: "",
+  },
 });
 
 // const url = ref("AmXJDzPZoXJX2buwbeg9aL1WUH7CwoNMw2JYFwk2LbKD");
@@ -270,202 +363,195 @@ const paramsId = ref(props.paramsId);
 const token_name = ref("");
 const token_img = ref("");
 const AccountType = ref("");
-const PermanentDelegate = ref('')
+const PermanentDelegate = ref("");
 const TokenTransferFeeMax = ref("");
 const TokenPermanentDelegate = ref("");
 const TransactionFee = ref("");
 
 onMounted(async () => {
-    AccountType.value = await getAccountState(props.url);
-    // PermanentDelegate.value = await checkAccountTransferability(props.url);
-    // // console.log(PermanentDelegate.value);
-    // TokenTransferFeeMax.value = await getTokenTransferFeeMax(props.url);
-    // // console.log(TokenTransferFeeMax.value);
-    TokenPermanentDelegate.value = await getTokenPermanentDelegate(url.value, paramsId.value);
-    TransactionFee.value = await getAddressTransactionFees(url.value);
+  AccountType.value = await getAccountState(props.url);
+  // PermanentDelegate.value = await checkAccountTransferability(props.url);
+  // // console.log(PermanentDelegate.value);
+  // TokenTransferFeeMax.value = await getTokenTransferFeeMax(props.url);
+  // // console.log(TokenTransferFeeMax.value);
+  TokenPermanentDelegate.value = await getTokenPermanentDelegate(
+    url.value,
+    paramsId.value
+  );
+  TransactionFee.value = await getAddressTransactionFees(url.value);
 });
 
-
 const tokenName = async (url, params) => {
-
-    try {
-        const res = await metaRequest(url, params);
-        if (res) {
-            token_name.value = res.name ? res.name : '';
-            token_img.value = res.uri ? res.uri : "";
-        } else {
-            token_name.value = url;
-        }
-
-    } catch (error) {
-
-        token_name.value = url;
-        console.error("Error fetching token info:", error);
+  try {
+    const res = await metaRequest(url, params);
+    if (res) {
+      token_name.value = res.name ? res.name : "";
+      token_img.value = res.uri ? res.uri : "";
+    } else {
+      token_name.value = url;
     }
-}
+  } catch (error) {
+    token_name.value = url;
+    console.error("Error fetching token info:", error);
+  }
+};
 const pubbley = () => {
-    router.push({
-        name: "TokenReputation",
-    })
+  router.push({
+    name: "TokenReputation",
+  });
 };
 const tokenRwquest = async () => {
+  // await chainRequest(method).then(res => {
 
-    // await chainRequest(method).then(res => {
+  try {
+    solanaRequest(url.value, paramsId.value).then((res) => {
+      tokenData.value = res;
 
-    try {
-        solanaRequest(url.value, paramsId.value).then(res => {
-            tokenData.value = res;
+      if (res.mintAuthority) {
+        let mintAuthorit = res.mintAuthority._bn;
 
-            if (res.mintAuthority) {
-                let mintAuthorit = res.mintAuthority._bn;
+        let mintAuthority = BigInt(mintAuthorit);
+        pubbleys.value = new PublicKey(mintAuthority);
+      }
 
-                let mintAuthority = BigInt(mintAuthorit);
-                pubbleys.value = new PublicKey(mintAuthority);
-
-
-            }
-
-
-            if (res.address) {
-                let addresses = res.address._bn;
-                let addressCard = BigInt(addresses);
-                address.value = new PublicKey(addressCard);
-            }
-        });
-        metaRequest(url.value, paramsId.value).then(res => {
-
-            mintToken.value = res;
-        });
-    } catch (err) {
-        // console.log(err);
-    }
-    // });
-}
-
+      if (res.address) {
+        let addresses = res.address._bn;
+        let addressCard = BigInt(addresses);
+        address.value = new PublicKey(addressCard);
+      }
+    });
+    metaRequest(url.value, paramsId.value).then((res) => {
+      mintToken.value = res;
+    });
+  } catch (err) {
+    // console.log(err);
+  }
+  // });
+};
 
 // defineEmits({ mintToken });
 const numberHeld = async () => {
-
-    let method = {
-        "jsonrpc": "2.0",
-        "id": 1,
-        "method": "getProgramAccounts",
-        "params": [
-            paramsId.value,
-            // "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c",
-            {
-                "encoding": "jsonParsed",
-                "filters": [
-                    {
-                        "memcmp": {
-                            "offset": 0,
-                            "bytes": props.url
-                            // "bytes": "GragM9tHgicpxtf9qrTkbY1fFZYA8CJaDgLuFnZikdqs"
-                        }
-                    }
-                ]
-            }
-        ]
-    }
-    chainRequest(method).then(res => {
-
-
-        if (res.err) {
-            holdNumber.value = 0;
-        } else {
-            let array = res.result;
-            let holder = 0;
-            // console.log(array);
-
-            for (let i in array) {
-                if (array[i].account.data.parsed.info.tokenAmount.uiAmount > 0) {
-                    holder++;
-                }
-            }
-            holdNumber.value = holder;
-        }
-    }).catch(() => {
+  let method = {
+    jsonrpc: "2.0",
+    id: 1,
+    method: "getProgramAccounts",
+    params: [
+      paramsId.value,
+      // "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c",
+      {
+        encoding: "jsonParsed",
+        filters: [
+          {
+            memcmp: {
+              offset: 0,
+              bytes: props.url,
+              // "bytes": "GragM9tHgicpxtf9qrTkbY1fFZYA8CJaDgLuFnZikdqs"
+            },
+          },
+        ],
+      },
+    ],
+  };
+  chainRequest(method)
+    .then((res) => {
+      if (res.err) {
         holdNumber.value = 0;
-    });
-}
-onMounted(async () => {
-    await tokenRwquest();
+      } else {
+        let array = res.result;
+        let holder = 0;
+        // console.log(array);
 
-    await numberHeld();
-    if (url.value == "B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz") {
-        mintToken.value = {
-            "name": "Wrap BTG",
-            "symbol": "WBTG",
+        for (let i in array) {
+          if (array[i].account.data.parsed.info.tokenAmount.uiAmount > 0) {
+            holder++;
+          }
         }
-    }
-    await tokenName(url.value, props.paramsId);
+        holdNumber.value = holder;
+      }
+    })
+    .catch(() => {
+      holdNumber.value = 0;
+    });
+};
+onMounted(async () => {
+  await tokenRwquest();
+
+  await numberHeld();
+  if (url.value == "B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz") {
+    mintToken.value = {
+      name: "Wrap BTG",
+      symbol: "WBTG",
+    };
+  }
+  await tokenName(url.value, props.paramsId);
 });
 const come = (num) => {
-    let reg =
-        num.toString().indexOf(".") > -1
-            ? /(\d)(?=(\d{3})+\.)/g
-            : /(\d)(?=(\d{3})+$)/g;
+  let reg =
+    num.toString().indexOf(".") > -1
+      ? /(\d)(?=(\d{3})+\.)/g
+      : /(\d)(?=(\d{3})+$)/g;
 
-    return num.toString().replace(reg, "$1,");
-}
+  return num.toString().replace(reg, "$1,");
+};
 const toFexedStake = (num, decimals) => {
-    if (num == null || decimals == null) {
-        console.error('Number and decimals must be provided.');
-        return 0;
-    }
-    const divisor = Math.pow(10, JSON.parse(decimals));
+  if (num == null || decimals == null) {
+    console.error("Number and decimals must be provided.");
+    return 0;
+  }
+  const divisor = Math.pow(10, JSON.parse(decimals));
 
-    return (JSON.parse(num) / divisor).toFixed(2);
-
+  return (JSON.parse(num) / divisor).toFixed(2);
 };
 
 const tabClick = () => {
-
-    console.log(123);
-    if (activeName.value !== 'fourth') {
-        nameText.value = "account.PerMonth"
-    }
-
-}
-
+  console.log(123);
+  if (activeName.value !== "fourth") {
+    nameText.value = "account.PerMonth";
+  }
+};
 </script>
 
 <style scoped>
 ::v-deep .el-tabs__active-bar {
-    display: none !important;
+  display: none !important;
 }
 
 ::v-deep .el-tabs__item {
-    /* background-color: #34434f; */
-    /* background-color: rgba(255, 255, 255, 0.1); */
-    margin-left: 10px;
-    text-align: center;
-    padding: 0 !important;
-    padding: 0 12px !important;
-    border-radius: 10px;
-    /* box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.2); */
-    box-shadow: 6px 6px 6px 0px rgba(0, 0, 0, 0.08);
-    background: rgba(255, 255, 255, 0.08);
-
+  /* background-color: #34434f; */
+  /* background-color: rgba(255, 255, 255, 0.1); */
+  margin-left: 10px;
+  text-align: center;
+  padding: 0 !important;
+  padding: 0 12px !important;
+  border-radius: 10px;
+  /* box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.2); */
+  box-shadow: 6px 6px 6px 0px rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .dropdown-mobile-full {
-    height: 40px;
-    line-height: 40px;
-    background-color: rgba(255, 255, 255, 0.08);
-    margin-left: 10px;
-    text-align: center;
-    padding: 0 !important;
-    padding: 0 12px !important;
-    border-radius: 10px;
-    box-shadow: 6px 6px 8px #00000014;
+  height: 40px;
+  line-height: 40px;
+  background-color: rgba(255, 255, 255, 0.08);
+  margin-left: 10px;
+  text-align: center;
+  padding: 0 !important;
+  padding: 0 12px !important;
+  border-radius: 10px;
+  box-shadow: 6px 6px 8px #00000014;
 }
 
 ::v-deep .el-tabs__nav {
-    width: 100%;
+  width: 100%;
 }
 
 ::v-deep .el-tabs__item.is-top:last-child {
-    float: right;
+  float: right;
+}
+
+.displayAlign {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }
 </style>

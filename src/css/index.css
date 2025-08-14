@@ -50,10 +50,23 @@
     margin-right: 10px;
 }
 
+.marginLeft10{
+    margin-left: 10px;
+}
+
 .imgWigth25{
     width: 25px;
 }
 
+.imgWigth40{
+    width: 40px;
+}
+
 .card.card-body{
     min-height: 205px;
+}
+
+.imgCenter{
+    object-fit: contain;
+    width: 20px;
 }
