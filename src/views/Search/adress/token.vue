@@ -225,7 +225,7 @@
                 v-if="activeName == 'third'"
               ></holder-view>
             </el-tab-pane>
-            <el-tab-pane :label="$t('Margin-record')" name="fourth">
+            <el-tab-pane v-if="!VrcType" :label="$t('Margin-record')" name="fourth">
               <ReserveView
                 :url="url"
                 ref="reserveViewRef"
@@ -234,6 +234,16 @@
                 :type="false"
               >
               </ReserveView>
+            </el-tab-pane>
+            <el-tab-pane :label="$t('Monetary-record')" name="fifth">
+              <activities
+                :url="url"
+                ref="reserveViewRef"
+                :paramsId="paramsId"
+                v-if="activeName == 'fifth'"
+                :type="false"
+              >
+              </activities>
             </el-tab-pane>
           </el-tabs>
           <div
@@ -305,6 +315,7 @@ import {
 } from '../../../request/extension';
 import { solanaRequest } from '../../../request/solanaReques';
 import { metaRequest } from '../../../request/tokenMeta';
+import activities from './components/activities.vue';
 import authorization from './components/authorization.vue';
 import cardView from './components/card.vue';
 
@@ -356,6 +367,14 @@ const props = defineProps({
     default: "",
   },
 });
+const VrcType = ref(false)
+console.log(titleUrl(props.url));
+for(let i in titleUrl(props.url).certificates){
+  if(titleUrl(props.url).certificates[i].code == "VRC10"){
+    VrcType.value = true
+  }
+}
+console.log(VrcType.value);
 
 // const url = ref("AmXJDzPZoXJX2buwbeg9aL1WUH7CwoNMw2JYFwk2LbKD");
 const url = ref(props.url);
