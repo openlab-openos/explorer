@@ -44,6 +44,8 @@
     "Requset-text": "每 8 小时最多 1 次请求",
     "ConfirmAirdrop": "确认空投",
     "Margin-record": "储备金记录",
+    "Monetary-record": "货币活动",
+    "Currency": "货币",
     "not-been-released": "当前储备金总锁仓量",
     "have-been-released": "已释放待赎回储备金",
     "stakeTime": "质押开始时间",
