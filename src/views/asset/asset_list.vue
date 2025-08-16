@@ -23,7 +23,7 @@
                         <template v-if="type">
                             <tr v-for="item, index in paginatedHistoryData" :key="index">
                                 <td class="text-theme">
-                                    <img v-if="item.image_url" :src="item.image_url" height="20" alt=""
+                                    <img v-if="item.image_url" :src="item.image_url"  alt=""
                                         class="marginRight8 imgCenter">
                                     <img v-if="B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz"
                                         :src="item.pubkey == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' ? 'https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png' : ''"

@@ -1,72 +1,75 @@
-.marginTOP-50{
-    margin-top: 50px;
+.marginTOP-50 {
+  margin-top: 50px;
 }
-.marginTOP-10{
-    margin-top: 10px;
+.marginTOP-10 {
+  margin-top: 10px;
 }
-.marginTOP-20{
-    margin-top: 20px;
-}
-
-.justify-end{
-    display: flex;
-    justify-content: end;
+.marginTOP-20 {
+  margin-top: 20px;
 }
 
-.padding-10{
-    padding: 10px;
+.justify-end {
+  display: flex;
+  justify-content: end;
 }
 
-.FontSize-12{
-    font-size: 12px;
-}
-.FontSize-14{
-    font-size: 14px;
+.padding-10 {
+  padding: 10px;
 }
 
-.FontWeight-Bold{
-    font-weight: bold;
+.FontSize-12 {
+  font-size: 12px;
+}
+.FontSize-14 {
+  font-size: 14px;
 }
 
-.color27-181-197{
-    color: rgba(67, 181, 197, 1);
-}
-.colorfff{
-    color: #fff;
-}
-.colord1{
-    color: #698582;
+.FontWeight-Bold {
+  font-weight: bold;
 }
 
-.color0-255-179-1{
-    color: rgba(0, 255, 136, 1) !important;
+.color27-181-197 {
+  color: rgba(67, 181, 197, 1);
+}
+.colorfff {
+  color: #fff;
+}
+.colord1 {
+  color: #698582;
 }
 
-.marginRight8{
-    margin-right: 8px;
+.color0-255-179-1 {
+  color: rgba(0, 255, 136, 1) !important;
 }
 
-.marginRight10{
-    margin-right: 10px;
+.marginRight8 {
+  margin-right: 8px;
 }
 
-.marginLeft10{
-    margin-left: 10px;
+.marginRight10 {
+  margin-right: 10px;
 }
 
-.imgWigth25{
-    width: 25px;
+.marginLeft10 {
+  margin-left: 10px;
 }
 
-.imgWigth40{
-    width: 40px;
+.imgWigth25 {
+  width: 25px;
 }
 
-.card.card-body{
-    min-height: 205px;
+.imgWigth40 {
+  width: 40px;
 }
 
-.imgCenter{
-    object-fit: contain;
-    width: 20px;
+.card.card-body {
+  min-height: 205px;
+}
+
+.imgCenter {
+  width: 24px;
+  height: 24px;
+  border-radius: 100%;
+  object-position: center center;
+  object-fit: cover;
 }
