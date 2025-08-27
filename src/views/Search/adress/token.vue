@@ -216,7 +216,7 @@
               ></transfer-view>
             </el-tab-pane>
             <el-tab-pane
-              :label="$t('account.holder') + ' ' + '(' + holdNumber + ')'"
+              :label="$t('account.holder') + ' ' + '(' + (holdNumber ? holdNumber : 0) + ')'"
               name="third"
             >
               <holder-view
@@ -225,7 +225,8 @@
                 v-if="activeName == 'third'"
               ></holder-view>
             </el-tab-pane>
-            <el-tab-pane v-if="!VrcType" :label="$t('Margin-record')" name="fourth">
+            <el-tab-pane :label="$t('Margin-record')" name="fourth">
+            <!-- <el-tab-pane v-if="!VrcType" :label="$t('Margin-record')" name="fourth"> -->
               <ReserveView
                 :url="url"
                 ref="reserveViewRef"
@@ -235,7 +236,7 @@
               >
               </ReserveView>
             </el-tab-pane>
-            <el-tab-pane :label="$t('Monetary-record')" name="fifth">
+            <!-- <el-tab-pane v-if="VrcType" :label="$t('Monetary-record')" name="fifth">
               <activities
                 :url="url"
                 ref="reserveViewRef"
@@ -244,7 +245,7 @@
                 :type="false"
               >
               </activities>
-            </el-tab-pane>
+            </el-tab-pane> -->
           </el-tabs>
           <div
             style="position: absolute; top: 0px; right: 0px; z-index: 9999999"
@@ -330,6 +331,7 @@ const mintToken = ref();
 const activeName = ref("first");
 // const activeName = ref('fourth');
 const nameText = ref("account.PerMonth");
+console.log('holdNumber',holdNumber.value);
 
 const selectData = ref([
   { name: "account.All", value: "all" },
@@ -488,7 +490,9 @@ const numberHeld = async () => {
         holdNumber.value = holder;
       }
     })
-    .catch(() => {
+    .catch((e) => {
+      console.log(e);
+      
       holdNumber.value = 0;
     });
 };

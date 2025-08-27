@@ -17,6 +17,7 @@
   "dependencies": {
     "@caohenghu/vue-colorpicker": "^1.2.4",
     "@chenfengyuan/vue-countdown": "^2.1.2",
+    "@coral-xyz/anchor": "^0.31.1",
     "@fortawesome/fontawesome-free": "^6.5.1",
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
     "@fortawesome/free-brands-svg-icons": "^6.6.0",

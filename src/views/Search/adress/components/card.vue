@@ -22,7 +22,7 @@ import { ref } from 'vue';
 // import vrc11 from '../../../../assets/assetsLogo/vrc11.png';
 // import vrc12 from '../../../../assets/assetsLogo/vrc12.png';
 // import vrc20 from '../../../../assets/assetsLogo/vrc20.png';
-import { tokenList } from './request.js';
+import { tokenList } from '../method/request.js';
 
 const props = defineProps({
     url: {

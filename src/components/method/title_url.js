@@ -1,10 +1,12 @@
+import Verified from '@/assets/icon/Verified.png';
+
 import {
-    Authentications,
-    LOADER_IDS,
-    PROGRAM_INFO_BY_ID,
-    SPECIAL_IDS,
-    SYSVAR_IDS,
-    TOKEN_IDS,
+  Authentications,
+  LOADER_IDS,
+  PROGRAM_INFO_BY_ID,
+  SPECIAL_IDS,
+  SYSVAR_IDS,
+  TOKEN_IDS,
 } from '../../program';
 
 export const titleUrl = (url) => {
@@ -78,8 +80,8 @@ export const titleUrl = (url) => {
             type: true,
             find: true,
             symbol: 'WBTG',
-            certificates: [{ 'img': 'https://pic1.imgdb.cn/item/682da89b58cb8da5c80290c2.png' }],
-            img: 'https://pic1.imgdb.cn/item/682da8a958cb8da5c8029118.png',
+            certificates: [{ 'img': Verified }],
+            img: Verified,
             assest: false,
         };
     }

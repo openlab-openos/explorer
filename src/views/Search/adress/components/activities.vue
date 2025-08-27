@@ -79,6 +79,7 @@ const historyData = ref([]);
 
 const currentPage = ref(1);
 const pageSize = ref(20);
+const totalItems = ref(0);
 
 const paginatedHistoryData = computed(() => {
   const start = (currentPage.value - 1) * pageSize.value;

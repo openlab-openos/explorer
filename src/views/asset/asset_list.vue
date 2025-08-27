@@ -25,21 +25,22 @@
                                 <td class="text-theme">
                                     <img v-if="item.image_url" :src="item.image_url"  alt=""
                                         class="marginRight8 imgCenter">
-                                    <img v-if="B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz"
-                                        :src="item.pubkey == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' ? 'https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png' : ''"
+                                    <img v-if="item.address == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'"
+                                        :src="item.address == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' ? 'https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png' : ''"
                                         width="20" alt="" class="marginRight8">
 
                                     <text style="cursor: pointer;" @click="pubbleys(item.address)">{{
-                                        item.name ? item.name : item.address }}</text>
+                                        item.name ? item.name : titleUrl(item.address).url }}
+                                    </text>
                                     <img v-if="titleUrl(item.pubkey).type"
                                         v-for="(datas, indexs) in titleUrl(item.pubkey).certificates" :key="indexs"
                                         :src="datas.img" height="20" class="marginRight8" alt="">
                                 </td>
                                 <td>
-                                    {{ item.symbol ? item.symbol : 'N/A' }}
+                                    {{ item.symbol ? item.symbol : (titleUrl(item.address).symbol ? titleUrl(item.address).symbol : 'N/A' ) }}
                                 </td>
 
-                                <template v-if="item.certificates.length == 0">
+                                <template v-if="item.certificates.length == 0 && item.address != 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' ">
                                     <td>N/A</td>
                                 </template>
                                 <template v-else>
@@ -47,6 +48,11 @@
                                         <img v-for="items, indexs in item.certificates" :key="indexs"
                                             :src="items.image_url" height="20" class="marginRight8"
                                             :title="items.certificate_code" @click="pubbley" style="cursor: pointer;">
+                                        <template v-if=" item.address == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' " >
+                                            <img v-for="items, indexs in titleUrl(item.address).certificates" :key="indexs"
+                                            :src="items.img" height="20" class="marginRight8"
+                                            :title="items.certificate_code" @click="pubbley" style="cursor: pointer;"></img>
+                                        </template>
                                         <!-- <div style="display: flex;">
                                         <p v-for="items, indexs in item.certificates" :key="indexs"
                                             :style="'background-color: ' + items.backColor"
@@ -56,8 +62,6 @@
                                     </div> -->
                                     </td>
                                 </template>
-
-
                                 <!-- <td>
                                 {{ item.symbol }}
                             </td> -->
@@ -76,6 +80,7 @@
                                     {{ come(smartFormatNumber(item.price ? item.price : '0'))  }}
                                     <img v-if="item.price_icon" :src="imgUrl + '/' + item.price_icon" height="24"
                                         class="marginRight8" alt="">
+                                    <!-- <img src="../../assets/icon/exchange.png" width="24" style="cursor: pointer;" alt=""> -->
                                 </td>
                                 <td>
                                     {{ come(smartFormatNumber(toFexedStake(item.supply, item.decimals))) }}

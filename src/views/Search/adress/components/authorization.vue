@@ -96,15 +96,18 @@
 
 <script setup>
 import {
-    onMounted,
-    ref,
+  onMounted,
+  ref,
 } from 'vue';
-import RenderText from "../../../../components/Render/text.vue"
+
+import { useRouter } from 'vue-router';
+
 import { titleUrl } from '../../../../components/method/title_url/';
+import RenderText from '../../../../components/Render/text.vue';
 import { chainRequest } from '../../../../request/chain.js';
 import { getExtraData } from '../../../../request/extensions.js';
-import { tokenList } from './auth.js';
-import { useRouter } from 'vue-router';
+import { tokenList } from '../method/auth.js';
+
 const router = useRouter();
 const pubbtx = (url) => {
     if (url) {

@@ -110,7 +110,7 @@ onMounted(async () => {
         jsonrpc: "2.0",
         id: "",
         method: "getConfirmedSignaturesForAddress2",
-        params: [props.url, { limit: 200 }],
+        params: [props.url,],
     });
     if (historyData.value) {
         totalItems.value = historyData.value.length;

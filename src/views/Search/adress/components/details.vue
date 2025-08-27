@@ -74,20 +74,21 @@
 
 <script setup>
 import {
-    computed,
-    onMounted,
-    ref,
+  computed,
+  onMounted,
+  ref,
 } from 'vue';
 
 import moment from 'moment';
 import { useRouter } from 'vue-router';
-import RenderText from "../../../../components/Render/text.vue"
+
 import { titleUrl } from '../../../../components/method/title_url';
 import { smartFormatNumber } from '../../../../components/number/smart.js';
+import RenderText from '../../../../components/Render/text.vue';
 import {
-    getData,
-    on,
-} from './event-bus.js';
+  getData,
+  on,
+} from '../method/event-bus.js';
 
 const router = useRouter();
 
