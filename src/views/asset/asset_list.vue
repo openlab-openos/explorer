@@ -80,7 +80,7 @@
                                     {{ come(smartFormatNumber(item.price ? item.price : '0'))  }}
                                     <img v-if="item.price_icon" :src="imgUrl + '/' + item.price_icon" height="24"
                                         class="marginRight8" alt="">
-                                    <!-- <img src="../../assets/icon/exchange.png" width="24" style="cursor: pointer;" alt=""> -->
+                                    <img src="../../assets/icon/exchange.png" v-if="item.name == 'USD' || item.name == 'USDT' " width="24" style="cursor: pointer;" alt="">
                                 </td>
                                 <td>
                                     {{ come(smartFormatNumber(toFexedStake(item.supply, item.decimals))) }}
@@ -148,6 +148,8 @@ const paginatedHistoryData = computed(() => {
     console.log(historyData.value);
     return historyData.value.slice(start, end);
 });
+// console.log('paginatedHistoryData',paginatedHistoryData);
+
 const type = ref(true);
 const handlePageChange = (newPage) => {
     type.value = false;
