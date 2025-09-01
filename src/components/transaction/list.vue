@@ -3,7 +3,8 @@
         <card-body>
             <div class="d-flex fw-bold small mb-3">
                 <span class="flex-grow-1"> {{ $t("transactions.title") }} </span>
-                <card-expand-toggler />
+                                  <!-- <card-expand-toggler /> -->
+
             </div>
             <div class="table-responsive">
                 <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
@@ -121,11 +122,11 @@
 
 <script setup>
 import {
-    getCurrentInstance,
-    onMounted,
-    ref,
+  getCurrentInstance,
+  onMounted,
+  ref,
 } from 'vue';
-import RenderText from "../Render/text.vue"
+
 import moment from 'moment';
 import CountUp from 'vue-countup-v3';
 import { useRouter } from 'vue-router';
@@ -136,6 +137,7 @@ import { solanapubbleys } from '../../components/method/solana';
 import { titleUrl } from '../../components/method/title_url';
 import { smartFormatNumber } from '../../components/number/smart.js';
 import { order } from '../../request/order';
+import RenderText from '../Render/text.vue';
 
 const props = defineProps({
     boolean: {

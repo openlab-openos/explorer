@@ -92,16 +92,13 @@ const urlType = sessionStorage.getItem("urlType");
 // console.log(UtlDevnetType, 'UtlDevnetType');
 if (UtlDevnetType) {
   if (ArchiveType) {
-    console.log(1234);
-    console.log(ArchiveType);
-    
     if (ArchiveType == "Archive1") {
-      ScanName.value = "Mainnet Archive1";
+      ScanName.value = "Betanet1";
     } else if (ArchiveType == "Archive2") {
-      ScanName.value = "Mainnet Archive2";
+      ScanName.value = "Betanet2";
     }
   } else {
-    ScanName.value = "Mainnet Archive1";
+    ScanName.value = "Betanet1";
   }
 
 } else {
@@ -177,8 +174,8 @@ const selectLanguage = (language: any, abbreviation: any) => {
 
 // 节点切换
 const selectData = ref([
-  { name: 'Mainnet Archive1', url: 'https://www.openverse.live', type: UtlDevnetType, requestType: 'Formal',ArchiveType:'Archive1', requestUrl: "https://archive1.openverse.network/" },
-  { name: 'Mainnet Archive2', url: 'https://www.openverse.live', type: UtlDevnetType, requestType: 'Formal',ArchiveType:'Archive2', requestUrl: "https://archive2.openverse.network/" },
+  { name: 'Betanet1', url: 'https://www.openverse.live', type: UtlDevnetType, requestType: 'Formal',ArchiveType:'Archive1', requestUrl: "https://archive1.openverse.network/" },
+  { name: 'Betanet2', url: 'https://www.openverse.live', type: UtlDevnetType, requestType: 'Formal',ArchiveType:'Archive2', requestUrl: "https://archive2.openverse.network/" },
   { name: 'Devnet', url: 'https://devnet.openverse.live', type: !UtlDevnetType,ArchiveType:'', requestType: 'Test' },
 ])
 
@@ -329,7 +326,7 @@ onMounted(() => {
       <div class="menu-item dropdown dropdown-mobile-full">
         <a href="#" data-bs-toggle="dropdown" data-bs-display="static" class="menu-link scales"
           style="white-space: nowrap;">
-          <!-- {{ UtlDevnetType ? 'Mainnet Archive1' : 'Devnet' }} -->
+          <!-- {{ UtlDevnetType ? 'Betanet1' : 'Devnet' }} -->
           {{ ScanName }}
           <!-- <img src="https://cdn.openverse.network/brands/openverse/icon_128.png" width="32" alt=""> -->
           <i class="bi bi-chevron-down" style="margin: 5px;"></i>

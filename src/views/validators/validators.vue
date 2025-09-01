@@ -8,7 +8,8 @@
             <div class="d-flex fw-bold small mb-3">
               <span class="flex-grow-1">{{ $t(item.name) }} </span>
 
-              <card-expand-toggler />
+                                <!-- <card-expand-toggler /> -->
+
             </div>
             <h5>
               <span class="text-theme">{{ item.value }}</span>
@@ -28,10 +29,18 @@
 
 
 <script setup>
-import { useAppStore } from "../../stores/index";
-import { ref, watchEffect,defineAsyncComponent } from "vue";
-import i18n from "@/i18n"
-import { useRouter } from "vue-router";
+import {
+  defineAsyncComponent,
+  ref,
+  watchEffect,
+} from 'vue';
+
+import { useRouter } from 'vue-router';
+
+import i18n from '@/i18n';
+
+import { useAppStore } from '../../stores/index';
+
 const validatorsVue = defineAsyncComponent(() =>
   import("../../components/validators/validators_list.vue")
 );

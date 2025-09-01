@@ -4,7 +4,7 @@
             <card-body class="card-bodys">
                 <div class="d-flex fw-bold small mb-3">
                     <span class="flex-grow-1"> {{ $t("navigation.tokens") }} </span>
-                    <card-expand-toggler />
+                    <!-- <card-expand-toggler /> -->
                 </div>
                 <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
                     <tbody>
