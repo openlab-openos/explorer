@@ -29,9 +29,11 @@
                                         :src="item.address == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' ? 'https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png' : ''"
                                         width="20" alt="" class="marginRight8">
 
-                                    <text style="cursor: pointer;" @click="pubbleys(item.address)">{{
+                                    <!-- <text style="cursor: pointer;" @click="pubbleys(item.address)">{{
                                         item.name ? item.name : titleUrl(item.address).url }}
-                                    </text>
+                                       
+                                    </text> -->
+                                     {{ titleUrl(item.address).url }}
                                     <img v-if="titleUrl(item.pubkey).type"
                                         v-for="(datas, indexs) in titleUrl(item.pubkey).certificates" :key="indexs"
                                         :src="datas.img" height="20" class="marginRight8" alt="">
@@ -45,14 +47,17 @@
                                 </template>
                                 <template v-else>
                                     <td>
-                                        <img v-for="items, indexs in item.certificates" :key="indexs"
+                                        <!-- <img v-for="items, indexs in item.certificates" :key="indexs"
                                             :src="items.image_url" height="20" class="marginRight8"
-                                            :title="items.certificate_code" @click="pubbley" style="cursor: pointer;">
-                                        <template v-if=" item.address == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' " >
+                                            :title="items.certificate_code" @click="pubbley" style="cursor: pointer;"> -->
+                                                                         <img v-for="items, indexs in titleUrl(item.address).certificates" :key="indexs"
+                                            :src="items.img" height="20" class="marginRight8"
+                                            :title="items.certificate_code" @click="pubbley" style="cursor: pointer;"></img>
+                                        <!-- <template v-if=" item.address == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' " >
                                             <img v-for="items, indexs in titleUrl(item.address).certificates" :key="indexs"
                                             :src="items.img" height="20" class="marginRight8"
                                             :title="items.certificate_code" @click="pubbley" style="cursor: pointer;"></img>
-                                        </template>
+                                        </template> -->
                                         <!-- <div style="display: flex;">
                                         <p v-for="items, indexs in item.certificates" :key="indexs"
                                             :style="'background-color: ' + items.backColor"
@@ -80,7 +85,8 @@
                                     {{ come(smartFormatNumber(item.price ? item.price : '0'))  }}
                                     <img v-if="item.price_icon" :src="imgUrl + '/' + item.price_icon" height="24"
                                         class="marginRight8" alt="">
-                                    <img src="../../assets/icon/exchange.png" v-if="item.name == 'USD' || item.name == 'USDT' " width="24" style="cursor: pointer;" alt="">
+                                    
+                                        <!--<img src="../../assets/icon/exchange.png" v-if="item.name == 'USD' || item.name == 'USDT' " width="24" style="cursor: pointer;" alt=""> -->
                                 </td>
                                 <td>
                                     {{ come(smartFormatNumber(toFexedStake(item.supply, item.decimals))) }}

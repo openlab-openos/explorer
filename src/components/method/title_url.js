@@ -1,4 +1,4 @@
-import Verified from '@/assets/icon/Verified.png';
+// import Verified from '@/assets/icon/Verified.png';
 
 import {
   Authentications,
@@ -56,7 +56,7 @@ export const titleUrl = (url) => {
     try {
         if (Authentications[url]) {
             return {
-                url: Authentications[url].name,
+                url: url == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' ? 'WBTG' : Authentications[url].name,
                 type: true,
                 find: true,
                 certificates: Authentications[url].certificates,
@@ -74,17 +74,17 @@ export const titleUrl = (url) => {
             find: false
         };
     }
-    if (url == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz') {
-        return {
-            url: 'Wrapped BTG',
-            type: true,
-            find: true,
-            symbol: 'WBTG',
-            certificates: [{ 'img': Verified }],
-            img: Verified,
-            assest: false,
-        };
-    }
+    // if (url == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz') {
+    //     return {
+    //         url: 'Wrapped BTG',
+    //         type: true,
+    //         find: true,
+    //         symbol: 'WBTG',
+    //         // certificates: [{ 'img': Verified }],
+    //         // img: Verified,
+    //         assest: false,
+    //     };
+    // }
     return {
         url: url,
         type: auth,

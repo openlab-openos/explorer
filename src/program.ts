@@ -501,6 +501,7 @@ const datas = ref();
 const Authentication = async () => {
   await axios
     .get(
+      // UtlDevnetType ? `https://test-open.openverse.live/api/token/hot` : `https://open.openverse.live/api/token/hot`,
       UtlDevnetType ? `https://open.openverse.live/api/token/hot` : `https://test-open.openverse.live/api/token/hot`,
       {
         headers: {
@@ -509,8 +510,10 @@ const Authentication = async () => {
       }
     )
     .then((res) => {
+      console.log(res);
+      
       let data = Cretifucate(res.data.data);
-      // console.log(data);
+      console.log(data);
 
       const transformedObject = data.reduce(
         (acc, item) => {
@@ -519,6 +522,7 @@ const Authentication = async () => {
         },
         {} as { [key: string]: any }
       );
+
       datas.value = transformedObject;
       return transformedObject;
     })
@@ -584,6 +588,7 @@ const TypebackColor = (type: string) => {
 
 const Cretifucate = (data: Array<any>) => {
   // console.log(data);
+  console.log(data);
 
   let CretifucateArray = [];
   for (let i in data) {
