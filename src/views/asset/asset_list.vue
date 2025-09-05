@@ -87,15 +87,15 @@
                                     <img v-if="item.price_icon" :src="imgUrl + '/' + item.price_icon" height="24"
                                         class="marginRight8" alt="">
                                     <!-- http://localhost:3109/swap/?lang=zh_CN&inputMint=USDTWFmHW5ieSiQM7ea4fPPdx3a5zMEgp1yqgRqjZdt&outputMint=%20USDo1uHcFo9H6aHWcqCkhBiWiMhUqQJFienbKDBPEhN -->
-                                    <a v-if="item.price_source == 'OpenSwap' " :href= "`http://localhost:3109/swap/?lang=zh_CN&inputMint=USDTWFmHW5ieSiQM7ea4fPPdx3a5zMEgp1yqgRqjZdt&outputMint=${item.address}`"  target="_blank" >
+                                    <a v-if="item.price_source == 'OpenSwap' " :href= "`https://test.openswap.me//swap/?lang=zh_CN&inputMint=USDTWFmHW5ieSiQM7ea4fPPdx3a5zMEgp1yqgRqjZdt&outputMint=${item.address}`"  target="_blank" >
                                         <img src="https://cdn.openverse.live/images/20250905/mUpak3IQXlGfMr9zZVe3ovrOddNybALmwNdIPG6b.png" v-if="item.market_value " width="20" style="cursor: pointer;" alt=""></img>
                                     </a>
                                     <a v-if="item.price_source == 'Bitcoin_TM' " :href= "`https://www.bitcoin.tm/trade?symbol=BIT/USDT`"  target="_blank" >
                                         <img src="https://cdn.openverse.live/images/BIT_1024x1024.png" v-if="item.market_value " width="20" style="cursor: pointer;" alt=""></img>
                                     </a>
-                                    <!-- <a v-if="item.price_source == 'Constant' " :href= "`http://localhost:3109/swap/?lang=zh_CN&outputMint= ${item.address} `"  target="_blank" >
+                                    <a v-if="item.price_source == 'Constant' " :href= "`http://localhost:3109/swap/?lang=zh_CN&outputMint= ${item.address} `"  target="_blank" >
                                         <img src="https://cdn.openverse.live/images/BIT_1024x1024.png" v-if="item.market_value " width="20" style="cursor: pointer;" alt=""></img>
-                                    </a> -->
+                                    </a>
                                 </td>
                                 <!-- <td>
                                     $ {{ come(smartFormatNumber(toFexedStake(item.market_value, item.decimals))) }}
