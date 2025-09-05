@@ -93,7 +93,7 @@
                       ? mintToken.symbol
                         ? mintToken.symbol
                         : "N/A"
-                      : "N/A"
+                      :(address == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' ? 'WBTG' : 'N/A')
                   }}
                 </td>
                 <!-- <td class="text-end"> {{ mintToken.symbol ? mintToken.symbol : 'N/A' }} </td> -->

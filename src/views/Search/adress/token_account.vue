@@ -91,19 +91,19 @@
 </template>
 <script setup>
 import {
-    onMounted,
-    ref,
+  onMounted,
+  ref,
 } from 'vue';
 
 import {
-    ExtensionType,
-    getExtensionData,
+  ExtensionType,
+  getExtensionData,
 } from 'open-token-web3';
 import { useRouter } from 'vue-router';
-import RenderText from '../../../components/Render/text.vue';
+
 import {
-    Connection,
-    PublicKey,
+  Connection,
+  PublicKey,
 } from '@solana/web3.js';
 
 import historyView from '../../../components/address/history_list.vue';
@@ -111,6 +111,7 @@ import holderView from '../../../components/address/holder_list.vue';
 import pledgeView from '../../../components/address/pledge.vue';
 import transferView from '../../../components/address/transfer_list.vue';
 import { titleUrl } from '../../../components/method/title_url';
+import RenderText from '../../../components/Render/text.vue';
 import { chainRequest } from '../../../request/chain';
 import { solanagetAccount } from '../../../request/solanaGetaccount';
 import { solanaRequest } from '../../../request/solanaReques';

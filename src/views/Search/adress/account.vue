@@ -133,7 +133,7 @@ import {
 } from 'vue';
 
 import { useRouter } from 'vue-router';
-import RenderText from "../../../components/Render/text.vue"
+
 import historyView from '../../../components/address/history_list.vue';
 import holderView from '../../../components/address/holder_list.vue';
 import pledgeView from '../../../components/address/pledge.vue';
@@ -142,6 +142,7 @@ import tokensView from '../../../components/address/tokens.vue';
 import transferView from '../../../components/address/transfer_list.vue';
 import { titleUrl } from '../../../components/method/title_url';
 import { smartFormatNumber } from '../../../components/number/smart.js';
+import RenderText from '../../../components/Render/text.vue';
 import { chainRequest } from '../../../request/chain';
 
 const router = useRouter();

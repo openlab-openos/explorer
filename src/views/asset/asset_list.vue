@@ -18,6 +18,7 @@
                             <th style=" text-align: left"> {{ $t("holders") }}</th>
                             <th style=" text-align: left"> {{ $t("market_cap") }} </th>
                             <th style=" text-align: left"> {{ $t("price") }}</th>
+                            <!-- <th style=" text-align: left"> {{ $t("Market_Cap") }}</th> -->
                             <th style="text-align: left"> {{ $t("dashboard.supply") }}</th>
                         </tr>
                         <template v-if="type">
@@ -29,11 +30,11 @@
                                         :src="item.address == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' ? 'https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png' : ''"
                                         width="20" alt="" class="marginRight8">
 
-                                    <!-- <text style="cursor: pointer;" @click="pubbleys(item.address)">{{
+                                    <text style="cursor: pointer;" @click="pubbleys(item.address)">{{
                                         item.name ? item.name : titleUrl(item.address).url }}
                                        
-                                    </text> -->
-                                     {{ titleUrl(item.address).url }}
+                                    </text>
+                                     <!-- {{ titleUrl(item.address).url }} -->
                                     <img v-if="titleUrl(item.pubkey).type"
                                         v-for="(datas, indexs) in titleUrl(item.pubkey).certificates" :key="indexs"
                                         :src="datas.img" height="20" class="marginRight8" alt="">
@@ -85,9 +86,20 @@
                                     {{ come(smartFormatNumber(item.price ? item.price : '0'))  }}
                                     <img v-if="item.price_icon" :src="imgUrl + '/' + item.price_icon" height="24"
                                         class="marginRight8" alt="">
-                                    
-                                        <!--<img src="../../assets/icon/exchange.png" v-if="item.name == 'USD' || item.name == 'USDT' " width="24" style="cursor: pointer;" alt=""> -->
+                                    <!-- http://localhost:3109/swap/?lang=zh_CN&inputMint=USDTWFmHW5ieSiQM7ea4fPPdx3a5zMEgp1yqgRqjZdt&outputMint=%20USDo1uHcFo9H6aHWcqCkhBiWiMhUqQJFienbKDBPEhN -->
+                                    <a v-if="item.price_source == 'OpenSwap' " :href= "`http://localhost:3109/swap/?lang=zh_CN&inputMint=USDTWFmHW5ieSiQM7ea4fPPdx3a5zMEgp1yqgRqjZdt&outputMint=${item.address}`"  target="_blank" >
+                                        <img src="https://cdn.openverse.live/images/20250905/mUpak3IQXlGfMr9zZVe3ovrOddNybALmwNdIPG6b.png" v-if="item.market_value " width="20" style="cursor: pointer;" alt=""></img>
+                                    </a>
+                                    <a v-if="item.price_source == 'Bitcoin_TM' " :href= "`https://www.bitcoin.tm/trade?symbol=BIT/USDT`"  target="_blank" >
+                                        <img src="https://cdn.openverse.live/images/BIT_1024x1024.png" v-if="item.market_value " width="20" style="cursor: pointer;" alt=""></img>
+                                    </a>
+                                    <!-- <a v-if="item.price_source == 'Constant' " :href= "`http://localhost:3109/swap/?lang=zh_CN&outputMint= ${item.address} `"  target="_blank" >
+                                        <img src="https://cdn.openverse.live/images/BIT_1024x1024.png" v-if="item.market_value " width="20" style="cursor: pointer;" alt=""></img>
+                                    </a> -->
                                 </td>
+                                <!-- <td>
+                                    $ {{ come(smartFormatNumber(toFexedStake(item.market_value, item.decimals))) }}
+                                </td> -->
                                 <td>
                                     {{ come(smartFormatNumber(toFexedStake(item.supply, item.decimals))) }}
                                 </td>
@@ -172,8 +184,24 @@ watchEffect(async () => {
         
         // const uniqueArray = [...combined,...combined,...combined]
         // console.log(uniqueArray);
-        historyData.value = assets.data;
-        totalItems.value =assets.data.length;
+        let data = assets.data;
+        const status1Items = data.filter(item => item.status === 1);
+        status1Items.sort((a, b) => b.market_value - a.market_value);
+        // 筛选出status不为1的数据
+        const nonStatus1Items = data.filter(item => item.status !== 1);
+        nonStatus1Items.sort((a, b) => b.market_value - a.market_value);
+
+
+        // 重组为新数组（可根据需求调整顺序）
+        const newArray = [
+          ...status1Items,  // status为1的元素放在前面
+          ...nonStatus1Items  // status不为1的元素放在后面
+        ];
+        console.log(newArray);
+
+        historyData.value = newArray;
+
+        totalItems.value =newArray.length;
         loading.value = true;
     } catch (error) {
         console.error('Error in watchEffect:', error);
