@@ -170,12 +170,12 @@ const selectLanguage = (language: any, abbreviation: any) => {
   appStore.setLanguage(abbreviation);
 
 };
-// https://archive1.openverse.network/
+// https://api.mainnet.openverse.network/
 
 // 节点切换
 const selectData = ref([
-  { name: 'Betanet Archive 1', url: 'https://www.openverse.live', type: UtlDevnetType, requestType: 'Formal',ArchiveType:'Archive1', requestUrl: "https://archive1.openverse.network/" },
-  { name: 'Betanet Archive 2', url: 'https://www.openverse.live', type: UtlDevnetType, requestType: 'Formal',ArchiveType:'Archive2', requestUrl: "https://archive2.openverse.network/" },
+  { name: 'Betanet Archive 1', url: 'https://www.openverse.live', type: UtlDevnetType, requestType: 'Formal',ArchiveType:'Archive1', requestUrl: "https://api.mainnet.openverse.network/" },
+  { name: 'Betanet Archive 2', url: 'https://www.openverse.live', type: UtlDevnetType, requestType: 'Formal',ArchiveType:'Archive2', requestUrl: "https://api.mainnet.openverse.network/" },
   { name: 'Devnet', url: 'https://devnet.openverse.live', type: !UtlDevnetType,ArchiveType:'', requestType: 'Test' },
 ])
 
