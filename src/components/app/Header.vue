@@ -132,6 +132,7 @@ function toggleAppHeaderSearch(event) {
   appOption.appHeaderSearchToggled = !appOption.appHeaderSearchToggled;
 }
 
+console.log(UtlDevnetType);
 
 function searchMenu() {
   if (searchcontent.value == "") {
@@ -186,18 +187,24 @@ const selsetClick = (index: number) => {
       ScanName.value = selectData.value[i].name;
       if(selectData.value[i].requestType == 'Test' ){
         sessionStorage.setItem("urlType",selectData.value[i].requestType);
-        window.location.href = item.url
+        console.log("Test");
+        
+        window.location.href = 'https://devnet.openverse.live'
       } else {
-        sessionStorage.setItem("ArchiveType",item.ArchiveType);
-        sessionStorage.setItem("urlType",selectData.value[i].requestType);
+        console.log("Production");
+        window.location.href = 'https://www.openverse.live';
+        // if(UtlDevnetType){
+          sessionStorage.setItem("ArchiveType",item.ArchiveType);
+          sessionStorage.setItem("urlType",selectData.value[i].requestType);
 
-        if(type !== item.ArchiveType ){
-          window.location.reload()
-        }
-        if(urlType == 'Test'){
-          window.location.href = item.url
-        }
-
+        //   if(type !== item.ArchiveType ){
+        //     window.location.reload()
+        //   }
+        //   if(urlType == 'Test'){
+        //    window.location.href = item.url
+        //   }
+        // }
+        
       }
       // // item.type = true;
       // if (UtlDevnetType == item.type) {

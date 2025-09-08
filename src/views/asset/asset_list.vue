@@ -79,10 +79,10 @@
                                     {{ item ? item.holders : 0 }}
                                 </td>
                                 <td>
-                                    $ {{ come(smartFormatNumber( toFexedStake(item.market_value,item.decimals)))  }}
+                                     {{ come(smartFormatNumber( toFexedStake(item.market_value,item.decimals)))  }}
                                 </td>
                                 <td>
-                                    {{ item.price ? '$' : '' }} 
+                                    <!-- {{ item.price ? '$' : '' }}  -->
                                     {{ come(smartFormatNumber(item.price ? item.price : '0'))  }}
                                     <img v-if="item.price_icon" :src="imgUrl + '/' + item.price_icon" height="24"
                                         class="marginRight8" alt="">
