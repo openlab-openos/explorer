@@ -52,9 +52,10 @@ export function smartFormatNumber(price) {
   }
 
   const num = parseFloat(price);
-  if (num == 0 ) {
+  if (num === 0) {
     return '$ 0';
   }
+
   // 情况1：价格高于$0但低于$0.00001
   if (num > 0 && num < 0.00001) {
     return '$ < 0.00001';
@@ -62,38 +63,37 @@ export function smartFormatNumber(price) {
 
   // 情况2：价格不低于$0.00001但低于$1
   if (num >= 0.00001 && num < 1) {
-    // 转换为字符串并分割整数和小数部分
-    const [, decimalPart = ''] = num.toString().split('.');
+    // 转换为字符串处理，避免浮点数精度问题
+    const numStr = num.toString();
+    const [integerPart, decimalPart = ''] = numStr.split('.');
 
-    // 找到前5位有效数字的位置
-    let significantCount = 0;
-    let lastIndex = 0;
-
-    for (let i = 0; i < decimalPart.length; i++) {
-      if (decimalPart[i] !== '0') {
-        significantCount++;
-      }
-      if (significantCount > 0) {
-        lastIndex = i;
-        if (significantCount >= 5) {
-          break;
-        }
-      }
+    // 找到小数点后第一个非零数字的位置（起始索引）
+    let startIndex = 0;
+    while (startIndex < decimalPart.length && decimalPart[startIndex] === '0') {
+      startIndex++;
     }
 
-    // 保留到第5位有效数字
-    const precision = lastIndex;
-    return `$${num.toFixed(precision)}`;
+    // 从第一个非零数字开始，取5位有效数字（直接截断）
+    const endIndex = Math.min(startIndex + 5, decimalPart.length);
+    const truncatedDecimal = decimalPart.substring(0, endIndex);
+
+    // 拼接结果
+    return `$${integerPart}.${truncatedDecimal}`;
   }
 
-  // 情况3：价格高于等于$1
+  // 情况3：价格高于等于$1（保留两位小数，直接截断）
   if (num >= 1) {
-    return `$${num.toFixed(2)}`;
+    // 扩大100倍后取整再缩小，实现截断效果
+    const truncated = Math.floor(num * 100) / 100;
+    // 确保显示两位小数（如1 → 1.00）
+    return `$${truncated.toFixed(2)}`;
   }
 
-  // 处理0或负数
-  return `$${num.toFixed(2)}`;
+  // 处理负数（保留两位小数，直接截断）
+  const truncatedNegative = Math.ceil(num * 100) / 100;
+  return `$${truncatedNegative.toFixed(2)}`;
 }
+
 
 // 格式化代币市值
 export function formatMarketCap(cap) {

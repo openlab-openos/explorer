@@ -20,6 +20,7 @@
                             <th style=" text-align: left"> {{ $t("price") }}</th>
                             <!-- <th style=" text-align: left"> {{ $t("Market_Cap") }}</th> -->
                             <th style="text-align: left"> {{ $t("dashboard.supply") }}</th>
+                            <th style="text-align: left"> {{ $t("exchange") }}</th>
                         </tr>
                         <template v-if="type">
                             <tr v-for="item, index in paginatedHistoryData" :key="index">
@@ -76,7 +77,7 @@
                                 </td> -->
                                 <td>
                                     <!-- {{ item.token_all[0] }} -->
-                                    {{ item ? item.holders : 0 }}
+                                    {{ item ? come(item.holders) : 0 }}
                                 </td>
                                 <td>
                                      {{ come(smartFormatNumber( toFexedStake(item.market_value,item.decimals)))  }}
@@ -87,21 +88,26 @@
                                     <img v-if="item.price_icon" :src="imgUrl + '/' + item.price_icon" height="24"
                                         class="marginRight8" alt="">
                                     <!-- http://localhost:3109/swap/?lang=zh_CN&inputMint=USDTWFmHW5ieSiQM7ea4fPPdx3a5zMEgp1yqgRqjZdt&outputMint=%20USDo1uHcFo9H6aHWcqCkhBiWiMhUqQJFienbKDBPEhN -->
-                                    <a v-if="item.price_source == 'OpenSwap' " :href= "`https://test.openswap.me//swap/?lang=zh_CN&inputMint=USDTWFmHW5ieSiQM7ea4fPPdx3a5zMEgp1yqgRqjZdt&outputMint=${item.address}`"  target="_blank" >
-                                        <img src="https://cdn.openverse.live/images/20250905/mUpak3IQXlGfMr9zZVe3ovrOddNybALmwNdIPG6b.png" v-if="item.market_value " width="20" style="cursor: pointer;" alt=""></img>
-                                    </a>
-                                    <a v-if="item.price_source == 'Bitcoin_TM' " :href= "`https://www.bitcoin.tm/trade?symbol=BIT/USDT`"  target="_blank" >
-                                        <img src="https://cdn.openverse.live/images/BIT_1024x1024.png" v-if="item.market_value " width="20" style="cursor: pointer;" alt=""></img>
-                                    </a>
-                                    <a v-if="item.price_source == 'Constant' " :href= "`http://localhost:3109/swap/?lang=zh_CN&outputMint= ${item.address} `"  target="_blank" >
-                                        <img src="https://cdn.openverse.live/images/BIT_1024x1024.png" v-if="item.market_value " width="20" style="cursor: pointer;" alt=""></img>
-                                    </a>
                                 </td>
                                 <!-- <td>
                                     $ {{ come(smartFormatNumber(toFexedStake(item.market_value, item.decimals))) }}
                                 </td> -->
                                 <td>
-                                    {{ come(smartFormatNumber(toFexedStake(item.supply, item.decimals))) }}
+                                    {{ come((toFexedStake(item.supply, item.decimals))) }}
+                                    <!-- {{ come(smartFormatNumber(toFexedStake(item.supply, item.decimals))) }} -->
+                                </td>
+                                <td>
+                                     <a class="a-Link" id="buyD" v-if="item.price_source == 'OpenSwap' " :href= "`https://test.openswap.me//swap/?lang=zh_CN&inputMint=USDTWFmHW5ieSiQM7ea4fPPdx3a5zMEgp1yqgRqjZdt&outputMint=${item.address}`"  target="_blank" >
+                                        <!-- <img src="https://cdn.openverse.live/images/20250905/mUpak3IQXlGfMr9zZVe3ovrOddNybALmwNdIPG6b.png" v-if="item.market_value " width="20" style="cursor: pointer;" alt=""></img> -->
+                                         <text class="textD backStyle" >D</text> Buy
+                                    </a>
+                                    <a class="a-Link" id="buyC" v-if="item.price_source == 'Bitcoin_TM' " :href= "`https://www.bitcoin.tm/trade?symbol=BIT/USDT`"  target="_blank" >
+                                        <!-- <img src="https://cdn.openverse.live/images/BIT_1024x1024.png" v-if="item.market_value " width="20" style="cursor: pointer;" alt=""></img> -->
+                                         <text class="textC backStyle">C</text> Buy
+                                    </a>
+                                    <a v-if="item.price_source == 'Constant' " :href= "`http://localhost:3109/swap/?lang=zh_CN&outputMint= ${item.address} `"  target="_blank" >
+                                        <!-- <img src="https://cdn.openverse.live/images/BIT_1024x1024.png" v-if="item.market_value " width="20" style="cursor: pointer;" alt=""></img> -->
+                                    </a>
                                 </td>
                             </tr>
                         </template>
@@ -261,7 +267,7 @@ const toFexedStake = (num, decimals) => {
     }
     const divisor = Math.pow(10, JSON.parse(decimals));
 
-    return (JSON.parse(num) / divisor).toFixed(2);;
+    return (JSON.parse(num) / divisor).toFixed(0);;
 
 };
 const come = (num) => {
@@ -275,3 +281,31 @@ const come = (num) => {
     }
 }
 </script>
+
+<style scoped>
+a{
+    text-decoration: none
+}
+#buyD{
+    color: rgba(0, 255, 179, 1);
+
+}
+#buyC{
+       color: rgba(255, 215, 39, 1);
+
+}
+.backStyle{
+    background: rgba(255, 255, 255, 0.2);
+    padding: 3px 6px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 14px;
+    margin-right: 3px;
+}
+.a-Link{
+    margin-left: 1px;
+    margin-bottom: 1px;
+    font-family: Gilroy;
+}
+
+</style>
