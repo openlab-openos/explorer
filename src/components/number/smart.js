@@ -75,7 +75,7 @@ export function smartFormatNumber(price) {
 
     // 从第一个非零数字开始，取5位有效数字（直接截断）
     const endIndex = Math.min(startIndex + 5, decimalPart.length);
-    const truncatedDecimal = decimalPart.substring(0, endIndex);
+    const truncatedDecimal = decimalPart.substring(0, 5);
 
     // 拼接结果
     return `$${integerPart}.${truncatedDecimal}`;

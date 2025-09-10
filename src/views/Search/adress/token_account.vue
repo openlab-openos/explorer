@@ -1,8 +1,8 @@
 <template>
     <div>
         <h3 class="align-center">
-            <img :src="token_img ? token_img : ''" alt="" class="marginRight10 imgWigth25" v-if="token_img">
-            <img v-if="titleUrl(token_name).type" :src="titleUrl(token_name).img" class="marginRight10 imgWigth25">
+            <img :src="token_img ? token_img : ''" alt="" class="marginRight10 imgWigth40" v-if="token_img">
+            <img v-if="titleUrl(token_name).type" :src="titleUrl(token_name).img" class="marginRight10 imgWigth40">
             <text> {{ $t("account.tokenAccount") }} {{ token_name ? (titleUrl(url).find ? titleUrl(url).url : '') : ''
                 }}
             </text>

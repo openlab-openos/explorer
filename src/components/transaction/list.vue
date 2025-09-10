@@ -183,7 +183,7 @@ const fetchOrderData = async () => {
                     }
                 }
 
-                console.log(index);
+          
             //     console.log(etach[index]);
             //     console.log(etach[1].parsed?.type);
 

@@ -64,11 +64,16 @@
 </template>
 
 <script setup>
-import numberAnimar from "../../components/CountFlop.vue";
-import { useAppStore } from "../../stores/index";
-import { onMounted, ref, watchEffect } from "vue";
-import i18n from "@/i18n";
+import {
+  onMounted,
+  ref,
+  watchEffect,
+} from 'vue';
 
+import i18n from '@/i18n';
+
+import numberAnimar from '../../components/CountFlop.vue';
+import { useAppStore } from '../../stores/index';
 
 const appStore = useAppStore();
 
@@ -100,9 +105,9 @@ onMounted(() => {
       },
       {
         icon: "fas fa-lg fa-fw me-2 fa-database",
-        text: "100",
-        language:"dashboard.mining_allocation_of_total",
-        unit:"dashboard.million"
+        text: `$  ${appStore.rate ? appStore.rate : 0 }`,
+        language:"price",
+        unit:""
       },
       {
         icon: "fas fa-lg fa-fw me-2 fa-cubes",

@@ -60,6 +60,8 @@
     "Enable": "Enable",
     "Market_Cap":"Market Cap",
     "exchange":"Exchange",
+    "CirculatingSupply":"Circulating Supply",
+    "Bitcurrency":"Bitcurrency USD Market Cap",
     "navigation": {
         "title": "Navigation",
         "dashboard": "Dashboard",

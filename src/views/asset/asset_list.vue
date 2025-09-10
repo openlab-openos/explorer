@@ -97,7 +97,7 @@
                                     <!-- {{ come(smartFormatNumber(toFexedStake(item.supply, item.decimals))) }} -->
                                 </td>
                                 <td>
-                                     <a class="a-Link" id="buyD" v-if="item.price_source == 'OpenSwap' " :href= "`https://test.openswap.me//swap/?lang=zh_CN&inputMint=USDTWFmHW5ieSiQM7ea4fPPdx3a5zMEgp1yqgRqjZdt&outputMint=${item.address}`"  target="_blank" >
+                                     <a class="a-Link" id="buyD" v-if="item.price_source == 'OpenSwap' " :href= "`https://openswap.me//swap/?lang=zh_CN&inputMint=USDTWFmHW5ieSiQM7ea4fPPdx3a5zMEgp1yqgRqjZdt&outputMint=${item.address}`"  target="_blank" >
                                         <!-- <img src="https://cdn.openverse.live/images/20250905/mUpak3IQXlGfMr9zZVe3ovrOddNybALmwNdIPG6b.png" v-if="item.market_value " width="20" style="cursor: pointer;" alt=""></img> -->
                                          <text class="textD backStyle" >D</text> Buy
                                     </a>
@@ -184,7 +184,7 @@ const handlePageChange = (newPage) => {
 };
 watchEffect(async () => {
     try {
-        const assets = await tokenList(1);
+        const assets = await tokenList(1,200);
         // const res = await tokenProgram(1);
         console.log('assets', assets);
         

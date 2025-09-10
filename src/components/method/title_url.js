@@ -1,5 +1,3 @@
-import Verified from '@/assets/icon/Verified.png';
-
 import {
   Authentications,
   LOADER_IDS,
@@ -59,7 +57,7 @@ export const titleUrl = (url) => {
                 type: true,
                 find: true,
                 certificates: Authentications[url].certificates,
-                img: url == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' ? 'https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png' : Authentications[url].img,
+                img: url == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' ? 'https://cdn.openverse.live/images/20250722/d7d75659e8c3d41bcdbb5925491894d0.png' : Authentications[url].img,
                 symbol: url == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' ? 'WBTG' : Authentications[url].symbol,
                 code: Authentications[url].code,
                 assest: true,
@@ -73,16 +71,16 @@ export const titleUrl = (url) => {
             find: false
         };
     }
- 
+
     if (url == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz') {
         return {
             url: 'Wrapped BTG',
             type: true,
             find: true,
             symbol: 'WBTG',
-            certificates: [{ 'img': Verified }],
-            img: Verified,
-            assest: false,
+            certificates: [{ 'img': 'https://cdn.openverse.live/images/20250722/d7d75659e8c3d41bcdbb5925491894d0.png' }],
+            img: 'https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png',
+            assest: true,
         };
     }
     return {

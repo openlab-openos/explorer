@@ -12,7 +12,7 @@
       <img
         v-if="titleUrl(token_name).type"
         :src="titleUrl(token_name).img"
-        class="marginRight10 imgWigth25"
+        class="marginRight10 imgWigth40"
       />
       <!-- <text> {{ token_name ? titleUrl(token_name).url : '' }} {{ $t("account.token") }} -->
       <div>
