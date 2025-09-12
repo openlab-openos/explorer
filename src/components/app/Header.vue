@@ -40,6 +40,12 @@ function isProductionDomain() {
   return !hostname.startsWith('devnet.');
 }
 const UtlDevnetType = isProductionDomain();
+function isProductionDomains() {
+  const hostname = window.location.hostname;
+  // 检测是否包含 'devnet.' 前缀
+  return !hostname.startsWith('test.');
+}
+const UtlDevnetTypes = isProductionDomains();
 
 const searchcontent = ref("");
 const abbreviationLanguage = ref();
@@ -174,9 +180,13 @@ const selectLanguage = (language: any, abbreviation: any) => {
 // https://api.mainnet.openverse.network/
 
 // 节点切换
-const selectData = ref([
+const selectData = ref(UtlDevnetTypes ?[
   { name: 'Betanet Archive 1', url: 'https://www.openverse.live', type: UtlDevnetType, requestType: 'Formal',ArchiveType:'Archive1', requestUrl: "https://api.mainnet.openverse.network/" },
   { name: 'Betanet Archive 2', url: 'https://www.openverse.live', type: UtlDevnetType, requestType: 'Formal',ArchiveType:'Archive2', requestUrl: "https://api.mainnet.openverse.network/" },
+  { name: 'Devnet', url: 'https://devnet.openverse.live', type: !UtlDevnetType,ArchiveType:'', requestType: 'Test' },
+]:[
+  { name: 'Betanet Archive 1', url: 'https://www.test.openverse.live', type: UtlDevnetType, requestType: 'Formal',ArchiveType:'Archive1', requestUrl: "https://api.mainnet.openverse.network/" },
+  { name: 'Betanet Archive 2', url: 'https://www.test.openverse.live', type: UtlDevnetType, requestType: 'Formal',ArchiveType:'Archive2', requestUrl: "https://api.mainnet.openverse.network/" },
   { name: 'Devnet', url: 'https://devnet.openverse.live', type: !UtlDevnetType,ArchiveType:'', requestType: 'Test' },
 ])
 
@@ -189,10 +199,10 @@ const selsetClick = (index: number) => {
         sessionStorage.setItem("urlType",selectData.value[i].requestType);
         console.log("Test");
         
-        window.location.href = 'https://devnet.openverse.live'
+        window.location.href = UtlDevnetTypes?'https://devnet.openverse.live':""
       } else {
         console.log("Production");
-        window.location.href = 'https://www.openverse.live';
+        window.location.href = UtlDevnetTypes?'https://www.openverse.live':"https://www.test.openverse.live";
         // if(UtlDevnetType){
           sessionStorage.setItem("ArchiveType",item.ArchiveType);
           sessionStorage.setItem("urlType",selectData.value[i].requestType);
