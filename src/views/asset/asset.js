@@ -3,7 +3,7 @@ import axios from 'axios';
 function isProductionDomain() {
     const hostname = window.location.hostname;
     // 检测是否包含 'devnet.' 前缀
-    return !hostname.startsWith('test.');
+    return !hostname.startsWith('test.')  || hostname.startsWith('test-devnet.');
 }
 const UtlDevnetType = isProductionDomain();
 // console.log('UtlDevnetType',UtlDevnetType);

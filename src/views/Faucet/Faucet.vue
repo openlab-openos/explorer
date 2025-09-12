@@ -117,10 +117,10 @@
 
 <script setup>
 import {
-    onMounted,
-    ref,
-    watch,
-    watchEffect,
+  onMounted,
+  ref,
+  watch,
+  watchEffect,
 } from 'vue';
 
 import Vcode from 'vue3-puzzle-vcode';
@@ -159,7 +159,7 @@ onMounted(() => {
     function isProductionDomain() {
         const hostname = window.location.hostname;
         // 检测是否包含 'devnet.' 前缀
-        return !hostname.startsWith('devnet.');
+        return !(hostname.startsWith('devnet.') || hostname.startsWith('test-devnet.'))
     }
     faucetType.value = !isProductionDomain();
 })

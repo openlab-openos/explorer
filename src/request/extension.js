@@ -5,10 +5,11 @@ import {
   LAMPORTS_PER_SOL,
   PublicKey,
 } from '@solana/web3.js';
-const currentUrl = window.location.href;
-// console.log(currentUrl);
 
-import solanaApiUrl from "./axiosUrl"
+// console.log(currentUrl);
+import solanaApiUrl from './axiosUrl';
+
+const currentUrl = window.location.href;
 
 // import { Token, TOKEN_PROGRAM_ID } from '@solana/spl-token';
 
@@ -18,7 +19,7 @@ const connection = new Connection(chainData ? chainData : "https://api.mainnet.o
 // function isProductionDomain() {
 //   const hostname = window.location.hostname;
 //   // 检测是否包含 'devnet.' 前缀
-// return !hostname.startsWith('devnet.');
+// return !(hostname.startsWith('devnet.') || hostname.startsWith('test-devnet.'))
 // }
 // // console.log(isProductionDomain());
 

@@ -4,8 +4,8 @@ import {
   Connection,
   PublicKey,
 } from '@solana/web3.js';
-import solanaApiUrl from "./axiosUrl"
 
+import solanaApiUrl from './axiosUrl';
 
 const chainStorg =  JSON.parse(sessionStorage.getItem("app"))
 const chainData =chainStorg ? chainStorg.chain : '';
@@ -17,7 +17,7 @@ const currentUrl = window.location.href;
 // function isProductionDomain() {
 //     const hostname = window.location.hostname;
 //     // 检测是否包含 'devnet.' 前缀
-//   return !hostname.startsWith('devnet.');
+//   return !(hostname.startsWith('devnet.') || hostname.startsWith('test-devnet.'))
 // }
 // // console.log(isProductionDomain());
 

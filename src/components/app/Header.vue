@@ -37,13 +37,13 @@ const currentUrl = window.location.href;
 function isProductionDomain() {
   const hostname = window.location.hostname;
   // 检测是否包含 'devnet.' 前缀
-  return !hostname.startsWith('devnet.');
+  return !(hostname.startsWith('devnet.') || hostname.startsWith('test-devnet.'))
 }
 const UtlDevnetType = isProductionDomain();
 function isProductionDomains() {
   const hostname = window.location.hostname;
   // 检测是否包含 'devnet.' 前缀
-  return !hostname.startsWith('test.');
+  return !hostname.startsWith('test.') || hostname.startsWith('test-devnet.');
 }
 const UtlDevnetTypes = isProductionDomains();
 
@@ -187,8 +187,9 @@ const selectData = ref(UtlDevnetTypes ?[
 ]:[
   { name: 'Betanet Archive 1', url: 'https://www.test.openverse.live', type: UtlDevnetType, requestType: 'Formal',ArchiveType:'Archive1', requestUrl: "https://api.mainnet.openverse.network/" },
   { name: 'Betanet Archive 2', url: 'https://www.test.openverse.live', type: UtlDevnetType, requestType: 'Formal',ArchiveType:'Archive2', requestUrl: "https://api.mainnet.openverse.network/" },
-  { name: 'Devnet', url: 'https://devnet.openverse.live', type: !UtlDevnetType,ArchiveType:'', requestType: 'Test' },
+  { name: 'Devnet', url: 'https://test-devnet.openverse.live', type: !UtlDevnetType,ArchiveType:'', requestType: 'Test' },
 ])
+console.log(selectData.value);
 
 const selsetClick = (index: number) => {
   let type = sessionStorage.getItem("ArchiveType")
@@ -199,7 +200,7 @@ const selsetClick = (index: number) => {
         sessionStorage.setItem("urlType",selectData.value[i].requestType);
         console.log("Test");
         
-        window.location.href = UtlDevnetTypes?'https://devnet.openverse.live':""
+        window.location.href = UtlDevnetTypes?'https://devnet.openverse.live':"https://test-devnet.openverse.live"
       } else {
         console.log("Production");
         window.location.href = UtlDevnetTypes?'https://www.openverse.live':"https://www.test.openverse.live";
