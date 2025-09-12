@@ -4,12 +4,14 @@ import {
   getMint,
   TOKEN_2022_PROGRAM_ID,
 } from 'open-token-web3';
+
 // import {Token} from '@solana/spl-token';
 import {
   Connection,
   PublicKey,
 } from '@solana/web3.js';
-import solanaApiUrl from "./axiosUrl"
+
+import solanaApiUrl from './axiosUrl';
 
 // const solanaApiUrl = urlTypeData === 'Test' ? "https://api.devnet.openverse.network" : (chainData ? chainData : "https://api.mainnet.openverse.network");
 // function isProductionDomain() {

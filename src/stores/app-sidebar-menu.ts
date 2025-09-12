@@ -18,6 +18,12 @@ import { defineStore } from 'pinia';
 //   : url
 //     ? false
 //     : true;
+function isProductionDomain() {
+  const hostname = window.location.hostname;
+  // 检测是否包含 'devnet.' 前缀
+  return !hostname.startsWith('devnet.');
+}
+const UtlDevnetType = isProductionDomain();
 export const useAppSidebarMenuStore = defineStore({
   id: "appSidebarMenu",
   state: () => {
@@ -32,13 +38,13 @@ export const useAppSidebarMenuStore = defineStore({
         text: "navigation.dashboard",
         type: false,
       },
-      {
+      UtlDevnetType ? {
         // url: urlType ? "tokens" : "tokens\\?cluster=devnet",
         url: "tokens",
         icon: "bi bi-x-diamond",
         text: "navigation.tokens",
         type: false,
-      },
+      } : {},
       {
         url: "validators",
         // path: urlType
