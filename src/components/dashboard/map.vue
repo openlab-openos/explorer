@@ -55,7 +55,7 @@
                                                             </div>
                                                         </td>
                                                         <td class="minification-size">
-                                                            {{ source.name }}
+                                                            {{ source.country_name }}
                                                         </td>
                                                         <td class="text-end">{{ source.pct }}%</td>
                                                     </template>
@@ -78,9 +78,9 @@ import 'jsvectormap/dist/maps/world.js';
 import 'jsvectormap/dist/jsvectormap.min.css';
 
 import {
-    onMounted,
-    ref,
-    onUnmounted
+  onMounted,
+  onUnmounted,
+  ref,
 } from 'vue';
 
 import jsVectorMap from 'jsvectormap';
@@ -113,6 +113,7 @@ onMounted(() => {
     getActivityLogData();
     mapCreate();
 });
+console.log(mapData);
 
 const mapCreate = () => {
     map.value = new jsVectorMap({
