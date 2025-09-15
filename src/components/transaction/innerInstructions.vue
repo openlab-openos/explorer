@@ -38,10 +38,14 @@
                                         @click="pubbleys(
                                             value.length > 43 ? (key == 'extensionTypes' ? '' : (key == 'lamports' ? '' : (key == 'space' ? '' : (key == 'decimals' ? '' : (key == 'tokenAmount' ? '' : value))))
                                             ) : ''
-                                        )">{{ key == 'extensionTypes' ? value[0] : (key == 'lamports' ? toFexedStake(value)
+                                        )">
+                                        <img v-if="voteArray[value]" :src="voteArray[value].uri" width="20" alt="">
+                                        {{ key == 'extensionTypes' ? value[0] : (key == 'lamports' ? toFexedStake(value)
                                         :
                                         (key
-                                            == 'tokenAmount' ? value.uiAmount : titleUrl(value).url)) }} {{ key == 'space' ?
+                                            == 'tokenAmount' ? value.uiAmount :(voteArray[value] ? (`${voteArray[value].name} (${voteArray[value].symbol}) `) : titleUrl(value).url)
+                                            // == 'tokenAmount' ? value.uiAmount : titleUrl(value).url
+                                        )) }} {{ key == 'space' ?
                                             'byts(s)' : '' }}
                                         {{ key == "lamports" ? '(BTG)' : '' }}</text>
 
@@ -73,7 +77,7 @@
                                     style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                     {{ items.code }}
                                 </text> -->
-                                <RenderText v-if="item.accounts[0]" :type="false" :address="item.accounts[0]" />
+                                <RenderText v-if="item.accounts[0]" :type="true" :address="item.accounts[0]" />
 
                             </td>
                         </tr>
@@ -88,7 +92,7 @@
                                     style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                     {{ items.code }}
                                 </text> -->
-                                <RenderText v-if="item.data" :type="false" :address="item.data" />
+                                <RenderText v-if="item.data" :type="true" :address="item.data" />
 
                             </td>
                         </tr>
@@ -104,7 +108,8 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { titleUrl } from '../../components/method/title_url';
-import RenderText from "../Render/text.vue"
+import RenderText from '../Render/text.vue';
+
 const router = useRouter();
 const props = defineProps({
     data: {
@@ -114,11 +119,15 @@ const props = defineProps({
     index: {
         typeof: Number,
         default: 0
+    },
+    voteArray: {
+        typeof: Array,
+        default: {}
     }
 })
 const instruction = ref(props.data);
 const instruction_index = ref(props.index);
-
+const voteArray = ref(props.voteArray);
 
 const toFexedStake = (num) => {
     if (num) {

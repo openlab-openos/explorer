@@ -12,10 +12,12 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
+
 import { useRouter } from 'vue-router';
 
-import { titleUrl } from "../method/title_url"
-import { ref } from 'vue'
+import { titleUrl } from '../method/title_url';
+
 const props = defineProps({
     address: {
         type: String,
@@ -33,6 +35,7 @@ const props = defineProps({
 const router = useRouter();
 
 const paramsId = ref(props.address)
+
 const propsType = ref(props.type)
 
 

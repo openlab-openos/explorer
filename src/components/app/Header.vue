@@ -33,7 +33,7 @@ const appStore = useAppStore();
 
 const appOption = useAppOptionStore();
 const notificationData = [];
-const currentUrl = window.location.href;
+// const currentUrl = window.location.href;
 function isProductionDomain() {
   const hostname = window.location.hostname;
   // 检测是否包含 'devnet.' 前缀
@@ -181,12 +181,12 @@ const selectLanguage = (language: any, abbreviation: any) => {
 
 // 节点切换
 const selectData = ref(UtlDevnetTypes ?[
-  { name: 'Betanet Archive 1', url: 'https://www.openverse.live', type: UtlDevnetType, requestType: 'Formal',ArchiveType:'Archive1', requestUrl: "https://api.mainnet.openverse.network/" },
-  { name: 'Betanet Archive 2', url: 'https://www.openverse.live', type: UtlDevnetType, requestType: 'Formal',ArchiveType:'Archive2', requestUrl: "https://api.mainnet.openverse.network/" },
+  { name: 'Betanet Archive 1', url: 'https://openverse.live', type: UtlDevnetType, requestType: 'Formal',ArchiveType:'Archive1', requestUrl: "https://api.mainnet.openverse.network/" },
+  { name: 'Betanet Archive 2', url: 'https://openverse.live', type: UtlDevnetType, requestType: 'Formal',ArchiveType:'Archive2', requestUrl: "https://archive2.openverse.network/" },
   { name: 'Devnet', url: 'https://devnet.openverse.live', type: !UtlDevnetType,ArchiveType:'', requestType: 'Test' },
 ]:[
-  { name: 'Betanet Archive 1', url: 'https://www.test.openverse.live', type: UtlDevnetType, requestType: 'Formal',ArchiveType:'Archive1', requestUrl: "https://api.mainnet.openverse.network/" },
-  { name: 'Betanet Archive 2', url: 'https://www.test.openverse.live', type: UtlDevnetType, requestType: 'Formal',ArchiveType:'Archive2', requestUrl: "https://api.mainnet.openverse.network/" },
+  { name: 'Betanet Archive 1', url: 'https://test.openverse.live', type: UtlDevnetType, requestType: 'Formal',ArchiveType:'Archive1', requestUrl: "https://api.mainnet.openverse.network/" },
+  { name: 'Betanet Archive 2', url: 'https://test.openverse.live', type: UtlDevnetType, requestType: 'Formal',ArchiveType:'Archive2', requestUrl: "https://archive2.openverse.network/" },
   { name: 'Devnet', url: 'https://test-devnet.openverse.live', type: !UtlDevnetType,ArchiveType:'', requestType: 'Test' },
 ])
 console.log(selectData.value);
@@ -198,15 +198,14 @@ const selsetClick = (index: number) => {
       ScanName.value = selectData.value[i].name;
       if(selectData.value[i].requestType == 'Test' ){
         sessionStorage.setItem("urlType",selectData.value[i].requestType);
-        console.log("Test");
-        
         window.location.href = UtlDevnetTypes?'https://devnet.openverse.live':"https://test-devnet.openverse.live"
       } else {
         console.log("Production");
-        window.location.href = UtlDevnetTypes?'https://www.openverse.live':"https://www.test.openverse.live";
+        // window.location.href = UtlDevnetTypes?'https://www.openverse.live':"https://www.test.openverse.live";
         // if(UtlDevnetType){
           sessionStorage.setItem("ArchiveType",item.ArchiveType);
           sessionStorage.setItem("urlType",selectData.value[i].requestType);
+        window.location.href = UtlDevnetTypes?'https://openverse.live':"https://test.openverse.live";
 
         //   if(type !== item.ArchiveType ){
         //     window.location.reload()

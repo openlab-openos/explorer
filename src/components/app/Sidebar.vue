@@ -32,13 +32,19 @@
 </template>
 
 <script setup>
-import { useAppSidebarMenuStore } from "@/stores/app-sidebar-menu";
-import { useAppOptionStore } from "@/stores/app-option";
-import { onMounted, computed,watchEffect,ref } from "vue";
-import { useRoute } from "vue-router";
-import { useAppStore } from "@/stores/index";
-import i18n from "@/i18n";
+import {
+  computed,
+  onMounted,
+  ref,
+  watchEffect,
+} from 'vue';
 
+import { useRoute } from 'vue-router';
+
+import i18n from '@/i18n';
+import { useAppOptionStore } from '@/stores/app-option';
+import { useAppSidebarMenuStore } from '@/stores/app-sidebar-menu';
+import { useAppStore } from '@/stores/index';
 
 const navigationArray = ref([]);
 

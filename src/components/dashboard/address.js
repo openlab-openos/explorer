@@ -591,7 +591,7 @@ export const ipAddresses = {
       "timezone": "America/Toronto",
       "country_name": "Canada"
     },
-     {
+    {
       "ip": "51.77.52.209",
       "location": [52.2299, 21.0093],
       "try": "PL",
@@ -647,7 +647,7 @@ export const ipAddresses = {
       "code": "NA",
       "timezone": "America/Los_Angeles",
       "country_name": "United States"
-    }, 
+    },
     {
       "ip": "79.137.64.102",
       "location": [50.6942, 3.1746],
@@ -670,7 +670,7 @@ export const ipAddresses = {
       "timezone": "Europe/Berlin",
       "country_name": "Germany"
     },
-     {
+    {
       "ip": "54.36.172.26",
       "location": [51.1167, 16.9507],
       "try": "PL",
@@ -691,7 +691,7 @@ export const ipAddresses = {
       "code": "EU",
       "timezone": "Europe/Paris",
       "country_name": "France"
-    }, 
+    },
     {
       "ip": "147.135.11.239",
       "location": [40.8318, -77.2888],
@@ -700,7 +700,7 @@ export const ipAddresses = {
       "timezone": "America/New_York",
       "country_name": "United States"
     },
-     {
+    {
       "ip": "145.239.68.140",
       "location": [50.6942, 3.1746],
       "try": "FR",
@@ -743,7 +743,7 @@ export const ipAddresses = {
       "code": "EU",
       "timezone": "Europe/Paris",
       "country_name": "France"
-    }, 
+    },
     {
       "ip": "94.72.111.64",
       "location": [50.8514, -0.9903],
@@ -751,6 +751,76 @@ export const ipAddresses = {
       "code": "EU",
       "timezone": "Europe/London",
       "country_name": "United Kingdom"
+    }, {
+      "ip": "137.74.92.21",
+      "location": [3.20113, 50.6924],
+      "try": "FR",
+      "code": "EU",
+      "timezone": "Europe/Paris",
+      "country_name": "France"
+    }, {
+      "ip": "147.135.37.205",
+      "location": [-122.9874, 45.526],
+      "try": "US",
+      "code": "NA",
+      "timezone": "America/Los_Angeles",
+      "country_name": "United States"
+    }, {
+      "ip": "192.95.33.151",
+      "location": [-73.5794, 45.5063],
+      "try": "CA",
+      "code": "NA",
+      "timezone": "America/Toronto",
+      "country_name": "Canada"
+    }, {
+      "ip": "217.15.160.69",
+      "location": [103.82, 1.35208],
+      "try": "SG",
+      "code": "AS",
+      "timezone": "Asia/Singapore",
+      "country_name": "Singapore"
+    }, {
+      "ip": "40.160.35.24",
+      "location": [-77.3592, 38.958],
+      "try": "US",
+      "code": "NA",
+      "timezone": "America/New_York",
+      "country_name": "United States"
+    }, {
+      "ip": "5.39.72.229",
+      "location": [3.2021, 50.6918],
+      "try": "FR",
+      "code": "HDF",
+      "timezone": "Europe/Paris",
+      "country_name": "France"
+    }, {
+      "ip": "51.77.152.14",
+      "location": [3.20113, 50.6924],
+      "try": "FR",
+      "code": "HDF",
+      "timezone": "Europe/Paris",
+      "country_name": "France"
+    }, {
+      "ip": "54.37.81.187",
+      "location": [3.20157, 50.6917],
+      "try": "FR",
+      "code": "HDF",
+      "timezone": "Europe/Paris",
+      "country_name": "France"
+    }, {
+      "ip": "89.117.18.132",
+      "location": [-122.2619, 47.3066],
+      "try": "US",
+      "code": "WA",
+      "timezone": "America/Los_Angeles",
+      "country_name": "United States"
+    }, {
+      "ip": "94.72.125.204",
+      "location": [-122.2619, 47.3066],
+      "try": "US",
+      "code": "WA",
+      "timezone": "America/Los_Angeles",
+      "country_name": "United States"
     }
   ]
 };

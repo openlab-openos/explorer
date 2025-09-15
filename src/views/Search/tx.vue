@@ -5,12 +5,14 @@ import {
   watchEffect,
 } from 'vue';
 
-import i18n from '@/i18n';
 import { useRouter } from 'vue-router';
-import RenderText from "../../components/Render/text.vue"
+
+import i18n from '@/i18n';
+
 import { solanapubbleys } from '../../components/method/solana';
 import { titleUrl } from '../../components/method/title_url';
 import { smartFormatNumber } from '../../components/number/smart.js';
+import RenderText from '../../components/Render/text.vue';
 import instructionView from '../../components/transaction/instruction.vue';
 import { PROGRAM_INFO_BY_ID } from '../../program';
 import { useAppStore } from '../../stores/index';
@@ -64,6 +66,7 @@ export default {
       initialize: null,
       unitLimit: null,
       innerInstructions: null,
+      voteData: null
     };
   },
   mounted() {
@@ -213,6 +216,23 @@ export default {
       } else {
         return { color: '#fa62fc', backgroundColor: '#712c71' }
       }
+    },
+    async voteFunction(data) {
+      let method = {
+        jsonrpc: "2.0",
+        id: 1,
+        method: "getMultipleAccounts",
+        params: [
+          data,
+          {
+            commitment: "confirmed",
+            encoding: "jsonParsed",
+          },
+        ],
+      }
+      let datas = await this.requestList(method)
+      this.voteData = datas.value;
+
     }
 
   },
@@ -245,15 +265,22 @@ export default {
         },
       ],
     });
-    // console.log(this.historyData);
 
     if (this.historyData) {
+
       this.instruction = this.historyData.transaction.message.instructions;
       this.innerInstructions = this.historyData.meta.innerInstructions;
       if (this.historyData.meta.logMessages[0].includes("Vote")) {
         this.preType = true;
       } else {
         this.preType = false;
+        let voteArray = [];
+        for (let i in this.historyData.transaction.message.accountKeys) {
+          voteArray.push(this.historyData.transaction.message.accountKeys[i].pubkey)
+        }
+        if (voteArray.length != 0) {
+          this.voteFunction(voteArray);
+        }
       }
     }
     this.laoding = true
@@ -425,6 +452,37 @@ export default {
                       {{ index + 1 }}
                     </td>
                     <td class="text-theme">
+                      <template v-if="voteData">
+                        <template v-if="voteData[index]?.data?.parsed?.info?.extensions">
+                          <!-- <div v-for="value in voteData[index]?.data?.parsed?.info?.extensions" > -->
+                          <div
+                            v-if="voteData[index]?.data?.parsed?.info?.extensions[voteData[index]?.data?.parsed?.info?.extensions.length - 1].extension == 'tokenMetadata'">
+                            <img
+                              :src="voteData[index]?.data?.parsed?.info?.extensions[voteData[index]?.data?.parsed?.info?.extensions.length - 1].state.uri"
+                              width="24" alt=""> {{
+                                voteData[index]?.data?.parsed?.info?.extensions[voteData[index]?.data?.parsed?.info?.extensions.length - 1].state.name
+                              }} ( {{
+                              voteData[index]?.data?.parsed?.info?.extensions[voteData[index]?.data?.parsed?.info?.extensions.length - 1].state.symbol
+                            }} )
+                            <img
+                              v-if="titleUrl(voteData[index]?.data?.parsed?.info?.extensions[voteData[index]?.data?.parsed?.info?.extensions.length - 1].state.mint).type && titleUrl(voteData[index]?.data?.parsed?.info?.extensions[voteData[index]?.data?.parsed?.info?.extensions.length - 1].state.mint).assest"
+                              v-for="(datas, indexs) in titleUrl(voteData[index]?.data?.parsed?.info?.extensions[voteData[index]?.data?.parsed?.info?.extensions.length - 1].state.mint).certificates"
+                              :key="indexs" :src="datas.img" height="20" class="marginRight8" alt="" @click="pubbley"
+                              style="cursor: pointer;">
+                          </div>
+                          <div v-else>
+                            <RenderText v-if="item.pubkey" :address="item.pubkey" />
+                          </div>
+                          <!-- </div> -->
+                        </template>
+                        <template v-else>
+                          <RenderText v-if="item.pubkey" :address="item.pubkey" />
+                        </template>
+                      </template>
+                      <template v-else>
+                        <RenderText v-if="item.pubkey" :address="item.pubkey" />
+                      </template>
+                      <!-- {{ voteData[index]?.data?.parsed?.info?.extensions }} -->
                       <!-- <text style="cursor: pointer;margin-right: 12px;" @click="pubbleys(item.pubkey)">{{ titleUrl(item.pubkey).url }}</text>
                       <img v-if="titleUrl(item.pubkey).type && !titleUrl(item.pubkey).assest"
                         v-for="(datas, indexs) in titleUrl(item.pubkey).certificates" :key="indexs" :src="datas.img"
@@ -434,7 +492,6 @@ export default {
                         style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                         {{ items.code }}
                       </text> -->
-                      <RenderText v-if="item.pubkey" :address="item.pubkey" />
 
                     </td>
                     <td v-if="historyData.meta.postBalances">
@@ -468,10 +525,9 @@ export default {
           </card>
         </div>
       </div>
-
-      <div v-if="!preType && historyData">
+      <div v-if="!preType && historyData && voteData">
         <h4 class="marginTOP-50">{{ $t("transaction.instruction") }}</h4>
-        <instruction-view :data="instruction" :child="innerInstructions" />
+        <instruction-view :data="instruction" :child="innerInstructions" :voteArray="voteData" />
       </div>
 
       <div style="margin-top:50px" v-if="preType">

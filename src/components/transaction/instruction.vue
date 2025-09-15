@@ -34,7 +34,7 @@
                                 </td>
                                 <td class="text-end"
                                     :class="typeof titleUrl(value).url == 'string' ? (value.length > 43 ? 'text-theme' : '') : ''">
-                                    <div style="display: flex; justify-content: end;align-items: center;"> 
+                                    <div style="display: flex; justify-content: end;align-items: center;">
                                         <text
                                             :style="typeof titleUrl(value).url == 'string' ? (value.length > 43 ? 'cursor: pointer' : '') : ''"
                                             @click="pubbleys(
@@ -47,10 +47,17 @@
                                                 (key
                                                     == 'tokenAmount' ? value.uiAmount : titleUrl(value).url)) }} {{ key ==
                                                 'space' ?
-                                            'byts(s)' : '' }}</text>
+                                                'byts(s)' : '' }}</text>
 
                                         {{ key == "lamports" ? '(BTG)' : '' }}
-                                        <RenderText v-if="value" :type="false" :address="value" style="margin-left: 10px;" />
+                                        <template v-if="value">
+                                            <div v-if="addressArray[value]">
+                                                1
+                                            </div>
+                                            <RenderText v-else :type="false" :address="value"
+                                                style="margin-left: 10px;" />
+
+                                        </template>
                                     </div>
 
 
@@ -96,7 +103,6 @@
                                                                     titleUrl(values).url))) }}
 
                                                     {{ keys == "lamports" ? '(BTG)' : '' }}</text>
-
                                                 <RenderText v-if="values" :type="false" :address="values" />
                                             </div>
 
@@ -128,7 +134,8 @@
                         </tr>
 
                         <tr v-if="item.accounts.length != 0">
-                            <td>Account</td>
+                            <td>Account
+                            </td>
                             <!-- {{ item.accounts[0] }} -->
                             <td class="text-end text-theme ">
                                 <!-- <text style="cursor: pointer" @click="item.accounts[0]">
@@ -188,7 +195,6 @@
                                                 'space' ?
                                                 'byts(s)' : '' }}
                                             {{ key == "lamports" ? '(BTG)' : '' }}</text>
-
                                         <RenderText v-if="value" :type="false" :address="value" />
                                     </div>
 
@@ -236,7 +242,8 @@
                 </tbody>
             </table>
             <template v-for="(child_item, child_index) in innerInstructions" :key="child_index">
-                <innerInster-view v-if="index == child_item.index" :data="child_item.instructions" :index="index + 1" />
+                <innerInster-view v-if="index == child_item.index" :data="child_item.instructions" :index="index + 1"
+                    :voteArray="addressArray" />
             </template>
         </card-body>
     </card>
@@ -247,8 +254,9 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { titleUrl } from '../../components/method/title_url';
+import RenderText from '../Render/text.vue';
 import innerInsterView from './innerInstructions.vue';
-import RenderText from "../Render/text.vue"
+
 const router = useRouter();
 const props = defineProps({
     data: {
@@ -258,8 +266,41 @@ const props = defineProps({
     child: {
         typeof: Array,
         default: []
+    },
+    voteArray: {
+        typeof: Array,
+        default: []
     }
 })
+console.log(props);
+const voteArray = ref(props.voteArray)
+const addressArray = ref({});
+
+console.log(voteArray.value);
+
+for (let i in voteArray.value) {
+    if (voteArray.value[i]?.data?.parsed?.info?.extensions) {
+        const extensions = voteArray.value[i].data.parsed.info.extensions;
+        const lastExtension = extensions[extensions.length - 1];
+
+        if (lastExtension?.extension === "tokenMetadata") {
+            const mint = lastExtension.state.mint;
+            const state = lastExtension.state;
+            // 以 mint 为键名，将 state 挂载到 addressArray.value 上
+            addressArray.value[mint] = state;
+        } else {
+            // 若不符合条件，可选择给某个默认键赋值，或不处理
+            // 示例：给键 'default' 赋值为空
+            addressArray.value['default'] = '';
+        }
+    } else {
+        // 同理，不符合条件时的默认处理
+        addressArray.value['default'] = '';
+    }
+}
+
+console.log(addressArray.value);
+
 const instruction = ref(props.data);
 const innerInstructions = ref(props.child)
 // console.log(233333);

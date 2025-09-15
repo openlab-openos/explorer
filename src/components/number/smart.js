@@ -53,12 +53,12 @@ export function smartFormatNumber(price) {
 
   const num = parseFloat(price);
   if (num === 0) {
-    return '$ 0';
+    return ' 0';
   }
 
   // 情况1：价格高于$0但低于$0.00001
   if (num > 0 && num < 0.00001) {
-    return '$ < 0.00001';
+    return ' < 0.00001';
   }
 
   // 情况2：价格不低于$0.00001但低于$1
@@ -78,7 +78,7 @@ export function smartFormatNumber(price) {
     const truncatedDecimal = decimalPart.substring(0, 5);
 
     // 拼接结果
-    return `$${integerPart}.${truncatedDecimal}`;
+    return `${integerPart}.${truncatedDecimal}`;
   }
 
   // 情况3：价格高于等于$1（保留两位小数，直接截断）
@@ -86,12 +86,12 @@ export function smartFormatNumber(price) {
     // 扩大100倍后取整再缩小，实现截断效果
     const truncated = Math.floor(num * 100) / 100;
     // 确保显示两位小数（如1 → 1.00）
-    return `$${truncated.toFixed(2)}`;
+    return `${truncated.toFixed(2)}`;
   }
 
   // 处理负数（保留两位小数，直接截断）
   const truncatedNegative = Math.ceil(num * 100) / 100;
-  return `$${truncatedNegative.toFixed(2)}`;
+  return `${truncatedNegative.toFixed(2)}`;
 }
 
 
@@ -106,9 +106,9 @@ export function formatMarketCap(cap) {
 
   // 情况4：市值小于$0.01
   if (num < 0.01) {
-    return '$0';
+    return '0';
   }
 
   // 情况5：市值不低于$0.01，最多保留两位小数
-  return `$${num.toFixed(2)}`;
+  return `${num.toFixed(2)}`;
 }
