@@ -94,10 +94,10 @@
 
                             </td>
                             <td style=" text-align: left">
-                                {{ item.type == 'token_transfer' ? item.uiAmount :
+                                {{ item.type == 'token_transfer' ? come(item.uiAmount) :
                                     (typeof item.uiAmount == 'number' ? come(smartFormatNumber(item.uiAmount / 1000000000))
                                         :
-                                        item.uiAmount) }}
+                                        come(item.uiAmount)) }}
                             </td>
                             <td style=" text-align: left;" @click="pubbleys(
                                 item.type == 'token_transfer' ? item.mint : ''

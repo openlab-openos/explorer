@@ -139,12 +139,12 @@ const infoRender = () => {
     {
       icon: "fas fa-lg fa-fw me-2 fa-hourglass",
       language: "price",
-      text: data.value? smartFormatNumber(data.value.price) : '0',
+      text: data.value ?('$' + smartFormatNumber(data.value.price)) : '0',
     },
     {
       icon: "fab fa-lg fa-fw me-2 fa-flickr",
       language: "CirculatingSupply",
-      text: data.value ? come(toFexedStake(data.value.supply,data.value.decimals)) : '0',
+      text: data.value ?( come(toFexedStake(data.value.supply,data.value.decimals)) ): '0',
     },
     {
       icon: "fas fa-lg fa-fw me-2 fa-money-bill-alt",

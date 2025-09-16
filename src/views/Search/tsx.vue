@@ -369,7 +369,8 @@ watch(language, (newLang) => {
                 </tr>
                 <tr>
                   <td>{{ t("transaction.fee") }} (BTG)</td>
-                  <td class="text-end"> {{ smartFormatNumber(historyData.meta.fee / 1000000000) }} </td>
+                  <td class="text-end"> {{ (historyData.meta.fee / 1000000000) }} </td>
+                  <!-- <td class="text-end"> {{ smartFormatNumber(historyData.meta.fee / 1000000000) }} </td> -->
                 </tr>
                 <tr>
                   <td>{{ t("transaction.compute_units_consumed") }} </td>

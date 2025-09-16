@@ -55,7 +55,7 @@
                                                             </div>
                                                         </td>
                                                         <td class="minification-size">
-                                                            {{ source.country_name }}
+                                                            {{ source.name }}
                                                         </td>
                                                         <td class="text-end">{{ source.pct }}%</td>
                                                     </template>
@@ -257,6 +257,8 @@ const getActivityLogData = async () => {
             // console.log(mapArray.value);
 
             traffic.value = getTrafficData(mapArray.value);
+            console.log(traffic.value);
+            
         }
         //         for(let i in aaaaa){
         //             // console.log(aaaaa[i]);
@@ -396,6 +398,8 @@ const renderMap = async () => {
 
     mapData.value = markers_data;
     traffic.value = getTrafficData(markers_data);
+    console.log(traffic.value);
+    
 
 };
 
@@ -442,7 +446,8 @@ const getTrafficData = (data) => {
     let countryArray = [];
     let chartArray = [];
     let chartName = [];
-
+    console.log(data);
+    
     if (data) {
         let arrayData = uniqueArrayByProperty(data, "try");
         let country = uniqueArrayByProperty(data, "code");

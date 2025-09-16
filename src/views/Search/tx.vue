@@ -396,7 +396,8 @@ export default {
                 </tr>
                 <tr>
                   <td>{{ $t("transaction.fee") }} (BTG)</td>
-                  <td class="text-end"> {{ smartFormatNumber(historyData.meta.fee / 1000000000) }} </td>
+                  <td class="text-end"> {{ (historyData.meta.fee / 1000000000) }} </td>
+                  <!-- <td class="text-end"> {{ smartFormatNumber(historyData.meta.fee / 1000000000) }} </td> -->
                 </tr>
                 <tr>
                   <td>{{ $t("transaction.compute_units_consumed") }} </td>
@@ -459,10 +460,16 @@ export default {
                             v-if="voteData[index]?.data?.parsed?.info?.extensions[voteData[index]?.data?.parsed?.info?.extensions.length - 1].extension == 'tokenMetadata'">
                             <img
                               :src="voteData[index]?.data?.parsed?.info?.extensions[voteData[index]?.data?.parsed?.info?.extensions.length - 1].state.uri"
-                              width="24" alt=""> {{
-                                voteData[index]?.data?.parsed?.info?.extensions[voteData[index]?.data?.parsed?.info?.extensions.length - 1].state.name
-                              }} ( {{
-                              voteData[index]?.data?.parsed?.info?.extensions[voteData[index]?.data?.parsed?.info?.extensions.length - 1].state.symbol
+                              width="24" alt="">
+                            <text style="cursor: pointer;" @click="pubbleys(item.pubkey)" >
+                              {{
+                                voteData[index]?.data?.parsed?.info?.extensions[voteData[index]?.data?.parsed?.info?.extensions.length
+                                  - 1].state.name
+                              }}
+                            </text>
+                            ( {{
+                              voteData[index]?.data?.parsed?.info?.extensions[voteData[index]?.data?.parsed?.info?.extensions.length
+                                - 1].state.symbol
                             }} )
                             <img
                               v-if="titleUrl(voteData[index]?.data?.parsed?.info?.extensions[voteData[index]?.data?.parsed?.info?.extensions.length - 1].state.mint).type && titleUrl(voteData[index]?.data?.parsed?.info?.extensions[voteData[index]?.data?.parsed?.info?.extensions.length - 1].state.mint).assest"

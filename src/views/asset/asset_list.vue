@@ -80,11 +80,11 @@
                                     {{ item ? come(item.holders) : 0 }}
                                 </td>
                                 <td>
-                                     {{ come(smartFormatNumber( toFexedStake(item.market_value,item.decimals)))  }}
+                                     $ {{ come(smartFormatNumber( toFexedStake(item.market_value,item.decimals)))  }}
                                 </td>
                                 <td>
                                     <!-- {{ item.price ? '$' : '' }}  -->
-                                    {{ come(smartFormatNumber(item.price ? item.price : '0'))  }}
+                                    $ {{ come(smartFormatNumber(item.price ? item.price : '0'))  }}
                                     <img v-if="item.price_icon" :src="imgUrl + '/' + item.price_icon" height="24"
                                         class="marginRight8" alt="">
                                     <!-- http://localhost:3109/swap/?lang=zh_CN&inputMint=USDTWFmHW5ieSiQM7ea4fPPdx3a5zMEgp1yqgRqjZdt&outputMint=%20USDo1uHcFo9H6aHWcqCkhBiWiMhUqQJFienbKDBPEhN -->

@@ -434,7 +434,7 @@ export const ipAddresses = {
       "ip": "194.233.82.186",
       "location": [9.3552, 105.8859],
       "try": "SG",
-      "code": "AS141995",
+      "code": "01",
       "timezone": "Asia/Singapore",
       "country_name": "Singapore"
     },

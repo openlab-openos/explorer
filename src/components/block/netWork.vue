@@ -40,14 +40,19 @@
 
 
 <script setup>
-import { chainRequest } from "../../request/chain";
-import numberAnimar from "../../components/CountFlop.vue";
-import apexchart from "@/components/plugins/Apexcharts.vue";
-import { useAppVariableStore } from "@/stores/app-variable";
-import { onMounted, ref, watchEffect } from 'vue'
-import { useAppStore } from "@/stores/index";
-import i18n from "@/i18n";
+import {
+  onMounted,
+  ref,
+  watchEffect,
+} from 'vue';
 
+import apexchart from '@/components/plugins/Apexcharts.vue';
+import i18n from '@/i18n';
+import { useAppVariableStore } from '@/stores/app-variable';
+import { useAppStore } from '@/stores/index';
+
+import numberAnimar from '../../components/CountFlop.vue';
+import { chainRequest } from '../../request/chain';
 
 const appVariable = useAppVariableStore();
 const appStore = useAppStore();
@@ -101,12 +106,12 @@ const performanceSamples = () => {
         {
           icon: ['fas', 'stop-circle'],
           language:"dashboard.true",
-          text: trueTramsatiom.value,
+          text: come(trueTramsatiom.value),
         },
         {
           icon: ['far', 'registered'],
           language:"dashboard.vote",
-          text:  unnumTranstions.value[23],
+          text:  come(unnumTranstions.value[23]),
         },
         {
           icon: ['fab', 'mizuni'],
@@ -142,5 +147,12 @@ chart.value = {
   },
   series: [randomNo(), randomNo(), randomNo()],
 }
+const come = (num) => {
+    let reg =
+        num.toString().indexOf(".") > -1
+            ? /(\d)(?=(\d{3})+\.)/g
+            : /(\d)(?=(\d{3})+$)/g;
 
+    return num.toString().replace(reg, "$1,");
+}
 </script>

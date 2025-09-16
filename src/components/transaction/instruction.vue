@@ -41,21 +41,26 @@
                                                 value.length > 43 ? (key == 'extensionTypes' ? '' : (key == 'lamports' ? '' : (key == 'space' ? '' : (key == 'decimals' ? '' : (key == 'tokenAmount' ? '' : value))))
                                                 ) : ''
                                             )">
+                                            <img v-if="addressArray[value]" :src="addressArray[value].uri" width="20"
+                                                alt="">
                                             {{ key == 'extensionTypes' ? value[0] : (key == 'lamports' ?
                                                 toFexedStake(value)
                                                 :
                                                 (key
-                                                    == 'tokenAmount' ? value.uiAmount : titleUrl(value).url)) }} {{ key ==
+                                                    == 'tokenAmount' ? value.uiAmount : (addressArray[value] ?
+                                                        (`${addressArray[value].name} (${addressArray[value].symbol}) `) :
+                                            titleUrl(value).url))) }} {{ key ==
                                                 'space' ?
                                                 'byts(s)' : '' }}</text>
 
                                         {{ key == "lamports" ? '(BTG)' : '' }}
                                         <template v-if="value">
+                                            <!-- 
                                             <div v-if="addressArray[value]">
-                                                1
+                                                {{ addressArray[value].name }}
                                             </div>
-                                            <RenderText v-else :type="false" :address="value"
-                                                style="margin-left: 10px;" />
+                                            -->
+                                            <RenderText :type="false" :address="value" style="margin-left: 10px;" />
 
                                         </template>
                                     </div>
