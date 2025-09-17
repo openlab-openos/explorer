@@ -104,7 +104,7 @@ import {
   onMounted,
   ref,
 } from 'vue';
-import RenderText from "../Render/text.vue"
+
 import { useRouter } from 'vue-router';
 
 import { PublicKey } from '@solana/web3.js';
@@ -113,6 +113,7 @@ import { chainRequest } from '../../request/chain';
 import { solanaRequest } from '../../request/solanaReques';
 import { metaRequest } from '../../request/tokenMeta';
 import { titleUrl } from '../method/title_url';
+import RenderText from '../Render/text.vue';
 
 const tokenData = ref();
 const pubbleys = ref("");

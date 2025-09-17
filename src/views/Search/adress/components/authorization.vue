@@ -17,7 +17,7 @@
                                 v-for="(datas, indexs) in titleUrl(MintData?.mintAuthority).certificates" :key="indexs"
                                 :src="datas.img" height="24" class="marginRight8" alt=""> -->
                             <RenderText v-if="MintData?.mintAuthority" :address="MintData?.mintAuthority" />
-
+                            <text v-else>N/A</text>
                         </td>
                     </tr>
                     <tr>
@@ -31,6 +31,7 @@
                                 v-for="(datas, indexs) in titleUrl(MintData?.freezeAuthority).certificates"
                                 :key="indexs" :src="datas.img" height="24" class="marginRight8" alt=""> -->
                             <RenderText v-if="MintData?.freezeAuthority" :address="MintData?.freezeAuthority" />
+                            <text v-else>N/A</text>
 
                         </td>
                     </tr>

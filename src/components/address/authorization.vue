@@ -20,7 +20,9 @@
                     </tr>
                     <tr>
                         <td>{{ $t("account.freeze_authorization") }} </td>
-                        <td class="text-end"> {{ tokenData.freezeAuthority == null ? "N/A" :
+                        <td class="text-end">
+                            
+                             {{ tokenData.freezeAuthority == null ? "N/A" :
                             titleUrl(tokenData.freezeAuthority).url }}
                             <img v-if="titleUrl(tokenData.freezeAuthority).type"
                                 v-for="(datas, indexs) in titleUrl(tokenData.freezeAuthority).certificates"
@@ -35,8 +37,11 @@
 
 <script setup>
 import { ref } from 'vue';
+
 import { useRouter } from 'vue-router';
-import RenderText from "../method/text.vue"
+
+import RenderText from '../method/text.vue';
+
 const router = useRouter();
 const pubbtx = (url) => {
     if (url) {
@@ -48,5 +53,6 @@ const pubbtx = (url) => {
         })
     }
 };
+
 const data = ref();
 </script>

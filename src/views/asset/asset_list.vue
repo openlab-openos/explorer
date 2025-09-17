@@ -101,7 +101,7 @@
                                         <!-- <img src="https://cdn.openverse.live/images/20250905/mUpak3IQXlGfMr9zZVe3ovrOddNybALmwNdIPG6b.png" v-if="item.market_value " width="20" style="cursor: pointer;" alt=""></img> -->
                                          <text class="textD backStyle" >D</text> Buy
                                     </a>
-                                    <a class="a-Link" id="buyC" v-if="item.price_source == 'Bitcoin_TM' " :href= "`https://www.bitcoin.tm/trade?symbol=BIT/USDT`"  target="_blank" >
+                                    <a class="a-Link" id="buyC" v-if="item.price_source == 'Bitcoin_TM' " :href= "`https://www.bitcoin.tm/trade?symbol=${item.symbol}/USDT`"  target="_blank" >
                                         <!-- <img src="https://cdn.openverse.live/images/BIT_1024x1024.png" v-if="item.market_value " width="20" style="cursor: pointer;" alt=""></img> -->
                                          <text class="textC backStyle">C</text> Buy
                                     </a>
