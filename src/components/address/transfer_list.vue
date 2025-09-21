@@ -158,14 +158,17 @@
                                 style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                 {{ items.code }}
                             </text> -->
-                            <template v-if="URL_title[item.token]">
-                                <text>
+                            <template v-if="URL_title">
+                                <text v-if="URL_title[item.token]">
                                     <img :src="URL_title[item.token].uri" height="24" class="marginRight8" alt="">
                                     {{ URL_title[item.token] ?
                                         URL_title[item.token].name : null }}
                                     {{ URL_title[item.token] ?
                                         ('(' + URL_title[item.token].symbol + ')') : null }}
                                 </text>
+                                <template v-else>
+                                    <RenderText v-if="item.token" :address="item.token" />
+                                </template>
                             </template>
                             <template v-else>
                                 <RenderText v-if="item.token" :address="item.token" />
@@ -275,10 +278,11 @@ onMounted(async () => {
         historyData.value = HandleList(res);
         for (let i in historyData.value) {
             const currentToken = historyData.value[i].token;
-            // 关键：判断当前token是否已在dataArray中，不存在才添加
-            if (!dataArray.value.includes(currentToken)) {
-                dataArray.value.push(currentToken);
-            }
+            if (currentToken.length > 30)
+                // 关键：判断当前token是否已在dataArray中，不存在才添加
+                if (!dataArray.value.includes(currentToken)) {
+                    dataArray.value.push(currentToken);
+                }
         }
         await tokenList();
         totalItems.value = historyData.value.length;
@@ -312,7 +316,10 @@ const tokenList = async () => {
     };
     try {
         const res = await chainRequest(method);
-        URL_title.value = voteFunction(res.result.value);
+        if (res.result && res.result.value)
+            URL_title.value = voteFunction(res.result.value);
+        console.log(URL_title.value);
+        console.log(res);
 
         return res.result;
     } catch (err) {

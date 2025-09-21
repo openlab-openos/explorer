@@ -26,7 +26,8 @@
                         <tr v-for="(item, index) in paginatedHistoryData" :key="index">
                             <td class="text-theme" style="line-height: 30px;">
                                 <template v-if="URL_title">
-                                    <text v-if="URL_title[item.account.data.parsed.info.mint]" @click="pubbtx(item.account.data.parsed.info.mint)" style="cursor: pointer">
+                                    <text v-if="URL_title[item.account.data.parsed.info.mint]"
+                                        @click="pubbtx(item.account.data.parsed.info.mint)" style="cursor: pointer">
                                         <img :src="URL_title[item.account.data.parsed.info.mint].uri ? URL_title[item.account.data.parsed.info.mint].uri : ''"
                                             width="20" height="20" style="margin-right: 5px;vertical-align: middle;"
                                             v-if="URL_title[item.account.data.parsed.info.mint].uri" alt="">
@@ -90,9 +91,12 @@ const dataArray = ref([]);
 
 const data = ref(props.tokens);
 for (let i in data.value) {
-    dataArray.value.push(
-        data.value[i].account.data.parsed.info.mint,
-    )
+    const currentToken = data.value[i].account.data.parsed.info.mint;
+    if (currentToken.length > 30)
+        // 关键：判断当前token是否已在dataArray中，不存在才添加
+        if (!dataArray.value.includes(currentToken)) {
+            dataArray.value.push(currentToken);
+        }
 }
 const URL_title = ref();
 
