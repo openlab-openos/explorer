@@ -277,6 +277,7 @@ const props = defineProps({
         default: []
     }
 })
+
 console.log(props);
 const voteArray = ref(props.voteArray)
 const addressArray = ref({});

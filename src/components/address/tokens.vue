@@ -25,7 +25,21 @@
                     <template v-if="tokens.length != 0 && type">
                         <tr v-for="(item, index) in paginatedHistoryData" :key="index">
                             <td class="text-theme" style="line-height: 30px;">
-                                <RenderText :address="item.account.data.parsed.info.mint" />
+                                <template v-if="URL_title">
+                                    <text v-if="URL_title[item.account.data.parsed.info.mint]" @click="pubbtx(item.account.data.parsed.info.mint)" style="cursor: pointer">
+                                        <img :src="URL_title[item.account.data.parsed.info.mint].uri ? URL_title[item.account.data.parsed.info.mint].uri : ''"
+                                            width="20" height="20" style="margin-right: 5px;vertical-align: middle;"
+                                            v-if="URL_title[item.account.data.parsed.info.mint].uri" alt="">
+                                        {{ URL_title[item.account.data.parsed.info.mint] ?
+                                            URL_title[item.account.data.parsed.info.mint].name : null }}
+                                        {{ URL_title[item.account.data.parsed.info.mint] ?
+                                            ('(' + URL_title[item.account.data.parsed.info.mint].symbol + ')') : null }}
+                                    </text>
+                                    <RenderText v-else :address="item.account.data.parsed.info.mint" />
+
+                                </template>
+
+                                <RenderText v-else :address="item.account.data.parsed.info.mint" />
                             </td>
                             <td class="text-theme">
                                 <RenderText :address="item.pubkey" />
@@ -55,22 +69,33 @@
 
 <script setup>
 import {
-    computed,
-    onMounted,
-    ref,
+  computed,
+  onMounted,
+  ref,
 } from 'vue';
-import RenderText from "../Render/text.vue"
+
 import { useRouter } from 'vue-router';
 
 import { titleUrl } from '../../components/method/title_url';
 import { smartFormatNumber } from '../../components/number/smart';
 import { chainRequest } from '../../request/chain';
+import RenderText from '../Render/text.vue';
 
 const router = useRouter();
 const props = defineProps({
     tokens: Array,
 });
+const dataArray = ref([]);
+// console.log(props.tokens);
+
 const data = ref(props.tokens);
+for (let i in data.value) {
+    dataArray.value.push(
+        data.value[i].account.data.parsed.info.mint,
+    )
+}
+const URL_title = ref();
+
 const currentPage = ref(1);
 const pageSize = ref(10);
 const tokenData = ref();
@@ -92,9 +117,9 @@ const tokenList = async () => {
     let method = {
         jsonrpc: "2.0",
         id: 1,
-        method: "getProgramAccounts",
+        method: "getMultipleAccounts",
         params: [
-            "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c",
+            dataArray.value,
             {
                 encoding: "jsonParsed",
                 filters: [
@@ -110,14 +135,41 @@ const tokenList = async () => {
     };
     try {
         const res = await chainRequest(method);
-
         tokenData.value = res.result;
+        URL_title.value = voteFunction(res.result.value);
+
         return res.result;
     } catch (err) {
         console.error(`Error fetching accounts for ${token}:`, err);
         return [];
     }
 }
+
+const voteFunction = (item) => {
+    let addressArray = {};
+    for (let i in item) {
+        if (item[i]?.data?.parsed?.info?.extensions) {
+            const extensions = item[i].data.parsed.info.extensions;
+            const lastExtension = extensions[extensions.length - 1];
+
+            if (lastExtension?.extension === "tokenMetadata") {
+                const mint = lastExtension.state.mint;
+                const state = lastExtension.state;
+                // 以 mint 为键名，将 state 挂载到 addressArray 上
+                addressArray[mint] = state;
+            } else {
+                // 若不符合条件，可选择给某个默认键赋值，或不处理
+                // 示例：给键 'default' 赋值为空
+                addressArray['default'] = '';
+            }
+        } else {
+            // 同理，不符合条件时的默认处理
+            addressArray['default'] = '';
+        }
+    }
+    return addressArray;
+}
+
 onMounted(async () => {
     await tokenList();
 

@@ -5,12 +5,10 @@ return !(hostname.startsWith('devnet.') || hostname.startsWith('test-devnet.'))
 }
 // console.log(isProductionDomain());
 const ArchiveType = sessionStorage.getItem('ArchiveType');
-console.log(ArchiveType);
 const ArchiveUrl = ArchiveType == 'Archive2' ? 'https://archive2.openverse.network/': 'https://api.mainnet.openverse.network/';
 
 
 const solanaApiUrl = isProductionDomain() ? ArchiveUrl : "https://api.devnet.openverse.network";
-console.log(solanaApiUrl);
 
 
 export default solanaApiUrl;

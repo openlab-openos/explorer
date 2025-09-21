@@ -33,7 +33,7 @@
                     <tr v-for="(item, index) in paginatedHistoryData" :key="index">
                         <td class="text-theme">
                             <text style="cursor: pointer" @click="pubbtx(item.signature)">{{ stringcate(item.signature)
-                            }}</text>
+                                }}</text>
                         </td>
                         <td>
                             <button type="button" style="
@@ -158,7 +158,19 @@
                                 style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                 {{ items.code }}
                             </text> -->
-                            <RenderText v-if="item.token" :address="item.token" />
+                            <template v-if="URL_title[item.token]">
+                                <text>
+                                    <img :src="URL_title[item.token].uri" height="24" class="marginRight8" alt="">
+                                    {{ URL_title[item.token] ?
+                                        URL_title[item.token].name : null }}
+                                    {{ URL_title[item.token] ?
+                                        ('(' + URL_title[item.token].symbol + ')') : null }}
+                                </text>
+                            </template>
+                            <template v-else>
+                                <RenderText v-if="item.token" :address="item.token" />
+                            </template>
+
 
                         </td>
 
@@ -184,21 +196,22 @@
 
 <script setup>
 import {
-    computed,
-    onMounted,
-    ref,
-    watchEffect,
+  computed,
+  onMounted,
+  ref,
+  watchEffect,
 } from 'vue';
 
 import moment from 'moment';
 import { useRouter } from 'vue-router';
-import RenderText from "../Render/text.vue"
+
 import LoadingVue from '../../components/block/loading.vue';
 import { smartFormatNumber } from '../../components/number/smart.js';
 import { chainRequest } from '../../request/chain';
 import { order } from '../../request/order';
 import { solanapubbleys } from '../method/solana';
 import { titleUrl } from '../method/title_url';
+import RenderText from '../Render/text.vue';
 
 const router = useRouter();
 const props = defineProps({
@@ -231,6 +244,8 @@ const paginatedHistoryData = computed(() => {
 const totalItems = ref(0);
 
 const type = ref(true);
+const dataArray = ref([]);
+
 const handlePageChange = (newPage) => {
     type.value = false;
     currentPage.value = newPage;
@@ -253,12 +268,19 @@ const requestList = async (object) => {
         return []; // 返回一个空数组或抛出错误取决于你的需求
     }
 }
-
-
+const URL_title = ref();
 onMounted(async () => {
     try {
         let res = await requestList('transactions/' + props.url);
         historyData.value = HandleList(res);
+        for (let i in historyData.value) {
+            const currentToken = historyData.value[i].token;
+            // 关键：判断当前token是否已在dataArray中，不存在才添加
+            if (!dataArray.value.includes(currentToken)) {
+                dataArray.value.push(currentToken);
+            }
+        }
+        await tokenList();
         totalItems.value = historyData.value.length;
         loading.value = true;
         // // console.log(historyData.value);
@@ -268,7 +290,60 @@ onMounted(async () => {
     }
 });
 const ownerArray = ref([props.url]);
+const tokenList = async () => {
+    let method = {
+        jsonrpc: "2.0",
+        id: 1,
+        method: "getMultipleAccounts",
+        params: [
+            dataArray.value,
+            {
+                encoding: "jsonParsed",
+                filters: [
+                    {
+                        "memcmp": {
+                            "offset": 1,
+                            "bytes": "1"
+                        },
+                    }
+                ]
+            }
+        ]
+    };
+    try {
+        const res = await chainRequest(method);
+        URL_title.value = voteFunction(res.result.value);
 
+        return res.result;
+    } catch (err) {
+        console.error(err);
+        return [];
+    }
+}
+const voteFunction = (item) => {
+    let addressArray = {};
+    for (let i in item) {
+        if (item[i]?.data?.parsed?.info?.extensions) {
+            const extensions = item[i].data.parsed.info.extensions;
+            const lastExtension = extensions[extensions.length - 1];
+
+            if (lastExtension?.extension === "tokenMetadata") {
+                const mint = lastExtension.state.mint;
+                const state = lastExtension.state;
+                // 以 mint 为键名，将 state 挂载到 addressArray 上
+                addressArray[mint] = state;
+            } else {
+                // 若不符合条件，可选择给某个默认键赋值，或不处理
+                // 示例：给键 'default' 赋值为空
+                addressArray['default'] = '';
+            }
+        } else {
+            // 同理，不符合条件时的默认处理
+            addressArray['default'] = '';
+        }
+    }
+    return addressArray;
+}
 const HandleList = (listItem) => {
     // console.log('原始数据:', listItem);
     let array = [];
@@ -320,7 +395,7 @@ const HandleList = (listItem) => {
             // quantityType = props.type ? (firstInstruction?.parsed?.info?.source == props.url ? ((firstInstruction?.parsed?.info?.destination == props.url ? true : false)) : true) : false;
             quantityType = false;
             program = firstInstruction?.programId || '';
-            lamports = firstInstruction?.parsed?.info?.tokenAmount ? firstInstruction?.parsed?.info?.tokenAmount?.uiAmount :( firstInstruction?.parsed?.info?.lamports / 1000000000);
+            lamports = firstInstruction?.parsed?.info?.tokenAmount ? firstInstruction?.parsed?.info?.tokenAmount?.uiAmount : (firstInstruction?.parsed?.info?.lamports / 1000000000);
             owner = firstInstruction?.parsed?.info?.source == firstInstruction?.parsed?.info?.destination ? firstInstruction?.parsed?.info?.destination : '';
             authority = firstInstruction?.parsed?.info?.authority || '';
             // } 

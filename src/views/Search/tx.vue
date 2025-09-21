@@ -239,6 +239,7 @@ export default {
 
   async created() {
     this.url = this.$route.params.item;
+
     this.type = this.$route.params.err;
     this.card = await this.requestList({
       jsonrpc: "2.0",
@@ -269,6 +270,7 @@ export default {
     if (this.historyData) {
 
       this.instruction = this.historyData.transaction.message.instructions;
+
       this.innerInstructions = this.historyData.meta.innerInstructions;
       if (this.historyData.meta.logMessages[0].includes("Vote")) {
         this.preType = true;
@@ -290,12 +292,13 @@ export default {
   watch: {
 
     async $route(to, from) {
-      // console.log('变化');
       // console.log(this.$route.params.item);
-
       this.laoding = false
-      this.url = this.$route.params.item;
-      this.type = this.$route.params.err;
+      // if(to.params.item == from.params.item){
+
+      // }
+      this.url = to.params.item;
+      this.type = to.params.err;
       this.card = await this.requestList({
         jsonrpc: "2.0",
         id: "",
@@ -307,6 +310,7 @@ export default {
           },
         ],
       });
+
       this.historyData = await this.requestList({
         jsonrpc: "2.0",
         id: "",
@@ -322,13 +326,23 @@ export default {
       });
 
       if (this.historyData) {
+
+        this.instruction = this.historyData.transaction.message.instructions;
+
+        this.innerInstructions = this.historyData.meta.innerInstructions;
         if (this.historyData.meta.logMessages[0].includes("Vote")) {
           this.preType = true;
         } else {
           this.preType = false;
+          let voteArray = [];
+          for (let i in this.historyData.transaction.message.accountKeys) {
+            voteArray.push(this.historyData.transaction.message.accountKeys[i].pubkey)
+          }
+          if (voteArray.length != 0) {
+            this.voteFunction(voteArray);
+          }
         }
       }
-
       this.laoding = true
     }
   }
@@ -461,7 +475,7 @@ export default {
                             <img
                               :src="voteData[index]?.data?.parsed?.info?.extensions[voteData[index]?.data?.parsed?.info?.extensions.length - 1].state.uri"
                               width="24" alt="">
-                            <text style="cursor: pointer;" @click="pubbleys(item.pubkey)" >
+                            <text style="cursor: pointer;" @click="pubbleys(item.pubkey)">
                               {{
                                 voteData[index]?.data?.parsed?.info?.extensions[voteData[index]?.data?.parsed?.info?.extensions.length
                                   - 1].state.name

@@ -204,7 +204,6 @@
               <history-view :url="url"></history-view>
             </el-tab-pane>
             <el-tab-pane
-              v-if="transfersType"
               :label="$t('transfer')"
               name="second"
             >
@@ -331,7 +330,6 @@ const mintToken = ref();
 const activeName = ref("first");
 // const activeName = ref('fourth');
 const nameText = ref("account.PerMonth");
-console.log('holdNumber',holdNumber.value);
 
 const selectData = ref([
   { name: "account.All", value: "all" },
@@ -370,13 +368,11 @@ const props = defineProps({
   },
 });
 const VrcType = ref(false)
-console.log(titleUrl(props.url));
 for(let i in titleUrl(props.url).certificates){
   if(titleUrl(props.url).certificates[i].code == "VRC10"){
     VrcType.value = true
   }
 }
-console.log(VrcType.value);
 
 // const url = ref("AmXJDzPZoXJX2buwbeg9aL1WUH7CwoNMw2JYFwk2LbKD");
 const url = ref(props.url);
@@ -527,7 +523,6 @@ const toFexedStake = (num, decimals) => {
 };
 
 const tabClick = () => {
-  console.log(123);
   if (activeName.value !== "fourth") {
     nameText.value = "account.PerMonth";
   }

@@ -87,7 +87,7 @@
                             </tr>
                             <tr>
                                 <td>{{ $t("account.assigned_program_id") }}</td>
-                                <td class="text-end text-theme" >
+                                <td class="text-end text-theme">
                                     {{ $t("account.native_label") }}
                                 </td>
                             </tr>
@@ -111,15 +111,14 @@
                         <el-tab-pane :label="$t('navigation.transactions')" name="first">
                             <history-view :url="url"></history-view>
                         </el-tab-pane>
-                        <template v-if="card_data[0]" >
-                        <el-tab-pane v-if="transfersType && type && !card_data[0].executable"
-                            :label="$t('transfer')" name="second">
-                            <transfer-view :url="url" :type="true" v-if="activeName == 'second'"></transfer-view>
-                        </el-tab-pane>
-                        <el-tab-pane v-if="transfersType && type && !card_data[0].executable"
-                            :label="$t('pledge')" name="third">
-                            <pledgeView v-if="activeName == 'third'" :url="url" />
-                        </el-tab-pane>
+                        <template v-if="card_data[0]">
+                            <el-tab-pane :label="$t('transfer')" name="second">
+                                <transfer-view :url="url" :type="true" v-if="activeName == 'second'"></transfer-view>
+                            </el-tab-pane>
+                            <el-tab-pane v-if="transfersType && type && !card_data[0].executable" :label="$t('pledge')"
+                                name="third">
+                                <pledgeView v-if="activeName == 'third'" :url="url" />
+                            </el-tab-pane>
                         </template>
 
                     </el-tabs>
@@ -173,9 +172,9 @@ onMounted(async () => {
 
 })
 function isProductionDomain() {
-  const hostname = window.location.hostname;
-  // 检测是否包含 'devnet.' 前缀
-  return !(hostname.startsWith('devnet.') || hostname.startsWith('test-devnet.'))
+    const hostname = window.location.hostname;
+    // 检测是否包含 'devnet.' 前缀
+    return !(hostname.startsWith('devnet.') || hostname.startsWith('test-devnet.'))
 }
 const transfersType = isProductionDomain();
 
@@ -196,14 +195,12 @@ const pubbleys = async (url) => {
             },
         ],
     });
-    console.log(cardData);
-    
+
     if (cardData) {
         if (cardData.value[0] != null) {
             card_data.value = cardData.value;
             type.value = true
-            console.log(card_data.value);
-            
+
         } else {
             type.value = false
         }
