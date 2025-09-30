@@ -102,8 +102,8 @@ if (UtlDevnetType) {
       ScanName.value = "Betanet Archive 2";
     } else if (ArchiveType == "Archive3") {
       ScanName.value = "Betanet Archive 3";
-    } else if (ArchiveType == "RPC") {
-      ScanName.value = "RPC";
+    } else if (ArchiveType == "Betanet Archive 1") {
+      ScanName.value = "Betanet Archive 1";
     }
   } else {
     ScanName.value = "Betanet Archive 2";
@@ -183,12 +183,12 @@ const selectLanguage = (language: any, abbreviation: any) => {
 
 // 节点切换
 const selectData = ref(UtlDevnetTypes ? [
-  { name: 'RPC', url: 'https://openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'RPC', requestUrl: "https://rpc.openverse.network/" },
+  { name: 'Betanet Archive 1', url: 'https://openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'Betanet Archive 1', requestUrl: "https://rpc.openverse.network/" },
   { name: 'Betanet Archive 2', url: 'https://openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'Archive2', requestUrl: "https://api.mainnet.openverse.network/" },
   { name: 'Betanet Archive 3', url: 'https://openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'Archive3', requestUrl: "https://archive2.openverse.network/" },
   { name: 'Devnet', url: 'https://devnet.openverse.live', type: !UtlDevnetType, ArchiveType: '', requestType: 'Test' },
 ] : [
-  { name: 'RPC', url: 'https://test.openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'RPC', requestUrl: "https://rpc.openverse.network/" },
+  { name: 'Betanet Archive 1', url: 'https://test.openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'Betanet Archive 1', requestUrl: "https://rpc.openverse.network/" },
   { name: 'Betanet Archive 2', url: 'https://test.openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'Archive2', requestUrl: "https://api.mainnet.openverse.network/" },
   { name: 'Betanet Archive 3', url: 'https://test.openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'Archive3', requestUrl: "https://archive2.openverse.network/" },
   { name: 'Devnet', url: 'https://test-devnet.openverse.live', type: !UtlDevnetType, ArchiveType: '', requestType: 'Test' },
@@ -254,7 +254,7 @@ onMounted(() => {
     // @ts-ignore
     appStore.setChain(selectData.value[0].url);
     selectData.value[0].type = true;
-    nameText.value = 'Openverse RPC.DEV'
+    nameText.value = 'Openverse Betanet Archive 1.DEV'
   }
 })
 

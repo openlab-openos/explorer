@@ -5,7 +5,7 @@ return !(hostname.startsWith('devnet.') || hostname.startsWith('test-devnet.'))
 }
 // console.log(isProductionDomain());
 const ArchiveType = sessionStorage.getItem('ArchiveType');
-const ArchiveUrl = ArchiveType == 'Archive3' ? 'https://archive2.openverse.network/': ( ArchiveType == 'RPC' ? 'https://rpc.openverse.network/' : 'https://api.mainnet.openverse.network/');
+const ArchiveUrl = ArchiveType == 'Archive3' ? 'https://archive2.openverse.network/': ( ArchiveType == 'Betanet Archive 1' ? 'https://rpc.openverse.network/' : 'https://api.mainnet.openverse.network/');
 // const ArchiveUrl = ArchiveType == 'Archive3' ? 'https://archive2.openverse.network/': 'https://api.mainnet.openverse.network/';
 
 
