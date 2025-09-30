@@ -98,15 +98,15 @@ const urlType = sessionStorage.getItem("urlType");
 // console.log(UtlDevnetType, 'UtlDevnetType');
 if (UtlDevnetType) {
   if (ArchiveType) {
-    if (ArchiveType == "Archive1") {
-      ScanName.value = "Betanet Archive 1";
-    } else if (ArchiveType == "Archive2") {
+    if (ArchiveType == "Archive2") {
       ScanName.value = "Betanet Archive 2";
+    } else if (ArchiveType == "Archive3") {
+      ScanName.value = "Betanet Archive 3";
     } else if (ArchiveType == "RPC") {
       ScanName.value = "RPC";
     }
   } else {
-    ScanName.value = "Betanet Archive 1";
+    ScanName.value = "Betanet Archive 2";
   }
 
 } else {
@@ -184,13 +184,13 @@ const selectLanguage = (language: any, abbreviation: any) => {
 // 节点切换
 const selectData = ref(UtlDevnetTypes ? [
   { name: 'RPC', url: 'https://openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'RPC', requestUrl: "https://rpc.openverse.network/" },
-  { name: 'Betanet Archive 1', url: 'https://openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'Archive1', requestUrl: "https://api.mainnet.openverse.network/" },
-  { name: 'Betanet Archive 2', url: 'https://openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'Archive2', requestUrl: "https://archive2.openverse.network/" },
+  { name: 'Betanet Archive 2', url: 'https://openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'Archive2', requestUrl: "https://api.mainnet.openverse.network/" },
+  { name: 'Betanet Archive 3', url: 'https://openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'Archive3', requestUrl: "https://archive2.openverse.network/" },
   { name: 'Devnet', url: 'https://devnet.openverse.live', type: !UtlDevnetType, ArchiveType: '', requestType: 'Test' },
 ] : [
   { name: 'RPC', url: 'https://test.openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'RPC', requestUrl: "https://rpc.openverse.network/" },
-  { name: 'Betanet Archive 1', url: 'https://test.openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'Archive1', requestUrl: "https://api.mainnet.openverse.network/" },
-  { name: 'Betanet Archive 2', url: 'https://test.openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'Archive2', requestUrl: "https://archive2.openverse.network/" },
+  { name: 'Betanet Archive 2', url: 'https://test.openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'Archive2', requestUrl: "https://api.mainnet.openverse.network/" },
+  { name: 'Betanet Archive 3', url: 'https://test.openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'Archive3', requestUrl: "https://archive2.openverse.network/" },
   { name: 'Devnet', url: 'https://test-devnet.openverse.live', type: !UtlDevnetType, ArchiveType: '', requestType: 'Test' },
 ])
 console.log(selectData.value);
@@ -205,7 +205,7 @@ const selsetClick = (index: number) => {
         window.location.href = UtlDevnetTypes?'https://devnet.openverse.live':"https://test-devnet.openverse.live"
       } else {
         console.log("Production");
-        window.location.href = UtlDevnetTypes?'https://www.openverse.live':"https://www.test.openverse.live";
+        window.location.href = UtlDevnetTypes?'https://www.openverse.live':"https://test.openverse.live";
         // if(UtlDevnetType){
         sessionStorage.setItem("ArchiveType", item.ArchiveType);
         sessionStorage.setItem("urlType", selectData.value[i].requestType);
@@ -347,7 +347,7 @@ onMounted(() => {
       <div class="menu-item dropdown dropdown-mobile-full">
         <a href="#" data-bs-toggle="dropdown" data-bs-display="static" class="menu-link scales"
           style="white-space: nowrap;">
-          <!-- {{ UtlDevnetType ? 'Betanet Archive 1' : 'Devnet' }} -->
+          <!-- {{ UtlDevnetType ? 'Betanet Archive 2' : 'Devnet' }} -->
           {{ ScanName }}
           <!-- <img src="https://cdn.openverse.network/brands/openverse/icon_128.png" width="32" alt=""> -->
           <i class="bi bi-chevron-down" style="margin: 5px;"></i>
