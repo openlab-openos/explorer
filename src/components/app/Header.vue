@@ -106,7 +106,7 @@ if (UtlDevnetType) {
       ScanName.value = "Betanet Archive 1";
     }
   } else {
-    ScanName.value = "Betanet Archive 2";
+    ScanName.value = "Betanet Archive 1";
   }
 
 } else {
