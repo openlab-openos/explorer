@@ -272,7 +272,7 @@ export default {
       this.instruction = this.historyData.transaction.message.instructions;
 
       this.innerInstructions = this.historyData.meta.innerInstructions;
-      if (this.historyData.meta.logMessages[0].includes("Vote")) {
+      if (this.historyData.meta.logMessages[0]?.includes("Vote")) {
         this.preType = true;
       } else {
         this.preType = false;

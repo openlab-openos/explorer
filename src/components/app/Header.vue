@@ -102,6 +102,8 @@ if (UtlDevnetType) {
       ScanName.value = "Betanet Archive 1";
     } else if (ArchiveType == "Archive2") {
       ScanName.value = "Betanet Archive 2";
+    } else if (ArchiveType == "RPC") {
+      ScanName.value = "RPC";
     }
   } else {
     ScanName.value = "Betanet Archive 1";
@@ -180,14 +182,16 @@ const selectLanguage = (language: any, abbreviation: any) => {
 // https://api.mainnet.openverse.network/
 
 // 节点切换
-const selectData = ref(UtlDevnetTypes ?[
-  { name: 'Betanet Archive 1', url: 'https://openverse.live', type: UtlDevnetType, requestType: 'Formal',ArchiveType:'Archive1', requestUrl: "https://api.mainnet.openverse.network/" },
-  { name: 'Betanet Archive 2', url: 'https://openverse.live', type: UtlDevnetType, requestType: 'Formal',ArchiveType:'Archive2', requestUrl: "https://archive2.openverse.network/" },
-  { name: 'Devnet', url: 'https://devnet.openverse.live', type: !UtlDevnetType,ArchiveType:'', requestType: 'Test' },
-]:[
-  { name: 'Betanet Archive 1', url: 'https://test.openverse.live', type: UtlDevnetType, requestType: 'Formal',ArchiveType:'Archive1', requestUrl: "https://api.mainnet.openverse.network/" },
-  { name: 'Betanet Archive 2', url: 'https://test.openverse.live', type: UtlDevnetType, requestType: 'Formal',ArchiveType:'Archive2', requestUrl: "https://archive2.openverse.network/" },
-  { name: 'Devnet', url: 'https://test-devnet.openverse.live', type: !UtlDevnetType,ArchiveType:'', requestType: 'Test' },
+const selectData = ref(UtlDevnetTypes ? [
+  { name: 'RPC', url: 'https://openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'RPC', requestUrl: "https://rpc.openverse.network/" },
+  { name: 'Betanet Archive 1', url: 'https://openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'Archive1', requestUrl: "https://api.mainnet.openverse.network/" },
+  { name: 'Betanet Archive 2', url: 'https://openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'Archive2', requestUrl: "https://archive2.openverse.network/" },
+  { name: 'Devnet', url: 'https://devnet.openverse.live', type: !UtlDevnetType, ArchiveType: '', requestType: 'Test' },
+] : [
+  { name: 'RPC', url: 'https://test.openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'RPC', requestUrl: "https://rpc.openverse.network/" },
+  { name: 'Betanet Archive 1', url: 'https://test.openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'Archive1', requestUrl: "https://api.mainnet.openverse.network/" },
+  { name: 'Betanet Archive 2', url: 'https://test.openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'Archive2', requestUrl: "https://archive2.openverse.network/" },
+  { name: 'Devnet', url: 'https://test-devnet.openverse.live', type: !UtlDevnetType, ArchiveType: '', requestType: 'Test' },
 ])
 console.log(selectData.value);
 
@@ -196,16 +200,16 @@ const selsetClick = (index: number) => {
   selectData.value.map((item, i) => {
     if (i == index) {
       ScanName.value = selectData.value[i].name;
-      if(selectData.value[i].requestType == 'Test' ){
-        sessionStorage.setItem("urlType",selectData.value[i].requestType);
+      if (selectData.value[i].requestType == 'Test') {
+        sessionStorage.setItem("urlType", selectData.value[i].requestType);
         window.location.href = UtlDevnetTypes?'https://devnet.openverse.live':"https://test-devnet.openverse.live"
       } else {
         console.log("Production");
-        // window.location.href = UtlDevnetTypes?'https://www.openverse.live':"https://www.test.openverse.live";
+        window.location.href = UtlDevnetTypes?'https://www.openverse.live':"https://www.test.openverse.live";
         // if(UtlDevnetType){
-          sessionStorage.setItem("ArchiveType",item.ArchiveType);
-          sessionStorage.setItem("urlType",selectData.value[i].requestType);
-        window.location.href = UtlDevnetTypes?'https://openverse.live':"https://test.openverse.live";
+        sessionStorage.setItem("ArchiveType", item.ArchiveType);
+        sessionStorage.setItem("urlType", selectData.value[i].requestType);
+        // window.location.href = UtlDevnetTypes?'https://openverse.live':"https://test.openverse.live";
 
         //   if(type !== item.ArchiveType ){
         //     window.location.reload()
@@ -214,7 +218,7 @@ const selsetClick = (index: number) => {
         //    window.location.href = item.url
         //   }
         // }
-        
+
       }
       // // item.type = true;
       // if (UtlDevnetType == item.type) {
