@@ -258,7 +258,7 @@ const getActivityLogData = async () => {
 
             traffic.value = getTrafficData(mapArray.value);
             console.log(traffic.value);
-            
+
         }
         //         for(let i in aaaaa){
         //             // console.log(aaaaa[i]);
@@ -399,7 +399,7 @@ const renderMap = async () => {
     mapData.value = markers_data;
     traffic.value = getTrafficData(markers_data);
     console.log(traffic.value);
-    
+
 
 };
 
@@ -447,10 +447,14 @@ const getTrafficData = (data) => {
     let chartArray = [];
     let chartName = [];
     console.log(data);
-    
+
     if (data) {
         let arrayData = uniqueArrayByProperty(data, "try");
-        let country = uniqueArrayByProperty(data, "code");
+        // let country = uniqueArrayByProperty(data, "code");
+        let country = uniqueArrayByProperty(data.map(item => ({
+            ...item,
+            timezoneFirstPart: item.timezone ? item.timezone.split("/")[0] : "Unknown"
+        })), "timezoneFirstPart");
 
         for (let i = 0; i < 5; i++) {
             if (arrayData[i].value != undefined) {
@@ -467,9 +471,12 @@ const getTrafficData = (data) => {
                 });
             }
         }
+        console.log(country);
+        console.log(arrayData);
+
         for (let i in country) {
             countryArray.push({
-                name: country[i].value,
+                name: country[i].try,
                 visits: country[i].count,
                 pct: (
                     (JSON.parse(country[i].count) / JSON.parse(data.length)) *
@@ -493,7 +500,9 @@ const getTrafficData = (data) => {
     appStore.getCountryData(chainArray[0]);
     series.value = chartArray.map(parseFloat);
     let array = series.value;
-
+    console.log(chainArray);
+    console.log(chartArray);
+    
     for (let i in chainArray) {
         chartName.push(chainArray[i].timezone);
     }
@@ -548,7 +557,8 @@ function uniqueArrayByProperty(arr, key) {
         }
         return acc;
     }, {});
-
+    console.log(uniqueItemsMap);
+    
     // 将映射转换为一个数组，其中每个对象包含原始数据和它的出现次数
     return Object.entries(uniqueItemsMap).map(([key, items]) => ({
         value: key, // 如果需要key的值，可以保留这一行
@@ -556,6 +566,7 @@ function uniqueArrayByProperty(arr, key) {
         count: items.length, // 这是该项的出现次数
         country_name: items[0].country_name,
         timezone: items[0].timezone,
+        try: items[0].try,
     }));
 }
 onUnmounted(() => {

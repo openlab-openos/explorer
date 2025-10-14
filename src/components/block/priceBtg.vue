@@ -14,7 +14,7 @@
               height: 30px;
             ">
             <h5 style="display: flex; height: 30px; font-size: 0.9rem;line-height: 30px;">
-              {{data? come(smartFormatNumber( toFexedStake(data.market_value,data.decimals))) : '0'}}
+              {{ data ? come(smartFormatNumber(toFexedStake(data.market_value, data.decimals))) : '0' }}
             </h5>
           </div>
 
@@ -68,20 +68,21 @@ watchEffect(() => {
 const data = ref();
 
 watchEffect(async () => {
-    try {
-        const assets = await tokenList(1,5);
-        // const res = await tokenProgram(1);
-        console.log('assets', assets);
-        for(let i in assets.data){
-          if(assets.data[i].address == "USDo1uHcFo9H6aHWcqCkhBiWiMhUqQJFienbKDBPEhN"){
-            data.value = assets.data[i];
-          }
-        }
-        console.log(data.value);
-        
-    } catch (error) {
-        console.error('Error in watchEffect:', error);
+  try {
+    const assets = await tokenList(1, 5);
+    // const res = await tokenProgram(1);
+    console.log('assets', assets);
+    for (let i in assets.data) {
+      if (assets.data[i].address == "USDo1uHcFo9H6aHWcqCkhBiWiMhUqQJFienbKDBPEhN") {
+        data.value = assets.data[i];
+      }
     }
+    console.log(data.value);
+
+  } catch (error) {
+    console.error('Error in watchEffect:', error);
+  }
+  console.log(data.value);
 });
 
 selectLanguage(appStore.$state.language);
@@ -118,12 +119,7 @@ const charts = ref({
   ],
 });
 
-onMounted(() => {
-  watchEffect(() => {
-    rate.value = appStore.rate;
-    infoRender()
-  })
-})
+
 
 
 
@@ -139,17 +135,17 @@ const infoRender = () => {
     {
       icon: "fas fa-lg fa-fw me-2 fa-hourglass",
       language: "price",
-      text: data.value ?('$' + smartFormatNumber(data.value.price)) : '0',
+      text: data.value ? ('$' + smartFormatNumber(data.value.price)) : '0',
     },
     {
       icon: "fab fa-lg fa-fw me-2 fa-flickr",
       language: "CirculatingSupply",
-      text: data.value ?( come(toFexedStake(data.value.supply,data.value.decimals)) ): '0',
+      text: data.value ? (come(toFexedStake(data.value.supply, data.value.decimals))) : '0',
     },
     {
       icon: "fas fa-lg fa-fw me-2 fa-money-bill-alt",
       language: "holders",
-      text: data.value? come(data.value.holders) : '0'
+      text: data.value ? come(data.value.holders) : '0'
     },
   ];
 }
@@ -158,23 +154,30 @@ const randomNo = () => {
   return Math.floor(Math.random() * 2) + 3;
 };
 const toFexedStake = (num, decimals) => {
-    if (num == null || decimals == null) {
-        console.error('Number and decimals must be provided.');
-        return 0;
-    }
-    const divisor = Math.pow(10, JSON.parse(decimals));
+  if (num == null || decimals == null) {
+    console.error('Number and decimals must be provided.');
+    return 0;
+  }
+  const divisor = Math.pow(10, JSON.parse(decimals));
 
-    return (JSON.parse(num) / divisor).toFixed(0);;
+  return (JSON.parse(num) / divisor).toFixed(0);;
 
 };
 const come = (num) => {
-    if (num) {
-        const reg =
-            num.toString().indexOf(".") > -1
-                ? /(\d)(?=(\d{3})+\.)/g
-                : /(\d)(?=(\d{3})+$)/g;
+  if (num) {
+    const reg =
+      num.toString().indexOf(".") > -1
+        ? /(\d)(?=(\d{3})+\.)/g
+        : /(\d)(?=(\d{3})+$)/g;
 
-        return num.toString().replace(reg, "$1,");
-    }
+    return num.toString().replace(reg, "$1,");
+  }
 }
+
+// onMounted(() => {
+watchEffect(() => {
+  rate.value = appStore.rate;
+  infoRender()
+})
+// })
 </script>

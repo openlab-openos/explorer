@@ -265,7 +265,7 @@ const menufunction = async (url) => {
 
         let datas = await requestList(methods);
 
-
+        
         if (datas) {
             for (let i in datas.value) {
                 menu.value.push(datas.value[i])
