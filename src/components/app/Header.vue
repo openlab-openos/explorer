@@ -202,13 +202,14 @@ const selsetClick = (index: number) => {
       ScanName.value = selectData.value[i].name;
       if (selectData.value[i].requestType == 'Test') {
         sessionStorage.setItem("urlType", selectData.value[i].requestType);
-        window.location.href = UtlDevnetTypes?'https://devnet.openverse.live':"https://test-devnet.openverse.live"
+        window.location.href = UtlDevnetTypes ? 'https://devnet.openverse.live' : "https://test-devnet.openverse.live"
       } else {
         console.log("Production");
-        window.location.href = UtlDevnetTypes?'https://www.openverse.live':"https://test.openverse.live";
-        // if(UtlDevnetType){
         sessionStorage.setItem("ArchiveType", item.ArchiveType);
         sessionStorage.setItem("urlType", selectData.value[i].requestType);
+        window.location.href = UtlDevnetTypes ? 'https://www.openverse.live' : "https://test.openverse.live";
+        // if(UtlDevnetType){
+
         // window.location.href = UtlDevnetTypes?'https://openverse.live':"https://test.openverse.live";
 
         //   if(type !== item.ArchiveType ){
