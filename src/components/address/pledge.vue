@@ -33,7 +33,7 @@
                             @click="pubbtx(item.account.data.parsed.info.stake ? item.account.data.parsed.info.stake.delegation.voter : '')">
                             {{ item.account.data.parsed.info.stake ?
                                 item.account.data.parsed.info.stake.delegation.voter :
-                            'N/A' }}</text>
+                                'N/A' }}</text>
                         <!-- item.account.data.parsed.info.stake.delegation.voter -->
                     </td>
                     <!-- </template> -->
@@ -91,11 +91,12 @@ import {
 } from '@solana/web3.js';
 
 import LoadingVue from '../../components/block/loading.vue';
+import solanaApiUrl from '../../request/axiosUrl';
 import { chainRequest } from '../../request/chain';
 import { order } from '../../request/order';
 import { proportionAmount } from '../method/proportion_account';
 
-const connection = new Connection("https://api.mainnet.openverse.network", "confirmed");
+const connection = new Connection(solanaApiUrl, "confirmed");
 // const connection = new Connection("https://api.mainnet.openverse.network/api", "confirmed");
 const appStore = useAppStore();
 
