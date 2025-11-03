@@ -26,7 +26,7 @@
                         <tr v-for="(item, index) in paginatedHistoryData" :key="index">
                             <td class="text-theme" style="line-height: 30px;">
                                 <template v-if="URL_title">
-                                    <text v-if="URL_title[item.account.data.parsed.info.mint]"
+                                    <!-- <text v-if="URL_title[item.account.data.parsed.info.mint]"
                                         @click="pubbtx(item.account.data.parsed.info.mint)" style="cursor: pointer">
                                         <img :src="URL_title[item.account.data.parsed.info.mint].uri ? URL_title[item.account.data.parsed.info.mint].uri : ''"
                                             width="20" height="20" style="margin-right: 5px;vertical-align: middle;"
@@ -35,7 +35,17 @@
                                             URL_title[item.account.data.parsed.info.mint].name : null }}
                                         {{ URL_title[item.account.data.parsed.info.mint] ?
                                             ('(' + URL_title[item.account.data.parsed.info.mint].symbol + ')') : null }}
-                                    </text>
+                                    </text> -->
+                                    <router-link v-if="URL_title[item.account.data.parsed.info.mint]"
+                                        :to="{ name: 'address', params: { url: item.account.data.parsed.info.mint } }">
+                                        <img :src="URL_title[item.account.data.parsed.info.mint].uri ? URL_title[item.account.data.parsed.info.mint].uri : ''"
+                                            width="20" height="20" style="margin-right: 5px;vertical-align: middle;"
+                                            v-if="URL_title[item.account.data.parsed.info.mint].uri" alt="">
+                                        {{ URL_title[item.account.data.parsed.info.mint] ?
+                                            URL_title[item.account.data.parsed.info.mint].name : null }}
+                                        {{ URL_title[item.account.data.parsed.info.mint] ?
+                                            ('(' + URL_title[item.account.data.parsed.info.mint].symbol + ')') : null }}
+                                    </router-link>
                                     <RenderText v-else :address="item.account.data.parsed.info.mint" />
 
                                 </template>

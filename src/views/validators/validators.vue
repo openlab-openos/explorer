@@ -95,7 +95,9 @@ Vaildators.value[0].value = ActivityLogData.value.length;
 
 Vaildators.value[1].value = (appStore.part * 100).toFixed(2) + "%";
 Vaildators.value[2].value = appStore.stake + "%";
-Vaildators.value[3].value = ActivityLogData.value[0].version;
+console.log(ActivityLogData.value);
+
+Vaildators.value[3].value = ActivityLogData.value[0]?.version;
 
 
 

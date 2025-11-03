@@ -17,14 +17,17 @@
             </tr>
             <template v-if="loading && type">
                 <tr v-for="(item, index) in paginatedHistoryData" :key="index">
-                    <td class="text-theme" >
-                        <text style="cursor: pointer" @click="pubbtx(item.signature)"> {{ item.signature }}</text>
+                    <td class="text-theme">
+                        <!-- <text style="cursor: pointer" @click="pubbtx(item.signature)"> {{ item.signature }}</text> -->
+                        <router-link :to="{ name: 'tx', params: { item: item.signature, } }">{{
+                            item.signature
+                        }}</router-link>
                     </td>
                     <td class="text-theme">
                         <text>{{ come(item.slot) }}</text>
                     </td>
                     <td :class="item.err == null ? 'color0-255-179-1' : ''">
-                        {{ item.err == null ?  $t('success') : $t('failed') }}
+                        {{ item.err == null ? $t('success') : $t('failed') }}
                     </td>
                     <td>
                         {{ timeSome(item.blockTime) }}

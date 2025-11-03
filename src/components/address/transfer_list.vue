@@ -32,8 +32,10 @@
                 <template v-if="loading && type">
                     <tr v-for="(item, index) in paginatedHistoryData" :key="index">
                         <td class="text-theme">
-                            <text style="cursor: pointer" @click="pubbtx(item.signature)">{{ stringcate(item.signature)
-                                }}</text>
+                            <!-- <text style="cursor: pointer" @click="pubbtx(item.signature)">{{ stringcate(item.signature)
+                            }}</text> -->
+                            <router-link :to="{ name: 'tx', params: { item: item.signature, } }">{{ stringcate(item.signature)
+                            }}</router-link>
                         </td>
                         <td>
                             <button type="button" style="

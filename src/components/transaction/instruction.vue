@@ -17,8 +17,11 @@
                         <tr v-if="item.programId">
                             <td>ProgramId</td>
                             <td class="text-end text-theme ">
-                                <text style="cursor: pointer" @click="pubbleys(item.programId)">{{
-                                    titleUrl(item.programId).url }}</text>
+                                <!-- <text style="cursor: pointer" @click="pubbleys(item.programId)">{{
+                                    titleUrl(item.programId).url }}</text> -->
+                                <router-link :to="{ name: 'address', params: { url: item.programId, } }">{{
+                                    titleUrl(item.programId).url
+                                    }}</router-link>
                             </td>
                         </tr>
 
@@ -35,13 +38,23 @@
                                 <td class="text-end"
                                     :class="typeof titleUrl(value).url == 'string' ? (value.length > 43 ? 'text-theme' : '') : ''">
                                     <div style="display: flex; justify-content: end;align-items: center;">
-                                        <text
-                                            :style="typeof titleUrl(value).url == 'string' ? (value.length > 43 ? 'cursor: pointer' : '') : ''"
-                                            @click="pubbleys(
-                                                value.length > 43 ? (key == 'extensionTypes' ? '' : (key == 'lamports' ? '' : (key == 'space' ? '' : (key == 'decimals' ? '' : (key == 'tokenAmount' ? '' : value))))
+                                        <text v-if="value.length < 43">
+                                            {{ key == 'extensionTypes' ? value[0] : (key == 'lamports' ?
+                                                toFexedStake(value)
+                                                :
+                                                (key
+                                                    == 'tokenAmount' ? value.uiAmount : (addressArray[value] ?
+                                                        (`${addressArray[value].name} (${addressArray[value].symbol}) `) :
+                                                        titleUrl(value).url))) }} {{ key ==
+                                                'space' ?
+                                                'byts(s)' : '' }}
+                                        </text>
+                                        <router-link v-else :to="{
+                                            name: 'address', params: {
+                                                url: value.length > 43 ? (key == 'extensionTypes' ? '' : (key == 'lamports' ? '' : (key == 'space' ? '' : (key == 'decimals' ? '' : (key == 'tokenAmount' ? '' : value))))
                                                 ) : ''
-                                            )">
-                                            <img v-if="addressArray[value]" :src="addressArray[value].uri" width="20"
+                                            }
+                                        }"><img v-if="addressArray[value]" :src="addressArray[value].uri" width="20"
                                                 alt="">
                                             {{ key == 'extensionTypes' ? value[0] : (key == 'lamports' ?
                                                 toFexedStake(value)
@@ -49,10 +62,9 @@
                                                 (key
                                                     == 'tokenAmount' ? value.uiAmount : (addressArray[value] ?
                                                         (`${addressArray[value].name} (${addressArray[value].symbol}) `) :
-                                            titleUrl(value).url))) }} {{ key ==
+                                                        titleUrl(value).url))) }} {{ key ==
                                                 'space' ?
-                                                'byts(s)' : '' }}</text>
-
+                                                'byts(s)' : '' }}</router-link>
                                         {{ key == "lamports" ? '(BTG)' : '' }}
                                         <template v-if="value">
                                             <!-- 
@@ -89,7 +101,7 @@
                                         <td class="text-end"
                                             :class="typeof titleUrl(values).url == 'string' ? (values.length > 43 ? 'text-theme' : '') : ''">
                                             <div style="display: flex; justify-content: end;align-items: center;">
-                                                <text
+                                                <!-- <text
                                                     :style="typeof titleUrl(values).url == 'string' ? (values.length > 43 ? 'cursor: pointer' : '') : ''"
                                                     @click="pubbleys(
                                                         values.length > 43 ? (keys == 'extensionTypes' ? '' : (keys == 'lamports' ? '' : (keys == 'space' ? '' : (keys == 'decimals' ? '' : (keys == 'tokenAmount' ? '' : values))))
@@ -107,7 +119,34 @@
                                                                 == 'tokenAmount' ? values.uiAmount : (keys == 'lockouts' ? 'data' :
                                                                     titleUrl(values).url))) }}
 
-                                                    {{ keys == "lamports" ? '(BTG)' : '' }}</text>
+                                                    {{ keys == "lamports" ? '(BTG)' : '' }}</text> -->
+                                                <!-- <text v-if="value.length < 43">
+                                                    {{ key == 'extensionTypes' ? value[0] : (key == 'lamports' ?
+                                                        toFexedStake(value)
+                                                        :
+                                                        (key
+                                                            == 'tokenAmount' ? value.uiAmount : (addressArray[value] ?
+                                                                (`${addressArray[value].name} (${addressArray[value].symbol}) `) :
+                                                                titleUrl(value).url))) }} {{ key ==
+                                                        'space' ?
+                                                        'byts(s)' : '' }}
+                                                </text>
+                                                <router-link v-else :to="{
+                                                    name: 'address', params: {
+                                                        url: values.length > 43 ? (keys == 'extensionTypes' ? '' : (keys == 'lamports' ? '' : (keys == 'space' ? '' : (keys == 'decimals' ? '' : (keys == 'tokenAmount' ? '' : values))))
+                                                        ) : ''
+                                                    }
+                                                }">{{ keys == 'amount' ? come(values) : keys == 'extensionTypes' ?
+                                                        values[0] :
+                                                        (keys ==
+                                                            'lamports' ?
+                                                            toFexedStake(values)
+                                                            :
+                                                            (keys
+                                                                == 'tokenAmount' ? values.uiAmount : (keys == 'lockouts' ? 'data' :
+                                                                    titleUrl(values).url))) }}
+
+                                                    {{ keys == "lamports" ? '(BTG)' : '' }}</router-link> -->
                                                 <RenderText v-if="values" :type="false" :address="values" />
                                             </div>
 
@@ -133,8 +172,10 @@
                         <tr v-if="item.programId">
                             <td>ProgramId</td>
                             <td class="text-end text-theme ">
-                                <text style="cursor: pointer" @click="pubbleys(item.programId)">{{
-                                    titleUrl(item.programId).url }}</text>
+                                <!-- <text style="cursor: pointer" @click="pubbleys(item.programId)">{{
+                                    titleUrl(item.programId).url }}</text> -->
+                                <router-link :to="{ name: 'address', params: { url: item.programId } }">{{
+                                    titleUrl(item.programId).url }}</router-link>
                             </td>
                         </tr>
 
@@ -161,7 +202,8 @@
                         </tr>
                         <tr v-if="item">
                             <td>Data</td>
-                            <td class="text-end">{{ titleUrl(item.data ? item.data : 'Note Data').url }}
+                            <td class="text-end">
+                                <!-- {{ titleUrl(item.data ? item.data : 'Note Data').url }} -->
                                 <!-- <img v-if="titleUrl(item.data).type && !titleUrl(item.data).assest"
                                     v-for="(datas, indexs) in titleUrl(item.data).certificates" :key="indexs"
                                     :src="datas.img" height="24" class="marginRight8" alt="">

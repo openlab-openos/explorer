@@ -3,7 +3,7 @@
         <card-body>
             <div class="d-flex fw-bold small mb-3">
                 <span class="flex-grow-1"> {{ $t("transactions.title") }} </span>
-                                  <!-- <card-expand-toggler /> -->
+                <!-- <card-expand-toggler /> -->
 
             </div>
             <div class="table-responsive">
@@ -20,22 +20,36 @@
                         </tr>
                         <tr v-for="(item, index) in arrayData" :key="index" style="height: 35px">
                             <td v-if="!props.boolean" style=" text-align: left; " class="text-theme">
-                                <text style="cursor: pointer" @click="
+                                <!-- <text style="cursor: pointer" @click="
                                     pubbtx(
                                         item.signature
                                     )
                                     ">{{
                                         item.signature
-                                    }}</text>
+                                    }}</text> -->
+                                <!-- <a href="http://baidu.com">1</a> -->
+                                <!-- 
+                                        router.push({
+        name: "tx",
+        params: {
+            item: item,
+        },
+    }); -->
+                                <router-link :to="{name: 'tx',params:{item: item.signature,}}">{{
+                                        item.signature
+                                    }}</router-link>
                             </td>
                             <td v-else style=" text-align: left;" class="text-theme">
-                                <text style="cursor: pointer" @click="
+                                <!-- <text style="cursor: pointer" @click="
                                     pubbtx(
                                         item.signature
                                     )
                                     ">{{
                                         stringcate(item.signature)
-                                    }}</text>
+                                    }}</text> -->
+                                     <router-link :to="{name: 'tx',params:{item: item.signature,}}">{{
+                                        stringcate(item.signature)
+                                    }}</router-link>
                             </td>
                             <td style=" text-align: left">
                                 <button type="button" style="
@@ -172,8 +186,8 @@ const fetchOrderData = async () => {
                 // console.log(res[i].result);
                 // console.log(etach);
                 console.log(etach);
-                
-                for (let h = 0 ; h < etach.length ; h ++) {
+
+                for (let h = 0; h < etach.length; h++) {
                     if (etach[h].parsed?.type == "transferChecked" && etach[h].programId == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" || etach[h].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c") {
                         index = h;
                         break;
@@ -183,12 +197,12 @@ const fetchOrderData = async () => {
                     }
                 }
 
-          
-            //     console.log(etach[index]);
-            //     console.log(etach[1].parsed?.type);
 
-            //    console.log( etach[index].parsed?.type == "transferChecked");
-               
+                //     console.log(etach[index]);
+                //     console.log(etach[1].parsed?.type);
+
+                //    console.log( etach[index].parsed?.type == "transferChecked");
+
                 if (etach[index].parsed?.type == "transfer" && etach[index].programId == "11111111111111111111111111111111") {
                     let data = {
                         type: "transfer",

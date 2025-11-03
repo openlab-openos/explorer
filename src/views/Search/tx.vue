@@ -398,14 +398,12 @@ export default {
                     </InfoTooltip>
                   </td>
                   <td class="text-end text-theme">
-                    <text style="cursor: pointer" @click="blockSkip(historyData.slot)">
-                      <!-- {{
-                        promaster[historyData.transaction.message.accountKeys[0].pubkey] ?
-                          promaster[historyData.transaction.message.accountKeys[0].pubkey].name
-                          : historyData.transaction.message.accountKeys[0].pubkey
-                      }} -->
+                    <!-- <text style="cursor: pointer" @click="blockSkip(historyData.slot)">
                       {{ historyData.transaction.message.recentBlockhash }}
-                    </text>
+                    </text> -->
+                    <router-link :to="{ name: 'block', params: { url: historyData.slot } }">{{
+                      historyData.transaction.message.recentBlockhash
+                    }}</router-link>
                   </td>
                 </tr>
                 <tr>
@@ -475,12 +473,16 @@ export default {
                             <img
                               :src="voteData[index]?.data?.parsed?.info?.extensions[voteData[index]?.data?.parsed?.info?.extensions.length - 1].state.uri"
                               width="24" alt="">
-                            <text style="cursor: pointer;" @click="pubbleys(item.pubkey)">
+                            <!-- <text style="cursor: pointer;" @click="pubbleys(item.pubkey)">
                               {{
                                 voteData[index]?.data?.parsed?.info?.extensions[voteData[index]?.data?.parsed?.info?.extensions.length
                                   - 1].state.name
                               }}
-                            </text>
+                            </text> -->
+                            <router-link :to="{ name: 'address', params: { url: item.pubkey } }">{{
+                                voteData[index]?.data?.parsed?.info?.extensions[voteData[index]?.data?.parsed?.info?.extensions.length
+                                  - 1].state.name
+                              }}</router-link>
                             ( {{
                               voteData[index]?.data?.parsed?.info?.extensions[voteData[index]?.data?.parsed?.info?.extensions.length
                                 - 1].state.symbol

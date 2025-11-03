@@ -25,26 +25,31 @@
                         <template v-if="type">
                             <tr v-for="item, index in paginatedHistoryData" :key="index">
                                 <td class="text-theme">
-                                    <img v-if="item.image_url" :src="item.image_url"  alt=""
+                                    <img v-if="item.image_url" :src="item.image_url" alt=""
                                         class="marginRight8 imgCenter">
                                     <img v-if="item.address == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'"
                                         :src="item.address == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' ? 'https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png' : ''"
                                         width="20" alt="" class="marginRight8">
 
-                                    <text style="cursor: pointer;" @click="pubbleys(item.address)">{{
+                                    <!-- <text style="cursor: pointer;" @click="pubbleys(item.address)">{{
                                         item.name ? item.name : titleUrl(item.address).url }}
-                                       
-                                    </text>
-                                     <!-- {{ titleUrl(item.address).url }} -->
+
+                                    </text> -->
+                                    <router-link :to="{ name: 'address', params: { url: item.address, } }">{{
+                                        item.name ? item.name : titleUrl(item.address).url }}</router-link>
+
+                                    <!-- {{ titleUrl(item.address).url }} -->
                                     <img v-if="titleUrl(item.pubkey).type"
                                         v-for="(datas, indexs) in titleUrl(item.pubkey).certificates" :key="indexs"
                                         :src="datas.img" height="20" class="marginRight8" alt="">
                                 </td>
                                 <td>
-                                    {{ item.symbol ? item.symbol : (titleUrl(item.address).symbol ? titleUrl(item.address).symbol : 'N/A' ) }}
+                                    {{ item.symbol ? item.symbol : (titleUrl(item.address).symbol ?
+                                        titleUrl(item.address).symbol : 'N/A' ) }}
                                 </td>
 
-                                <template v-if="item.certificates.length == 0 && item.address != 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' ">
+                                <template
+                                    v-if="item.certificates.length == 0 && item.address != 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'">
                                     <td>N/A</td>
                                 </template>
                                 <template v-else>
@@ -52,9 +57,10 @@
                                         <!-- <img v-for="items, indexs in item.certificates" :key="indexs"
                                             :src="items.image_url" height="20" class="marginRight8"
                                             :title="items.certificate_code" @click="pubbley" style="cursor: pointer;"> -->
-                                                                         <img v-for="items, indexs in titleUrl(item.address).certificates" :key="indexs"
+                                        <img v-for="items, indexs in titleUrl(item.address).certificates" :key="indexs"
                                             :src="items.img" height="20" class="marginRight8"
-                                            :title="items.certificate_code" @click="pubbley" style="cursor: pointer;"></img>
+                                            :title="items.certificate_code" @click="pubbley"
+                                            style="cursor: pointer;"></img>
                                         <!-- <template v-if=" item.address == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' " >
                                             <img v-for="items, indexs in titleUrl(item.address).certificates" :key="indexs"
                                             :src="items.img" height="20" class="marginRight8"
@@ -80,11 +86,11 @@
                                     {{ item ? come(item.holders) : 0 }}
                                 </td>
                                 <td>
-                                     $ {{ come(smartFormatNumber( toFexedStake(item.market_value,item.decimals)))  }}
+                                    $ {{ come(smartFormatNumber(toFexedStake(item.market_value, item.decimals))) }}
                                 </td>
                                 <td>
                                     <!-- {{ item.price ? '$' : '' }}  -->
-                                    $ {{ come(smartFormatNumber(item.price ? item.price : '0'))  }}
+                                    $ {{ come(smartFormatNumber(item.price ? item.price : '0')) }}
                                     <img v-if="item.price_icon" :src="imgUrl + '/' + item.price_icon" height="24"
                                         class="marginRight8" alt="">
                                     <!-- http://localhost:3109/swap/?lang=zh_CN&inputMint=USDTWFmHW5ieSiQM7ea4fPPdx3a5zMEgp1yqgRqjZdt&outputMint=%20USDo1uHcFo9H6aHWcqCkhBiWiMhUqQJFienbKDBPEhN -->
@@ -97,15 +103,21 @@
                                     <!-- {{ come(smartFormatNumber(toFexedStake(item.supply, item.decimals))) }} -->
                                 </td>
                                 <td>
-                                     <a class="a-Link" id="buyD" v-if="item.price_source == 'OpenSwap' " :href= "`https://openswap.me//swap/?lang=zh_CN&inputMint=USDTWFmHW5ieSiQM7ea4fPPdx3a5zMEgp1yqgRqjZdt&outputMint=${item.address}`"  target="_blank" >
+                                    <a class="a-Link" id="buyD" v-if="item.price_source == 'OpenSwap'"
+                                        :href="`https://openswap.me//swap/?lang=zh_CN&inputMint=USDTWFmHW5ieSiQM7ea4fPPdx3a5zMEgp1yqgRqjZdt&outputMint=${item.address}`"
+                                        target="_blank">
                                         <!-- <img src="https://cdn.openverse.live/images/20250905/mUpak3IQXlGfMr9zZVe3ovrOddNybALmwNdIPG6b.png" v-if="item.market_value " width="20" style="cursor: pointer;" alt=""></img> -->
-                                         <text class="textD backStyle" >D</text> Buy
+                                        <text class="textD backStyle">D</text> Buy
                                     </a>
-                                    <a class="a-Link" id="buyC" v-if="item.price_source == 'Bitcoin_TM' " :href= "`https://www.bitcoin.tm/trade?symbol=${item.symbol}/USDT`"  target="_blank" >
+                                    <a class="a-Link" id="buyC" v-if="item.price_source == 'Bitcoin_TM'"
+                                        :href="`https://www.bitcoin.tm/trade?symbol=${item.symbol}/USDT`"
+                                        target="_blank">
                                         <!-- <img src="https://cdn.openverse.live/images/BIT_1024x1024.png" v-if="item.market_value " width="20" style="cursor: pointer;" alt=""></img> -->
-                                         <text class="textC backStyle">C</text> Buy
+                                        <text class="textC backStyle">C</text> Buy
                                     </a>
-                                    <a v-if="item.price_source == 'Constant' " :href= "`http://localhost:3109/swap/?lang=zh_CN&outputMint= ${item.address} `"  target="_blank" >
+                                    <a v-if="item.price_source == 'Constant'"
+                                        :href="`http://localhost:3109/swap/?lang=zh_CN&outputMint= ${item.address} `"
+                                        target="_blank">
                                         <!-- <img src="https://cdn.openverse.live/images/BIT_1024x1024.png" v-if="item.market_value " width="20" style="cursor: pointer;" alt=""></img> -->
                                     </a>
                                 </td>
@@ -184,10 +196,10 @@ const handlePageChange = (newPage) => {
 };
 watchEffect(async () => {
     try {
-        const assets = await tokenList(1,200);
+        const assets = await tokenList(1, 200);
         // const res = await tokenProgram(1);
         console.log('assets', assets);
-        
+
         // const uniqueArray = [...combined,...combined,...combined]
         // console.log(uniqueArray);
         let data = assets.data;
@@ -200,14 +212,14 @@ watchEffect(async () => {
 
         // 重组为新数组（可根据需求调整顺序）
         const newArray = [
-          ...status1Items,  // status为1的元素放在前面
-          ...nonStatus1Items  // status不为1的元素放在后面
+            ...status1Items,  // status为1的元素放在前面
+            ...nonStatus1Items  // status不为1的元素放在后面
         ];
         console.log(newArray);
 
         historyData.value = newArray;
 
-        totalItems.value =newArray.length;
+        totalItems.value = newArray.length;
         loading.value = true;
     } catch (error) {
         console.error('Error in watchEffect:', error);
@@ -283,18 +295,21 @@ const come = (num) => {
 </script>
 
 <style scoped>
-a{
+a {
     text-decoration: none
 }
-#buyD{
+
+#buyD {
     color: rgba(0, 255, 179, 1);
 
 }
-#buyC{
-       color: rgba(255, 215, 39, 1);
+
+#buyC {
+    color: rgba(255, 215, 39, 1);
 
 }
-.backStyle{
+
+.backStyle {
     background: rgba(255, 255, 255, 0.2);
     padding: 3px 6px;
     border-radius: 6px;
@@ -302,10 +317,10 @@ a{
     font-size: 14px;
     margin-right: 3px;
 }
-.a-Link{
+
+.a-Link {
     margin-left: 1px;
     margin-bottom: 1px;
     font-family: Gilroy;
 }
-
 </style>

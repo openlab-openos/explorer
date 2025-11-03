@@ -2,9 +2,13 @@
     <div>
         <img v-if="titleUrl(paramsId).type && propsType" :src="titleUrl(paramsId).img" height="20"
             class="marginRight10">
-        <text v-if="propsType" style="cursor: pointer" @click="pubbtx(paramsId)" class="marginRight10">
-            {{ props.transactionType ?( titleUrl(paramsId).url ? titleUrl(paramsId).url : 'N/A') : (stringcate(paramsId)) }}
-        </text>
+        <!-- <text v-if="propsType" style="cursor: pointer" @click="pubbtx(paramsId)" class="marginRight10">
+            {{ props.transactionType ? (titleUrl(paramsId).url ? titleUrl(paramsId).url : 'N/A') :
+                (stringcate(paramsId)) }}
+        </text> -->
+        <router-link v-if="propsType" :to="{ name: 'address', params: { url: paramsId, } }">{{ props.transactionType ?
+            (titleUrl(paramsId).url ? titleUrl(paramsId).url : 'N/A') :
+            (stringcate(paramsId)) }}</router-link>
         <img v-if="titleUrl(paramsId).type && titleUrl(paramsId).assest"
             v-for="(datas, indexs) in titleUrl(paramsId).certificates" :key="indexs" :src="datas.img" height="20"
             class="marginRight8" alt="" @click="pubbley" style="cursor: pointer;">

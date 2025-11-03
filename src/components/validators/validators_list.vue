@@ -33,9 +33,12 @@
                                                 : log.pubkey
                                     )
                                     }} -->
-                                        <text style="cursor: pointer" @click="pubbleys(log.votepubkey)">{{
+                                        <!-- <text style="cursor: pointer" @click="pubbleys(log.votepubkey)">{{
                                             stringcate(log.votepubkey)
-                                        }}</text>
+                                            }}</text> -->
+                                        <router-link :to="{ name: 'address', params: { url: log.votepubkey, } }">{{
+                                            stringcate(log.votepubkey)
+                                            }}</router-link>
                                     </span>
                                 </td>
                                 <td style="text-align: left; display: flex;height: 40px;">
