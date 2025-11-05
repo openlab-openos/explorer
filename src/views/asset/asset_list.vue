@@ -204,10 +204,10 @@ watchEffect(async () => {
         // console.log(uniqueArray);
         let data = assets.data;
         const status1Items = data.filter(item => item.status === 1);
-        status1Items.sort((a, b) => b.market_value - a.market_value);
+        // status1Items.sort((a, b) => b.market_value - a.market_value);
         // 筛选出status不为1的数据
         const nonStatus1Items = data.filter(item => item.status !== 1);
-        nonStatus1Items.sort((a, b) => b.market_value - a.market_value);
+        // nonStatus1Items.sort((a, b) => b.market_value - a.market_value);
 
 
         // 重组为新数组（可根据需求调整顺序）

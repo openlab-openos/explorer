@@ -69,11 +69,20 @@
 </template>
 
 <script setup>
-import { tokenList, getTokenAccounts } from "./Program.js";
-import { ref, computed, watchEffect } from "vue";
-import LoadingVue from '../../../components/block/loading.vue';
+import {
+  computed,
+  ref,
+  watchEffect,
+} from 'vue';
+
 import { useRouter } from 'vue-router';
+
+import LoadingVue from '../../../components/block/loading.vue';
 import { smartFormatNumber } from '../../../components/number/smart';
+import {
+  getTokenAccounts,
+  tokenList,
+} from './Program.js';
 
 // 路由实例
 const router = useRouter();
@@ -179,9 +188,9 @@ watchEffect(async () => {
                 }
             });
             // 截取前100条数据
-            tokenList.sort((a, b) => {
-                return b.holders - a.holders;
-            });
+            // tokenList.sort((a, b) => {
+            //     return b.holders - a.holders;
+            // });
             dataArray = tokenList.slice(0, 100);
             totalItems.value = dataArray.length;
             // console.log(dataArray);
