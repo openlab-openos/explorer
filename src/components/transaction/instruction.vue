@@ -21,7 +21,7 @@
                                     titleUrl(item.programId).url }}</text> -->
                                 <router-link :to="{ name: 'address', params: { url: item.programId, } }">{{
                                     titleUrl(item.programId).url
-                                    }}</router-link>
+                                }}</router-link>
                             </td>
                         </tr>
 
@@ -54,7 +54,9 @@
                                                 url: value.length > 43 ? (key == 'extensionTypes' ? '' : (key == 'lamports' ? '' : (key == 'space' ? '' : (key == 'decimals' ? '' : (key == 'tokenAmount' ? '' : value))))
                                                 ) : ''
                                             }
-                                        }"><img v-if="addressArray[value]" :src="addressArray[value].uri" width="20"
+                                        }">
+
+                                            <img v-if="addressArray[value]" :src="addressArray[value].uri" width="20"
                                                 alt="">
                                             {{ key == 'extensionTypes' ? value[0] : (key == 'lamports' ?
                                                 toFexedStake(value)
@@ -147,7 +149,19 @@
                                                                     titleUrl(values).url))) }}
 
                                                     {{ keys == "lamports" ? '(BTG)' : '' }}</router-link> -->
-                                                <RenderText v-if="values" :type="false" :address="values" />
+
+                                                <!-- <RenderText v-if="values" :type="true" :address="values" /> -->
+                                                {{ keys == 'amount' ? come(values) : keys == 'extensionTypes' ?
+                                                    values[0] :
+                                                    (keys ==
+                                                        'lamports' ?
+                                                        toFexedStake(values)
+                                                        :
+                                                        (keys
+                                                            == 'tokenAmount' ? values.uiAmount : (keys == 'lockouts' ? 'data' :
+                                                                titleUrl(values).url))) }}
+
+                                                {{ keys == "lamports" ? '(BTG)' : '' }}
                                             </div>
 
 
