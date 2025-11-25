@@ -73,7 +73,7 @@
                                 style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                 {{ items.code }}
                             </text> -->
-                            <RenderText v-if="item.primary" :address="item.primary" />
+                            <RenderText :class="item.primaryType ? 'textTheme' : 'text-theme'"  :propsColor=" 'color0-255-179-1' " v-if="item.primary" :address="item.primary" />
 
 
                         </td>
@@ -94,7 +94,7 @@
                                 style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                 {{ items.code }}
                             </text> -->
-                            <RenderText v-if="item.quantity" :address="item.quantity" />
+                            <RenderText :class="item.quantityType ? 'textTheme' : 'text-theme'" v-if="item.quantity" :address="item.quantity" />
 
                         </td>
                         <td v-else style=" text-align: left;" class="text-theme">

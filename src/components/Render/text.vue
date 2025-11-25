@@ -6,7 +6,7 @@
             {{ props.transactionType ? (titleUrl(paramsId).url ? titleUrl(paramsId).url : 'N/A') :
                 (stringcate(paramsId)) }}
         </text> -->
-        <router-link v-if="propsType" :to="{ name: 'address', params: { url: paramsId, } }">{{ props.transactionType ?
+        <router-link v-if="propsType" :style="'color:' + propsColor " :to="{ name: 'address', params: { url: paramsId, } }">{{ props.transactionType ?
             (titleUrl(paramsId).url ? titleUrl(paramsId).url : 'N/A') :
             (stringcate(paramsId)) }}</router-link>
         <img v-if="titleUrl(paramsId).type && titleUrl(paramsId).assest"
@@ -34,6 +34,10 @@ const props = defineProps({
     transactionType: {
         default: true,
         typeof: Boolean
+    },
+    color:{
+        type: String,
+        default: ""
     }
 })
 const router = useRouter();
@@ -41,6 +45,7 @@ const router = useRouter();
 const paramsId = ref(props.address)
 
 const propsType = ref(props.type)
+const propsColor = ref(props.color)
 
 
 const pubbtx = (url) => {
