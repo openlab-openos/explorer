@@ -119,6 +119,10 @@
                                 name="third">
                                 <pledgeView v-if="activeName == 'third'" :url="url" />
                             </el-tab-pane>
+                            <el-tab-pane v-if="transfersType && type && !card_data[0].executable" label="Mint"
+                                name="fourth">
+                                <MintView v-if="activeName == 'fourth'" :url="url" />
+                            </el-tab-pane>
                         </template>
 
                     </el-tabs>
@@ -138,6 +142,7 @@ import { useRouter } from 'vue-router';
 
 import historyView from '../../../components/address/history_list.vue';
 import holderView from '../../../components/address/holder_list.vue';
+import MintView from '../../../components/address/mintList.vue';
 import pledgeView from '../../../components/address/pledge.vue';
 import ReserveView from '../../../components/address/reserve_list.vue';
 import tokensView from '../../../components/address/tokens.vue';
