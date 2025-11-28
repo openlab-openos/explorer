@@ -119,7 +119,7 @@
                                 name="third">
                                 <pledgeView v-if="activeName == 'third'" :url="url" />
                             </el-tab-pane>
-                            <el-tab-pane v-if="transfersType && type && !card_data[0].executable" label="Mint"
+                            <el-tab-pane v-if="transfersType && type && !card_data[0].executable" :label="$t('mint')"
                                 name="fourth">
                                 <MintView v-if="activeName == 'fourth'" :url="url" />
                             </el-tab-pane>

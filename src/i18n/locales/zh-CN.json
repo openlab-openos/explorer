@@ -22,7 +22,7 @@
   "mint_amount": "铸造量",
   "mint_price":"铸造价格",
   "mint_rate":"产出率",
-  "mint_result":"产出数量",
+  "mint_result":"产出",
   "mint_result_time":"时间",
   "viewaccount": "查看账户",
   "pledge": "质押",

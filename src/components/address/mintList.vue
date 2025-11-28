@@ -30,18 +30,18 @@
                         </td> -->
                         <!-- <template v-if="item.account.data.parsed.info.stake"> -->
                         <td>
-                            {{ percent(item.btgAmount / 1000000000) }} BTG
+                            {{ smartFormatNumber(item.btgAmount / 1000000000) }} BTG
                             <!-- item.account.data.parsed.info.stake.delegation.voter -->
                         </td>
                         <!-- </template> -->
                         <td>
-                            {{ item.btgPrice }}
+                            {{  smartFormatNumber(item.btgPrice) }}
                         </td>
                         <td>
-                            {{ item.outputRate }}
+                            {{ smartFormatNumber(item.outputRate) }}
                         </td>
                         <td>
-                            {{ percent(item.outputTokenAmount / 1000000000) }} <img width="20" :src="  titleUrl(item.mint).find ? titleUrl(item.mint).img : ''  " alt=""> {{ titleUrl(item.mint).find ? titleUrl(item.mint).url : ''  }}
+                            {{ smartFormatNumber(item.outputTokenAmount / 1000000000) }} <img width="20" :src="  titleUrl(item.mint).find ? titleUrl(item.mint).img : ''  " alt=""> {{ titleUrl(item.mint).find ? titleUrl(item.mint).url : ''  }}
                         </td>
                         <td>
                             <!-- {{ item.time }} -->
@@ -80,7 +80,8 @@ import {
 
 import LoadingVue from '../../components/block/loading.vue';
 import { titleUrl } from '../../components/method/title_url';
-import RenderText from '../Render/text.vue';
+// import RenderText from '../Render/text.vue';
+import { smartFormatNumber } from '../../components/number/smart';
 
 const type = ref(true);
 
@@ -205,8 +206,6 @@ onMounted(async () => {
     // 使用示例
     const userWalletAddress = myAddress.value;
     const records = await queryStakingRecords(userWalletAddress);
-    console.log('质押记录:', records);
-    console.log(123);
     historyData.value = records;
     loading.value = true;
 });

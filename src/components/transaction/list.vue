@@ -183,9 +183,6 @@ const fetchOrderData = async () => {
             if (res[i].result) {
                 let etach = res[i].result.transaction.message.instructions;
                 let index = 0;
-                // console.log(res[i].result);
-                // console.log(etach);
-                console.log(etach);
 
                 for (let h = 0; h < etach.length; h++) {
                     if (etach[h].parsed?.type == "transferChecked" && etach[h].programId == "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" || etach[h].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c") {

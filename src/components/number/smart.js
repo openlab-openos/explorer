@@ -48,6 +48,8 @@
 export function smartFormatNumber(price) {
   // 处理非数字输入
   if (isNaN(parseFloat(price))) {
+    console.log(4);
+    
     return price.toString();
   }
 
@@ -75,7 +77,7 @@ export function smartFormatNumber(price) {
 
     // 从第一个非零数字开始，取5位有效数字（直接截断）
     const endIndex = Math.min(startIndex + 5, decimalPart.length);
-    const truncatedDecimal = decimalPart.substring(0, 5);
+    const truncatedDecimal = decimalPart.substring(0, 3);
 
     // 拼接结果
     return `${integerPart}.${truncatedDecimal}`;
