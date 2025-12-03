@@ -7,6 +7,8 @@ import {
 
 import { useRouter } from 'vue-router';
 
+import copyImg from '@/assets/icon/copy.png';
+import successImg from '@/assets/icon/state_succcess.png';
 import i18n from '@/i18n';
 
 import { solanapubbleys } from '../../components/method/solana';
@@ -66,7 +68,8 @@ export default {
       initialize: null,
       unitLimit: null,
       innerInstructions: null,
-      voteData: null
+      voteData: null,
+      copySuccess: false
     };
   },
   mounted() {
@@ -233,6 +236,17 @@ export default {
       let datas = await this.requestList(method)
       this.voteData = datas.value;
 
+    },
+    copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        this.copySuccess = true;
+        // 3秒后恢复复制图标
+        setTimeout(() => {
+          this.copySuccess = false;
+        }, 3000);
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+      });
     }
 
   },
@@ -364,7 +378,10 @@ export default {
               <tbody v-if="historyData">
                 <tr>
                   <td>{{ $t("transactions.signature") }}</td>
-                  <td class="text-end">{{ promaster[url] ? promaster[url].name : url }}</td>
+                  <td class="text-end">{{ promaster[url] ? promaster[url].name : url }} <span>
+                    <img v-if="!copySuccess" width="16" style="cursor: pointer;" :src="copyImg" alt="" @click="copyToClipboard(url)">
+                    <img v-else width="16" style="cursor: pointer;" :src="successImg" alt="">
+                  </span> </td>
                 </tr>
                 <tr>
                   <td>{{ $t("transaction.reault") }}</td>

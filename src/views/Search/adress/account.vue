@@ -18,7 +18,12 @@
                         <tbody v-for="(item, index) in card_data" :key="index">
                             <tr>
                                 <td>{{ $t("account.address") }} </td>
-                                <td class="text-end">{{ url }}</td>
+                                <td class="text-end">{{ url }}
+
+                                    <img v-if="!copySuccess" width="16" style="cursor: pointer;" :src="copyImg" alt=""
+                                        @click="copyToClipboard(url)">
+                                    <img v-else width="16" style="cursor: pointer;" :src="successImg" alt="">
+                                </td>
                             </tr>
                             <tr v-if="promaster[url]">
                                 <td>{{ $t("account.address_label") }} </td>
@@ -140,6 +145,9 @@ import {
 
 import { useRouter } from 'vue-router';
 
+import copyImg from '@/assets/icon/copy.png';
+import successImg from '@/assets/icon/state_succcess.png';
+
 import historyView from '../../../components/address/history_list.vue';
 import holderView from '../../../components/address/holder_list.vue';
 import MintView from '../../../components/address/mintList.vue';
@@ -168,6 +176,9 @@ const menu = ref([]);
 const activeName = ref('first')
 const promaster = apps?.proxy?.$progream;
 // console.log(1111);
+const copySuccess = ref(false);
+
+
 
 onMounted(async () => {
     // console.log(1111);
@@ -270,7 +281,7 @@ const menufunction = async (url) => {
 
         let datas = await requestList(methods);
 
-        
+
         if (datas) {
             for (let i in datas.value) {
                 menu.value.push(datas.value[i])
@@ -288,6 +299,18 @@ const pubbtx = (url) => {
         },
     })
 };
+const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+        copySuccess.value = true;
+        // 3秒后恢复复制图标
+        setTimeout(() => {
+            copySuccess.value = false;
+        }, 3000);
+    }).catch(err => {
+        console.error('Failed to copy: ', err);
+    });
+};
+
 </script>
 <style scoped>
 ::v-deep .el-tabs__item {

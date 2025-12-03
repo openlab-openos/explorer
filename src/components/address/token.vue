@@ -11,7 +11,8 @@
                     <tbody v-if="tokenData">
                         <tr>
                             <td>{{ $t("account.token_account") }} </td>
-                            <td class="text-end"> {{ address == "" ? "" : address }} </td>
+                            <td class="text-end"> {{ address == "" ? "" : address }}
+                            </td>
                         </tr>
                         <tr>
                             <td>{{ $t("account.name") }} </td>
@@ -95,7 +96,7 @@
                 </table>
             </card-body>
         </card>
-       
+
     </div>
 </template>
 
@@ -107,6 +108,8 @@ import {
 
 import { useRouter } from 'vue-router';
 
+import copyImg from '@/assets/icon/copy.png';
+import successImg from '@/assets/icon/state_succcess.png';
 import { PublicKey } from '@solana/web3.js';
 
 import { chainRequest } from '../../request/chain';

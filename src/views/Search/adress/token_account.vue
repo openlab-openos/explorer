@@ -4,7 +4,7 @@
             <img :src="token_img ? token_img : ''" alt="" class="marginRight10 imgWigth40" v-if="token_img">
             <img v-if="titleUrl(token_name).type" :src="titleUrl(token_name).img" class="marginRight10 imgWigth40">
             <text> {{ $t("account.tokenAccount") }} {{ token_name ? (titleUrl(url).find ? titleUrl(url).url : '') : ''
-                }}
+            }}
             </text>
             <img v-if="titleUrl(url).type && titleUrl(url).assest" v-for="(datas, indexs) in titleUrl(url).certificates"
                 :key="indexs" :src="datas.img" height="24" class="marginRight8" alt="">
@@ -19,7 +19,11 @@
                         <tbody v-if="tokenData">
                             <tr>
                                 <td>{{ $t("account.token_account") }} </td>
-                                <td class="text-end"> {{ url }} </td>
+                                <td class="text-end"> {{ url }}
+                                    <img v-if="!copySuccess" width="16" style="cursor: pointer;" :src="copyImg" alt=""
+                                        @click="copyToClipboard(url)">
+                                    <img v-else width="16" style="cursor: pointer;" :src="successImg" alt="">
+                                </td>
                             </tr>
                             <tr>
                                 <td>{{ $t("account.address_label") }} </td>
@@ -48,7 +52,7 @@
                                 <td>{{ $t("account.state") }} </td>
                                 <td class="text-end">{{ tokenData.isFrozen ? $t("account.frozen") :
                                     $t("account.initialize")
-                                }} </td>
+                                    }} </td>
                             </tr>
                             <tr>
                                 <td>{{ $t("account.Owner") }} </td>
@@ -101,6 +105,8 @@ import {
 } from 'open-token-web3';
 import { useRouter } from 'vue-router';
 
+import copyImg from '@/assets/icon/copy.png';
+import successImg from '@/assets/icon/state_succcess.png';
 import {
   Connection,
   PublicKey,
@@ -127,6 +133,9 @@ const owners = ref();
 const program = ref();
 const data = ref();
 const activeName = ref('first')
+
+const copySuccess = ref(false);
+
 
 function isProductionDomain() {
     const hostname = window.location.hostname;
@@ -271,6 +280,18 @@ const pubbtx = (url) => {
         },
     })
 }
+
+const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+        copySuccess.value = true;
+        // 3秒后恢复复制图标
+        setTimeout(() => {
+            copySuccess.value = false;
+        }, 3000);
+    }).catch(err => {
+        console.error('Failed to copy: ', err);
+    });
+};
 
 </script>
 
