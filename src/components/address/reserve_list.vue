@@ -222,7 +222,8 @@ onMounted(async () => {
   for (let i = 0; i < data.length; i++) {
     data[i].metadata = decodeLockAccount(data[i].account.data);
   }
-
+  console.log(data);
+  
   historyData.value = groupBySerialNumber(data);
   historyData.value = historyData.value.sort((a, b) => {
     return b.startTime - a.startTime;
@@ -423,7 +424,7 @@ const stampSome = (time) => {
 };
 
 function formatTimestamp(timestamp) {
-  return moment(timestamp * 1000).format('YYYY-M-DD hh:mm:ss');
+  return moment(timestamp * 1000).format('YYYY-M-DD HH:mm:ss');
 }
 
 const percent = (lod, nem) => {

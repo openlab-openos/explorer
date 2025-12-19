@@ -56,7 +56,7 @@
     "not-been-released": "Total Locked Reserve",
     "have-been-released": "The reserve funds awaiting redemption have been released",
     "stakeTime": "Stake Time",
-    "last_time": "Last Unlock Time",
+    "last_time": "Unlock Time",
     "stage": "Stage",
     "isUnlocked": "Is Unlocked",
     "Frozen": "Frozen",

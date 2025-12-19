@@ -9,6 +9,9 @@
             <tbody>
                 <tr>
                     <th>
+                        <!-- {{ $t("stakeTime") }} -->
+                    </th>
+                    <th>
                         {{ $t("stakeTime") }}
                     </th>
                     <th>
@@ -35,6 +38,9 @@
                 </tr>
                 <template v-if="historyData.length != 0">
                     <tr v-for="(item, index) in paginatedHistoryData" :key="index" @click="detailsFunction(item.child)">
+                        <td>
+                            {{ index + 1 }}
+                        </td>
                         <td>
                             <!-- {{ item.startTime }} -->
                             {{ formatTimestamp(item.startTime) }}
@@ -126,7 +132,7 @@ const paginatedHistoryData = computed(() => {
 });
 
 function formatTimestamp(timestamp) {
-    return moment(timestamp * 1000).format('YYYY-M-DD hh:mm:ss')
+    return moment(timestamp * 1000).format('YYYY-M-DD HH:mm:ss')
 }
 const toFexedStake = (num) => {
     if (num) {
