@@ -38,6 +38,7 @@
     "rentSysvar": "RentSysvar",
     "certificates": "Certificates",
     "protocol": "Protocol",
+    "number": "Number",
     "rate": "Rate",
     "timeRemaining": "Time Remaining",
     "price": "Price",

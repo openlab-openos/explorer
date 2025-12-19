@@ -43,6 +43,7 @@
   "market_cap": "市值",
   "switch": "请切换测试网络进行访问",
   "submit": "提交",
+  "number":"期数",
   "Submitsuccess": "提交成功",
   "Submitfailed": "提交失败",
   "Request-Airdrop": "请求水龙头",

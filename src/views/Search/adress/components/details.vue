@@ -9,7 +9,7 @@
             <tbody>
                 <tr>
                     <th>
-                        <!-- {{ $t("stakeTime") }} -->
+                        {{ $t("number") }}
                     </th>
                     <th>
                         {{ $t("stakeTime") }}
