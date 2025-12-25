@@ -1,10 +1,12 @@
-
 import {
-    createRouter,
-    createWebHistory,
+  createRouter,
+  createWebHistory,
 } from 'vue-router';
 
+import TokenReputation from '@/views/reputation/tokenReputation.vue';
+
 import Tokens from '../views/asset/asset_list.vue';
+import BlackHole from '../views/blackhole/view.vue';
 import Blocks from '../views/blocks/Blocks.vue';
 import Dashboard from '../views/dashboard/dashboard.vue';
 import Faucet from '../views/Faucet/Faucet.vue';
@@ -15,7 +17,6 @@ import Address from '../views/Search/search.vue';
 import Tx from '../views/Search/tx.vue';
 import Transition from '../views/transaction/transactions.vue';
 import Validators from '../views/validators/validators.vue';
-import TokenReputation from '@/views/reputation/tokenReputation.vue';
 
 // const currentUrl = window.location.href;
 
@@ -135,6 +136,11 @@ const router = createRouter({
       path: "/token-reputation",
       name: "TokenReputation",
       component: TokenReputation,
+    },
+    {
+      path: "/blackhole",
+      name: "blackhole",
+      component: BlackHole,
     },
   ],
 });

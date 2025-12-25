@@ -53,9 +53,9 @@
 
 <script setup>
 import {
-    computed,
-    onMounted,
-    ref,
+  computed,
+  onMounted,
+  ref,
 } from 'vue';
 
 import moment from 'moment';
@@ -67,7 +67,8 @@ import { smartFormatNumber } from '../../components/number/smart';
 import { chainRequest } from '../../request/chain';
 import { order } from '../../request/order';
 import { proportionAmount } from '../method/proportion_account';
-import RenderText from "../Render/text.vue"
+import RenderText from '../Render/text.vue';
+
 const loading = ref(true);
 
 const router = useRouter();
@@ -81,6 +82,8 @@ const props = defineProps({
         default: ""
     }
 })
+console.log('props',props);
+
 const historyData = ref([]);
 const proportion_amount = ref(0);
 const currentPage = ref(1);
@@ -117,6 +120,8 @@ const requestList = async (object) => {
 
 
 onMounted(async () => {
+    console.log(324342323);
+    
     let res = await requestList({
         "jsonrpc": "2.0",
         "id": 1,

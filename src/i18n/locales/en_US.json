@@ -80,7 +80,8 @@
         "website": "Website",
         "tokens": "Assets",
         "TokenTracker": "Token Tracker",
-        "faucet": "Faucet"
+        "faucet": "Faucet",
+        "blackhole": "Black Hole"
     },
     "dashboard": {
         "title": "Dashboard",
@@ -343,5 +344,20 @@
         "VRC11Center": "The Openverse team recognizes that the project meets the VRCil protocol standards.",
         "VRC12": " “VRC12” Reputation",
         "VRC12Center": "The Openverse team recognizes that the project meets the VRC12 protocol standards."
+    },
+    "holder": {
+        "title1": "BTG Holders",
+        "title2": "USD Holders",
+        "title3": "JPY Holders",
+        "title4": "EUR Holders",
+        "24H": "24H",
+        "7D": "7D",
+        "30D": "30D",
+        "btg_locked": "BTG Locked",
+        "circulating_supply": "Circulating Supply",
+        "mc":"MC"
+    },
+    "rurn":{
+        "title":"Rurn"
     }
 }

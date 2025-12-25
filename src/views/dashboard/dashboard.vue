@@ -26,7 +26,6 @@ const appVariable = useAppVariableStore();
 
 const apps = getCurrentInstance();
 
-
 const slot = ref(1);
 const inepoch = ref(1);
 const epoch = ref();
@@ -41,38 +40,50 @@ const networkref = ref(null);
 const router = useRouter();
 const renderType = ref(false);
 
-const BlockHeightVue = defineAsyncComponent(() =>
-  import("../../components/block/blockHeight.vue")
+const BlockHeightVue = defineAsyncComponent(
+  () => import("../../components/block/blockHeight.vue")
 );
-const NetWorkVue = defineAsyncComponent(() =>
-  import("../../components/block/netWork.vue")
+const NetWorkVue = defineAsyncComponent(
+  () => import("../../components/block/netWork.vue")
 );
-const ActiveAccountVue = defineAsyncComponent(() =>
-  import("../../components/block/activeAccount.vue")
+const ActiveAccountVue = defineAsyncComponent(
+  () => import("../../components/block/activeAccount.vue")
 );
-const TransferVue = defineAsyncComponent(() =>
-  import("../../components/block/transfer.vue")
+const TransferVue = defineAsyncComponent(
+  () => import("../../components/block/transfer.vue")
 );
-const SupplyVue = defineAsyncComponent(() =>
-  import("../../components/block/supply.vue")
+const SupplyVue = defineAsyncComponent(
+  () => import("../../components/block/supply.vue")
 );
-const ActiveVue = defineAsyncComponent(() =>
-  import("../../components/block/active.vue")
+const ActiveVue = defineAsyncComponent(
+  () => import("../../components/block/active.vue")
 );
-const PriceVue = defineAsyncComponent(() =>
-  import("../../components/block/price.vue")
+const PriceVue = defineAsyncComponent(
+  () => import("../../components/block/price.vue")
 );
-const PriceBtgVue = defineAsyncComponent(() =>
-  import("../../components/block/priceBtg.vue")
+const PriceBtgVue = defineAsyncComponent(
+  () => import("../../components/block/priceBtg.vue")
 );
-const mapDeshboard = defineAsyncComponent(() =>
-  import("../../components/dashboard/map.vue")
+const mapDeshboard = defineAsyncComponent(
+  () => import("../../components/dashboard/map.vue")
 );
-const orderVue = defineAsyncComponent(() =>
-  import("../../components/transaction/list.vue")
+const orderVue = defineAsyncComponent(
+  () => import("../../components/transaction/list.vue")
 );
-const validatorsVue = defineAsyncComponent(() =>
-  import("../../components/validators/validators_list.vue")
+const validatorsVue = defineAsyncComponent(
+  () => import("../../components/validators/validators_list.vue")
+);
+const btgVue = defineAsyncComponent(
+  () => import("../../components/holders/btg.vue")
+);
+const usdVue = defineAsyncComponent(
+  () => import("../../components/holders/usd.vue")
+);
+const jpyVue = defineAsyncComponent(
+  () => import("../../components/holders/jpy.vue")
+);
+const eurVue = defineAsyncComponent(
+  () => import("../../components/holders/eur.vue")
 );
 
 // const Gettype = JSON.parse(sessionStorage.getItem("urlType"))
@@ -84,7 +95,7 @@ function selectLanguage(indexValue) {
 
 watchEffect(() => {
   selectLanguage(appStore.$state.language);
-})
+});
 const requestType = ref(false);
 
 ustdData().then((data) => {
@@ -107,25 +118,21 @@ const performanceSamples = async () => {
         : JSON.parse(i) + 1 + "minutes ago "
     );
     cote.value.push(JSON.parse(res[i].numTransactions));
-    trueTramsatiom.value.push(
-      JSON.parse(res[i].numNonVoteTransactions)
-    );
+    trueTramsatiom.value.push(JSON.parse(res[i].numNonVoteTransactions));
     unnumTranstions.value.push(
       JSON.parse(res[i].numTransactions) +
-      JSON.parse(res[i].numNonVoteTransactions)
+        JSON.parse(res[i].numNonVoteTransactions)
     );
   }
-
 };
 
 const getTime = (timestamp) => {
   return moment(JSON.parse(moment().format("x")) + timestamp * 400).fromNow();
 };
-const ReadyType = ref(true)
+const ReadyType = ref(true);
 
 const supplyRequest = async (epoch, slot, inepoch, solttime) => {
   if (ReadyType.value) {
-
     await chainRequest({
       jsonrpc: "2.0",
       id: 1,
@@ -133,7 +140,8 @@ const supplyRequest = async (epoch, slot, inepoch, solttime) => {
     })
       .then((res) => {
         stubly.value = (
-          JSON.parse(JSON.stringify(res.result.value.total).slice(0, 9)) / 1000000
+          JSON.parse(JSON.stringify(res.result.value.total).slice(0, 9)) /
+          1000000
         ).toFixed(1);
 
         appStore.setStubly(stubly.value);
@@ -145,15 +153,11 @@ const supplyRequest = async (epoch, slot, inepoch, solttime) => {
     pubbley.value = appStore.pubbley;
     ReadyType.value = false;
     // requestType.value = false;
-
   }
   server.value = getServerData(epoch, slot, inepoch, solttime);
-
 };
 
-
 const getServerData = (epoch, slot, inepoch, solttime) => {
-
   Apex = {
     title: {
       style: {
@@ -223,7 +227,7 @@ const getServerData = (epoch, slot, inepoch, solttime) => {
           cssClass: "apexcharts-xaxis-label",
         },
       },
-      min:  3000,
+      min: 3000,
       // min: Gettype ? (Gettype.urlType == 'Formal' ? 3000 : 0) : 3000,
     },
   };
@@ -396,29 +400,32 @@ const epochSkip = (num) => {
 
 watchEffect(async () => {
   const response = appStore.getepochInfo;
-  solttime.value = getTime(
-    response.slotsInEpoch - response.slotIndex
-  );
+  solttime.value = getTime(response.slotsInEpoch - response.slotIndex);
   appStore.setEposhTome(solttime.value);
 
-
-
   if (response) {
-
   }
   await performanceSamples();
-  if (response.epoch && response.slotIndex && response.slotsInEpoch && solttime.value) {
+  if (
+    response.epoch &&
+    response.slotIndex &&
+    response.slotsInEpoch &&
+    solttime.value
+  ) {
     if (!requestType.value) {
       requestType.value = true;
     }
   } else {
     requestType.value = false;
-
   }
   if (requestType.value) {
-    await supplyRequest(response.epoch, response.slotIndex, response.slotsInEpoch, solttime.value);
+    await supplyRequest(
+      response.epoch,
+      response.slotIndex,
+      response.slotsInEpoch,
+      solttime.value
+    );
   }
-
 });
 
 onBeforeUnmount(() => {
@@ -427,8 +434,6 @@ onBeforeUnmount(() => {
   }
 });
 </script>
-
-
 
 <template>
   <div class="row">
@@ -440,6 +445,11 @@ onBeforeUnmount(() => {
     <activeVue />
     <priceVue />
     <priceBtgVue />
+    <btgVue />
+    <usdVue />
+
+    <jpyVue />
+    <eurVue />
   </div>
   <div class="row">
     <!-- BEGIN stats -->
@@ -453,47 +463,89 @@ onBeforeUnmount(() => {
             <!-- <card-expand-toggler /> -->
           </div>
           <div class="ratio ratio-21x9 mb-3" v-if="server.chart">
-            <apexchart type="bar" width="100%" height="100%" :options="server.chart.options"
-              :series="server.chart.series"></apexchart>
+            <apexchart
+              type="bar"
+              width="100%"
+              height="100%"
+              :options="server.chart.options"
+              :series="server.chart.series"
+            ></apexchart>
           </div>
           <div class="row" v-if="requestType">
-            <div class="col-lg-6 mb-3 mb-lg-0" v-for="(stat, index) in server.stats" :key="index">
+            <div
+              class="col-lg-6 mb-3 mb-lg-0"
+              v-for="(stat, index) in server.stats"
+              :key="index"
+            >
               <div class="d-flex align-items-center">
                 <div class="w-50px h-50px">
-                  <apexchart :height="stat.chart.height" :options="stat.chart.options" :series="stat.chart.series">
+                  <apexchart
+                    :height="stat.chart.height"
+                    :options="stat.chart.options"
+                    :series="stat.chart.series"
+                  >
                   </apexchart>
                 </div>
                 <div class="ps-3 flex-1">
-                  <div class="fs-10px fw-bold text-inverse text-opacity-50 mb-1">
+                  <div
+                    class="fs-10px fw-bold text-inverse text-opacity-50 mb-1"
+                  >
                     {{ $t(stat.name) }}
                   </div>
                   <div class="mb-2 fs-5 text-truncate" style="display: flex">
-                    <count-up duration="3" :startVal="stat.total" :end-val="stat.total"></count-up>
+                    <count-up
+                      duration="3"
+                      :startVal="stat.total"
+                      :end-val="stat.total"
+                    ></count-up>
                     {{ stat.unit }}
-                    /<count-up duration="3" :startVal="stat.totals" :end-val="stat.totals"></count-up>
+                    /<count-up
+                      duration="3"
+                      :startVal="stat.totals"
+                      :end-val="stat.totals"
+                    ></count-up>
                     {{ stat.unit }}
                   </div>
                   <div class="progress h-3px mb-1">
-                    <div class="progress-bar bg-theme" v-bind:style="{
-                      width:
-                        JSON.parse((stat.total / stat.totals).toFixed(2)) *
-                        100 +
-                        '%',
-                    }"></div>
+                    <div
+                      class="progress-bar bg-theme"
+                      v-bind:style="{
+                        width:
+                          JSON.parse((stat.total / stat.totals).toFixed(2)) *
+                            100 +
+                          '%',
+                      }"
+                    ></div>
                   </div>
-                  <div class="fs-11px text-inverse text-opacity-50 mb-2 text-truncate">
+                  <div
+                    class="fs-11px text-inverse text-opacity-50 mb-2 text-truncate"
+                  >
                     {{ $t(stat.time) }}
                   </div>
-                  <div class="d-flex align-items-center small" v-for="(info, index) in stat.info" :key="index">
-                    <i class="bi bi-circle-fill fs-6px me-2" v-bind:class="info.class"></i>
-                    <div class="flex-1" style="
+                  <div
+                    class="d-flex align-items-center small"
+                    v-for="(info, index) in stat.info"
+                    :key="index"
+                  >
+                    <i
+                      class="bi bi-circle-fill fs-6px me-2"
+                      v-bind:class="info.class"
+                    ></i>
+                    <div
+                      class="flex-1"
+                      style="
                         overflow: hidden;
                         text-overflow: ellipsis;
                         white-space: nowrap;
-                      ">
+                      "
+                    >
                       {{ $t(info.title) }}
                     </div>
-                    <div :style="info.style" @click="info.click ? epochSkip(info.value) : ''" class="text-theme">
+                    <div
+                      :style="info.style"
+                      @click="info.click ? epochSkip(info.value) : ''"
+                      class="text-theme"
+                    >
                       {{ info.value }}
                     </div>
                   </div>

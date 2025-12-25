@@ -3,24 +3,49 @@
     <perfect-scrollbar class="app-sidebar-content">
       <div class="menu">
         <template v-for="(menu, index) in navigationArray" :key="index">
-          <div class="menu-header" v-if="menu.is_header">{{ $t(menu.text)  }}</div>
+          <div class="menu-header" v-if="menu.is_header">
+            {{ $t(menu.text) }}
+          </div>
           <div class="menu-divider" v-else-if="menu.is_divider"></div>
           <template v-else>
-            <div v-if="!menu.type" class="menu-item" :class="{ active: isActive(menu.url) }"
-              :style="{ display: Number(index) ? 'block' : 'none' }">
-              <router-link :to="{ name: menu.url === '/' ? 'dashboard' : menu.url }" class="menu-link"  >
-                <span class="menu-icon">
+            <div
+              v-if="!menu.type"
+              class="menu-item"
+              :class="{ active: isActive(menu.url) }"
+              :style="{ display: Number(index) ? 'block' : 'none' }"
+            >
+              <router-link
+                :to="{ name: menu.url === '/' ? 'dashboard' : menu.url }"
+                class="menu-link"
+              >
+                <!-- <span class="menu-icon">
                   <i class="menu-icon" :class="menu.icon"></i>
-                </span>
-                <span class="menu-text">{{ $t(menu.text) }}</span>
+                </span> -->
+                <img
+                  :src="isActive(menu.url) ? menu.checkedImg : menu.img"
+                  width="20"
+                  alt=""
+                />
+                &nbsp;
+                <span
+                  class="menu-text"
+                  :class="isActive(menu.url) ? 'text-theme' : ''"
+                  >{{ $t(menu.text) }}  </span
+                >
               </router-link>
             </div>
-            <div v-if="menu.type" class="menu-item "  :class="{ active: isActive(menu.url) }"
-            :style="{ display: Number(index) ? 'block' : 'none' }" >
+            <div
+              v-if="menu.type"
+              class="menu-item"
+              :class="{ active: isActive(menu.url) }"
+              :style="{ display: Number(index) ? 'block' : 'none' }"
+            >
               <a :href="menu.url" class="menu-link arrs" target="_blank">
-                <span class="menu-icon" widdth="50" height="24">
+                <!-- <span class="menu-icon" widdth="50" height="24">
                   <i class="menu-icon" :class="menu.icon"></i>
-                </span>
+                </span> -->
+                <img :src="menu.img" width="20" alt="" />
+                &nbsp;
                 <span class="menu-text">{{ $t(menu.text) }}</span>
               </a>
             </div>
@@ -49,12 +74,12 @@ import { useAppStore } from '@/stores/index';
 const navigationArray = ref([]);
 
 const appSidebarMenu = useAppSidebarMenuStore();
-for(let i in appSidebarMenu){
-  if(appSidebarMenu[i].text){
+for (let i in appSidebarMenu) {
+  if (appSidebarMenu[i].text) {
     navigationArray.value.push(appSidebarMenu[i]);
   }
 }
-
+console.log("navigationArray", navigationArray.value);
 
 const appOption = useAppOptionStore();
 const appStore = useAppStore();
@@ -64,16 +89,15 @@ function appSidebarMobileToggled() {
   appOption.appSidebarMobileToggled = !appOption.appSidebarMobileToggled;
 }
 
-  // 语言
-  function selectLanguage(indexValue) {
-    i18n.global.locale = indexValue;
-  }
+// 语言
+function selectLanguage(indexValue) {
+  i18n.global.locale = indexValue;
+}
 
-  watchEffect(() => {
-    selectLanguage(appStore.$state.language);
-  })
-  // selectLanguage('en-US');
-
+watchEffect(() => {
+  selectLanguage(appStore.$state.language);
+});
+// selectLanguage('en-US');
 
 onMounted(() => {
   const handleSidebarMenuToggle = function (menus) {
@@ -131,7 +155,8 @@ onMounted(() => {
 });
 
 const isActive = computed(() => (url) => {
-  return url === '/' ? route.path === '/' : route.path === '/' + url;
+  
+  return url === "/" ? route.path === "/" : route.path === "/" + url;
 });
 </script>
 

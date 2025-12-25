@@ -340,5 +340,11 @@
     "VRC11Center": "Openverse 团队确认该项目符合 VRC11 协议标准。",
     "VRC12": "“VRC12” 声誉",
     "VRC12Center": "Openverse 团队确认该项目符合 VRC12 协议标准。"
+  },
+  "holder":{
+    "title1":"BTG Holders",
+    "title2":"USD Holders",
+    "title3":"JPY Holders",
+    "title4":"EUR Holders"
   }
 }
