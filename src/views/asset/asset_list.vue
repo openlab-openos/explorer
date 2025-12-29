@@ -236,17 +236,7 @@ watchEffect(async () => {
 //     loadingType.value = true;
 //     console.error('Failed to fetch token list:', error);
 // });
-const pubbleys = (url) => {
-    if (url) {
-        router.push({
-            name: "address",
-            params: {
-                url: url,
-            },
-        })
-    }
 
-};
 const pubbley = () => {
     router.push({
         name: "TokenReputation",

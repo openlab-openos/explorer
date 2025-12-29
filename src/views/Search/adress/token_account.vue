@@ -272,14 +272,6 @@ const toFexedStake = (num, decimals) => {
     return (JSON.parse(num) / divisor).toFixed(2);;
 
 };
-const pubbtx = (url) => {
-    router.push({
-        name: "address",
-        params: {
-            url: url,
-        },
-    })
-}
 
 const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text).then(() => {

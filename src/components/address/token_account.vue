@@ -85,27 +85,27 @@
 
 <script setup>
 import {
-    onMounted,
-    ref,
+  onMounted,
+  ref,
 } from 'vue';
 
 import {
-    ExtensionType,
-    getExtensionData,
+  ExtensionType,
+  getExtensionData,
 } from 'open-token-web3';
 import { useRouter } from 'vue-router';
 
 import {
-    Connection,
-    PublicKey,
+  Connection,
+  PublicKey,
 } from '@solana/web3.js';
-import RenderText from "../Render/text.vue"
 
 import { chainRequest } from '../../request/chain';
 import { solanagetAccount } from '../../request/solanaGetaccount';
 import { solanaRequest } from '../../request/solanaReques';
 import { metaRequest } from '../../request/tokenMeta';
 import { titleUrl } from '../method/title_url';
+import RenderText from '../Render/text.vue';
 
 const router = useRouter();
 const tokenData = ref();
@@ -227,13 +227,6 @@ const toFexedStake = (num, decimals) => {
     return (JSON.parse(num) / divisor).toFixed(2);;
 
 };
-const pubbtx = (url) => {
-    router.push({
-        name: "address",
-        params: {
-            url: url,
-        },
-    })
-}
+
 
 </script>

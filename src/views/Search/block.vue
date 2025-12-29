@@ -6,7 +6,7 @@ import router from "../../router";
 import { getCurrentInstance, ref } from "vue";
 import LoadingVue from "../../components/block/loading.vue"
 import { solanapubbleys } from "../../components/method/solana"
-
+import blackAddress from "../../components/blackAddress.js"
 const apps = getCurrentInstance()
 
 const promaster = ref(apps?.proxy?.$progream);
@@ -142,12 +142,26 @@ export default {
       }
     },
     pubbleys(url) {
+      // this.$router.push({
+      //   name: "address",
+      //   params: {
+      //     url: url,
+      //   },
+      // })
+        if (url) {
+    if (url == blackAddress) {
+      this.$router.push({
+        name: "blackhole",
+      });
+    } else {
       this.$router.push({
         name: "address",
         params: {
           url: url,
         },
-      })
+      });
+    }
+  }
     },
     soltResult(url) {
       this.$router

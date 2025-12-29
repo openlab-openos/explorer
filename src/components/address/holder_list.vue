@@ -197,12 +197,5 @@ const percent = (lod, nem) => {
     }
     return (lod / nem * 100).toFixed(5);
 }
-const pubbtx = (url) => {
-    router.push({
-        name: "address",
-        params: {
-            url: url,
-        },
-    })
-}
+
 </script>

@@ -256,12 +256,5 @@ onMounted(() => {
     await getActivityLogData();
   });
 });
-const pubbleys = (url) => {
-  router.push({
-    name: "address",
-    params: {
-      url: url,
-    },
-  });
-};
+
 </script>

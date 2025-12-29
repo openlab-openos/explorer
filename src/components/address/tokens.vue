@@ -233,12 +233,5 @@ const tokenNumber = (num) => {
         return num.toString();
     }
 };
-const pubbtx = (item) => {
-    router.push({
-        name: "address",
-        params: {
-            url: item,
-        },
-    });
-};
+
 </script>

@@ -121,10 +121,10 @@
                             <el-tab-pane :label="$t('transfer')" name="second">
                                 <transfer-view :url="url" :type="true" v-if="activeName == 'second'"></transfer-view>
                             </el-tab-pane>
-                            <el-tab-pane v-if="transfersType && type && !card_data[0].executable" :label="$t('rurn.title')"
+                            <!-- <el-tab-pane v-if="transfersType && type && !card_data[0].executable" :label="$t('rurn.title')"
                                 name="third">
                                 <ruru-view  :url="url" :type="true" v-if="activeName == 'third'"  />
-                            </el-tab-pane>
+                            </el-tab-pane> -->
                             <!-- <el-tab-pane v-if="transfersType && type && !card_data[0].executable" :label="$t('mint')"
                                 name="fourth">
                                 <MintView v-if="activeName == 'fourth'" :url="url" />

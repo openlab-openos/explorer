@@ -1,86 +1,146 @@
 <template>
-    <card class="md-3" v-for="(item, index) in instruction" :key="index" :class="index != 0 ? 'marginTOP-50' : ''">
-        <card-body class="card-bodys">
-            <table class=" w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
-                <tr>
-                    <th style="white-space: nowrap;">
-                        <span class="text-theme">
-                            #{{ index + 1 }}
-                        </span>
-                        {{ titleUrl(item.programId).find ? (titleUrl(item.programId).url ? titleUrl(item.programId).url
-                            : 'Associated Token Program') : 'Unknown Program' }} : {{ item.parsed ? item.parsed.type :
-                            'Unknown Instruction' }}
-                    </th>
-                </tr>
-                <tbody>
-                    <template v-if="item.parsed?.info">
-                        <tr v-if="item.programId">
-                            <td>ProgramId</td>
-                            <td class="text-end text-theme ">
-                                <!-- <text style="cursor: pointer" @click="pubbleys(item.programId)">{{
+  <card
+    class="md-3"
+    v-for="(item, index) in instruction"
+    :key="index"
+    :class="index != 0 ? 'marginTOP-50' : ''"
+  >
+    <card-body class="card-bodys">
+      <table
+        class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small"
+      >
+        <tr>
+          <th style="white-space: nowrap">
+            <span class="text-theme"> #{{ index + 1 }} </span>
+            {{
+              titleUrl(item.programId).find
+                ? titleUrl(item.programId).url
+                  ? titleUrl(item.programId).url
+                  : "Associated Token Program"
+                : "Unknown Program"
+            }}
+            : {{ item.parsed ? item.parsed.type : "Unknown Instruction" }}
+          </th>
+        </tr>
+        <tbody>
+          <template v-if="item.parsed?.info">
+            <tr v-if="item.programId">
+              <td>ProgramId</td>
+              <td class="text-end text-theme">
+                <!-- <text style="cursor: pointer" @click="pubbleys(item.programId)">{{
                                     titleUrl(item.programId).url }}</text> -->
-                                <router-link :to="{ name: 'address', params: { url: item.programId, } }">{{
-                                    titleUrl(item.programId).url
-                                }}</router-link>
-                            </td>
-                        </tr>
+                <router-link
+                  :to="{ name: blackAddress == item.programId ? 'blackhole': 'address', params: { url: item.programId } }"
+                  >{{ titleUrl(item.programId).url }}</router-link
+                >
+              </td>
+            </tr>
 
-                        <template v-for="[key, value] in Object.entries(item.parsed.info)" :key="key">
-                            <tr v-if="typeof value != 'object'">
-                                <td>
-                                    {{ capitalize(key == "lamports" ? 'amount' : key) }}
-                                    {{ key == "lamports" ? '(BTG)' : '' }}{{ typeof value == 'object' ? '.' : '' }}
-                                    <span v-if="typeof value == 'object'" v-for="[keys, values] in Object.entries(key)"
-                                        :key="keys">
-                                        {{ values }}
-                                    </span>
-                                </td>
-                                <td class="text-end"
-                                    :class="typeof titleUrl(value).url == 'string' ? (value.length > 43 ? 'text-theme' : '') : ''">
-                                    <div style="display: flex; justify-content: end;align-items: center;">
-                                        <text v-if="value.length < 43">
-                                            {{ key == 'extensionTypes' ? value[0] : (key == 'lamports' ?
-                                                toFexedStake(value)
-                                                :
-                                                (key
-                                                    == 'tokenAmount' ? value.uiAmount : (addressArray[value] ?
-                                                        (`${addressArray[value].name} (${addressArray[value].symbol}) `) :
-                                                        titleUrl(value).url))) }} {{ key ==
-                                                'space' ?
-                                                'byts(s)' : '' }}
-                                        </text>
-                                        <router-link v-else :to="{
-                                            name: 'address', params: {
-                                                url: value.length > 43 ? (key == 'extensionTypes' ? '' : (key == 'lamports' ? '' : (key == 'space' ? '' : (key == 'decimals' ? '' : (key == 'tokenAmount' ? '' : value))))
-                                                ) : ''
-                                            }
-                                        }">
-
-                                            <img v-if="addressArray[value]" :src="addressArray[value].uri" width="20"
-                                                alt="">
-                                            {{ key == 'extensionTypes' ? value[0] : (key == 'lamports' ?
-                                                toFexedStake(value)
-                                                :
-                                                (key
-                                                    == 'tokenAmount' ? value.uiAmount : (addressArray[value] ?
-                                                        (`${addressArray[value].name} (${addressArray[value].symbol}) `) :
-                                                        titleUrl(value).url))) }} {{ key ==
-                                                'space' ?
-                                                'byts(s)' : '' }}</router-link>
-                                        {{ key == "lamports" ? '(BTG)' : '' }}
-                                        <template v-if="value">
-                                            <!-- 
+            <template
+              v-for="[key, value] in Object.entries(item.parsed.info)"
+              :key="key"
+            >
+              <tr v-if="typeof value != 'object'">
+                <td>
+                  {{ capitalize(key == "lamports" ? "amount" : key) }}
+                  {{ key == "lamports" ? "(BTG)" : ""
+                  }}{{ typeof value == "object" ? "." : "" }}
+                  <span
+                    v-if="typeof value == 'object' "
+                    v-for="[keys, values] in Object.entries(key)"
+                    :key="keys"
+                  >
+                    {{ values }}
+                  </span>
+                </td>
+                <td
+                  class="text-end"
+                  :class="
+                    typeof titleUrl(value).url == 'string'
+                      ? value.length > 43
+                        ? 'text-theme'
+                        : ''
+                      : ''
+                  "
+                >
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: end;
+                      align-items: center;
+                    "
+                  >
+                    <text v-if="value.length < 43 || isNumber(value)">
+                      {{
+                        key == "extensionTypes"
+                          ? value[0]
+                          : key == "lamports"
+                            ? toFexedStake(value)
+                            : key == "tokenAmount"
+                              ? value.uiAmount
+                              : addressArray[value]
+                                ? `${addressArray[value].name} (${addressArray[value].symbol}) `
+                                : titleUrl(value).url
+                      }}
+                      {{ key == "space" ? "byts(s)" : "" }}
+                    </text>
+                    <router-link
+                      v-else
+                      :to="{
+                        name: blackAddress == value ? 'blackhole' : 'address',
+                        params: {
+                          url:
+                            value.length > 43
+                              ? key == 'extensionTypes'
+                                ? ''
+                                : key == 'lamports'
+                                  ? ''
+                                  : key == 'space'
+                                    ? ''
+                                    : key == 'decimals'
+                                      ? ''
+                                      : key == 'tokenAmount'
+                                        ? ''
+                                        : value
+                              : '',
+                        },
+                      }"
+                    >
+                      <img
+                        v-if="addressArray[value]"
+                        :src="addressArray[value].uri"
+                        width="20"
+                        alt=""
+                      />
+                      {{
+                        key == "extensionTypes"
+                          ? value[0]
+                          : key == "lamports"
+                            ? toFexedStake(value)
+                            : key == "tokenAmount"
+                              ? value.uiAmount
+                              : addressArray[value]
+                                ? `${addressArray[value].name} (${addressArray[value].symbol}) `
+                                : titleUrl(value).url
+                      }}
+                      {{ key == "space" ? "byts(s)" : "" }}</router-link
+                    >
+                    {{ key == "lamports" ? "(BTG)" : "" }}
+                    <template v-if="value">
+                      <!-- 
                                             <div v-if="addressArray[value]">
                                                 {{ addressArray[value].name }}
                                             </div>
                                             -->
-                                            <RenderText :type="false" :address="value" style="margin-left: 10px;" />
+                      <RenderText
+                        :type="false"
+                        :address="value"
+                        style="margin-left: 10px"
+                      />
+                    </template>
+                  </div>
 
-                                        </template>
-                                    </div>
-
-
-                                    <!-- <img v-if="titleUrl(value).type && !titleUrl(value).assest"
+                  <!-- <img v-if="titleUrl(value).type && !titleUrl(value).assest"
                                         v-for="(datas, indexs) in titleUrl(value).certificates" :key="indexs"
                                         :src="datas.img" height="24" class="marginRight8" alt="">
                                     <text v-for="items, indexs in titleUrl(value).certificates" :key="indexs"
@@ -88,88 +148,61 @@
                                         style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                         {{ items.code }}
                                     </text> -->
-                                </td>
-                            </tr>
+                </td>
+              </tr>
 
-                            <template v-else>
-                                <template v-if="value">
-                                    <tr v-for="[keys, values] in Object.entries(value)" :key="keys">
-                                        <td>
-                                            {{ capitalize(key == "lamports" ? 'amount' : key) }}.<span
-                                                v-for="[keyChild, valuechild] in Object.entries(keys)" :key="keyChild">
-                                                {{ valuechild }}
-                                            </span>
-                                        </td>
-                                        <td class="text-end"
-                                            :class="typeof titleUrl(values).url == 'string' ? (values.length > 43 ? 'text-theme' : '') : ''">
-                                            <div style="display: flex; justify-content: end;align-items: center;">
-                                                <!-- <text
-                                                    :style="typeof titleUrl(values).url == 'string' ? (values.length > 43 ? 'cursor: pointer' : '') : ''"
-                                                    @click="pubbleys(
-                                                        values.length > 43 ? (keys == 'extensionTypes' ? '' : (keys == 'lamports' ? '' : (keys == 'space' ? '' : (keys == 'decimals' ? '' : (keys == 'tokenAmount' ? '' : values))))
-                                                        ) : ''
-                                                    )">{{ keys ==
-                                                        'space' ?
-                                                        'byts(s)' : '' }}
-                                                    {{ keys == 'amount' ? come(values) : keys == 'extensionTypes' ?
-                                                        values[0] :
-                                                        (keys ==
-                                                            'lamports' ?
-                                                            toFexedStake(values)
-                                                            :
-                                                            (keys
-                                                                == 'tokenAmount' ? values.uiAmount : (keys == 'lockouts' ? 'data' :
-                                                                    titleUrl(values).url))) }}
+              <template v-else>
+                <template v-if="value">
+                  <tr
+                    v-for="[keys, values] in Object.entries(value)"
+                    :key="keys"
+                  >
+                    <td>
+                      {{ capitalize(key == "lamports" ? "amount" : key) }}.<span
+                        v-for="[keyChild, valuechild] in Object.entries(keys)"
+                        :key="keyChild"
+                      >
+                        {{ valuechild }}
+                      </span>
+                    </td>
+                    <td
+                      class="text-end"
+                      :class="
+                        typeof titleUrl(values).url == 'string'
+                          ? values.length > 43
+                            ? 'text-theme'
+                            : ''
+                          : ''
+                      "
+                    >
+                      <div
+                        style="
+                          display: flex;
+                          justify-content: end;
+                          align-items: center;
+                        "
+                      >
+                        {{
+                          keys == "amount"
+                            ? come(values)
+                            : keys == "extensionTypes"
+                              ? values[0]
+                              : keys == "lamports"
+                                ? toFexedStake(values)
+                                : keys == "tokenAmount"
+                                  ? values.uiAmount
+                                  : keys == "lockouts"
+                                    ? "data"
+                                    : titleUrl(values).url
+                        }}
 
-                                                    {{ keys == "lamports" ? '(BTG)' : '' }}</text> -->
-                                                <!-- <text v-if="value.length < 43">
-                                                    {{ key == 'extensionTypes' ? value[0] : (key == 'lamports' ?
-                                                        toFexedStake(value)
-                                                        :
-                                                        (key
-                                                            == 'tokenAmount' ? value.uiAmount : (addressArray[value] ?
-                                                                (`${addressArray[value].name} (${addressArray[value].symbol}) `) :
-                                                                titleUrl(value).url))) }} {{ key ==
-                                                        'space' ?
-                                                        'byts(s)' : '' }}
-                                                </text>
-                                                <router-link v-else :to="{
-                                                    name: 'address', params: {
-                                                        url: values.length > 43 ? (keys == 'extensionTypes' ? '' : (keys == 'lamports' ? '' : (keys == 'space' ? '' : (keys == 'decimals' ? '' : (keys == 'tokenAmount' ? '' : values))))
-                                                        ) : ''
-                                                    }
-                                                }">{{ keys == 'amount' ? come(values) : keys == 'extensionTypes' ?
-                                                        values[0] :
-                                                        (keys ==
-                                                            'lamports' ?
-                                                            toFexedStake(values)
-                                                            :
-                                                            (keys
-                                                                == 'tokenAmount' ? values.uiAmount : (keys == 'lockouts' ? 'data' :
-                                                                    titleUrl(values).url))) }}
-
-                                                    {{ keys == "lamports" ? '(BTG)' : '' }}</router-link> -->
-
-                                                <!-- <RenderText v-if="values" :type="true" :address="values" /> -->
-                                                {{ keys == 'amount' ? come(values) : keys == 'extensionTypes' ?
-                                                    values[0] :
-                                                    (keys ==
-                                                        'lamports' ?
-                                                        toFexedStake(values)
-                                                        :
-                                                        (keys
-                                                            == 'tokenAmount' ? values.uiAmount : (keys == 'lockouts' ? 'data' :
-                                                                titleUrl(values).url))) }}
-
-                                                {{ keys == "lamports" ? '(BTG)' : '' }}
-                                            </div>
-
-
-                                        </td>
-                                    </tr>
-                                </template>
-                            </template>
-                            <!-- <tr v-else>
+                        {{ keys == "lamports" ? "(BTG)" : "" }}
+                      </div>
+                    </td>
+                  </tr>
+                </template>
+              </template>
+              <!-- <tr v-else>
                                     <td>1
                                     </td>
                                     <td class="text-end"
@@ -180,134 +213,213 @@
                                         2
                                     </td>
                             </tr> -->
-                        </template>
-                    </template>
-                    <template v-if="item.accounts">
-                        <tr v-if="item.programId">
-                            <td>ProgramId</td>
-                            <td class="text-end text-theme ">
-                                <!-- <text style="cursor: pointer" @click="pubbleys(item.programId)">{{
-                                    titleUrl(item.programId).url }}</text> -->
-                                <router-link :to="{ name: 'address', params: { url: item.programId } }">{{
-                                    titleUrl(item.programId).url }}</router-link>
-                            </td>
-                        </tr>
-
-                        <tr v-if="item.accounts.length != 0">
-                            <td>Account
-                            </td>
-                            <!-- {{ item.accounts[0] }} -->
-                            <td class="text-end text-theme ">
-                                <!-- <text style="cursor: pointer" @click="item.accounts[0]">
-                                    {{
-                                        titleUrl(item.accounts[0]).url }}
-                                </text>
-                                <img v-if="titleUrl().type && !titleUrl(item.accounts[0]).assest"
-                                    v-for="(datas, indexs) in titleUrl(item.accounts[0]).certificates" :key="indexs"
-                                    :src="datas.img" height="24" class="marginRight8" alt="">
-                                <text v-for="items, indexs in titleUrl(item.accounts[0]).certificates" :key="indexs"
-                                    :style="'background-color: ' + items.backColor"
-                                    style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
-                                    {{ items.code }}
-                                </text> -->
-                                <RenderText v-if="item.accounts[0]" :address="item.accounts[0]" />
-
-                            </td>
-                        </tr>
-                        <tr v-if="item">
-                            <td>Data</td>
-                            <td class="text-end">
-                                <!-- {{ titleUrl(item.data ? item.data : 'Note Data').url }} -->
-                                <!-- <img v-if="titleUrl(item.data).type && !titleUrl(item.data).assest"
-                                    v-for="(datas, indexs) in titleUrl(item.data).certificates" :key="indexs"
-                                    :src="datas.img" height="24" class="marginRight8" alt="">
-                                <text v-for="items, indexs in titleUrl(item.data).certificates" :key="indexs"
-                                    :style="'background-color: ' + items.backColor"
-                                    style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
-                                    {{ items.code }}
-                                </text> -->
-                                <RenderText v-if="item.data" :address="item.data" />
-
-                            </td>
-                        </tr>
-                    </template>
-                    <template v-if="!item.accounts && !item.parsed?.info">
-                        <template v-for="[key, value] in Object.entries(item)" :key="key">
-                            <tr v-if="typeof value != 'object'">
-                                <td>{{ capitalize(key == "lamports" ? 'amount' : key) }}
-                                    {{ key == "lamports" ? '(BTG)' : '' }}{{ typeof value == 'object' ? '.' : '' }}
-                                    <span v-if="typeof value == 'object'" v-for="[keys, values] in Object.entries(key)"
-                                        :key="keys">
-                                        {{ values }}
-                                    </span>
-                                </td>
-                                <td class="text-end"
-                                    :class="typeof titleUrl(value).url == 'string' ? (value.length > 43 ? 'text-theme' : '') : ''">
-                                    <div style="display: flex; justify-content: end;align-items: center;"><text
-                                            :style="typeof titleUrl(value).url == 'string' ? (value.length > 43 ? 'cursor: pointer' : '') : ''"
-                                            @click="pubbleys(
-                                                value.length > 43 ? (key == 'extensionTypes' ? '' : (key == 'lamports' ? '' : (key == 'space' ? '' : (key == 'decimals' ? '' : (key == 'tokenAmount' ? '' : value))))
-                                                ) : ''
-                                            )"> {{ key == 'extensionTypes' ? value[0] : (key == 'lamports' ?
-                                                toFexedStake(value)
-                                                :
-                                                (key
-                                                    == 'tokenAmount' ? value.uiAmount : titleUrl(value).url)) }} {{ key ==
-                                                'space' ?
-                                                'byts(s)' : '' }}
-                                            {{ key == "lamports" ? '(BTG)' : '' }}</text>
-                                        <RenderText v-if="value" :type="false" :address="value" />
-                                    </div>
-
-
-                                </td>
-                            </tr>
-
-                            <template v-else>
-                                <template v-if="value">
-                                    <tr v-for="[keys, values] in Object.entries(value)" :key="keys">
-                                        <td>
-                                            {{ capitalize(key == "lamports" ? 'amount' : key) }}<span
-                                                v-for="[keyChild, valuechild] in Object.entries(keys)" :key="keyChild">
-                                                {{ valuechild }}
-                                            </span>
-                                        </td>
-                                        <td class="text-end"
-                                            :class="typeof titleUrl(values).url == 'string' ? (values.length > 43 ? 'text-theme' : '') : ''">
-                                            <div style="display: flex; justify-content: end;align-items: center;">
-                                                <text
-                                                    :style="typeof titleUrl(values).url == 'string' ? (values.length > 43 ? 'cursor: pointer' : '') : ''"
-                                                    @click="pubbleys(
-                                                        values.length > 43 ? (keys == 'extensionTypes' ? '' : (keys == 'lamports' ? '' : (keys == 'space' ? '' : (keys == 'decimals' ? '' : (keys == 'tokenAmount' ? '' : values))))
-                                                        ) : ''
-                                                    )"> {{ keys == 'extensionTypes' ? values[0] : (keys == 'lamports' ?
-                                                        toFexedStake(values)
-                                                        :
-                                                        (keys
-                                                            == 'tokenAmount' ? values.uiAmount : (keys == 'lockouts' ? 'data' :
-                                                                titleUrl(values).url))) }}
-                                                    {{ keys ==
-                                                        'space' ?
-                                                        'byts(s)' : '' }}
-                                                    {{ keys == "lamports" ? '(BTG)' : '' }}</text>
-
-                                                <RenderText v-if="values" :type="false" :address="values" />
-                                            </div>
-
-                                        </td>
-                                    </tr>
-                                </template>
-                            </template>
-                        </template>
-                    </template>
-                </tbody>
-            </table>
-            <template v-for="(child_item, child_index) in innerInstructions" :key="child_index">
-                <innerInster-view v-if="index == child_item.index" :data="child_item.instructions" :index="index + 1"
-                    :voteArray="addressArray" />
             </template>
-        </card-body>
-    </card>
+          </template>
+          <template v-if="item.accounts">
+            <tr v-if="item.programId">
+              <td>ProgramId</td>
+              <td class="text-end text-theme">
+                <!-- <text style="cursor: pointer" @click="pubbleys(item.programId)">{{
+                                    titleUrl(item.programId).url }}</text> -->
+                <router-link
+                  :to="{ name:blackAddress == item.programId ? 'blackhole': 'address', params: { url: item.programId } }"
+                  >{{ titleUrl(item.programId).url }}</router-link
+                >
+              </td>
+            </tr>
+
+            <tr v-if="item.accounts.length != 0">
+              <td>Account</td>
+              <!-- {{ item.accounts[0] }} -->
+              <td class="text-end text-theme">
+                <RenderText
+                  v-if="item.accounts[0]"
+                  :address="item.accounts[0]"
+                />
+              </td>
+            </tr>
+            <tr v-if="item">
+              <td>Data</td>
+              <td class="text-end">
+                <RenderText v-if="item.data" :address="item.data" />
+              </td>
+            </tr>
+          </template>
+          <template v-if="!item.accounts && !item.parsed?.info">
+            <template v-for="[key, value] in Object.entries(item)" :key="key">
+              <tr v-if="typeof value != 'object'">
+                <td>
+                  {{ capitalize(key == "lamports" ? "amount" : key) }}
+                  {{ key == "lamports" ? "(BTG)" : ""
+                  }}{{ typeof value == "object" ? "." : "" }}
+                  <span
+                    v-if="typeof value == 'object'"
+                    v-for="[keys, values] in Object.entries(key)"
+                    :key="keys"
+                  >
+                    {{ values }}
+                  </span>
+                </td>
+                <td
+                  class="text-end"
+                  :class="
+                    typeof titleUrl(value).url == 'string'
+                      ? value.length > 43
+                        ? 'text-theme'
+                        : ''
+                      : ''
+                  "
+                >
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: end;
+                      align-items: center;
+                    "
+                  >
+                    <text
+                      :style="
+                        typeof titleUrl(value).url == 'string'
+                          ? value.length > 43
+                            ? 'cursor: pointer'
+                            : ''
+                          : ''
+                      "
+                      @click="
+                        pubbleys(
+                          value.length > 43
+                            ? key == 'extensionTypes'
+                              ? ''
+                              : key == 'lamports'
+                                ? ''
+                                : key == 'space'
+                                  ? ''
+                                  : key == 'decimals'
+                                    ? ''
+                                    : key == 'tokenAmount'
+                                      ? ''
+                                      : value
+                            : ''
+                        )
+                      "
+                    >
+                      {{
+                        key == "extensionTypes"
+                          ? value[0]
+                          : key == "lamports"
+                            ? toFexedStake(value)
+                            : key == "tokenAmount"
+                              ? value.uiAmount
+                              : titleUrl(value).url
+                      }}
+                      {{ key == "space" ? "byts(s)" : "" }}
+                      {{ key == "lamports" ? "(BTG)" : "" }}</text
+                    >
+                    <RenderText v-if="value" :type="false" :address="value" />
+                  </div>
+                </td>
+              </tr>
+
+              <template v-else>
+                <template v-if="value">
+                  <tr
+                    v-for="[keys, values] in Object.entries(value)"
+                    :key="keys"
+                  >
+                    <td>
+                      {{ capitalize(key == "lamports" ? "amount" : key)
+                      }}<span
+                        v-for="[keyChild, valuechild] in Object.entries(keys)"
+                        :key="keyChild"
+                      >
+                        {{ valuechild }}
+                      </span>
+                    </td>
+                    <td
+                      class="text-end"
+                      :class="
+                        typeof titleUrl(values).url == 'string'
+                          ? values.length > 43
+                            ? 'text-theme'
+                            : ''
+                          : ''
+                      "
+                    >
+                      <div
+                        style="
+                          display: flex;
+                          justify-content: end;
+                          align-items: center;
+                        "
+                      >
+                        <text
+                          :style="
+                            typeof titleUrl(values).url == 'string'
+                              ? values.length > 43
+                                ? 'cursor: pointer'
+                                : ''
+                              : ''
+                          "
+                          @click="
+                            pubbleys(
+                              values.length > 43
+                                ? keys == 'extensionTypes'
+                                  ? ''
+                                  : keys == 'lamports'
+                                    ? ''
+                                    : keys == 'space'
+                                      ? ''
+                                      : keys == 'decimals'
+                                        ? ''
+                                        : keys == 'tokenAmount'
+                                          ? ''
+                                          : values
+                                : ''
+                            )
+                          "
+                        >
+                          {{
+                            keys == "extensionTypes"
+                              ? values[0]
+                              : keys == "lamports"
+                                ? toFexedStake(values)
+                                : keys == "tokenAmount"
+                                  ? values.uiAmount
+                                  : keys == "lockouts"
+                                    ? "data"
+                                    : titleUrl(values).url
+                          }}
+                          {{ keys == "space" ? "byts(s)" : "" }}
+                          {{ keys == "lamports" ? "(BTG)" : "" }}</text
+                        >
+
+                        <RenderText
+                          v-if="values"
+                          :type="false"
+                          :address="values"
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                </template>
+              </template>
+            </template>
+          </template>
+        </tbody>
+      </table>
+      <template
+        v-for="(child_item, child_index) in innerInstructions"
+        :key="child_index"
+      >
+        <innerInster-view
+          v-if="index == child_item.index"
+          :data="child_item.instructions"
+          :index="index + 1"
+          :voteArray="addressArray"
+        />
+      </template>
+    </card-body>
+  </card>
 </template>
 <script setup>
 import { ref } from 'vue';
@@ -315,92 +427,106 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { titleUrl } from '../../components/method/title_url';
+import blackAddress from '../blackAddress.js';
 import RenderText from '../Render/text.vue';
 import innerInsterView from './innerInstructions.vue';
 
 const router = useRouter();
 const props = defineProps({
-    data: {
-        typeof: Array,
-        default: []
-    },
-    child: {
-        typeof: Array,
-        default: []
-    },
-    voteArray: {
-        typeof: Array,
-        default: []
-    }
-})
+  data: {
+    typeof: Array,
+    default: [],
+  },
+  child: {
+    typeof: Array,
+    default: [],
+  },
+  voteArray: {
+    typeof: Array,
+    default: [],
+  },
+});
 
 console.log(props);
-const voteArray = ref(props.voteArray)
+const voteArray = ref(props.voteArray);
 const addressArray = ref({});
 
 console.log(voteArray.value);
 
 for (let i in voteArray.value) {
-    if (voteArray.value[i]?.data?.parsed?.info?.extensions) {
-        const extensions = voteArray.value[i].data.parsed.info.extensions;
-        const lastExtension = extensions[extensions.length - 1];
+  if (voteArray.value[i]?.data?.parsed?.info?.extensions) {
+    const extensions = voteArray.value[i].data.parsed.info.extensions;
+    const lastExtension = extensions[extensions.length - 1];
 
-        if (lastExtension?.extension === "tokenMetadata") {
-            const mint = lastExtension.state.mint;
-            const state = lastExtension.state;
-            // 以 mint 为键名，将 state 挂载到 addressArray.value 上
-            addressArray.value[mint] = state;
-        } else {
-            // 若不符合条件，可选择给某个默认键赋值，或不处理
-            // 示例：给键 'default' 赋值为空
-            addressArray.value['default'] = '';
-        }
+    if (lastExtension?.extension === "tokenMetadata") {
+      const mint = lastExtension.state.mint;
+      const state = lastExtension.state;
+      // 以 mint 为键名，将 state 挂载到 addressArray.value 上
+      addressArray.value[mint] = state;
     } else {
-        // 同理，不符合条件时的默认处理
-        addressArray.value['default'] = '';
+      // 若不符合条件，可选择给某个默认键赋值，或不处理
+      // 示例：给键 'default' 赋值为空
+      addressArray.value["default"] = "";
     }
+  } else {
+    // 同理，不符合条件时的默认处理
+    addressArray.value["default"] = "";
+  }
 }
 
 console.log(addressArray.value);
 
 const instruction = ref(props.data);
-const innerInstructions = ref(props.child)
+const innerInstructions = ref(props.child);
 // console.log(233333);
 const come = (num) => {
-    let reg =
-        num.toString().indexOf(".") > -1
-            ? /(\d)(?=(\d{3})+\.)/g
-            : /(\d)(?=(\d{3})+$)/g;
+  let reg =
+    num.toString().indexOf(".") > -1
+      ? /(\d)(?=(\d{3})+\.)/g
+      : /(\d)(?=(\d{3})+$)/g;
 
-    return num.toString().replace(reg, "$1,");
-}
+  return num.toString().replace(reg, "$1,");
+};
 
 const toFexedStake = (num) => {
-    if (num === undefined || num === null) {
-        return null; // 或者您可以选择返回其他默认值
-    }
+  if (num === undefined || num === null) {
+    return null; // 或者您可以选择返回其他默认值
+  }
 
-    const value = num / 1000000000;
-    const integerPart = Math.trunc(value);
+  const value = num / 1000000000;
+  const integerPart = Math.trunc(value);
 
-    if (integerPart > 0) {
-        return value.toFixed(2);
-    } else {
-        return value.toFixed(5);
-    }
+  if (integerPart > 0) {
+    return value.toFixed(2);
+  } else {
+    return value.toFixed(5);
+  }
 };
 const pubbleys = (url) => {
-    if (url) {
-        router.push({
-            name: "address",
-            params: {
-                url: url,
-            },
-        })
+  if (url) {
+    if (url == blackAddress) {
+      router.push({
+        name: "blackhole",
+      });
+    } else {
+      router.push({
+        name: "address",
+        params: {
+          url: url,
+        },
+      });
     }
-
+  }
 };
 const capitalize = ([first, ...rest]) => {
-    return first.toUpperCase() + rest.join('')
-}
+  return first.toUpperCase() + rest.join("");
+};
+const isNumber = (value) => {
+  // 排除 null/undefined/空字符串，同时校验是否为有效数字
+  if (value === null || value === undefined || value === "") return false;
+  // 方式1：正则校验（推荐，兼容字符串数字如 "123"、"-456"、"789.01"）
+  return /^-?\d+(\.\d+)?$/.test(String(value).trim());
+  // 方式2：类型校验（仅针对纯数字类型 number，不兼容字符串格式数字）
+  // return typeof value === 'number' && !isNaN(value);
+};
 </script>

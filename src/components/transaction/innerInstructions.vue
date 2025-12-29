@@ -108,6 +108,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { titleUrl } from '../../components/method/title_url';
+import blackAddress from '../blackAddress.js';
 import RenderText from '../Render/text.vue';
 
 const router = useRouter();
@@ -138,14 +139,20 @@ const capitalize = ([first, ...rest]) => {
     return first.toUpperCase() + rest.join('')
 }
 const pubbleys = (url) => {
-    if (url) {
-        router.push({
-            name: "address",
-            params: {
-                url: url,
-            },
-        })
+     if (url) {
+    if (url == blackAddress) {
+      router.push({
+        name: "blackhole",
+      });
+    } else {
+      router.push({
+        name: "address",
+        params: {
+          url: url,
+        },
+      });
     }
+  }
 
 };
 </script>

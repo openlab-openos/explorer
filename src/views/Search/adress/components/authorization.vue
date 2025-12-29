@@ -110,16 +110,6 @@ import { getExtraData } from '../../../../request/extensions.js';
 import { tokenList } from '../method/auth.js';
 
 const router = useRouter();
-const pubbtx = (url) => {
-    if (url) {
-        router.push({
-            name: "address",
-            params: {
-                url: url,
-            },
-        })
-    }
-};
 const data = ref();
 const props = defineProps({
     url: {

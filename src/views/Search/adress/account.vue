@@ -291,14 +291,8 @@ const menufunction = async (url) => {
 
     }
 }
-const pubbtx = (url) => {
-    router.push({
-        name: "address",
-        params: {
-            url: url,
-        },
-    })
-};
+
+
 const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text).then(() => {
         copySuccess.value = true;

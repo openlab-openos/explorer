@@ -151,6 +151,7 @@ import { solanapubbleys } from '../../components/method/solana';
 import { titleUrl } from '../../components/method/title_url';
 import { smartFormatNumber } from '../../components/number/smart.js';
 import { order } from '../../request/order';
+import blackAddress from '../blackAddress.js';
 import RenderText from '../Render/text.vue';
 
 const props = defineProps({
@@ -346,14 +347,20 @@ const soltResult = (solt) => {
 
 
 const pubbleys = (url) => {
-    if (url) {
-        router.push({
-            name: "address",
-            params: {
-                url: url,
-            },
-        })
+  if (url) {
+    if (url == blackAddress) {
+      router.push({
+        name: "blackhole",
+      });
+    } else {
+      router.push({
+        name: "address",
+        params: {
+          url: url,
+        },
+      });
     }
+  }
 };
 
 const pubbtx = (item) => {

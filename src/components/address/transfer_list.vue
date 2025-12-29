@@ -488,19 +488,7 @@ const pubbtx = (item) => {
     });
 };
 
-const slot = (url) => {
 
-
-    if (url) {
-        router.push({
-            name: "address",
-            params: {
-                url: url,
-            },
-        })
-    }
-
-};
 const stringcate = (str) => {
     if (str.length < 10) {
         return str;

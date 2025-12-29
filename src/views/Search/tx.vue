@@ -11,6 +11,7 @@ import copyImg from '@/assets/icon/copy.png';
 import successImg from '@/assets/icon/state_succcess.png';
 import i18n from '@/i18n';
 
+import blackAddress from '../../components/blackAddress.js';
 import { solanapubbleys } from '../../components/method/solana';
 import { titleUrl } from '../../components/method/title_url';
 import { smartFormatNumber } from '../../components/number/smart.js';
@@ -496,7 +497,12 @@ export default {
                                   - 1].state.name
                               }}
                             </text> -->
-                            <router-link :to="{ name: 'address', params: { url: item.pubkey } }">{{
+                            
+                            <router-link v-if="item.pubkey != blackAddress" :to="{ name: 'address', params: { url: item.pubkey } }">{{
+                                voteData[index]?.data?.parsed?.info?.extensions[voteData[index]?.data?.parsed?.info?.extensions.length
+                                  - 1].state.name
+                              }}</router-link>
+                            <router-link v-else :to="{ name: 'blackhole' }">{{
                                 voteData[index]?.data?.parsed?.info?.extensions[voteData[index]?.data?.parsed?.info?.extensions.length
                                   - 1].state.name
                               }}</router-link>

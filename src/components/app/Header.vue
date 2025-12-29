@@ -26,10 +26,10 @@ import my from '../../assets/24x24/my.png';
 import ru from '../../assets/24x24/ru.png';
 import um from '../../assets/24x24/um.png';
 import vn from '../../assets/24x24/vn.png';
+import blackAddress from '../blackAddress.js';
 
 const router = useRouter();
 const appStore = useAppStore();
-
 
 const appOption = useAppOptionStore();
 const notificationData = [];
@@ -37,37 +37,37 @@ const notificationData = [];
 function isProductionDomain() {
   const hostname = window.location.hostname;
   // 检测是否包含 'devnet.' 前缀
-  return !(hostname.startsWith('devnet.') || hostname.startsWith('test-devnet.'))
+  return !(
+    hostname.startsWith("devnet.") || hostname.startsWith("test-devnet.")
+  );
 }
 const UtlDevnetType = isProductionDomain();
 function isProductionDomains() {
   const hostname = window.location.hostname;
   // 检测是否包含 'devnet.' 前缀
-  return !hostname.startsWith('test.') || hostname.startsWith('test-devnet.');
+  return !hostname.startsWith("test.") || hostname.startsWith("test-devnet.");
 }
 const UtlDevnetTypes = isProductionDomains();
 
 const searchcontent = ref("");
 const abbreviationLanguage = ref();
 const languages = ref([
-  { name: 'English', abbreviation: 'en-US', flag: um },
-  { name: '简体中文', abbreviation: 'zh-CN', flag: cn },
-  { name: '繁体中文', abbreviation: 'hk-HK', flag: hk },
-  { name: '日本語', abbreviation: 'jp-JP', flag: jp },
-  { name: '한국어', abbreviation: 'kr-KR', flag: kr },
-  { name: 'Deutsch', abbreviation: 'de-DE', flag: de },
-  { name: 'русский язык', abbreviation: 'ru-RU', flag: ru },
-  { name: 'Bahasa Melayu', abbreviation: 'my-MY', flag: my },
-  { name: 'Việt nam', abbreviation: 'vn-VN', flag: vn },
-
+  { name: "English", abbreviation: "en-US", flag: um },
+  { name: "简体中文", abbreviation: "zh-CN", flag: cn },
+  { name: "繁体中文", abbreviation: "hk-HK", flag: hk },
+  { name: "日本語", abbreviation: "jp-JP", flag: jp },
+  { name: "한국어", abbreviation: "kr-KR", flag: kr },
+  { name: "Deutsch", abbreviation: "de-DE", flag: de },
+  { name: "русский язык", abbreviation: "ru-RU", flag: ru },
+  { name: "Bahasa Melayu", abbreviation: "my-MY", flag: my },
+  { name: "Việt nam", abbreviation: "vn-VN", flag: vn },
 ]);
 const selectedLanguage = ref();
 // @ts-ignore
-const sessionStorageData = ref(JSON.parse(sessionStorage.getItem('app')));
+const sessionStorageData = ref(JSON.parse(sessionStorage.getItem("app")));
 
 if (sessionStorageData.value) {
-  languages.value.map(item => {
-
+  languages.value.map((item) => {
     if (item.abbreviation == sessionStorageData.value.language) {
       selectedLanguage.value = item;
       abbreviationLanguage.value = item.abbreviation;
@@ -75,8 +75,8 @@ if (sessionStorageData.value) {
     }
   });
 } else {
-  selectedLanguage.value = { name: 'English', abbreviation: 'en-US', flag: um };
-  abbreviationLanguage.value = 'en-US';
+  selectedLanguage.value = { name: "English", abbreviation: "en-US", flag: um };
+  abbreviationLanguage.value = "en-US";
 }
 
 const nameText = ref("");
@@ -89,7 +89,7 @@ function selectLanguages(indexValue) {
 
 watchEffect(() => {
   selectLanguages(appStore.$state.language);
-})
+});
 
 const ScanName = ref("");
 
@@ -108,12 +108,10 @@ if (UtlDevnetType) {
   } else {
     ScanName.value = "Betanet Archive 1";
   }
-
 } else {
   ScanName.value = "Devnet";
 }
 // console.log(ScanName.value);
-
 
 function toggleAppSidebarCollapsed() {
   if (!appOption.appSidebarHide) {
@@ -146,8 +144,11 @@ function searchMenu() {
   if (searchcontent.value == "") {
   } else {
     let chainData = searchcontent.value.trim();
-
-    if (chainData.length >= 45) {
+    if (blackAddress == searchcontent.value) {
+      router.push({
+        name: "blackhole",
+      });
+    } else if (chainData.length >= 45) {
       router.push({
         name: "tx",
         params: {
@@ -177,37 +178,98 @@ const selectLanguage = (language: any, abbreviation: any) => {
   abbreviationLanguage.value = abbreviation;
   // @ts-ignore
   appStore.setLanguage(abbreviation);
-
 };
 // https://api.mainnet.openverse.network/
 
 // 节点切换
-const selectData = ref(UtlDevnetTypes ? [
-  { name: 'Betanet Archive 1', url: 'https://openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'Betanet Archive 1', requestUrl: "https://rpc.openverse.network/" },
-  { name: 'Betanet Archive 2', url: 'https://openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'Archive2', requestUrl: "https://api.mainnet.openverse.network/" },
-  { name: 'Betanet Archive 3', url: 'https://openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'Archive3', requestUrl: "https://archive2.openverse.network/" },
-  { name: 'Devnet', url: 'https://devnet.openverse.live', type: !UtlDevnetType, ArchiveType: '', requestType: 'Test' },
-] : [
-  { name: 'Betanet Archive 1', url: 'https://test.openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'Betanet Archive 1', requestUrl: "https://rpc.openverse.network/" },
-  { name: 'Betanet Archive 2', url: 'https://test.openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'Archive2', requestUrl: "https://api.mainnet.openverse.network/" },
-  { name: 'Betanet Archive 3', url: 'https://test.openverse.live', type: UtlDevnetType, requestType: 'Formal', ArchiveType: 'Archive3', requestUrl: "https://archive2.openverse.network/" },
-  { name: 'Devnet', url: 'https://test-devnet.openverse.live', type: !UtlDevnetType, ArchiveType: '', requestType: 'Test' },
-])
+const selectData = ref(
+  UtlDevnetTypes
+    ? [
+        {
+          name: "Betanet Archive 1",
+          url: "https://openverse.live",
+          type: UtlDevnetType,
+          requestType: "Formal",
+          ArchiveType: "Betanet Archive 1",
+          requestUrl: "https://rpc.openverse.network/",
+        },
+        {
+          name: "Betanet Archive 2",
+          url: "https://openverse.live",
+          type: UtlDevnetType,
+          requestType: "Formal",
+          ArchiveType: "Archive2",
+          requestUrl: "https://api.mainnet.openverse.network/",
+        },
+        {
+          name: "Betanet Archive 3",
+          url: "https://openverse.live",
+          type: UtlDevnetType,
+          requestType: "Formal",
+          ArchiveType: "Archive3",
+          requestUrl: "https://archive2.openverse.network/",
+        },
+        {
+          name: "Devnet",
+          url: "https://devnet.openverse.live",
+          type: !UtlDevnetType,
+          ArchiveType: "",
+          requestType: "Test",
+        },
+      ]
+    : [
+        {
+          name: "Betanet Archive 1",
+          url: "https://test.openverse.live",
+          type: UtlDevnetType,
+          requestType: "Formal",
+          ArchiveType: "Betanet Archive 1",
+          requestUrl: "https://rpc.openverse.network/",
+        },
+        {
+          name: "Betanet Archive 2",
+          url: "https://test.openverse.live",
+          type: UtlDevnetType,
+          requestType: "Formal",
+          ArchiveType: "Archive2",
+          requestUrl: "https://api.mainnet.openverse.network/",
+        },
+        {
+          name: "Betanet Archive 3",
+          url: "https://test.openverse.live",
+          type: UtlDevnetType,
+          requestType: "Formal",
+          ArchiveType: "Archive3",
+          requestUrl: "https://archive2.openverse.network/",
+        },
+        {
+          name: "Devnet",
+          url: "https://test-devnet.openverse.live",
+          type: !UtlDevnetType,
+          ArchiveType: "",
+          requestType: "Test",
+        },
+      ]
+);
 console.log(selectData.value);
 
 const selsetClick = (index: number) => {
-  let type = sessionStorage.getItem("ArchiveType")
+  let type = sessionStorage.getItem("ArchiveType");
   selectData.value.map((item, i) => {
     if (i == index) {
       ScanName.value = selectData.value[i].name;
-      if (selectData.value[i].requestType == 'Test') {
+      if (selectData.value[i].requestType == "Test") {
         sessionStorage.setItem("urlType", selectData.value[i].requestType);
-        window.location.href = UtlDevnetTypes ? 'https://devnet.openverse.live' : "https://test-devnet.openverse.live"
+        window.location.href = UtlDevnetTypes
+          ? "https://devnet.openverse.live"
+          : "https://test-devnet.openverse.live";
       } else {
         console.log("Production");
         sessionStorage.setItem("ArchiveType", item.ArchiveType);
         sessionStorage.setItem("urlType", selectData.value[i].requestType);
-        window.location.href = UtlDevnetTypes ? 'https://www.openverse.live' : "https://test.openverse.live";
+        window.location.href = UtlDevnetTypes
+          ? "https://www.openverse.live"
+          : "https://test.openverse.live";
         // if(UtlDevnetType){
 
         // window.location.href = UtlDevnetTypes?'https://openverse.live':"https://test.openverse.live";
@@ -219,7 +281,6 @@ const selsetClick = (index: number) => {
         //    window.location.href = item.url
         //   }
         // }
-
       }
       // // item.type = true;
       // if (UtlDevnetType == item.type) {
@@ -230,48 +291,60 @@ const selsetClick = (index: number) => {
     } else {
       item.type = false;
     }
-  })
-}
+  });
+};
 
 onMounted(() => {
-
   // @ts-ignore
   const chainStorg = JSON.parse(sessionStorage.getItem("app"));
   // @ts-ignore
   // const urlType = JSON.parse(sessionStorage.getItem("urlType"));
 
-
-  const chainData = chainStorg ? (chainStorg.chain ? chainStorg.chain : (urlType ? urlType.url : '')) : (urlType ? urlType.url : '');
-
+  const chainData = chainStorg
+    ? chainStorg.chain
+      ? chainStorg.chain
+      : urlType
+        ? urlType.url
+        : ""
+    : urlType
+      ? urlType.url
+      : "";
 
   if (chainData) {
     selectData.value.map((item, i) => {
       if (selectData.value[i].url == chainData) {
         item.type = true;
-        nameText.value = selectData.value[i].name
+        nameText.value = selectData.value[i].name;
       }
-    })
+    });
   } else {
     // @ts-ignore
     appStore.setChain(selectData.value[0].url);
     selectData.value[0].type = true;
-    nameText.value = 'Openverse Betanet Archive 1.DEV'
+    nameText.value = "Openverse Betanet Archive 1.DEV";
   }
-})
-
+});
 </script>
 <template>
   <div id="header" class="app-header">
     <!-- BEGIN desktop-toggler -->
     <div class="desktop-toggler">
-      <button type="button" class="menu-toggler" v-on:click="toggleAppSidebarCollapsed">
+      <button
+        type="button"
+        class="menu-toggler"
+        v-on:click="toggleAppSidebarCollapsed"
+      >
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
       </button>
     </div>
     <div class="mobile-toggler">
-      <button type="button" class="menu-toggler" v-on:click="toggleAppSidebarMobileToggled">
+      <button
+        type="button"
+        class="menu-toggler"
+        v-on:click="toggleAppSidebarMobileToggled"
+      >
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
@@ -285,10 +358,16 @@ onMounted(() => {
         <!-- <span class="brand-img">
           <span class="brand-img-text text-theme">H</span>
         </span> -->
-        <img height="24px" src="https://cdn.openverse.network/brands/openverse/icon_128.png" alt="">
-        <span class="brand-text titleBox">OPENVERSE <span class="marks">LIVE</span> </span>
+        <img
+          height="24px"
+          src="https://cdn.openverse.network/brands/openverse/icon_128.png"
+          alt=""
+        />
+        <span class="brand-text titleBox"
+          >OPENVERSE <span class="marks">LIVE</span>
+        </span>
       </RouterLink>
-      <span v-if="!UtlDevnetType" style="margin-left: 2.3rem;">(Devnet)</span>
+      <span v-if="!UtlDevnetType" style="margin-left: 2.3rem">(Devnet)</span>
     </div>
     <!-- END brand -->
 
@@ -296,15 +375,22 @@ onMounted(() => {
     <div class="menu">
       <div style="width: 100%">
         <div style="width: 100%">
-          <div class="menu-search-container" style="
+          <div
+            class="menu-search-container"
+            style="
               width: 100%;
               display: flex;
               justify-content: center;
               align-items: center;
-            ">
-
+            "
+          >
             <div class="menu-search-input" style="width: 80%">
-              <input type="text" :placeholder="$t('placehold')" v-model="searchcontent" @keyup.enter="searchMenu" style="
+              <input
+                type="text"
+                :placeholder="$t('placehold')"
+                v-model="searchcontent"
+                @keyup.enter="searchMenu"
+                style="
                   border: none;
                   margin: 10px;
                   width: 100%;
@@ -312,33 +398,67 @@ onMounted(() => {
                   height: 30px;
                   border-radius: 5px;
                   padding: 5px;
-                " />
+                "
+              />
             </div>
-            <div class="menu-search-icon" style="margin-left: 20px;cursor: pointer;" @click="searchMenu"><i
-                class="bi bi-search"></i>
+            <div
+              class="menu-search-icon"
+              style="margin-left: 20px; cursor: pointer"
+              @click="searchMenu"
+            >
+              <i class="bi bi-search"></i>
             </div>
           </div>
         </div>
-
       </div>
 
-      <div class="menu-item dropdown dropdown-mobile-full" style="width: 20%; justify-content: end;">
-        <a href="#" data-bs-toggle="dropdown" data-bs-display="static" class="menu-link scales">
-          <img :src="selectedLanguage.flag" class="deopdownImage" alt="">
+      <div
+        class="menu-item dropdown dropdown-mobile-full"
+        style="width: 20%; justify-content: end"
+      >
+        <a
+          href="#"
+          data-bs-toggle="dropdown"
+          data-bs-display="static"
+          class="menu-link scales"
+        >
+          <img :src="selectedLanguage.flag" class="deopdownImage" alt="" />
           <div
-            style="cursor: pointer; text-align: center; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;display: flex;align-items: center;flex-wrap: wrap;">
-            {{ selectedLanguage.name }} </div>
-          <i class="bi bi-chevron-down" style="margin: 5px;"></i>
+            style="
+              cursor: pointer;
+              text-align: center;
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+              display: flex;
+              align-items: center;
+              flex-wrap: wrap;
+            "
+          >
+            {{ selectedLanguage.name }}
+          </div>
+          <i class="bi bi-chevron-down" style="margin: 5px"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-end me-lg-3 fs-11px mt-1">
-          <div class="dropdown-item align-items-center" v-for="(language, index) in languages" :key="index"
-            :class="{ 'text-theme': abbreviationLanguage === language.abbreviation }"
-            style="cursor: pointer; text-align: center;display: flex;justify-content: center;"
-            @click="selectLanguage(language, language.abbreviation)">
-            <div style="width: 30%;">
-              <img :src="language.flag" alt="">
+          <div
+            class="dropdown-item align-items-center"
+            v-for="(language, index) in languages"
+            :key="index"
+            :class="{
+              'text-theme': abbreviationLanguage === language.abbreviation,
+            }"
+            style="
+              cursor: pointer;
+              text-align: center;
+              display: flex;
+              justify-content: center;
+            "
+            @click="selectLanguage(language, language.abbreviation)"
+          >
+            <div style="width: 30%">
+              <img :src="language.flag" alt="" />
             </div>
-            <div style="width: 60%;text-align: left;">
+            <div style="width: 60%; text-align: left">
               {{ language.name }}
             </div>
           </div>
@@ -346,12 +466,17 @@ onMounted(() => {
       </div>
       <!-- 节点切换 -->
       <div class="menu-item dropdown dropdown-mobile-full">
-        <a href="#" data-bs-toggle="dropdown" data-bs-display="static" class="menu-link scales"
-          style="white-space: nowrap;">
+        <a
+          href="#"
+          data-bs-toggle="dropdown"
+          data-bs-display="static"
+          class="menu-link scales"
+          style="white-space: nowrap"
+        >
           <!-- {{ UtlDevnetType ? 'Betanet Archive 2' : 'Devnet' }} -->
           {{ ScanName }}
           <!-- <img src="https://cdn.openverse.network/brands/openverse/icon_128.png" width="32" alt=""> -->
-          <i class="bi bi-chevron-down" style="margin: 5px;"></i>
+          <i class="bi bi-chevron-down" style="margin: 5px"></i>
         </a>
         <!-- <div class="dropdown-menu dropdown-menu-end me-lg-3 fs-11px mt-1">
           <div class="dropdown-item align-items-center text-theme" style="cursor: pointer;text-align: center;">Openverse
@@ -363,8 +488,13 @@ onMounted(() => {
             Openverse Testnet </div>
         </div> -->
         <div class="dropdown-menu dropdown-menu-end me-lg-3 fs-11px mt-1">
-          <div class="dropdown-item align-items-center" style="cursor: pointer;text-align: center;"
-            v-for="(item, index) in selectData" :key="index" @click="selsetClick(index)">
+          <div
+            class="dropdown-item align-items-center"
+            style="cursor: pointer; text-align: center"
+            v-for="(item, index) in selectData"
+            :key="index"
+            @click="selsetClick(index)"
+          >
             {{ item.name }}
           </div>
         </div>
@@ -372,7 +502,6 @@ onMounted(() => {
     </div>
   </div>
 </template>
-
 
 <style scoped>
 .titlBox {

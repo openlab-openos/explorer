@@ -154,12 +154,4 @@ const stringcate = (str) => {
         return str.slice(0, 8) + "..." + str.slice(-8);
     }
 };
-const pubbtx = (url) => {
-    router.push({
-        name: "address",
-        params: {
-            url: url,
-        },
-    })
-}
 </script>
