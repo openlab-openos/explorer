@@ -37,15 +37,21 @@
 </template>
 
 <script setup>
-import { chainRequest } from "../../request/chain";
-import numberAnimar from "../../components/CountFlop.vue";
-import apexchart from "@/components/plugins/Apexcharts.vue";
-import moment from "moment";
-import { useAppStore } from "@/stores/index";
-import { onMounted, ref, watchEffect } from 'vue'
-import { useAppVariableStore } from "@/stores/app-variable";
-import i18n from "@/i18n";
-import VueApexCharts from "vue3-apexcharts";
+import {
+  onMounted,
+  ref,
+  watchEffect,
+} from 'vue';
+
+import moment from 'moment';
+
+import apexchart from '@/components/plugins/Apexcharts.vue';
+import i18n from '@/i18n';
+import { useAppVariableStore } from '@/stores/app-variable';
+import { useAppStore } from '@/stores/index';
+
+import numberAnimar from '../../components/CountFlop.vue';
+import { chainRequest } from '../../request/chain';
 
 const componentKey = ref(0);
 const appVariable = useAppVariableStore();

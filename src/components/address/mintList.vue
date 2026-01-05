@@ -162,7 +162,7 @@ function parseStakingVaultData(data) {
     };
 }
 
-// 查询质押记录
+// 查询铸造记录
 async function queryStakingRecords(userAddress) {
     try {
         const programId = new PublicKey('vrca8nDGAZW9R23jAerRJUqsd7vz1q3sqkKMxQsisxk');

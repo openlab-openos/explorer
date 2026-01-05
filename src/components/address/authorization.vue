@@ -43,16 +43,5 @@ import { useRouter } from 'vue-router';
 import RenderText from '../method/text.vue';
 
 const router = useRouter();
-const pubbtx = (url) => {
-    if (url) {
-        router.push({
-            name: "address",
-            params: {
-                url: url,
-            },
-        })
-    }
-};
-
 const data = ref();
 </script>

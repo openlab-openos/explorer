@@ -445,11 +445,11 @@ onBeforeUnmount(() => {
     <activeVue />
     <priceVue />
     <priceBtgVue />
-    <!-- <btgVue />
+    <btgVue />
     <usdVue />
 
     <jpyVue />
-    <eurVue /> -->
+    <eurVue />
   </div>
   <div class="row">
     <!-- BEGIN stats -->
