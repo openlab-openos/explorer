@@ -502,7 +502,7 @@ const Authentication = async () => {
   await axios
     .get(
       // UtlDevnetType ? `https://test-open.openverse.live/api/token/hot` : `https://open.openverse.live/api/token/hot`,
-      UtlDevnetType ? `https://open.openverse.live/api/token/hot` : `https://test-open.openverse.live/api/token/hot`,
+      UtlDevnetType ? `https://open.openverse.live/api/tokens?site=openverse&is_all=1&page=1&page_size=200` : `https://test-open.openverse.live/api/tokens?site=openverse&is_all=1&page=1&page_size=200`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -592,23 +592,23 @@ const Cretifucate = (data: Array<any>) => {
 
   let CretifucateArray = [];
   for (let i in data) {
-    if (data[i].token) {
+    if (data[i]) {
       CretifucateArray.push({
-        address: data[i].token.address,
-        img: data[i].token.image_url,
-        name: data[i].token.name,
-        code: data[i].token.protocol_code,
-        symbol: data[i].token.symbol,
+        address: data[i].address,
+        img: data[i].image_url,
+        name: data[i].name,
+        code: data[i].protocol_code,
+        symbol: data[i].symbol,
         certificates: [],
       });
-      for (let j in data[i].token.certificates) {
+      for (let j in data[i].certificates) {
         // @ts-ignore
         CretifucateArray[i].certificates.push({
           // @ts-ignore
-          img: data[i].token.certificates[j].image_url,
+          img: data[i].certificates[j].image_url,
           // 'img': imageType(data[i].certificates[j].certificate_code),
-          code: data[i].token.certificates[j].certificate_code == 'USDStableCoin' ? 'Stablecoin' : data[i].token.certificates[j].certificate_code,
-          backColor: TypebackColor(data[i].token.certificates[j].certificate_code),
+          code: data[i].certificates[j].certificate_code == 'USDStableCoin' ? 'Stablecoin' : data[i].certificates[j].certificate_code,
+          backColor: TypebackColor(data[i].certificates[j].certificate_code),
         });
       }
     }

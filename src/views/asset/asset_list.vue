@@ -57,10 +57,15 @@
                                         <!-- <img v-for="items, indexs in item.certificates" :key="indexs"
                                             :src="items.image_url" height="20" class="marginRight8"
                                             :title="items.certificate_code" @click="pubbley" style="cursor: pointer;"> -->
-                                        <img v-for="items, indexs in titleUrl(item.address).certificates" :key="indexs"
-                                            :src="items.img" height="20" class="marginRight8"
+                                            {{  }}
+                                            <!-- <span v-for="items, indexs in item.certificates" :key="indexs">
+                                                {{ items }}
+                                            </span> -->
+                                        <img v-for="items, indexs in item.certificates" :key="indexs"
+                                            :src="items.image_url" height="20" class="marginRight8"
                                             :title="items.certificate_code" @click="pubbley"
-                                            style="cursor: pointer;"></img>
+                                            style="cursor: pointer;">
+                                        </img>
                                         <!-- <template v-if=" item.address == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' " >
                                             <img v-for="items, indexs in titleUrl(item.address).certificates" :key="indexs"
                                             :src="items.img" height="20" class="marginRight8"

@@ -12,7 +12,6 @@ export function dataObject() {
     return new Promise((resolve, reject) => {
         axios.get(UtlDevnetType ? `https://test-open.openverse.live/api/token/distribute` : `https://test-open.openverse.live/api/token/distribute`, {
             // axios.get(UtlDevnetType ? `https://test-open.openverse.live/api/tokens?site=openverse&is_all=1&page=${page}` : `https://test-open.openverse.live/api/tokens?site=openverse&is_all=1`,{
-            // axios.get(`https://test-open.openverse.live/api/token/hot`,data,{
             // axios.get(`https://open.openverse.live/api/token/some?net=${urlType ? 'mainnet' : 'devnet'}`,data,{
             // axios.get("https://open.openverse.live/api/token/web",data,{
             headers: {

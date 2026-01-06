@@ -10,7 +10,6 @@ const UtlDevnetType = isProductionDomain();
 
 export function tokenList(page,number) {
     return new Promise((resolve, reject) => {
-        // axios.get(UtlDevnetType ? `https://open.openverse.live/api/token/hot` : `https://test-open.openverse.live/api/token/hot`, data, {
         axios.get(UtlDevnetType ? `https://open.openverse.live/api/tokens?site=openverse&is_all=1&page=${page}&page_size=${number}` : `https://test-open.openverse.live/api/tokens?site=openverse&is_all=1&page=${page}&page_size=200`, {
         // axios.get(UtlDevnetType ? `https://test-open.openverse.live/api/tokens?site=openverse&is_all=1&page=${page}&page_size=200` : `https://open.openverse.live/api/tokens?site=openverse&is_all=1&page=${page}&page_size=200`, {
             // axios.get(`https://test-open.openverse.live/api/tokens?site=openverse&is_all=1&page=${page}&page_size=200`, {
