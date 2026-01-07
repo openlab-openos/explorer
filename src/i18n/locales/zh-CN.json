@@ -20,10 +20,10 @@
   "amount": "金额",
   "mint": "铸造",
   "mint_amount": "抵押量",
-  "mint_price":"铸造价格",
-  "mint_rate":"铸造系数",
-  "mint_result":"铸造量",
-  "mint_result_time":"时间",
+  "mint_price": "铸造价格",
+  "mint_rate": "铸造系数",
+  "mint_result": "铸造量",
+  "mint_result_time": "时间",
   "viewaccount": "查看账户",
   "pledge": "质押",
   "newAccount": "新账户",
@@ -43,7 +43,7 @@
   "market_cap": "市值",
   "switch": "请切换测试网络进行访问",
   "submit": "提交",
-  "number":"期数",
+  "number": "期数",
   "Submitsuccess": "提交成功",
   "Submitfailed": "提交失败",
   "Request-Airdrop": "请求水龙头",
@@ -341,10 +341,20 @@
     "VRC12": "“VRC12” 声誉",
     "VRC12Center": "Openverse 团队确认该项目符合 VRC12 协议标准。"
   },
-  "holder":{
-    "title1":"BTG Holders",
-    "title2":"USD Holders",
-    "title3":"JPY Holders",
-    "title4":"EUR Holders"
+  "holder": {
+    "title1": "BTG持有者",
+    "title2": "USD持有者",
+    "title3": "JPY持有者",
+    "title4": "EUR持有者",
+    "24H": "24小时",
+    "7D": "7天",
+    "30D": "30天",
+    "btg_locked": "BTG锁仓量",
+    "circulating_supply": "流通供应量",
+    "mc": "市值",
+    "token_found": "代币总量",
+    "tvl": "总锁仓价值",
+    "total_transfer": "总转账数",
+    "total_holders": "总持有者数"
   }
 }

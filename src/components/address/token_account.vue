@@ -25,7 +25,7 @@
                         </template>
                         <tr>
                             <td>{{ $t("account.owning_token") }}</td>
-                            <td class="text-end text-theme">
+                            <td class="text-end text-theme" style="display: flex;justify-content: end;">
                                 <!-- <text @click="pubbtx(getMint)" style="cursor: pointer;margin-right: 12px;">{{
                                     titleUrl(getMint).url }}</text>
                                 <img v-if="titleUrl(getMint).type"

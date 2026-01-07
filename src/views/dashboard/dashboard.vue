@@ -85,6 +85,9 @@ const jpyVue = defineAsyncComponent(
 const eurVue = defineAsyncComponent(
   () => import("../../components/holders/eur.vue")
 );
+const foundVue = defineAsyncComponent(
+  () => import("../../components/holders/token.vue")
+);
 
 // const Gettype = JSON.parse(sessionStorage.getItem("urlType"))
 
@@ -444,7 +447,8 @@ onBeforeUnmount(() => {
     <supplyVue />
     <activeVue />
     <priceVue />
-    <priceBtgVue />
+    <!-- <priceBtgVue /> -->
+    <foundVue />
     <btgVue />
     <usdVue />
 

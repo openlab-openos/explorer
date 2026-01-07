@@ -44,7 +44,7 @@
                             </tr>
                             <tr>
                                 <td>{{ $t("account.assigned_program_id") }} </td>
-                                <td class="text-end text-theme">
+                                <td class="text-end text-theme"  style="display: flex;justify-content: end;">
                                     <!-- <text style="cursor: pointer" @click="pubbtx(item.owner)"> {{
                                         titleUrl(item.owner).url }}</text>
                                     <img v-if="titleUrl(item.owner).type && !titleUrl(item.owner).assest"

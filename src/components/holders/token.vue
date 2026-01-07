@@ -4,7 +4,7 @@
     <card class="mb-3" style="height: 175px">
       <card-body>
         <div class="d-flex fw-bold small mb-3">
-          <span class="flex-grow-1"> {{ $t("holder.title2") }}</span>
+          <span class="flex-grow-1"> {{ $t("holder.token_found") }}</span>
         </div>
         <div class="row align-items-center mb-2" style="height: 30px">
           <div
@@ -23,11 +23,11 @@
                 line-height: 30px;
               "
             >
-              {{ come(data.holders) }}
+              {{ come(data.token_count) }}
             </h5>
           </div>
           <div style="width: 40%; height: 30px;display: flex;justify-content: center;">
-            <img :src="usdImage" width="60" height="60" alt="">
+            <img :src="foundImage" width="50" height="50" alt="">
           </div>
         </div>
         <div class="small text-inverse text-opacity-50 text-truncate">
@@ -55,7 +55,7 @@ import apexchart from '@/components/plugins/Apexcharts.vue';
 import i18n from '@/i18n';
 import { useAppVariableStore } from '@/stores/app-variable';
 
-import usdImage from '../../assets/holders/usd.png';
+import foundImage from '../../assets/holders/found.png';
 import numberAnimar from '../../components/CountFlop.vue';
 import { smartFormatNumber } from '../../components/number/smart';
 import { chainRequest } from '../../request/chain';
@@ -87,24 +87,24 @@ onMounted(() => {
   watchEffect(async () => {
     await dataObject().then((res) => {
       console.log(res);
-      data.value = res.token[0];
+      data.value = res.token_found;
     });
 
     info.value = [
       {
         icon: ["fas", "chevron-up"],
-        language: "holder.btg_locked",
-        text: come(smartFormatNumber(data.value.btg_amount)),
+        language: "holder.tvl",
+        text: come(smartFormatNumber(data.value.transfer_count)),
       },
       {
         icon: ["far", "hdd"],
-        language: "holder.circulating_supply",
-        text:come(smartFormatNumber(data.value.supply)),
+        language: "holder.total_transfer",
+        text:come(smartFormatNumber(data.value.market_value_total)),
       },
       {
         icon: ["far", "hand-point-up"],
-        language: "holder.mc",
-        text:come(smartFormatNumber(data.value.market_cap)),
+        language: "holder.total_holders",
+        text:come(smartFormatNumber(data.value.address_count)),
       },
     ];
   });

@@ -101,7 +101,7 @@
               </tr>
               <tr>
                 <td>{{ $t("account.owner") }}</td>
-                <td class="text-end text-theme">
+                <td class="text-end text-theme" style="display: flex;justify-content: end;">
                   <RenderText :address="paramsId" />
                 </td>
               </tr>

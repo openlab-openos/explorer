@@ -9,7 +9,7 @@
                 <tbody v-if="data">
                     <tr>
                         <td>{{ $t("account.foundry_license") }} </td>
-                        <td class="text-end text-theme">
+                        <td class="text-end text-theme"  style="display: flex;justify-content: end;">
                             <!-- <text :style="MintData?.mintAuthority ? 'cursor: pointer' : ''"
                                 @click="pubbtx(MintData?.mintAuthority)">{{
                                     !MintData?.mintAuthority ? "N/A" : titleUrl(MintData?.mintAuthority).url }}</text>
@@ -22,7 +22,7 @@
                     </tr>
                     <tr>
                         <td>{{ $t("account.freeze_authorization") }} </td>
-                        <td class="text-end text-theme">
+                        <td class="text-end text-theme"  style="display: flex;justify-content: end;">
                             <!-- <text :style="MintData?.freezeAuthority ? 'cursor: pointer' : ''"
                                 @click="pubbtx(MintData?.freezeAuthority)">{{ MintData?.freezeAuthority == null ? "N/A"
                                     :
@@ -37,7 +37,7 @@
                     </tr>
                     <tr>
                         <td>{{ $t("account.update_authorization") }} </td>
-                        <td class="text-end" v-if="MintData">
+                        <td class="text-end" v-if="MintData"  style="display: flex;justify-content: end;">
                             <template v-for="(item, index) in MintData.extensions" :key="index">
                                 <template v-if="item.state?.updateAuthority">
                                     <!-- <text>{{ item.state?.updateAuthority ? titleUrl(item.state.updateAuthority).url :

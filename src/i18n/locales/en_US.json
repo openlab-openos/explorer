@@ -355,7 +355,11 @@
         "30D": "30D",
         "btg_locked": "BTG Locked",
         "circulating_supply": "Circulating Supply",
-        "mc":"MC"
+        "mc":"MC",
+        "token_found": "Token Found",
+        "tvl": "TVL",
+        "total_transfer": "Total Transfer",
+        "total_holders": "Total Holders"
     },
     "rurn":{
         "title":"Rurn"

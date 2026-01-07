@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="display: flex" >
     <img
       v-if="titleUrl(paramsId).type && propsType"
       :src="titleUrl(paramsId).img"
