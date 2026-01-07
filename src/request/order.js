@@ -1,11 +1,13 @@
-import axios from "axios";
+import axios from 'axios';
 
 export function order(url) {
     return new Promise((resolve, reject) => {
         axios
             // .get(url, {
+            .get('https://serve-sds.faypay.com/api/openverse/' + url, {
+            // .get('https://test-sds.xuper.cloud/api/openverse/' + url, {
             // .get('/dataapi/' + url, {
-            .get('https://openverse.live/dataapi/' + url, {
+            // .get('https://openverse.live/dataapi/' + url, {
                 headers: {
                     "Content-Type": "application/json",
                 },

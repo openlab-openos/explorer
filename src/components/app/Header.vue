@@ -263,13 +263,27 @@ const selsetClick = (index: number) => {
         window.location.href = UtlDevnetTypes
           ? "https://devnet.openverse.live"
           : "https://test-devnet.openverse.live";
+        // window.location.reload();
       } else {
-        console.log("Production");
+        // console.log("Production");
+        // console.log(selectData.value[i].requestType);
+        let urlType = sessionStorage.getItem("urlType");
         sessionStorage.setItem("ArchiveType", item.ArchiveType);
         sessionStorage.setItem("urlType", selectData.value[i].requestType);
-        window.location.href = UtlDevnetTypes
-          ? "https://www.openverse.live"
-          : "https://test.openverse.live";
+
+        if (urlType == selectData.value[i].requestType || !urlType) {
+          window.location.reload();
+        } else {
+          window.location.href = UtlDevnetTypes
+            ? "https://www.openverse.live"
+            : "https://test.openverse.live";
+        }
+
+        // window.location.reload();
+
+        // window.location.href = UtlDevnetTypes
+        //   ? "https://www.openverse.live"
+        //   : "https://test.openverse.live";
         // if(UtlDevnetType){
 
         // window.location.href = UtlDevnetTypes?'https://openverse.live':"https://test.openverse.live";
