@@ -24,7 +24,7 @@
               <th style="text-align: left">{{ $t("transactions.time") }}</th>
             </tr>
             <tr
-              v-for="(item, index) in arrayData"
+              v-for="(item, index) in paginatedHistoryData"
               :key="index"
               style="height: 35px"
             >
@@ -102,8 +102,8 @@
                                     {{ items.code }}
                                 </text> -->
                 <RenderText
-                  v-if="item.source"
-                  :address="item.source"
+                  v-if="item.source_account"
+                  :address="item.source_account"
                   :transactionType="!props.boolean"
                 />
               </td>
@@ -124,36 +124,53 @@
                                     {{ items.code }}
                                 </text> -->
                 <RenderText
-                  v-if="item.destination"
-                  :address="item.destination"
+                  v-if="item.destination_account"
+                  :address="item.destination_account"
                   :transactionType="!props.boolean"
                 />
               </td>
               <td style="text-align: left">
-                {{
+                {{ smartFormatNumber(item.amount) }}
+                <!-- {{
                   item.type == "token_transfer"
                     ? come(item.uiAmount)
                     : typeof item.uiAmount == "number"
                       ? come(smartFormatNumber(item.uiAmount / 1000000000))
                       : come(item.uiAmount)
-                }}
+                }} -->
               </td>
               <td
                 style="text-align: left"
-                @click="
-                  pubbleys(item.type == 'token_transfer' ? item.mint : '')
-                "
-                :class="item.type == 'token_transfer' ? 'text-theme' : ''"
-                :style="item.type == 'token_transfer' ? 'cursor: pointer' : ''"
+                @click="pubbleys(!item.mint ? 'token_transfer' : item.mint)"
+                :class="!item.mint ? 'token_transfer' : 'text-theme'"
+                :style="!item.mint ? 'token_transfer' : 'cursor: pointer'"
               >
-                {{ stringcate(item.mint) }}
+                <!-- {{ stringcate(item.mint) }} -->
+                <router-link
+                  v-if="item.mint"
+                  :to="{ name: 'address', params: { url: item.mint } }"
+                  >{{ stringcate(item.mint) }}</router-link
+                >
+                <text v-else>{{ stringcate(item.mint) }}</text>
               </td>
               <td style="text-align: left">
-                {{ timeFormatter(item.blockTime * 1000) }} &nbsp;
+                {{ timeFormatter(item.blockTime) }} &nbsp;
               </td>
             </tr>
           </tbody>
         </table>
+      </div>
+
+      <div class="justify-end padding-10" v-if="ActivityLogData.length != 0">
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :hide-on-single-page="true"
+          :current-page="currentPage"
+          :page-size="pageSize"
+          :total="totalItems"
+          @current-change="handlePageChange"
+        />
       </div>
     </card-body>
   </card>
@@ -161,6 +178,7 @@
 
 <script setup>
 import {
+  computed,
   getCurrentInstance,
   onMounted,
   ref,
@@ -194,143 +212,162 @@ const orderData = ref([]);
 const apps = getCurrentInstance();
 
 const promaster = ref(apps?.proxy?.$progream);
+const ActivityLogData = ref([]);
+const totalItems = ref(1);
+const pageSize = ref(20);
+const arrayData = ref([]);
+
+const currentPage = ref(1);
+const paginatedHistoryData = computed(() => {
+  const start = (currentPage.value - 1) * pageSize.value;
+  const end = start + pageSize.value;
+  return ActivityLogData.value.slice(start, end);
+});
+const handlePageChange = (newPage) => {
+  //   type.value = false;
+  currentPage.value = newPage;
+  //   setTimeout(() => {
+  //     type.value = true;
+  //   }, 1);
+};
 
 onMounted(() => {
   fetchOrderData();
 });
-const arrayData = ref([]);
 const fetchOrderData = async () => {
   try {
     const res = await order("new_transactions");
-    const nullData = ref([]);
-    
-    for (let i in res) {
+    arrayData.value = res.data;
+    console.log(res.data.transactions);
+    ActivityLogData.value = res.data.transactions;
+    totalItems.value = ActivityLogData.value.length; // 添加这一行来更新总条数
+    // for (let i in res) {
 
-      if (res[i].result) {
-        let etach = res[i].result.transaction.message.instructions;
-        let index = 0;
+    //   if (res[i].result) {
+    //     let etach = res[i].result.transaction.message.instructions;
+    //     let index = 0;
 
-        for (let h = 0; h < etach.length; h++) {
-          if (
-            (etach[h].parsed?.type == "transferChecked" &&
-              etach[h].programId ==
-                "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA") ||
-            etach[h].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c"
-          ) {
-            index = h;
-            break;
-          } else if (
-            etach[h].parsed?.type == "transfer" &&
-            etach[h].programId == "11111111111111111111111111111111"
-          ) {
-            index = h;
-            break;
-          }
-        }
+    //     for (let h = 0; h < etach.length; h++) {
+    //       if (
+    //         (etach[h].parsed?.type == "transferChecked" &&
+    //           etach[h].programId ==
+    //             "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA") ||
+    //         etach[h].programId == "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c"
+    //       ) {
+    //         index = h;
+    //         break;
+    //       } else if (
+    //         etach[h].parsed?.type == "transfer" &&
+    //         etach[h].programId == "11111111111111111111111111111111"
+    //       ) {
+    //         index = h;
+    //         break;
+    //       }
+    //     }
 
-        //     console.log(etach[index]);
-        //     console.log(etach[1].parsed?.type);
+    //     //     console.log(etach[index]);
+    //     //     console.log(etach[1].parsed?.type);
 
-        //    console.log( etach[index].parsed?.type == "transferChecked");
+    //     //    console.log( etach[index].parsed?.type == "transferChecked");
 
-        if (
-          etach[index].parsed?.type == "transfer" &&
-          etach[index].programId == "11111111111111111111111111111111"
-        ) {
-          let data = {
-            type: "transfer",
-            signature: res[i].result.transaction.signatures[0],
-            source: etach[index].parsed.info.source,
-            destination: etach[index].parsed.info.destination,
-            uiAmount: etach[index].parsed.info.lamports,
-            mint: "BTG",
-            blockTime: res[i].result.blockTime,
-          };
-          arrayData.value.push(data);
-        } else if (etach[index].parsed?.type == "transferChecked") {
-          // console.log(123);
+    //     if (
+    //       etach[index].parsed?.type == "transfer" &&
+    //       etach[index].programId == "11111111111111111111111111111111"
+    //     ) {
+    //       let data = {
+    //         type: "transfer",
+    //         signature: res[i].result.transaction.signatures[0],
+    //         source: etach[index].parsed.info.source,
+    //         destination: etach[index].parsed.info.destination,
+    //         uiAmount: etach[index].parsed.info.lamports,
+    //         mint: "BTG",
+    //         blockTime: res[i].result.blockTime,
+    //       };
+    //       arrayData.value.push(data);
+    //     } else if (etach[index].parsed?.type == "transferChecked") {
+    //       // console.log(123);
 
-          let data = {
-            type: "token_transfer",
-            signature: res[i].result.transaction.signatures[0],
-            source: etach[index].parsed.info.source,
-            destination: etach[index].parsed.info.destination,
-            uiAmount: etach[index].parsed.info.tokenAmount
-              ? etach[index].parsed.info.tokenAmount.uiAmount
-              : 0,
-            mint: etach[index].parsed.info.mint,
-            blockTime: res[i].result.blockTime,
-          };
-          arrayData.value.push(data);
-        } else if (
-          (etach[index].parsed?.type == "transfer" &&
-            etach[index].programId ==
-              "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA") ||
-          etach[index].programId ==
-            "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c"
-        ) {
-          // console.log(etach);
+    //       let data = {
+    //         type: "token_transfer",
+    //         signature: res[i].result.transaction.signatures[0],
+    //         source: etach[index].parsed.info.source,
+    //         destination: etach[index].parsed.info.destination,
+    //         uiAmount: etach[index].parsed.info.tokenAmount
+    //           ? etach[index].parsed.info.tokenAmount.uiAmount
+    //           : 0,
+    //         mint: etach[index].parsed.info.mint ? etach[index].parsed.info.mint : etach[0].parsed.info.mint,
+    //         blockTime: res[i].result.blockTime,
+    //       };
+    //       arrayData.value.push(data);
+    //     } else if (
+    //       (etach[index].parsed?.type == "transfer" &&
+    //         etach[index].programId ==
+    //           "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA") ||
+    //       etach[index].programId ==
+    //         "Token9ADbPtdFC3PjxaohBLGw2pgZwofdcbj6Lyaw6c"
+    //     ) {
+    //       // console.log(etach);
 
-          let data = {
-            type: "token_transfer",
-            signature: res[i].result.transaction.signatures[0],
-            source: etach[index].parsed.info.source,
-            destination: etach[index].parsed.info.destination,
-            uiAmount: etach[index].parsed.info.tokenAmount
-              ? etach[index].parsed.info.tokenAmount.uiAmount
-              : 0,
-            mint: etach[index].parsed.info.mint,
-            blockTime: res[i].result.blockTime,
-          };
-          arrayData.value.push(data);
-        } else if (
-          etach[index].parsed?.type == "delegate" &&
-          etach[index].programId ==
-            "Stake11111111111111111111111111111111111111"
-        ) {
-          let data = {
-            type: "stake",
-            signature: res[i].result.transaction.signatures[0],
-            source: etach[index].parsed.info.stakeAuthority,
-            destination: etach[index].parsed.info.stakeAccount,
-            uiAmount: etach[index].parsed.info.lamports
-              ? etach[index].parsed.info.lamports
-              : "N/A",
-            mint: "BTG",
-            blockTime: res[i].result.blockTime,
-          };
-          arrayData.value.push(data);
-        } else if (etach[index].parsed?.type == "deactivate") {
-          let data = {
-            type: "unstake",
-            signature: res[i].result.transaction.signatures[0],
-            source: etach[index].parsed.info.stakeAuthority,
-            destination: etach[index].parsed.info.stakeAccount,
-            uiAmount: "N/A",
-            mint: "BTG",
-            blockTime: res[i].result.blockTime,
-          };
-          arrayData.value.push(data);
-        } else if (etach[index].parsed?.type == "withdraw") {
-          let data = {
-            type: "withdraw",
-            signature: res[i].result.transaction.signatures[0],
-            source: etach[index].parsed.info.withdrawAuthority,
-            destination: etach[index].parsed.info.destination,
-            uiAmount: etach[index].parsed.info.lamports,
-            mint: "BTG",
-            blockTime: res[i].result.blockTime,
-          };
-          arrayData.value.push(data);
-        } else {
-          nullData.value.push({ data: etach, index: i });
-        }
-      }
-      // if (res[i].result && res[i].result.transaction.message.instructions.length < 3) {
-      // arrayData.value.push(res[i].result.transaction);
+    //       let data = {
+    //         type: "token_transfer",
+    //         signature: res[i].result.transaction.signatures[0],
+    //         source: etach[index].parsed.info.source,
+    //         destination: etach[index].parsed.info.destination,
+    //         uiAmount: etach[index].parsed.info.tokenAmount
+    //           ? etach[index].parsed.info.tokenAmount.uiAmount
+    //           : 0,
+    //         mint: etach[index].parsed.info.mint ? etach[index].parsed.info.mint : etach[0].parsed.info.mint,
+    //         blockTime: res[i].result.blockTime,
+    //       };
+    //       arrayData.value.push(data);
+    //     } else if (
+    //       etach[index].parsed?.type == "delegate" &&
+    //       etach[index].programId ==
+    //         "Stake11111111111111111111111111111111111111"
+    //     ) {
+    //       let data = {
+    //         type: "stake",
+    //         signature: res[i].result.transaction.signatures[0],
+    //         source: etach[index].parsed.info.stakeAuthority,
+    //         destination: etach[index].parsed.info.stakeAccount,
+    //         uiAmount: etach[index].parsed.info.lamports
+    //           ? etach[index].parsed.info.lamports
+    //           : "N/A",
+    //         mint: "BTG",
+    //         blockTime: res[i].result.blockTime,
+    //       };
+    //       arrayData.value.push(data);
+    //     } else if (etach[index].parsed?.type == "deactivate") {
+    //       let data = {
+    //         type: "unstake",
+    //         signature: res[i].result.transaction.signatures[0],
+    //         source: etach[index].parsed.info.stakeAuthority,
+    //         destination: etach[index].parsed.info.stakeAccount,
+    //         uiAmount: "N/A",
+    //         mint: "BTG",
+    //         blockTime: res[i].result.blockTime,
+    //       };
+    //       arrayData.value.push(data);
+    //     } else if (etach[index].parsed?.type == "withdraw") {
+    //       let data = {
+    //         type: "withdraw",
+    //         signature: res[i].result.transaction.signatures[0],
+    //         source: etach[index].parsed.info.withdrawAuthority,
+    //         destination: etach[index].parsed.info.destination,
+    //         uiAmount: etach[index].parsed.info.lamports,
+    //         mint: "BTG",
+    //         blockTime: res[i].result.blockTime,
+    //       };
+    //       arrayData.value.push(data);
+    //     } else {
+    //       nullData.value.push({ data: etach, index: i });
+    //     }
+    //   }
+    //   // if (res[i].result && res[i].result.transaction.message.instructions.length < 3) {
+    //   // arrayData.value.push(res[i].result.transaction);
 
-      // }
-    }
+    //   // }
+    // }
     // // console.log(arrayData.value);
 
     appStore.setTransaction(JSON.stringify(arrayData.value));
@@ -351,7 +388,7 @@ const stringcate = (str) => {
       return str.slice(0, 5) + "..." + str.slice(-5);
     }
   } else {
-    return "N/A";
+    return "BTG";
   }
 };
 
@@ -382,6 +419,7 @@ const toFexedStake = (num) => {
 };
 
 const textValue = (text) => {
+  //   return text;
   return text.toUpperCase();
 };
 

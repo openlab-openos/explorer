@@ -57,7 +57,7 @@
                   cursor: auto;
                 "
               >
-                {{ textValue(item.movement) }}
+                {{ textValue(item.type) }}
               </button>
             </td>
             <td
@@ -80,10 +80,10 @@
                                 {{ items.code }}
                             </text> -->
               <RenderText
-                :class="item.primaryType ? 'textTheme' : 'text-theme'"
+                :class="item.from_address == props.url ? 'textTheme' : 'text-theme'"
                 :propsColor="'color0-255-179-1'"
-                v-if="item.primary"
-                :address="item.primary"
+                v-if="item.source_account"
+                :address="item.source_account"
               />
             </td>
             <td
@@ -107,9 +107,9 @@
                                 {{ items.code }}
                             </text> -->
               <RenderText
-                :class="item.quantityType ? 'textTheme' : 'text-theme'"
-                v-if="item.quantity"
-                :address="item.quantity"
+                :class="item.from_address !== props.url ? 'textTheme' : 'text-theme'"
+                v-if="item.destination_account"
+                :address="item.destination_account"
               />
             </td>
             <td v-else style="text-align: left" class="text-theme">
@@ -148,10 +148,10 @@
                                 style="border-radius: 5px;padding: 2px 4px;margin: 5px 5px 0 0;font-weight: 500;font-size: 14px;color: #ffff;">
                                 {{ items.code }}
                             </text> -->
-              <RenderText v-if="item.program" :address="item.program" />
+              <RenderText v-if="item.programId" :address="item.programId" />
             </td>
             <td>
-              {{ come(item.lamports) }}
+              {{ come(smartFormatNumber(item.amount)) }}
             </td>
             <td style="text-align: left">
               <!-- <text :style="item.token ? 'cursor: pointer' : ''" class="text-theme" @click="slot(
@@ -192,12 +192,17 @@
                 </template>
               </template>
               <template v-else>
-                <RenderText v-if="item.token" :address="item.token" />
+                <!-- <RenderText v-if="item.token" :address="item.token" /> -->
+                 {{ 
+                 item.mint
+        ? titleUrl(item.mint).url
+        : "BTG" }}
               </template>
             </td>
 
             <td class="text-theme">
-              {{ item.time }}
+              <!-- {{  }} -->
+             {{  timeSome(item.chain_timestamp) }}
             </td>
           </tr>
         </template>
@@ -311,20 +316,23 @@ onMounted(async () => {
     let res = await requestList(
       "transactions/" + props.url + `?account_type=${props.transfersType}`
     );
-    historyData.value = HandleList(res);
-    for (let i in historyData.value) {
-      const currentToken = historyData.value[i].token;
-      if (currentToken.length > 30)
-        if (!dataArray.value.includes(currentToken)) {
-          // 关键：判断当前token是否已在dataArray中，不存在才添加
-          dataArray.value.push(currentToken);
-        }
-    }
-    await tokenList();
+    console.log(res);
+    console.log(res.data.transactions);
+    
+    historyData.value = res.data.transactions;
+    // for (let i in historyData.value) {
+    //   const currentToken = historyData.value[i].token;
+    //   if (currentToken.length > 30)
+    //     if (!dataArray.value.includes(currentToken)) {
+    //       // 关键：判断当前token是否已在dataArray中，不存在才添加
+    //       dataArray.value.push(currentToken);
+    //     }
+    // }
+    // await tokenList();
     totalItems.value = historyData.value.length;
     loading.value = true;
     // // console.log(historyData.value);
-    paginatedHistoryFunction(historyData.value);
+    // paginatedHistoryFunction(historyData.value);
   } catch {}
 });
 const ownerArray = ref([props.url]);

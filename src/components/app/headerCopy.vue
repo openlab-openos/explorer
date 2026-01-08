@@ -361,6 +361,65 @@ onMounted(() => {
     nameText.value = "Openverse Betanet Archive 1.DEV";
   }
 });
+
+
+// const selsetClick = (index: number) => {
+//   let type = sessionStorage.getItem("ArchiveType");
+//   selectData.value.map((item, i) => {
+//     if (i == index) {
+//       ScanName.value = selectData.value[i].name;
+//       if (selectData.value[i].requestType == "Test") {
+//         sessionStorage.setItem("ArchiveType", item.ArchiveType);
+//         sessionStorage.setItem("urlType", selectData.value[i].requestType);
+//         window.location.href = UtlDevnetTypes
+//           ? "https://devnet.openverse.live"
+//           : "https://test-devnet.openverse.live";
+//         // window.location.reload();
+//       } else {
+//         // console.log("Production");
+//         // console.log(selectData.value[i].requestType);
+//         let urlType = sessionStorage.getItem("urlType");
+//         sessionStorage.setItem("ArchiveType", item.ArchiveType);
+//         sessionStorage.setItem("urlType", selectData.value[i].requestType);
+
+//         if (urlType == selectData.value[i].requestType || !urlType) {
+//           window.location.reload();
+//         } else {
+//           window.location.href = UtlDevnetTypes
+//             ? "https://www.openverse.live"
+//             : "https://test.openverse.live";
+//         }
+
+//         // window.location.reload();
+
+//         // window.location.href = UtlDevnetTypes
+//         //   ? "https://www.openverse.live"
+//         //   : "https://test.openverse.live";
+//         // if(UtlDevnetType){
+
+//         // window.location.href = UtlDevnetTypes?'https://openverse.live':"https://test.openverse.live";
+
+//         //   if(type !== item.ArchiveType ){
+//         //     window.location.reload()
+//         //   }
+//         //   if(urlType == 'Test'){
+//         //    window.location.href = item.url
+//         //   }
+//         // }
+//       }
+//       // // item.type = true;
+//       // if (UtlDevnetType == item.type) {
+//       //   sessionStorage.setItem("ArchiveType",item.ArchiveType);
+//       // } else {
+//       //   // window.location.href = item.url
+//       // }
+//     } else {
+//       item.type = false;
+//     }
+//   });
+// };
+
+
 </script>
 <template>
   <div id="header" class="app-header">

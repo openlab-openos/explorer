@@ -213,7 +213,7 @@ const selectData = ref(
           name: "Devnet",
           url: "https://devnet.openverse.live",
           type: !UtlDevnetType,
-          ArchiveType: "",
+          ArchiveType: "Devnet",
           requestType: "Test",
         },
       ]
@@ -246,7 +246,7 @@ const selectData = ref(
           name: "Devnet",
           url: "https://test-devnet.openverse.live",
           type: !UtlDevnetType,
-          ArchiveType: "",
+          ArchiveType: "Devnet",
           requestType: "Test",
         },
       ]
@@ -254,58 +254,94 @@ const selectData = ref(
 console.log(selectData.value);
 
 const selsetClick = (index: number) => {
-  let type = sessionStorage.getItem("ArchiveType");
-  selectData.value.map((item, i) => {
-    if (i == index) {
-      ScanName.value = selectData.value[i].name;
-      if (selectData.value[i].requestType == "Test") {
-        sessionStorage.setItem("urlType", selectData.value[i].requestType);
-        window.location.href = UtlDevnetTypes
-          ? "https://devnet.openverse.live"
-          : "https://test-devnet.openverse.live";
-        // window.location.reload();
-      } else {
-        // console.log("Production");
-        // console.log(selectData.value[i].requestType);
-        let urlType = sessionStorage.getItem("urlType");
-        sessionStorage.setItem("ArchiveType", item.ArchiveType);
-        sessionStorage.setItem("urlType", selectData.value[i].requestType);
+  // 获取当前路由
+  const currentUrl = window.location.href;
 
-        if (urlType == selectData.value[i].requestType || !urlType) {
-          window.location.reload();
-        } else {
-          window.location.href = UtlDevnetTypes
-            ? "https://www.openverse.live"
-            : "https://test.openverse.live";
-        }
-
-        // window.location.reload();
-
-        // window.location.href = UtlDevnetTypes
-        //   ? "https://www.openverse.live"
-        //   : "https://test.openverse.live";
-        // if(UtlDevnetType){
-
-        // window.location.href = UtlDevnetTypes?'https://openverse.live':"https://test.openverse.live";
-
-        //   if(type !== item.ArchiveType ){
-        //     window.location.reload()
-        //   }
-        //   if(urlType == 'Test'){
-        //    window.location.href = item.url
-        //   }
-        // }
-      }
-      // // item.type = true;
-      // if (UtlDevnetType == item.type) {
-      //   sessionStorage.setItem("ArchiveType",item.ArchiveType);
-      // } else {
-      //   // window.location.href = item.url
-      // }
-    } else {
-      item.type = false;
+  // 检查当前路由是否为test-devnet或devnet环境
+  if (
+    currentUrl.includes("test-devnet.openverse.live") ||
+    currentUrl.includes("devnet.openverse.live")
+  ) {
+    if (selectData.value[index].ArchiveType !== "Devnet") {
+      // 执行用户要求的跳转逻辑
+      sessionStorage.setItem(
+        "ArchiveType",
+        selectData.value[index].ArchiveType
+      );
+      sessionStorage.setItem("urlType", selectData.value[index].requestType);
+      window.location.href = !UtlDevnetTypes
+        ? "https://www.openverse.live"
+        : "https://test.openverse.live";
+      return;
     }
-  });
+  } else {
+    if (selectData.value[index].ArchiveType == "Devnet") {
+      window.location.href = UtlDevnetTypes
+        ? "https://devnet.openverse.live"
+        : "https://test-devnet.openverse.live";
+    } else {
+      sessionStorage.setItem(
+        "ArchiveType",
+        selectData.value[index].ArchiveType
+      );
+      sessionStorage.setItem("urlType", selectData.value[index].requestType);
+      window.location.reload();
+    }
+  }
+
+  // let type = sessionStorage.getItem("ArchiveType");
+  // selectData.value.map((item, i) => {
+  //   if (i == index) {
+  //     ScanName.value = selectData.value[i].name;
+  //     if (selectData.value[i].requestType == "Test") {
+  //       sessionStorage.setItem("ArchiveType", item.ArchiveType);
+  //       sessionStorage.setItem("urlType", selectData.value[i].requestType);
+  //       window.location.href = UtlDevnetTypes
+  //         ? "https://devnet.openverse.live"
+  //         : "https://test-devnet.openverse.live";
+  //       // window.location.reload();
+  //     } else {
+  //       // console.log("Production");
+  //       // console.log(selectData.value[i].requestType);
+  //       let urlType = sessionStorage.getItem("urlType");
+  //       sessionStorage.setItem("ArchiveType", item.ArchiveType);
+  //       sessionStorage.setItem("urlType", selectData.value[i].requestType);
+
+  //       if (urlType == selectData.value[i].requestType || !urlType) {
+  //         window.location.reload();
+  //       } else {
+  //         window.location.href = UtlDevnetTypes
+  //           ? "https://www.openverse.live"
+  //           : "https://test.openverse.live";
+  //       }
+
+  //       // window.location.reload();
+
+  //       // window.location.href = UtlDevnetTypes
+  //       //   ? "https://www.openverse.live"
+  //       //   : "https://test.openverse.live";
+  //       // if(UtlDevnetType){
+
+  //       // window.location.href = UtlDevnetTypes?'https://openverse.live':"https://test.openverse.live";
+
+  //       //   if(type !== item.ArchiveType ){
+  //       //     window.location.reload()
+  //       //   }
+  //       //   if(urlType == 'Test'){
+  //       //    window.location.href = item.url
+  //       //   }
+  //       // }
+  //     }
+  //     // // item.type = true;
+  //     // if (UtlDevnetType == item.type) {
+  //     //   sessionStorage.setItem("ArchiveType",item.ArchiveType);
+  //     // } else {
+  //     //   // window.location.href = item.url
+  //     // }
+  //   } else {
+  //     item.type = false;
+  //   }
+  // });
 };
 
 onMounted(() => {
