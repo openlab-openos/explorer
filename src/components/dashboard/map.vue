@@ -440,7 +440,8 @@ const renderMap = async () => {
 // };
 const getIPLocation = async (ip) => {
 //   const url = `http://ip-api.com/json/${ip}`; // 使用你的访问令牌
-  const url = `https://test-sds.xuper.cloud/api/ip-info/${ip}`; // 使用你的访问令牌
+  // const url = `https://test-sds.xuper.cloud/api/ip-info/${ip}`; // 使用你的访问令牌
+  const url = `https://serve-sds.faypay.com/api/ip-info/${ip}`; // 使用你的访问令牌
   // const url = `https://ipapi.co/ip/${ip}/json`; // 使用你的访问令牌
 
   try {

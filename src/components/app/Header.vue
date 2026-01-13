@@ -269,7 +269,7 @@ const selsetClick = (index: number) => {
         selectData.value[index].ArchiveType
       );
       sessionStorage.setItem("urlType", selectData.value[index].requestType);
-      window.location.href = !UtlDevnetTypes
+      window.location.href = UtlDevnetTypes
         ? "https://www.openverse.live"
         : "https://test.openverse.live";
       return;

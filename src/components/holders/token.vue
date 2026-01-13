@@ -99,7 +99,7 @@ onMounted(() => {
       {
         icon: ["far", "hdd"],
         language: "holder.total_transfer",
-        text:come(smartFormatNumber(data.value.market_value_total)),
+        text:come(smartFormatNumber(data.value.market_value_total/1000000000)),
       },
       {
         icon: ["far", "hand-point-up"],
