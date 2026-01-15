@@ -115,7 +115,7 @@
                                         <text class="textD backStyle">D</text> Buy
                                     </a>
                                     <a class="a-Link" id="buyC" v-if="item.price_source == 'Bitcoin_TM'"
-                                        :href="`https://www.bitcoin.tm/trade?symbol=${item.symbol}/USDT`"
+                                        :href="`https://www.vasdaq.com`"
                                         target="_blank">
                                         <!-- <img src="https://cdn.openverse.live/images/BIT_1024x1024.png" v-if="item.market_value " width="20" style="cursor: pointer;" alt=""></img> -->
                                         <text class="textC backStyle">C</text> Buy

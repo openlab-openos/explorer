@@ -154,7 +154,7 @@
                 <text v-else>{{ stringcate(item.mint) }}</text>
               </td>
               <td style="text-align: left">
-                {{ timeFormatter(item.blockTime) }} &nbsp;
+                {{ timeFormatter(item.chain_timestamp * 1000) }} &nbsp;
               </td>
             </tr>
           </tbody>
@@ -377,6 +377,8 @@ const fetchOrderData = async () => {
 };
 
 const timeFormatter = (time) => {
+console.log(time);
+
   return moment(time).fromNow();
 };
 

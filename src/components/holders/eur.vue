@@ -107,13 +107,13 @@ onMounted(() => {
         icon: ["far", "hdd"],
         language: "holder.circulating_supply",
         text: come(
-          smartFormatNumber(data.value.supply / 10 ** data.value.decimals)
+          smartFormatNumber(data.value.supply / 10 ** (data.value.decimals ? data.value.decimals : 0))
         ),
       },
       {
         icon: ["far", "hand-point-up"],
         language: "holder.mc",
-        text: come(smartFormatNumber(data.value.market_cap / 10 ** data.value.decimals)),
+        text: come(smartFormatNumber(data.value.market_cap / 10 ** (data.value.decimals ? data.value.decimals : 0))),
       },
     ];
   });
