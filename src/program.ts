@@ -450,6 +450,18 @@ export const PROGRAM_INFO_BY_ID: { [address: string]: ProgramInfo } = {
     deployments: [Cluster.MainnetBeta],
     name: PROGRAM_NAMES.WORMHOLE_TOKEN,
   },
+  vrca8nDGAZW9R23jAerRJUqsd7vz1q3sqkKMxQsisxk: {
+    deployments: ALL_CLUSTERS,
+    name: "Mint Program",
+  },
+  swapCpz48CQA1zVD8xXr6e4RGCtZCc9pTDEjQ5cUukr: {
+    deployments: ALL_CLUSTERS,
+    name: "Swap Program",
+  },
+  vrccD48wXDoZbj9t6xu7X2362Lr9yyocMB7aq9GVaym: {
+    deployments: ALL_CLUSTERS,
+    name: "Reserve Program",
+  },
 };
 
 export const SPECIAL_IDS: { [key: string]: string } = {
@@ -494,7 +506,7 @@ export const TOKEN_IDS: { [key: string]: string } = {
 function isProductionDomain() {
   const hostname = window.location.hostname;
   // 检测是否包含 'devnet.' 前缀
-  return !hostname.startsWith('test.') || hostname.startsWith('test-devnet.');
+  return !hostname.startsWith("test.") || hostname.startsWith("test-devnet.");
 }
 const UtlDevnetType = isProductionDomain();
 const datas = ref();
@@ -502,16 +514,18 @@ const Authentication = async () => {
   await axios
     .get(
       // UtlDevnetType ? `https://test-open.openverse.live/api/token/hot` : `https://open.openverse.live/api/token/hot`,
-      UtlDevnetType ? `https://open.openverse.live/api/tokens?site=openverse&is_all=1&page=1&page_size=200` : `https://test-open.openverse.live/api/tokens?site=openverse&is_all=1&page=1&page_size=200`,
+      UtlDevnetType
+        ? `https://open.openverse.live/api/tokens?site=openverse&is_all=1&page=1&page_size=200`
+        : `https://test-open.openverse.live/api/tokens?site=openverse&is_all=1&page=1&page_size=200`,
       {
         headers: {
           "Content-Type": "application/json",
         },
-      }
+      },
     )
     .then((res) => {
       console.log(res);
-      
+
       let data = Cretifucate(res.data.data);
       console.log(data);
 
@@ -520,7 +534,7 @@ const Authentication = async () => {
           acc[item.address] = item;
           return acc;
         },
-        {} as { [key: string]: any }
+        {} as { [key: string]: any },
       );
 
       datas.value = transformedObject;
@@ -554,7 +568,6 @@ const imageType = (type: any) => {
       return vrc20;
   }
 };
-
 
 const TypebackColor = (type: string) => {
   switch (type) {
@@ -607,27 +620,28 @@ const Cretifucate = (data: Array<any>) => {
           // @ts-ignore
           img: data[i].certificates[j].image_url,
           // 'img': imageType(data[i].certificates[j].certificate_code),
-          code: data[i].certificates[j].certificate_code == 'USDStableCoin' ? 'Stablecoin' : data[i].certificates[j].certificate_code,
+          code:
+            data[i].certificates[j].certificate_code == "USDStableCoin"
+              ? "Stablecoin"
+              : data[i].certificates[j].certificate_code,
           backColor: TypebackColor(data[i].certificates[j].certificate_code),
         });
       }
     }
-
   }
   return CretifucateArray;
 };
 await Authentication();
 
-
 export const Authentications: { [key: string]: TokenProgramInfo } = datas.value;
 
 export type TokenProgram = "open-token" | "open-token-2022";
 export function assertIsTokenProgram(
-  program: string
+  program: string,
 ): asserts program is TokenProgram {
   if (program !== "open-token" && program !== "open-token-2022")
     throw new Error(
-      "Expected token program name of `open-token` or `open-token-2022`"
+      "Expected token program name of `open-token` or `open-token-2022`",
     );
 }
 export function isTokenProgram(program: string): program is TokenProgram {

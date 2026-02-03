@@ -1,5 +1,5 @@
 <template>
-  <div style="display: flex" >
+  <div style="display: flex;" :style="propsLeftType ? 'justify-content: end;' : ''" >
     <img
       v-if="titleUrl(paramsId).type && propsType"
       :src="titleUrl(paramsId).img"
@@ -10,7 +10,7 @@
             {{ props.transactionType ? (titleUrl(paramsId).url ? titleUrl(paramsId).url : 'N/A') :
                 (stringcate(paramsId)) }}
         </text> -->
-        
+       <!-- {{ propsLeftType }}  -->
     <span
       v-if="
         isNumber(paramsId) && paramsId !== '11111111111111111111111111111111'
@@ -18,6 +18,7 @@
     >
       <!-- {{ paramsId }} -->
     </span>
+    
     <div v-else>
       <router-link
         v-if="propsType && paramsId != blackAddress"
@@ -86,6 +87,10 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  leftType:{
+    type: Boolean,
+    default: false,
+  }
 });
 const router = useRouter();
 
@@ -93,7 +98,7 @@ const paramsId = ref(props.address);
 
 const propsType = ref(props.type);
 const propsColor = ref(props.color);
-
+const propsLeftType = ref(props.leftType);
 const isNumber = (value) => {
   // 排除 null/undefined/空字符串，同时校验是否为有效数字
   if (value === null || value === undefined || value === "") return false;

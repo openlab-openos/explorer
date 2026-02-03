@@ -30,7 +30,11 @@
                 <!-- <text style="cursor: pointer" @click="pubbleys(item.programId)">{{
                                     titleUrl(item.programId).url }}</text> -->
                 <router-link
-                  :to="{ name: blackAddress == item.programId ? 'blackhole': 'address', params: { url: item.programId } }"
+                  :to="{
+                    name:
+                      blackAddress == item.programId ? 'blackhole' : 'address',
+                    params: { url: item.programId },
+                  }"
                   >{{ titleUrl(item.programId).url }}</router-link
                 >
               </td>
@@ -46,7 +50,7 @@
                   {{ key == "lamports" ? "(BTG)" : ""
                   }}{{ typeof value == "object" ? "." : "" }}
                   <span
-                    v-if="typeof value == 'object' "
+                    v-if="typeof value == 'object'"
                     v-for="[keys, values] in Object.entries(key)"
                     :key="keys"
                   >
@@ -135,6 +139,7 @@
                       <RenderText
                         :type="false"
                         :address="value"
+                        :leftType="true"
                         style="margin-left: 10px"
                       />
                     </template>
@@ -222,7 +227,11 @@
                 <!-- <text style="cursor: pointer" @click="pubbleys(item.programId)">{{
                                     titleUrl(item.programId).url }}</text> -->
                 <router-link
-                  :to="{ name:blackAddress == item.programId ? 'blackhole': 'address', params: { url: item.programId } }"
+                  :to="{
+                    name:
+                      blackAddress == item.programId ? 'blackhole' : 'address',
+                    params: { url: item.programId },
+                  }"
                   >{{ titleUrl(item.programId).url }}</router-link
                 >
               </td>
@@ -234,6 +243,7 @@
               <td class="text-end text-theme">
                 <RenderText
                   v-if="item.accounts[0]"
+                  :leftType="true"
                   :address="item.accounts[0]"
                 />
               </td>
@@ -241,7 +251,11 @@
             <tr v-if="item">
               <td>Data</td>
               <td class="text-end">
-                <RenderText v-if="item.data" :address="item.data" />
+                <RenderText
+                  v-if="item.data"
+                  :leftType="true"
+                  :address="item.data"
+                />
               </td>
             </tr>
           </template>
@@ -299,7 +313,7 @@
                                     : key == 'tokenAmount'
                                       ? ''
                                       : value
-                            : ''
+                            : '',
                         )
                       "
                     >
@@ -315,7 +329,12 @@
                       {{ key == "space" ? "byts(s)" : "" }}
                       {{ key == "lamports" ? "(BTG)" : "" }}</text
                     >
-                    <RenderText v-if="value" :type="false" :address="value" />
+                    <RenderText
+                      v-if="value"
+                      :leftType="true"
+                      :type="false"
+                      :address="value"
+                    />
                   </div>
                 </td>
               </tr>
@@ -374,7 +393,7 @@
                                         : keys == 'tokenAmount'
                                           ? ''
                                           : values
-                                : ''
+                                : '',
                             )
                           "
                         >
@@ -396,6 +415,7 @@
                         <RenderText
                           v-if="values"
                           :type="false"
+                          :leftType="true"
                           :address="values"
                         />
                       </div>
