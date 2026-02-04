@@ -38,7 +38,7 @@
                     <tr>
                         <td>{{ $t("account.update_authorization") }} </td>
                         <td class="text-end" v-if="MintData"  style="display: flex;justify-content: end;">
-                            <template v-for="(item, index) in MintData.extensions" :key="index">
+                            <template v-for="(item, index) in MintData.extensions" :key="item.state.updateAuthority">
                                 <template v-if="item.state?.updateAuthority">
                                     <!-- <text>{{ item.state?.updateAuthority ? titleUrl(item.state.updateAuthority).url :
                                         'N/A' }}</text>

@@ -37,7 +37,7 @@
                     </th>
                 </tr>
                 <template v-if="historyData.length != 0">
-                    <tr v-for="(item, index) in paginatedHistoryData" :key="index" @click="detailsFunction(item.child)">
+                    <tr v-for="(item, index) in paginatedHistoryData" :key="item" @click="detailsFunction(item.child)">
                         <td>
                             {{ index + 1 }}
                         </td>

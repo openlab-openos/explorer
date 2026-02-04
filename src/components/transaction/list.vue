@@ -25,7 +25,7 @@
             </tr>
             <tr
               v-for="(item, index) in paginatedHistoryData"
-              :key="index"
+              :key="item.signature"
               style="height: 35px"
             >
               <td
