@@ -123,7 +123,6 @@
               <history-view :url="url"></history-view>
             </el-tab-pane>
             <el-tab-pane
-              v-if="transfersType"
               :label="$t('transfer')"
               name="second"
             >

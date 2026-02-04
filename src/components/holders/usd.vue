@@ -107,69 +107,83 @@ onMounted(() => {
         icon: ["far", "hdd"],
         language: "holder.circulating_supply",
         text: come(
-          smartFormatNumber(data.value.supply / 10 ** (data.value.decimals ? data.value.decimals : 0))
+          smartFormatNumber(
+            data.value.supply /
+              10 ** (data.value.decimals ? data.value.decimals : 0),
+          ),
         ),
       },
       {
         icon: ["far", "hand-point-up"],
         language: "holder.mc",
         text: come(
-          smartFormatNumber(data.value.market_cap / 10 ** (data.value.decimals ? data.value.decimals : 0))
+          smartFormatNumber(
+            data.value.market_cap /
+              10 ** (data.value.decimals ? data.value.decimals : 0),
+          ),
         ),
       },
     ];
   });
 });
 const come = (num) => {
-  if (!num && num !== 0) return ""; // 兼容num为0的情况
+  if (num) {
+    const reg =
+      num.toString().indexOf(".") > -1
+        ? /(\d)(?=(\d{3})+\.)/g
+        : /(\d)(?=(\d{3})+$)/g;
 
-  let resultStr = "";
-  const numStr = num.toString();
-  const isHasDecimal = numStr.indexOf(".") > -1;
-  // 先转换为数字类型（避免字符串数字计算异常）
-  const originalNum = Number(num);
-
-  // 步骤1：提取整数部分长度（兼容有小数的情况）
-  const integerPartLen = isHasDecimal
-    ? numStr.split(".")[0].length
-    : numStr.length;
-
-  // 步骤2：按位数判断用B（十亿）/M（百万）/原数字
-  if (integerPartLen > 9) {
-    // 整数部分>9位（≥10亿）：转换为十亿单位（÷1000000000），保留2位小数
-    const simplifiedNum = (originalNum / 1000000000).toFixed(2);
-    // 拼接B后缀，自动去除末尾多余的.00
-    resultStr = simplifiedNum.replace(/\.00$/, "") + "B";
-  } else if (integerPartLen > 6) {
-    // 整数部分>6位且≤9位（≥100万且＜10亿）：转换为百万单位
-    const simplifiedNum = (originalNum / 1000000).toFixed(2);
-    resultStr = simplifiedNum.replace(/\.00$/, "") + "M";
-  } else {
-    // 整数部分≤6位：无需简略，直接使用原始数字字符串
-    resultStr = numStr;
+    return num.toString().replace(reg, "$1,");
   }
+  // if (!num && num !== 0) return ""; // 兼容num为0的情况
 
-  // 步骤3：千分位逗号分隔格式化（兼容带M/B后缀的场景）
-  // 拆分后缀（M/B），避免正则匹配到后缀字符
-  const hasSuffix = resultStr.includes("M") || resultStr.includes("B");
-  let numPart = resultStr;
-  let suffix = "";
-  if (hasSuffix) {
-    // 提取数字部分和后缀（M/B）
-    const mbIndex =
-      resultStr.indexOf("M") > -1
-        ? resultStr.indexOf("M")
-        : resultStr.indexOf("B");
-    numPart = resultStr.substring(0, mbIndex);
-    suffix = resultStr.substring(mbIndex);
-  }
+  // let resultStr = "";
+  // const numStr = num.toString();
+  // const isHasDecimal = numStr.indexOf(".") > -1;
+  // // 先转换为数字类型（避免字符串数字计算异常）
+  // const originalNum = Number(num);
 
-  // 千分位格式化正则（仅处理数字部分）
-  const reg =
-    numPart.indexOf(".") > -1 ? /(\d)(?=(\d{3})+\.)/g : /(\d)(?=(\d{3})+$)/g;
+  // // 步骤1：提取整数部分长度（兼容有小数的情况）
+  // const integerPartLen = isHasDecimal
+  //   ? numStr.split(".")[0].length
+  //   : numStr.length;
 
-  // 格式化数字部分后，拼接后缀
-  const formattedNumPart = numPart.replace(reg, "$1,");
-  return formattedNumPart + suffix;
+  // // 步骤2：按位数判断用B（十亿）/M（百万）/原数字
+  // if (integerPartLen > 9) {
+  //   // 整数部分>9位（≥10亿）：转换为十亿单位（÷1000000000），保留2位小数
+  //   const simplifiedNum = (originalNum / 1000000000).toFixed(2);
+  //   // 拼接B后缀，自动去除末尾多余的.00
+  //   resultStr = simplifiedNum.replace(/\.00$/, "") + "B";
+  // } else if (integerPartLen > 6) {
+  //   // 整数部分>6位且≤9位（≥100万且＜10亿）：转换为百万单位
+  //   const simplifiedNum = (originalNum / 1000000).toFixed(2);
+  //   resultStr = simplifiedNum.replace(/\.00$/, "") + "M";
+  // } else {
+  //   // 整数部分≤6位：无需简略，直接使用原始数字字符串
+  //   resultStr = numStr;
+  // }
+
+  // // 步骤3：千分位逗号分隔格式化（兼容带M/B后缀的场景）
+  // // 拆分后缀（M/B），避免正则匹配到后缀字符
+  // const hasSuffix = resultStr.includes("M") || resultStr.includes("B");
+  // let numPart = resultStr;
+  // let suffix = "";
+  // if (hasSuffix) {
+  //   // 提取数字部分和后缀（M/B）
+  //   const mbIndex =
+  //     resultStr.indexOf("M") > -1
+  //       ? resultStr.indexOf("M")
+  //       : resultStr.indexOf("B");
+  //   numPart = resultStr.substring(0, mbIndex);
+  //   suffix = resultStr.substring(mbIndex);
+  // }
+
+  // // 千分位格式化正则（仅处理数字部分）
+  // const reg =
+  //   numPart.indexOf(".") > -1 ? /(\d)(?=(\d{3})+\.)/g : /(\d)(?=(\d{3})+$)/g;
+
+  // // 格式化数字部分后，拼接后缀
+  // const formattedNumPart = numPart.replace(reg, "$1,");
+  // return formattedNumPart + suffix;
 };
 </script>

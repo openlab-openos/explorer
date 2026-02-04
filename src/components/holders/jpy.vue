@@ -106,58 +106,76 @@ onMounted(() => {
       {
         icon: ["far", "hdd"],
         language: "holder.circulating_supply",
-        text: come(smartFormatNumber(data.value.supply / 10 ** (data.value.decimals ? data.value.decimals : 0))),
+        text: come(
+          smartFormatNumber(
+            data.value.supply /
+              10 ** (data.value.decimals ? data.value.decimals : 0),
+          ),
+        ),
       },
       {
         icon: ["far", "hand-point-up"],
         language: "holder.mc",
-        text: come(smartFormatNumber(data.value.market_cap/ 10 ** (data.value.decimals ? data.value.decimals : 0))),
+        text: come(
+          smartFormatNumber(
+            data.value.market_cap /
+              10 ** (data.value.decimals ? data.value.decimals : 0),
+          ),
+        ),
       },
     ];
   });
 });
 const come = (num) => {
-  if (!num && num !== 0) return ""; // 兼容num为0的情况
+  if (num) {
+    const reg =
+      num.toString().indexOf(".") > -1
+        ? /(\d)(?=(\d{3})+\.)/g
+        : /(\d)(?=(\d{3})+$)/g;
 
-  let resultStr = "";
-  const numStr = num.toString();
-  const isHasDecimal = numStr.indexOf(".") > -1;
-  // 先转换为数字类型（避免字符串数字计算异常）
-  const originalNum = Number(num);
-
-  // 步骤1：判断是否需要以M（百万）简略（小数点前整数部分>6位）
-  // 提取整数部分长度（兼容有小数的情况）
-  const integerPartLen = isHasDecimal
-    ? numStr.split(".")[0].length
-    : numStr.length;
-
-  if (integerPartLen > 6) {
-    // 转换为百万单位（÷1000000），保留2位小数（可调整）
-    const simplifiedNum = (originalNum / 1000000).toFixed(2);
-    // 拼接M后缀，自动去除末尾多余的.00
-    resultStr = simplifiedNum.replace(/\.00$/, "") + "M";
-  } else {
-    // 无需简略，直接使用原始数字字符串
-    resultStr = numStr;
+    return num.toString().replace(reg, "$1,");
   }
+  // if (!num && num !== 0) return ""; // 兼容num为0的情况
 
-  // 步骤2：千分位逗号分隔格式化（兼容带M后缀的场景）
-  // 拆分M后缀（避免正则匹配到M后面的字符）
-  const hasMSuffix = resultStr.includes("M");
-  let numPart = resultStr;
-  let suffix = "";
-  if (hasMSuffix) {
-    const splitArr = resultStr.split("M");
-    numPart = splitArr[0];
-    suffix = "M";
-  }
+  // let resultStr = "";
+  // const numStr = num.toString();
+  // const isHasDecimal = numStr.indexOf(".") > -1;
+  // // 先转换为数字类型（避免字符串数字计算异常）
+  // const originalNum = Number(num);
 
-  // 原有千分位格式化正则
-  const reg =
-    numPart.indexOf(".") > -1 ? /(\d)(?=(\d{3})+\.)/g : /(\d)(?=(\d{3})+$)/g;
+  // // 步骤1：判断是否需要以M（百万）简略（小数点前整数部分>6位）
+  // // 提取整数部分长度（兼容有小数的情况）
+  // const integerPartLen = isHasDecimal
+  //   ? numStr.split(".")[0].length
+  //   : numStr.length;
 
-  // 格式化数字部分后，拼接M后缀
-  const formattedNumPart = numPart.replace(reg, "$1,");
-  return formattedNumPart + suffix;
+  // if (integerPartLen > 6) {
+  //   // 转换为百万单位（÷1000000），保留2位小数（可调整）
+  //   const simplifiedNum = (originalNum / 1000000).toFixed(2);
+  //   // 拼接M后缀，自动去除末尾多余的.00
+  //   resultStr = simplifiedNum.replace(/\.00$/, "") + "M";
+  // } else {
+  //   // 无需简略，直接使用原始数字字符串
+  //   resultStr = numStr;
+  // }
+
+  // // 步骤2：千分位逗号分隔格式化（兼容带M后缀的场景）
+  // // 拆分M后缀（避免正则匹配到M后面的字符）
+  // const hasMSuffix = resultStr.includes("M");
+  // let numPart = resultStr;
+  // let suffix = "";
+  // if (hasMSuffix) {
+  //   const splitArr = resultStr.split("M");
+  //   numPart = splitArr[0];
+  //   suffix = "M";
+  // }
+
+  // // 原有千分位格式化正则
+  // const reg =
+  //   numPart.indexOf(".") > -1 ? /(\d)(?=(\d{3})+\.)/g : /(\d)(?=(\d{3})+$)/g;
+
+  // // 格式化数字部分后，拼接M后缀
+  // const formattedNumPart = numPart.replace(reg, "$1,");
+  // return formattedNumPart + suffix;
 };
 </script>

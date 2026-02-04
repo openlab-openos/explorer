@@ -118,7 +118,7 @@
                         </el-tab-pane>
                         <template v-if="card_data[0]">
                             <el-tab-pane :label="$t('transfer')" name="second">
-                                <transfer-view :url="url" :type="true" v-if="activeName == 'second'"></transfer-view>
+                                <transfer-view :url="url" :type="true"></transfer-view>
                             </el-tab-pane>
                             <el-tab-pane v-if="transfersType && type && !card_data[0].executable" :label="$t('pledge')"
                                 name="third">
