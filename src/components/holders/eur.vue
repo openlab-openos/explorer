@@ -101,7 +101,7 @@ onMounted(() => {
       {
         icon: ["fas", "chevron-up"],
         language: "holder.btg_locked",
-        text: come(smartFormatNumber(data.value.btg_amount)),
+        text: come(smartFormatNumber(data.value.btg_amount))+ " BTG",
       },
       {
         icon: ["far", "hdd"],
@@ -111,7 +111,7 @@ onMounted(() => {
             data.value.supply /
               10 ** (data.value.decimals ? data.value.decimals : 0),
           ),
-        ) + " BTG",
+        ) + " EUR",
       },
       {
         icon: ["far", "hand-point-up"],
