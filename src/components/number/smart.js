@@ -40,7 +40,6 @@
 //     }
 //   }
 
-
 //   // 默认情况：没有小数部分或全是0
 //   return number < 1 ? number.toString() : number.toFixed(0);
 // }
@@ -49,7 +48,7 @@
 //   // 处理非数字输入
 //   if (isNaN(parseFloat(price))) {
 //     console.log(4);
-    
+
 //     return price.toString();
 //   }
 
@@ -96,7 +95,6 @@
 //   return `${truncatedNegative.toFixed(2)}`;
 // }
 
-
 // // 格式化代币市值
 // export function formatMarketCap(cap) {
 //   // 处理非数字输入
@@ -119,37 +117,42 @@ export function smartFormatNumber(price) {
   if (isNaN(parseFloat(price))) {
     return price.toString();
   }
-
   const num = parseFloat(price);
+
+  if (Number.isInteger(parseFloat(num))) {
+    console.log(num);
+
+    return num.toFixed(0);
+  }
   if (num === 0) {
-    return '0';
+    return "0";
   }
 
   // 情况1：价格高于$0但低于$0.00001
   if (num > 0 && num < 0.00001) {
-    return '< 0.00001';
+    return "< 0.00001";
   }
 
   // 情况2：价格不低于$0.00001但低于$1
   if (num >= 0.00001 && num < 1) {
     // 使用更可靠的字符串截断方法
     const numStr = num.toString();
-    const [integerPart, decimalPart = ''] = numStr.split('.');
-    
+    const [integerPart, decimalPart = ""] = numStr.split(".");
+
     if (!decimalPart) {
       return integerPart;
     }
-    
+
     // 找到第一个非零数字的位置
     let startIndex = 0;
-    while (startIndex < decimalPart.length && decimalPart[startIndex] === '0') {
+    while (startIndex < decimalPart.length && decimalPart[startIndex] === "0") {
       startIndex++;
     }
-    
+
     // 截取：从第一个非零数字开始，最多5位
     const endIndex = Math.min(startIndex + 5, decimalPart.length);
     const truncatedDecimal = decimalPart.substring(0, endIndex);
-    
+
     return `${integerPart}.${truncatedDecimal}`;
   }
 
@@ -157,29 +160,29 @@ export function smartFormatNumber(price) {
   if (num >= 1) {
     // 使用字符串方法来精确截断，避免浮点数精度问题
     const numStr = num.toString();
-    const [integerPart, decimalPart = ''] = numStr.split('.');
-    
+    const [integerPart, decimalPart = ""] = numStr.split(".");
+
     if (!decimalPart || decimalPart.length <= 2) {
       // 如果小数位数不足2位，用0补齐
       return num.toFixed(2);
     }
-    
+
     // 直接截取前2位小数
     const truncatedDecimal = decimalPart.substring(0, 2);
-    
+
     return `${integerPart}.${truncatedDecimal}`;
   }
 
   // 处理负数（保留两位小数，直接截断）
   // 对于负数，截断需要特殊处理
   const numStr = Math.abs(num).toString();
-  const [integerPart, decimalPart = ''] = numStr.split('.');
-  
+  const [integerPart, decimalPart = ""] = numStr.split(".");
+
   if (!decimalPart || decimalPart.length <= 2) {
     // 如果小数位数不足2位，用0补齐
     return num.toFixed(2);
   }
-  
+
   // 直接截取前2位小数
   const truncatedDecimal = decimalPart.substring(0, 2);
   return `-${integerPart}.${truncatedDecimal}`;

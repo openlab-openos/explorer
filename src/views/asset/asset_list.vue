@@ -104,7 +104,7 @@
                                     $ {{ come(smartFormatNumber(toFexedStake(item.market_value, item.decimals))) }}
                                 </td> -->
                                 <td>
-                                    {{ come((toFexedStake(item.supply, item.decimals))) }}
+                                    {{ come(smartFormatNumber(toFexedStake(item.supply, item.decimals))) }}
                                     <!-- {{ come(smartFormatNumber(toFexedStake(item.supply, item.decimals))) }} -->
                                 </td>
                                 <td>
@@ -284,7 +284,7 @@ const toFexedStake = (num, decimals) => {
     }
     const divisor = Math.pow(10, JSON.parse(decimals));
 
-    return (JSON.parse(num) / divisor).toFixed(0);;
+    return (JSON.parse(num) / divisor).toFixed(2);;
 
 };
 const come = (num) => {
