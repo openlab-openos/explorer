@@ -3,8 +3,17 @@
   <div>
     <h3 class="align-center displayAlign">
       <!-- acquiesce -->
-      <img :src="token_img ? token_img : ''" alt="" class="marginRight10 imgWigth40" v-if="token_img" />
-      <img v-if="titleUrl(token_name).type" :src="titleUrl(token_name).img" class="marginRight10 imgWigth40" />
+      <img
+        :src="token_img ? token_img : ''"
+        alt=""
+        class="marginRight10 imgWigth40"
+        v-if="token_img"
+      />
+      <img
+        v-if="titleUrl(token_name).type"
+        :src="titleUrl(token_name).img"
+        class="marginRight10 imgWigth40"
+      />
       <!-- <text> {{ token_name ? titleUrl(token_name).url : '' }} {{ $t("account.token") }} -->
       <div>
         <div>
@@ -21,9 +30,17 @@
           </text>
         </div>
         <div>
-          <img v-if="titleUrl(url).type && titleUrl(url).assest" v-for="(datas, indexs) in titleUrl(url).certificates"
-            :key="indexs" :src="datas.img" height="20" class="marginRight10" alt="" @click="pubbley"
-            style="cursor: pointer" />
+          <img
+            v-if="titleUrl(url).type && titleUrl(url).assest"
+            v-for="(datas, indexs) in titleUrl(url).certificates"
+            :key="indexs"
+            :src="datas.img"
+            height="20"
+            class="marginRight10"
+            alt=""
+            @click="pubbley"
+            style="cursor: pointer"
+          />
         </div>
       </div>
       <!-- <text>
@@ -44,7 +61,9 @@
     <div class="marginTOP-50">
       <card class="md-3">
         <card-body class="card-bodys">
-          <table class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small">
+          <table
+            class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small"
+          >
             <tr>
               <th>{{ $t("account.general_situation") }}</th>
               <th class="text-end"></th>
@@ -52,9 +71,23 @@
             <tbody v-if="tokenData">
               <tr>
                 <td>{{ $t("account.token_account") }}</td>
-                <td class="text-end">{{ address == "" ? "" : address }}
-                  <img v-if="!copySuccess" width="16" style="cursor: pointer;" :src="copyImg" alt="" @click="copyToClipboard(address)">
-                  <img v-else width="16" style="cursor: pointer;" :src="successImg" alt="">
+                <td class="text-end">
+                  {{ address == "" ? "" : address }}
+                  <img
+                    v-if="!copySuccess"
+                    width="16"
+                    style="cursor: pointer"
+                    :src="copyImg"
+                    alt=""
+                    @click="copyToClipboard(address)"
+                  />
+                  <img
+                    v-else
+                    width="16"
+                    style="cursor: pointer"
+                    :src="successImg"
+                    alt=""
+                  />
                 </td>
               </tr>
               <tr v-if="mintToken">
@@ -77,7 +110,10 @@
                       ? mintToken.symbol
                         ? mintToken.symbol
                         : "N/A"
-                      : (address == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz' ? 'WBTG' : 'N/A')
+                      : address ==
+                          "B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz"
+                        ? "WBTG"
+                        : "N/A"
                   }}
                 </td>
                 <!-- <td class="text-end"> {{ mintToken.symbol ? mintToken.symbol : 'N/A' }} </td> -->
@@ -94,15 +130,34 @@
                   <span v-if="mintToken">
                     {{ mintToken.symbol ? "(" + mintToken.symbol + ")" : "" }}
                   </span>
-                  <span v-if="url == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'">
+                  <span
+                    v-if="url == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'"
+                  >
                     ( WBTG )
                   </span>
                 </td>
               </tr>
               <tr>
                 <td>{{ $t("account.owner") }}</td>
-                <td class="text-end text-theme" style="display: flex;justify-content: end;">
+                <td
+                  class="text-end text-theme"
+                  style="display: flex; justify-content: end"
+                >
                   <RenderText :address="paramsId" />
+                </td>
+              </tr>
+              <tr>
+                <td>{{ $t("price") }}</td>
+                <td class="text-end">
+                  {{ smartFormatNumber(tokenPrice) }}
+                  <span v-if="mintToken">
+                    {{ mintToken.symbol ? "(" + mintToken.symbol + ")" : "" }}
+                  </span>
+                  <span
+                    v-if="url == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'"
+                  >
+                    ( WBTG )
+                  </span>
                 </td>
               </tr>
             </tbody>
@@ -186,15 +241,37 @@
               <history-view :url="url"></history-view>
             </el-tab-pane>
             <el-tab-pane :label="$t('transfer')" name="second">
-              <transfer-view :url="url" :type="false" :toType="false"></transfer-view>
+              <transfer-view
+                :url="url"
+                :type="false"
+                :toType="false"
+              ></transfer-view>
             </el-tab-pane>
-            <el-tab-pane :label="$t('account.holder') + ' ' + '(' + (holdNumber ? holdNumber : 0) + ')'" name="third">
-              <holder-view :url="url" :paramsId="paramsId" v-if="activeName == 'third'"></holder-view>
+            <el-tab-pane
+              :label="
+                $t('account.holder') +
+                ' ' +
+                '(' +
+                (holdNumber ? holdNumber : 0) +
+                ')'
+              "
+              name="third"
+            >
+              <holder-view
+                :url="url"
+                :paramsId="paramsId"
+                v-if="activeName == 'third'"
+              ></holder-view>
             </el-tab-pane>
             <el-tab-pane :label="$t('Margin-record')" name="fourth">
               <!-- <el-tab-pane v-if="!VrcType" :label="$t('Margin-record')" name="fourth"> -->
-              <ReserveView :url="url" ref="reserveViewRef" :paramsId="paramsId" v-if="activeName == 'fourth'"
-                :type="false">
+              <ReserveView
+                :url="url"
+                ref="reserveViewRef"
+                :paramsId="paramsId"
+                v-if="activeName == 'fourth'"
+                :type="false"
+              >
               </ReserveView>
             </el-tab-pane>
             <!-- <el-tab-pane v-if="VrcType" :label="$t('Monetary-record')" name="fifth">
@@ -208,22 +285,38 @@
               </activities>
             </el-tab-pane> -->
           </el-tabs>
-          <div style="position: absolute; top: 0px; right: 0px; z-index: 9999999" v-if="activeName == 'fourth'">
+          <div
+            style="position: absolute; top: 0px; right: 0px; z-index: 9999999"
+            v-if="activeName == 'fourth'"
+          >
             <div style="padding: 16px 16px 0 0">
               <div class="menu-item dropdown dropdown-mobile-full">
-                <a href="#" data-bs-toggle="dropdown" data-bs-display="static" class="menu-link scales" style="
+                <a
+                  href="#"
+                  data-bs-toggle="dropdown"
+                  data-bs-display="static"
+                  class="menu-link scales"
+                  style="
                     white-space: nowrap;
                     text-decoration: none;
                     color: #fff;
-                  ">
+                  "
+                >
                   {{ $t(nameText) }}
                   <!-- <img src="https://cdn.openverse.network/brands/openverse/icon_128.png" width="32" alt=""> -->
                   <i class="bi bi-chevron-down" style="margin: 5px"></i>
                 </a>
-                <div class="dropdown-menu dropdown-menu-end me-lg-3 fs-11px mt-1">
-                  <div class="dropdown-item align-items-center" :class="item.type ? 'text-theme' : ''"
-                    style="cursor: pointer; text-align: center" v-for="(item, index) in selectData" :key="index"
-                    @click="selsetClick(index)">
+                <div
+                  class="dropdown-menu dropdown-menu-end me-lg-3 fs-11px mt-1"
+                >
+                  <div
+                    class="dropdown-item align-items-center"
+                    :class="item.type ? 'text-theme' : ''"
+                    style="cursor: pointer; text-align: center"
+                    v-for="(item, index) in selectData"
+                    :key="index"
+                    @click="selsetClick(index)"
+                  >
                     {{ $t(item.name) }}
                   </div>
                 </div>
@@ -254,6 +347,7 @@ import pledgeView from '../../../components/address/pledge.vue';
 import ReserveView from '../../../components/address/reserve_list.vue';
 import transferView from '../../../components/address/transfer_list.vue';
 import { titleUrl } from '../../../components/method/title_url';
+import { smartFormatNumber } from '../../../components/number/smart.js';
 import RenderText from '../../../components/Render/text.vue';
 import { chainRequest } from '../../../request/chain';
 import {
@@ -263,11 +357,13 @@ import {
 } from '../../../request/extension';
 import { solanaRequest } from '../../../request/solanaReques';
 import { metaRequest } from '../../../request/tokenMeta';
+import { tokenPriceRequest } from '../../../request/tokenprice';
 import activities from './components/activities.vue';
 import authorization from './components/authorization.vue';
 import cardView from './components/card.vue';
 
 // import {  checkAccountTransferability,getTokenTransferFeeMax } from "../../../request/extension";
+const tokenPrice = ref(0);
 
 const tokenData = ref();
 const pubbleys = ref("");
@@ -316,10 +412,10 @@ const props = defineProps({
     default: "",
   },
 });
-const VrcType = ref(false)
+const VrcType = ref(false);
 for (let i in titleUrl(props.url).certificates) {
   if (titleUrl(props.url).certificates[i].code == "VRC10") {
-    VrcType.value = true
+    VrcType.value = true;
   }
 }
 
@@ -342,9 +438,10 @@ onMounted(async () => {
   // // console.log(TokenTransferFeeMax.value);
   TokenPermanentDelegate.value = await getTokenPermanentDelegate(
     url.value,
-    paramsId.value
+    paramsId.value,
   );
   TransactionFee.value = await getAddressTransactionFees(url.value);
+  console.log(22222266677);
 });
 
 const tokenName = async (url, params) => {
@@ -384,6 +481,7 @@ const tokenRwquest = async () => {
         let addresses = res.address._bn;
         let addressCard = BigInt(addresses);
         address.value = new PublicKey(addressCard);
+        console.log(address.value);
       }
     });
     metaRequest(url.value, paramsId.value).then((res) => {
@@ -443,7 +541,12 @@ const numberHeld = async () => {
 };
 onMounted(async () => {
   await tokenRwquest();
-
+  console.log(address.value);
+  await tokenPriceRequest(url.value).then((res) => {
+    // console.log(res);
+    console.log(res);
+    tokenPrice.value = res.data[0]?.price || 0;
+  });
   await numberHeld();
   if (url.value == "B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz") {
     mintToken.value = {
@@ -478,15 +581,18 @@ const tabClick = () => {
 };
 
 const copyToClipboard = (text) => {
-  navigator.clipboard.writeText(text).then(() => {
-    copySuccess.value = true;
-    // 3秒后恢复复制图标
-    setTimeout(() => {
-      copySuccess.value = false;
-    }, 3000);
-  }).catch(err => {
-    console.error('Failed to copy: ', err);
-  });
+  navigator.clipboard
+    .writeText(text)
+    .then(() => {
+      copySuccess.value = true;
+      // 3秒后恢复复制图标
+      setTimeout(() => {
+        copySuccess.value = false;
+      }, 3000);
+    })
+    .catch((err) => {
+      console.error("Failed to copy: ", err);
+    });
 };
 </script>
 

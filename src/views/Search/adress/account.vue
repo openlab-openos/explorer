@@ -64,6 +64,7 @@
                                     'NO') }}
                                 </td>
                             </tr>
+                           
                         </tbody>
                     </table>
                 </card-body>
@@ -106,8 +107,8 @@
                 </card-body>
             </card>
         </div>
-        <div class="tab-content marginTOP-50" v-if="menu.length != 0">
-            <tokens-View :tokens="menu"></tokens-View>
+        <div class="tab-content marginTOP-50">
+            <tokens-View  :url="url"></tokens-View>
         </div>
         <div class="tab-content marginTOP-50">
             <card class="md-3">
@@ -177,7 +178,6 @@ const activeName = ref('first')
 const promaster = apps?.proxy?.$progream;
 // console.log(1111);
 const copySuccess = ref(false);
-
 
 
 onMounted(async () => {

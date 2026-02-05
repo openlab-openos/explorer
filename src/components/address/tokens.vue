@@ -19,48 +19,55 @@
                             {{ $t("transaction.program") }}
                         </th>
                         <th>
+                            {{ $t("price") }}
+                        </th>
+                        <th>
                             {{ $t("account.uiamount") }}
                         </th>
                     </tr>
-                    <template v-if="tokens.length != 0 && type">
+                    <template v-if="tokensList.length != 0 && type">
                         <tr v-for="(item, index) in paginatedHistoryData" :key="index">
                             <td class="text-theme" style="line-height: 30px;">
-                                <template v-if="URL_title">
-                                    <!-- <text v-if="URL_title[item.account.data.parsed.info.mint]"
-                                        @click="pubbtx(item.account.data.parsed.info.mint)" style="cursor: pointer">
-                                        <img :src="URL_title[item.account.data.parsed.info.mint].uri ? URL_title[item.account.data.parsed.info.mint].uri : ''"
+                                <!-- <template > -->
+                                    <!-- <text v-if="URL_title[item.mint]"
+                                        @click="pubbtx(item.mint)" style="cursor: pointer">
+                                        <img :src="URL_title[item.mint].uri ? URL_title[item.mint].uri : ''"
                                             width="20" height="20" style="margin-right: 5px;vertical-align: middle;"
-                                            v-if="URL_title[item.account.data.parsed.info.mint].uri" alt="">
-                                        {{ URL_title[item.account.data.parsed.info.mint] ?
-                                            URL_title[item.account.data.parsed.info.mint].name : null }}
-                                        {{ URL_title[item.account.data.parsed.info.mint] ?
-                                            ('(' + URL_title[item.account.data.parsed.info.mint].symbol + ')') : null }}
+                                            v-if="URL_title[item.mint].uri" alt="">
+                                        {{ URL_title[item.mint] ?
+                                            URL_title[item.mint].name : null }}
+                                        {{ URL_title[item.mint] ?
+                                            ('(' + URL_title[item.mint].symbol + ')') : null }}
                                     </text> -->
-                                    <router-link v-if="URL_title[item.account.data.parsed.info.mint]"
-                                        :to="{ name: 'address', params: { url: item.account.data.parsed.info.mint } }">
-                                        <img :src="URL_title[item.account.data.parsed.info.mint].uri ? URL_title[item.account.data.parsed.info.mint].uri : ''"
+                                    
+                                    <router-link 
+                                        :to="{ name: 'address', params: { url: item.mint } }">
+                                        <img :src="item.uri"
                                             width="20" height="20" style="margin-right: 5px;vertical-align: middle;"
-                                            v-if="URL_title[item.account.data.parsed.info.mint].uri" alt="">
-                                        {{ URL_title[item.account.data.parsed.info.mint] ?
-                                            URL_title[item.account.data.parsed.info.mint].name : null }}
-                                        {{ URL_title[item.account.data.parsed.info.mint] ?
-                                            ('(' + URL_title[item.account.data.parsed.info.mint].symbol + ')') : null }}
+                                             alt="">
+                                        {{item.name}}
+                                        {{('(' + item.symbol + ')')}}
+
                                     </router-link>
-                                    <RenderText v-else :address="item.account.data.parsed.info.mint" />
+                                    <!-- <RenderText v-else :address="item.mint" /> -->
 
-                                </template>
+                                <!-- </template> -->
 
-                                <RenderText v-else :address="item.account.data.parsed.info.mint" />
+                                <!-- <RenderText v-else :address="item.mint" /> -->
                             </td>
                             <td class="text-theme">
                                 <RenderText :address="item.pubkey" />
                             </td>
 
                             <td class="text-theme">
-                                <RenderText :address="item.account.owner" />
+                                <RenderText :address="item.program" />
                             </td>
                             <td>
-                                {{ come(smartFormatNumber(item.account.data.parsed.info.tokenAmount.uiAmount)) }}
+                                {{ come(smartFormatNumber(item.price || 0)) }}
+                                <text v-if="item.symbol"> {{ '(' + item.symbol + ')' }}</text>
+                            </td>
+                            <td>
+                                {{ come(smartFormatNumber(item.uiAmount)) }}
                                 <text v-if="item.symbol"> {{ '(' + item.symbol + ')' }}</text>
                             </td>
                         </tr>
@@ -68,10 +75,10 @@
                 </tbody>
             </table>
         </card-body>
-        <div v-if="tokens.length == 0" class="text-center">
+        <div v-if="tokensList.length == 0" class="text-center">
             {{ $t("account.available") }}
         </div>
-        <div class="justify-end padding-10" v-if="tokens.length != 0">
+        <div class="justify-end padding-10" v-if="tokensList.length != 0">
             <el-pagination background layout="prev, pager, next" :hide-on-single-page="true" :current-page="currentPage"
                 :page-size="pageSize" :total="totalItems" @current-change="handlePageChange" />
         </div>
@@ -90,34 +97,37 @@ import { useRouter } from 'vue-router';
 import { titleUrl } from '../../components/method/title_url';
 import { smartFormatNumber } from '../../components/number/smart';
 import { chainRequest } from '../../request/chain';
+import { tokenListRequest } from '../../request/tokensList.js';
 import RenderText from '../Render/text.vue';
 
 const router = useRouter();
 const props = defineProps({
     tokens: Array,
+    url: String,
 });
 const dataArray = ref([]);
 // console.log(props.tokens);
 
 const data = ref(props.tokens);
-for (let i in data.value) {
-    const currentToken = data.value[i].account.data.parsed.info.mint;
-    if (currentToken.length > 30)
-        // 关键：判断当前token是否已在dataArray中，不存在才添加
-        if (!dataArray.value.includes(currentToken)) {
-            dataArray.value.push(currentToken);
-        }
-}
+// for (let i in data.value) {
+//     const currentToken = data.value[i].mint;
+//     if (currentToken.length > 30)
+//         // 关键：判断当前token是否已在dataArray中，不存在才添加
+//         if (!dataArray.value.includes(currentToken)) {
+//             dataArray.value.push(currentToken);
+//         }
+// }
 const URL_title = ref();
 
 const currentPage = ref(1);
 const pageSize = ref(10);
 const tokenData = ref();
-const totalItems = ref(props.tokens.length);
+const totalItems = ref();
+const tokensList = ref([]);
 const paginatedHistoryData = computed(() => {
     const start = (currentPage.value - 1) * pageSize.value;
     const end = start + pageSize.value;
-    return props.tokens.slice(start, end);
+    return tokensList.value.slice(start, end);
 });
 const type = ref(true);
 const handlePageChange = (newPage) => {
@@ -128,32 +138,39 @@ const handlePageChange = (newPage) => {
     }, 1);
 };
 const tokenList = async () => {
-    let method = {
-        jsonrpc: "2.0",
-        id: 1,
-        method: "getMultipleAccounts",
-        params: [
-            dataArray.value,
-            {
-                encoding: "jsonParsed",
-                filters: [
-                    {
-                        "memcmp": {
-                            "offset": 1,
-                            "bytes": "1"
-                        },
-                    }
-                ]
-            }
-        ]
-    };
+    // let method = {
+    //     jsonrpc: "2.0",
+    //     id: 1,
+    //     method: "getMultipleAccounts",
+    //     params: [
+    //         dataArray.value,
+    //         {
+    //             encoding: "jsonParsed",
+    //             filters: [
+    //                 {
+    //                     "memcmp": {
+    //                         "offset": 1,
+    //                         "bytes": "1"
+    //                     },
+    //                 }
+    //             ]
+    //         }
+    //     ]
+    // };
     try {
-        const res = await chainRequest(method);
-        tokenData.value = res.result;
-        URL_title.value = voteFunction(res.result.value);
-
-        return res.result;
+        // const res = await chainRequest(method);
+        const res = await tokenListRequest(props.url)
+        console.log(res);
+        
+        // tokenData.value = res.result;
+        // URL_title.value = voteFunction(res.result.value);
+        tokensList.value = res.data;
+        totalItems.value = res.data.length;
+         URL_title.value = titleUrl(tokensList.value);
+        return res.data;
     } catch (err) {
+        console.log(err);
+        
         console.error(`Error fetching accounts for ${token}:`, err);
         return [];
     }
@@ -190,16 +207,16 @@ onMounted(async () => {
     if (tokenData.value) {
         for (let i in tokenData.value) {
             for (let j in data.value) {
-                if (tokenData.value[i].pubkey == data.value[j].account.data.parsed.info.mint) {
+                if (tokenData.value[i].pubkey == data.value[j].mint) {
 
-                    if (tokenData.value[i].account.data.parsed.info.extensions) {
+                    if (tokenData.value[i].extensions) {
 
-                        for (let a in tokenData.value[i].account.data.parsed.info.extensions) {
-                            if (tokenData.value[i].account.data.parsed.info.extensions[a].extension == "tokenMetadata") {
+                        for (let a in tokenData.value[i].extensions) {
+                            if (tokenData.value[i].extensions[a].extension == "tokenMetadata") {
 
-                                data.value[j].img = tokenData.value[i].account.data.parsed.info.extensions[a].state.uri;
-                                data.value[j].name = tokenData.value[i].account.data.parsed.info.extensions[a].state.name;
-                                data.value[j].symbol = tokenData.value[i].account.data.parsed.info.extensions[a].state.symbol;
+                                data.value[j].img = tokenData.value[i].extensions[a].state.uri;
+                                data.value[j].name = tokenData.value[i].extensions[a].state.name;
+                                data.value[j].symbol = tokenData.value[i].extensions[a].state.symbol;
 
                             }
                         }
