@@ -128,7 +128,7 @@
                 {{
                   item.account.data.parsed.info.tokenAmount
                     ? item.account.data.parsed.info.tokenAmount.uiAmount
-                    : toFexedStake(item.account.data.parsed.info.supply)
+                    : smartFormatNumber(item.account.data.parsed.info.supply)
                 }}
               </td>
             </template>
@@ -163,6 +163,7 @@ import { useRouter } from 'vue-router';
 
 import blackAddress from '../../components/blackAddress.js';
 import { titleUrl } from '../../components/method/title_url';
+import { smartFormatNumber } from '../../components/number/smart.js';
 import { tokenList } from './tokens_request';
 
 const router = useRouter();

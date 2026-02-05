@@ -45,72 +45,142 @@
 //   return number < 1 ? number.toString() : number.toFixed(0);
 // }
 // 格式化代币价格
+// export function smartFormatNumber(price) {
+//   // 处理非数字输入
+//   if (isNaN(parseFloat(price))) {
+//     console.log(4);
+    
+//     return price.toString();
+//   }
+
+//   const num = parseFloat(price);
+//   if (num === 0) {
+//     return ' 0';
+//   }
+
+//   // 情况1：价格高于$0但低于$0.00001
+//   if (num > 0 && num < 0.00001) {
+//     return ' < 0.00001';
+//   }
+
+//   // 情况2：价格不低于$0.00001但低于$1
+//   if (num >= 0.00001 && num < 1) {
+//     // 转换为字符串处理，避免浮点数精度问题
+//     const numStr = num.toString();
+//     const [integerPart, decimalPart = ''] = numStr.split('.');
+
+//     // 找到小数点后第一个非零数字的位置（起始索引）
+//     let startIndex = 0;
+//     while (startIndex < decimalPart.length && decimalPart[startIndex] === '0') {
+//       startIndex++;
+//     }
+
+//     // 从第一个非零数字开始，取5位有效数字（直接截断）
+//     const endIndex = Math.min(startIndex + 5, decimalPart.length);
+//     const truncatedDecimal = decimalPart.substring(0, 3);
+
+//     // 拼接结果
+//     return `${integerPart}.${truncatedDecimal}`;
+//   }
+
+//   // 情况3：价格高于等于$1（保留两位小数，直接截断）
+//   if (num >= 1) {
+//     // 扩大100倍后取整再缩小，实现截断效果
+//     const truncated = Math.floor(num * 100) / 100;
+//     // 确保显示两位小数（如1 → 1.00）
+//     return `${truncated.toFixed(2)}`;
+//   }
+
+//   // 处理负数（保留两位小数，直接截断）
+//   const truncatedNegative = Math.ceil(num * 100) / 100;
+//   return `${truncatedNegative.toFixed(2)}`;
+// }
+
+
+// // 格式化代币市值
+// export function formatMarketCap(cap) {
+//   // 处理非数字输入
+//   if (isNaN(parseFloat(cap))) {
+//     return cap.toString();
+//   }
+
+//   const num = parseFloat(cap);
+
+//   // 情况4：市值小于$0.01
+//   if (num < 0.01) {
+//     return '0';
+//   }
+
+//   // 情况5：市值不低于$0.01，最多保留两位小数
+//   return `${num.toFixed(2)}`;
+// }
 export function smartFormatNumber(price) {
   // 处理非数字输入
   if (isNaN(parseFloat(price))) {
-    console.log(4);
-    
     return price.toString();
   }
 
   const num = parseFloat(price);
   if (num === 0) {
-    return ' 0';
+    return '0';
   }
 
   // 情况1：价格高于$0但低于$0.00001
   if (num > 0 && num < 0.00001) {
-    return ' < 0.00001';
+    return '< 0.00001';
   }
 
   // 情况2：价格不低于$0.00001但低于$1
   if (num >= 0.00001 && num < 1) {
-    // 转换为字符串处理，避免浮点数精度问题
+    // 使用更可靠的字符串截断方法
     const numStr = num.toString();
     const [integerPart, decimalPart = ''] = numStr.split('.');
-
-    // 找到小数点后第一个非零数字的位置（起始索引）
+    
+    if (!decimalPart) {
+      return integerPart;
+    }
+    
+    // 找到第一个非零数字的位置
     let startIndex = 0;
     while (startIndex < decimalPart.length && decimalPart[startIndex] === '0') {
       startIndex++;
     }
-
-    // 从第一个非零数字开始，取5位有效数字（直接截断）
+    
+    // 截取：从第一个非零数字开始，最多5位
     const endIndex = Math.min(startIndex + 5, decimalPart.length);
-    const truncatedDecimal = decimalPart.substring(0, 3);
-
-    // 拼接结果
+    const truncatedDecimal = decimalPart.substring(0, endIndex);
+    
     return `${integerPart}.${truncatedDecimal}`;
   }
 
   // 情况3：价格高于等于$1（保留两位小数，直接截断）
   if (num >= 1) {
-    // 扩大100倍后取整再缩小，实现截断效果
-    const truncated = Math.floor(num * 100) / 100;
-    // 确保显示两位小数（如1 → 1.00）
-    return `${truncated.toFixed(2)}`;
+    // 使用字符串方法来精确截断，避免浮点数精度问题
+    const numStr = num.toString();
+    const [integerPart, decimalPart = ''] = numStr.split('.');
+    
+    if (!decimalPart || decimalPart.length <= 2) {
+      // 如果小数位数不足2位，用0补齐
+      return num.toFixed(2);
+    }
+    
+    // 直接截取前2位小数
+    const truncatedDecimal = decimalPart.substring(0, 2);
+    
+    return `${integerPart}.${truncatedDecimal}`;
   }
 
   // 处理负数（保留两位小数，直接截断）
-  const truncatedNegative = Math.ceil(num * 100) / 100;
-  return `${truncatedNegative.toFixed(2)}`;
-}
-
-
-// 格式化代币市值
-export function formatMarketCap(cap) {
-  // 处理非数字输入
-  if (isNaN(parseFloat(cap))) {
-    return cap.toString();
+  // 对于负数，截断需要特殊处理
+  const numStr = Math.abs(num).toString();
+  const [integerPart, decimalPart = ''] = numStr.split('.');
+  
+  if (!decimalPart || decimalPart.length <= 2) {
+    // 如果小数位数不足2位，用0补齐
+    return num.toFixed(2);
   }
-
-  const num = parseFloat(cap);
-
-  // 情况4：市值小于$0.01
-  if (num < 0.01) {
-    return '0';
-  }
-
-  // 情况5：市值不低于$0.01，最多保留两位小数
-  return `${num.toFixed(2)}`;
+  
+  // 直接截取前2位小数
+  const truncatedDecimal = decimalPart.substring(0, 2);
+  return `-${integerPart}.${truncatedDecimal}`;
 }

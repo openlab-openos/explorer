@@ -36,7 +36,7 @@
                             <tr>
                                 <td>{{ $t("account.balance") }} (BTG)</td>
                                 <td class="text-end"> {{ card_data[index] == null ? 'Account does not exist' :
-                                    come(smartFormatNumber(toFexedStake(item.lamports / 1000000000))) }} </td>
+                                    come(smartFormatNumber((item.lamports / 1000000000))) }} </td>
                             </tr>
                             <tr>
                                 <td>{{ $t("account.allocated_data_size") }} </td>
@@ -254,6 +254,8 @@ const toFexedStake = (num) => {
     }
 }
 const come = (num) => {
+    console.log(num);
+    
     let reg =
         num.toString().indexOf(".") > -1
             ? /(\d)(?=(\d{3})+\.)/g

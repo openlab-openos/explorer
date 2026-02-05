@@ -25,6 +25,9 @@
             {{ $t("account.destination") }}
           </th>
           <th>
+            {{ $t("account.balance") }}
+          </th>
+          <th>
             {{ $t("account.Political") }}
           </th>
           <th>
@@ -80,7 +83,9 @@
                                 {{ items.code }}
                             </text> -->
               <RenderText
-                :class="item.from_address == props.url ? 'textTheme' : 'text-theme'"
+                :class="
+                  item.from_address == props.url ? 'textTheme' : 'text-theme'
+                "
                 :propsColor="'color0-255-179-1'"
                 v-if="item.source_account"
                 :address="item.source_account"
@@ -107,7 +112,9 @@
                                 {{ items.code }}
                             </text> -->
               <RenderText
-                :class="item.from_address !== props.url ? 'textTheme' : 'text-theme'"
+                :class="
+                  item.from_address !== props.url ? 'textTheme' : 'text-theme'
+                "
                 v-if="item.destination_account"
                 :address="item.destination_account"
               />
@@ -153,6 +160,9 @@
             <td>
               {{ come(smartFormatNumber(item.amount)) }}
             </td>
+            <td>
+              {{ come(smartFormatNumber(item.user_post_balance)) }}
+            </td>
             <td style="text-align: left">
               <!-- <text :style="item.token ? 'cursor: pointer' : ''" class="text-theme" @click="slot(
                                 item.token
@@ -193,16 +203,13 @@
               </template>
               <template v-else>
                 <!-- <RenderText v-if="item.token" :address="item.token" /> -->
-                 {{ 
-                 item.mint
-        ? titleUrl(item.mint).url
-        : "BTG" }}
+                {{ item.mint ? titleUrl(item.mint).url : "BTG" }}
               </template>
             </td>
 
             <td class="text-theme">
               <!-- {{  }} -->
-             {{  timeSome(item.chain_timestamp) }}
+              {{ timeSome(item.chain_timestamp) }}
             </td>
           </tr>
         </template>
@@ -308,17 +315,17 @@ const requestList = async (object) => {
 };
 const URL_title = ref();
 onMounted(async () => {
-//   console.log(
-//     "transactions/" + props.url`?account_type=${props.transfersType}`
-//   );
+  //   console.log(
+  //     "transactions/" + props.url`?account_type=${props.transfersType}`
+  //   );
 
   try {
     let res = await requestList(
-      "transactions/" + props.url + `?account_type=${props.transfersType}`
+      "transactions/" + props.url + `?account_type=${props.transfersType}`,
     );
     console.log(res);
     console.log(res.data.transactions);
-    
+
     historyData.value = res.data.transactions;
     // for (let i in historyData.value) {
     //   const currentToken = historyData.value[i].token;

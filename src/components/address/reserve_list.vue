@@ -65,7 +65,7 @@
             <td>{{ formatTimestamp(item.startTime) }}</td>
             <td>{{ formatTimestamp(item.endTime) }}</td>
             <td>{{ item.futureCount + ' / ' + item.child.length }}</td>
-            <td>{{ come(smartFormatNumber(toFexedStake(item.amount))) }}</td>
+            <td>{{ come(smartFormatNumber((item.amount))) }}</td>
             <td class="text-theme" v-if="reserveType">
               <RenderText v-if="item.child[0].mint" :address="item.child[0].mint" />
             </td>
