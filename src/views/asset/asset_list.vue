@@ -36,7 +36,7 @@
 
                                     </text> -->
                                     <router-link :to="{ name: 'address', params: { url: item.address, } }">{{
-                                        item.name ? item.name : titleUrl(item.address).url }}</router-link>
+                                        item.name ? item.name :stringcate(item.address) }}</router-link>
 
                                     <!-- {{ titleUrl(item.address).url }} -->
                                     <img v-if="titleUrl(item.pubkey).type"
@@ -241,7 +241,17 @@ watchEffect(async () => {
 //     loadingType.value = true;
 //     console.error('Failed to fetch token list:', error);
 // });
-
+const stringcate = (str) => {
+  if (str) {
+    if (str.length < 10) {
+      return str;
+    } else {
+      return str.slice(0, 5) + "..." + str.slice(-5);
+    }
+  } else {
+    return "BTG";
+  }
+};
 const pubbley = () => {
     router.push({
         name: "TokenReputation",
