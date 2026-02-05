@@ -462,6 +462,10 @@ export const PROGRAM_INFO_BY_ID: { [address: string]: ProgramInfo } = {
     deployments: ALL_CLUSTERS,
     name: "Reserve Program",
   },
+  oracynDbHWzsfV7GaQveWhqrAsB1LNq6pr4ftRYME4c: {
+    deployments: ALL_CLUSTERS,
+    name: "Oracle Program",
+  },
 };
 
 export const SPECIAL_IDS: { [key: string]: string } = {

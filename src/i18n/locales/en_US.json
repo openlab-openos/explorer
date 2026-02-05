@@ -68,6 +68,8 @@
     "exchange": "Exchange",
     "CirculatingSupply": "Circulating Supply",
     "Bitcurrency": "Bitcurrency USD Market Cap",
+    "profileSummary":"Profile Summary",
+    "marketCap":"Market Cap",
     "navigation": {
         "title": "Navigation",
         "dashboard": "Dashboard",

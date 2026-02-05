@@ -65,6 +65,8 @@
   "exchange": "交易",
   "CirculatingSupply": "流通量",
   "Bitcurrency": "比特货币 USD 市值",
+  "profileSummary":"简介摘要",
+  "marketCap":"市值",
   "navigation": {
     "title": "导航",
     "dashboard": "仪表盘",

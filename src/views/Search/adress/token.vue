@@ -58,6 +58,7 @@
                     class="marginLeft10" alt="" @click="pubbley" style="cursor: pointer;">
       </text> -->
     </h3>
+
     <div class="marginTOP-50">
       <card class="md-3">
         <card-body class="card-bodys">
@@ -66,6 +67,65 @@
           >
             <tr>
               <th>{{ $t("account.general_situation") }}</th>
+              <th class="text-end"></th>
+            </tr>
+            <tbody v-if="tokenData">
+              <tr>
+                <td>{{ $t("price") }}</td>
+                <td class="text-end">
+                  ${{ come(smartFormatNumber(tokenPrice)) }}
+                </td>
+              </tr>
+              <tr>
+                <td>{{ $t("marketCap") }}</td>
+                <td class="text-end">
+                  ${{
+                    come(
+                      smartFormatNumber(
+                        tokenPrice *
+                          JSON.parse(
+                            toFexedStake(tokenData.supply, tokenData.decimals),
+                          ),
+                      ),
+                    )
+                  }}
+                </td>
+              </tr>
+              <tr>
+                <td>{{ $t("account.supply") }}</td>
+                <td class="text-end">
+                  {{ come(toFexedStake(tokenData.supply, tokenData.decimals)) }}
+                  <span v-if="mintToken">
+                    {{ mintToken.symbol ? "(" + mintToken.symbol + ")" : "" }}
+                  </span>
+                  <span
+                    v-if="url == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'"
+                  >
+                    ( WBTG )
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td>{{ $t("account.holder") }}</td>
+                <td class="text-end">
+                  {{ come((tokenHolders)) }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </card-body>
+      </card>
+    </div>
+
+    <div class="marginTOP-50">
+      <card class="md-3">
+        <card-body class="card-bodys">
+          <table
+            class="w-100 mb-0 small align-middle table table-striped table-borderless mb-2px small"
+          >
+            <tr>
+              <!-- <th>{{ $t("account.general_situation") }}</th> -->
+              <th>{{ $t("profileSummary") }}</th>
               <th class="text-end"></th>
             </tr>
             <tbody v-if="tokenData">
@@ -122,21 +182,6 @@
                 <td>{{ $t("transaction.Decimals") }}</td>
                 <td class="text-end">{{ tokenData.decimals }}</td>
               </tr>
-
-              <tr>
-                <td>{{ $t("account.supply") }}</td>
-                <td class="text-end">
-                  {{ come(toFexedStake(tokenData.supply, tokenData.decimals)) }}
-                  <span v-if="mintToken">
-                    {{ mintToken.symbol ? "(" + mintToken.symbol + ")" : "" }}
-                  </span>
-                  <span
-                    v-if="url == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'"
-                  >
-                    ( WBTG )
-                  </span>
-                </td>
-              </tr>
               <tr>
                 <td>{{ $t("account.owner") }}</td>
                 <td
@@ -144,20 +189,6 @@
                   style="display: flex; justify-content: end"
                 >
                   <RenderText :address="paramsId" />
-                </td>
-              </tr>
-              <tr>
-                <td>{{ $t("price") }}</td>
-                <td class="text-end">
-                  {{ smartFormatNumber(tokenPrice) }}
-                  <span v-if="mintToken">
-                    {{ mintToken.symbol ? "(" + mintToken.symbol + ")" : "" }}
-                  </span>
-                  <span
-                    v-if="url == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'"
-                  >
-                    ( WBTG )
-                  </span>
                 </td>
               </tr>
             </tbody>
@@ -364,7 +395,7 @@ import cardView from './components/card.vue';
 
 // import {  checkAccountTransferability,getTokenTransferFeeMax } from "../../../request/extension";
 const tokenPrice = ref(0);
-
+const tokenHolders = ref(0);
 const tokenData = ref();
 const pubbleys = ref("");
 const address = ref();
@@ -546,6 +577,7 @@ onMounted(async () => {
     // console.log(res);
     console.log(res);
     tokenPrice.value = res.data[0]?.price || 0;
+    tokenHolders.value = res.data[0]?.holders || 0;
   });
   await numberHeld();
   if (url.value == "B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz") {

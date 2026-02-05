@@ -111,7 +111,7 @@ onMounted(() => {
             data.value.supply /
               10 ** (data.value.decimals ? data.value.decimals : 0),
           ),
-        ),
+        ) + " BTG",
       },
       {
         icon: ["far", "hand-point-up"],
@@ -121,7 +121,7 @@ onMounted(() => {
             data.value.market_cap /
               10 ** (data.value.decimals ? data.value.decimals : 0),
           ),
-        ),
+        ) + " USD",
       },
     ];
   });
