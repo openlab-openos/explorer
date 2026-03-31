@@ -104,7 +104,7 @@
                                     $ {{ come(smartFormatNumber(toFexedStake(item.market_value, item.decimals))) }}
                                 </td> -->
                                 <td>
-                                    {{ come(smartFormatNumber(toFexedStake(item.supply, item.decimals))) }}
+                                    {{ come(smartFormatNumber(item.supply)) }}
                                     <!-- {{ come(smartFormatNumber(toFexedStake(item.supply, item.decimals))) }} -->
                                 </td>
                                 <td>

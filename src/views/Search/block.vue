@@ -3,6 +3,8 @@ import { useAppOptionStore } from "@/stores/app-option";
 import { chainRequest } from "../../request/chain";
 import moment from "moment";
 import router from "../../router";
+import pinia from '../../stores/pinia';
+
 import { getCurrentInstance, ref } from "vue";
 import LoadingVue from "../../components/block/loading.vue"
 import { solanapubbleys } from "../../components/method/solana"
@@ -11,7 +13,7 @@ const apps = getCurrentInstance()
 
 const promaster = ref(apps?.proxy?.$progream);
 
-const appOption = useAppOptionStore();
+const appOption = useAppOptionStore(pinia);
 
 export default {
   components: {

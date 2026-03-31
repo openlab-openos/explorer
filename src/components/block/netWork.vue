@@ -20,7 +20,7 @@
             </h5>
           </div>
           <div style="width: 40%; height: 30px">
-            <div v-if="chart != null">
+            <div v-if="chart != null && chart != undefined">
               <apexchart :height="chart.height" :options="chart.options" :series="chart.series"  style="margin-top: -10px;"></apexchart>
             </div>
           </div>
@@ -147,6 +147,7 @@ chart.value = {
   },
   series: [randomNo(), randomNo(), randomNo()],
 }
+
 const come = (num) => {
     let reg =
         num.toString().indexOf(".") > -1

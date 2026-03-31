@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import { set } from 'vue-demi';
 
 export const useAppStore = defineStore('app', {
     state: () => ({

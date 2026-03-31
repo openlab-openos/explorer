@@ -377,7 +377,6 @@ const fetchOrderData = async () => {
 };
 
 const timeFormatter = (time) => {
-console.log(time);
 
   return moment(time).fromNow();
 };

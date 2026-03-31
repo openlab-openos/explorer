@@ -20,7 +20,7 @@
           </div>
           <div style="width: 40%; height: 30px">
             <div>
-              <apexchart :height="charts.height" :options="charts.options" :series="charts.series"></apexchart>
+              <apexchart v-if="charts" :height="charts.height" :options="charts.options" :series="charts.series"></apexchart>
               <!-- <VueApexCharts height="30" type="bar" :options="charts.options" :series="charts.series" /> -->
             </div>
           </div>
@@ -82,6 +82,8 @@ const fetchData = async () => {
     params: [], // 如果需要的话}
   };
   await chainRequest(requestBody).then((res) => {
+    console.log(res.result);
+    
     data.value = res.result;
     appStore.setEpochInfo(res.result)
 
