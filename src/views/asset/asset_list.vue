@@ -91,7 +91,7 @@
                                     {{ item ? come(item.holders) : 0 }}
                                 </td>
                                 <td>
-                                    $ {{ come(smartFormatNumber(toFexedStake(item.market_value, item.decimals))) }}
+                                    $ {{ come(smartFormatNumber(item.market_value)) }}
                                 </td>
                                 <td>
                                     <!-- {{ item.price ? '$' : '' }}  -->
