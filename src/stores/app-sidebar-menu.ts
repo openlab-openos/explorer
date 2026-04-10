@@ -61,6 +61,7 @@ export const useAppSidebarMenuStore = defineStore({
         checkedImg: dashboardChecked,
         text: "navigation.dashboard",
         type: false,
+        tabType: false,
       },
       UtlDevnetType
         ? {
@@ -71,6 +72,33 @@ export const useAppSidebarMenuStore = defineStore({
             checkedImg: tokensChecked,
             text: "navigation.tokens",
             type: false,
+            tabType: true,
+            children: [
+              {
+                url: "Bitcurrency",
+                // icon: "bi bi-x-diamond",
+                img: tokens,
+                checkedImg: tokensChecked,
+                text: "navigation.bitcurrency10",
+                type: false,
+              },
+              {
+                url: "Privcurrency",
+                // icon: "bi bi-x-diamond",
+                img: tokens,
+                checkedImg: tokensChecked,
+                text: "navigation.privcurrency11",
+                type: false,
+              },
+              {
+                url: "Bitsecurity",
+                // icon: "bi bi-x-diamond",
+                img: tokens,
+                checkedImg: tokensChecked,
+                text: "navigation.bitsecurity12",
+                type: false,
+              },
+            ],
           }
         : {},
       {
@@ -83,6 +111,7 @@ export const useAppSidebarMenuStore = defineStore({
         checkedImg: validatorsChecked,
         text: "navigation.validators",
         type: false,
+        tabType: false,
       },
       {
         url: "blocks",
@@ -92,7 +121,28 @@ export const useAppSidebarMenuStore = defineStore({
         checkedImg: blocksChecked,
         text: "navigation.blocks",
         type: false,
+        tabType: false,
+
+        // children: [
+        //   {
+        //     url: "blocks",
+        //     // icon: "bi bi-x-diamond",
+        //     img: tokens,
+        //     checkedImg: tokensChecked,
+        //     text: "navigation.tokens",
+        //     type: false,
+        //   },
+        //   {
+        //     url: "blocks",
+        //     // icon: "bi bi-x-diamond",
+        //     img: tokens,
+        //     checkedImg: tokensChecked,
+        //     text: "navigation.tokens",
+        //     type: false,
+        //   },
+        // ],
       },
+
       {
         url: "transactions",
         // path: urlType ? "transactions" : "transactions\\?cluster=devnet",
@@ -101,6 +151,7 @@ export const useAppSidebarMenuStore = defineStore({
         checkedImg: transactionsChecked,
         text: "navigation.transactions",
         type: false,
+        tabType: false,
       },
       {
         url: "blackhole",
@@ -110,6 +161,7 @@ export const useAppSidebarMenuStore = defineStore({
         checkedImg: blackHoldChecked,
         text: "navigation.blackhole",
         type: false,
+        tabType: false,
       },
       // {
       //   'url': "faucet",

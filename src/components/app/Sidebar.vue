@@ -17,10 +17,8 @@
               <router-link
                 :to="{ name: menu.url === '/' ? 'dashboard' : menu.url }"
                 class="menu-link"
+                v-if="!menu.children"
               >
-                <!-- <span class="menu-icon">
-                  <i class="menu-icon" :class="menu.icon"></i>
-                </span> -->
                 <img
                   :src="isActive(menu.url) ? menu.checkedImg : menu.img"
                   width="20"
@@ -30,9 +28,13 @@
                 <span
                   class="menu-text"
                   :class="isActive(menu.url) ? 'text-theme' : ''"
-                  >{{ $t(menu.text) }}  </span
-                >
+                  >{{ $t(menu.text) }}
+                </span>
               </router-link>
+              <template v-else>
+                <SidebarNav v-if="!menu.tabType" :menu="menu"></SidebarNav>
+                <tab-sidebar v-if="menu.tabType" :menu="menu"></tab-sidebar>
+              </template>
             </div>
             <div
               v-if="menu.type"
@@ -66,10 +68,13 @@ import {
 
 import { useRoute } from 'vue-router';
 
+import SidebarNav from '@/components/app/SidebarNav.vue';
 import i18n from '@/i18n';
 import { useAppOptionStore } from '@/stores/app-option';
 import { useAppSidebarMenuStore } from '@/stores/app-sidebar-menu';
 import { useAppStore } from '@/stores/index';
+
+import tabSidebar from './tabSidebar.vue';
 
 const navigationArray = ref([]);
 
@@ -88,6 +93,7 @@ const route = useRoute();
 function appSidebarMobileToggled() {
   appOption.appSidebarMobileToggled = !appOption.appSidebarMobileToggled;
 }
+console.log("route2", route);
 
 // 语言
 function selectLanguage(indexValue) {
@@ -141,7 +147,7 @@ onMounted(() => {
   // submenu lvl 1
   const submenuLvl1Selector = menuBaseSelector + submenuBaseSelector;
   const submenusLvl1 = Array.from(
-    document.querySelectorAll(submenuLvl1Selector + " > .menu-link")
+    document.querySelectorAll(submenuLvl1Selector + " > .menu-link"),
   );
   handleSidebarMenuToggle(submenusLvl1);
 
@@ -149,13 +155,12 @@ onMounted(() => {
   const submenuLvl2Selector =
     menuBaseSelector + submenuBaseSelector + submenuBaseSelector;
   const submenusLvl2 = Array.from(
-    document.querySelectorAll(submenuLvl2Selector + " > .menu-link")
+    document.querySelectorAll(submenuLvl2Selector + " > .menu-link"),
   );
   handleSidebarMenuToggle(submenusLvl2);
 });
 
 const isActive = computed(() => (url) => {
-  
   return url === "/" ? route.path === "/" : route.path === "/" + url;
 });
 </script>

@@ -65,8 +65,8 @@
   "exchange": "交易",
   "CirculatingSupply": "流通量",
   "Bitcurrency": "比特货币 USD 市值",
-  "profileSummary":"简介摘要",
-  "marketCap":"市值",
+  "profileSummary": "简介摘要",
+  "marketCap": "市值",
   "navigation": {
     "title": "导航",
     "dashboard": "仪表盘",
@@ -79,7 +79,13 @@
     "website": "网站",
     "tokens": "资产",
     "TokenTracker": "代币追踪",
-    "faucet": "水龙头"
+    "faucet": "水龙头",
+    "bitcurrency": "比特货币(VRC10)",
+    "privcurrency": "隐私货币(VRC11)",
+    "bitsecurity": "比特安全(VRC12)",
+    "bitcurrency10": "VRC10",
+    "privcurrency11": "VRC11",
+    "bitsecurity12": "VRC12"
   },
   "dashboard": {
     "title": "仪表盘",

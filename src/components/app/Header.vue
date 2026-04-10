@@ -187,31 +187,31 @@ const selectData = ref(
     ? [
         {
           name: "Betanet Archive 1",
-          url: "https://openverse.live",
+          url: import.meta.env.VIPT_MINT_URL,
           type: UtlDevnetType,
           requestType: "Formal",
           ArchiveType: "Betanet Archive 1",
-          requestUrl: "https://rpc.openverse.network/",
+          requestUrl: import.meta.env.VITE_RPC_API_URL,
         },
         {
           name: "Betanet Archive 2",
-          url: "https://openverse.live",
+          url: import.meta.env.VIPT_MINT_URL,
           type: UtlDevnetType,
           requestType: "Formal",
           ArchiveType: "Archive2",
-          requestUrl: "https://api.mainnet.openverse.network/",
+          requestUrl: import.meta.env.VITE_MAINNET_API_URL,
         },
         {
           name: "Betanet Archive 3",
-          url: "https://openverse.live",
+          url: import.meta.env.VIPT_MINT_URL,
           type: UtlDevnetType,
           requestType: "Formal",
           ArchiveType: "Archive3",
-          requestUrl: "https://archive2.openverse.network/",
+          requestUrl: import.meta.env.VITE_ARCHIVE_TWO_API_URL,
         },
         {
           name: "Devnet",
-          url: "https://devnet.openverse.live",
+          url: import.meta.env.VITE_DEVNET_TEXT_URL,
           type: !UtlDevnetType,
           ArchiveType: "Devnet",
           requestType: "Test",
@@ -220,31 +220,31 @@ const selectData = ref(
     : [
         {
           name: "Betanet Archive 1",
-          url: "https://test.openverse.live",
+          url: import.meta.env.VIPT_TEXT_URL,
           type: UtlDevnetType,
           requestType: "Formal",
           ArchiveType: "Betanet Archive 1",
-          requestUrl: "https://rpc.openverse.network/",
+          requestUrl: import.meta.env.VITE_RPC_API_URL,
         },
         {
           name: "Betanet Archive 2",
-          url: "https://test.openverse.live",
+          url: import.meta.env.VIPT_TEXT_URL,
           type: UtlDevnetType,
           requestType: "Formal",
           ArchiveType: "Archive2",
-          requestUrl: "https://api.mainnet.openverse.network/",
+          requestUrl: import.meta.env.VITE_MAINNET_API_URL,
         },
         {
           name: "Betanet Archive 3",
-          url: "https://test.openverse.live",
+          url: import.meta.env.VIPT_TEXT_URL,
           type: UtlDevnetType,
           requestType: "Formal",
           ArchiveType: "Archive3",
-          requestUrl: "https://archive2.openverse.network/",
+          requestUrl: import.meta.env.VITE_ARCHIVE_TWO_API_URL,
         },
         {
           name: "Devnet",
-          url: "https://test-devnet.openverse.live",
+          url: import.meta.env.VITE_TESTNET_API_URL,
           type: !UtlDevnetType,
           ArchiveType: "Devnet",
           requestType: "Test",
@@ -270,15 +270,15 @@ const selsetClick = (index: number) => {
       );
       sessionStorage.setItem("urlType", selectData.value[index].requestType);
       window.location.href = UtlDevnetTypes
-        ? "https://www.openverse.live"
-        : "https://test.openverse.live";
+        ? import.meta.env.VIPT_WWW_MINT_URL
+        : import.meta.env.VIPT_TEXT_URL;
       return;
     }
   } else {
     if (selectData.value[index].ArchiveType == "Devnet") {
       window.location.href = UtlDevnetTypes
-        ? "https://devnet.openverse.live"
-        : "https://test-devnet.openverse.live";
+        ? import.meta.env.VITE_DEVNET_TEXT_URL
+        : import.meta.env.VITE_TESTNET_API_URL;
     } else {
       sessionStorage.setItem(
         "ArchiveType",
@@ -297,8 +297,8 @@ const selsetClick = (index: number) => {
   //       sessionStorage.setItem("ArchiveType", item.ArchiveType);
   //       sessionStorage.setItem("urlType", selectData.value[i].requestType);
   //       window.location.href = UtlDevnetTypes
-  //         ? "https://devnet.openverse.live"
-  //         : "https://test-devnet.openverse.live";
+  //         ? import.meta.env.VITE_DEVNET_TEXT_URL
+  //         : import.meta.env.VITE_TESTNET_API_URL;
   //       // window.location.reload();
   //     } else {
   //       // console.log("Production");
@@ -311,18 +311,18 @@ const selsetClick = (index: number) => {
   //         window.location.reload();
   //       } else {
   //         window.location.href = UtlDevnetTypes
-  //           ? "https://www.openverse.live"
-  //           : "https://test.openverse.live";
+  //           ? import.meta.env.VIPT_WWW_MINT_URL
+  //           : import.meta.env.VIPT_TEXT_URL;
   //       }
 
   //       // window.location.reload();
 
   //       // window.location.href = UtlDevnetTypes
-  //       //   ? "https://www.openverse.live"
-  //       //   : "https://test.openverse.live";
+  //       //   ? import.meta.env.VIPT_WWW_MINT_URL
+  //       //   : import.meta.env.VIPT_TEXT_URL;
   //       // if(UtlDevnetType){
 
-  //       // window.location.href = UtlDevnetTypes?'https://openverse.live':"https://test.openverse.live";
+  //       // window.location.href = UtlDevnetTypes?import.meta.env.VIPT_MINT_URL:import.meta.env.VIPT_TEXT_URL;
 
   //       //   if(type !== item.ArchiveType ){
   //       //     window.location.reload()

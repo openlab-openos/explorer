@@ -46,7 +46,7 @@
                 v-else
                 :src="
                   item.pubkey == 'B67JGY8hbUcNbpMufKJ4dF3egfbZuD4EkyffQ3cxZcUz'
-                    ? 'https://cdn.openverse.network/brands/bitgold/icon/bitgold_icon_128.png'
+                    ? import.meta.env.VITE_BTG_IMAGE_URL
                     : ''
                 "
                 width="32"

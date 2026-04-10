@@ -105,7 +105,7 @@ export async function getExtraData(url) {
 }
 
 // async function checkTokenAccountFrozen(tokenAccountPubkey) {
-//   const connection = new Connection('https://api.mainnet.openverse.network/');
+//   const connection = new Connection(import.meta.env.VITE_MAINNET_API_URL);
 //   const tokenAccount = await Token.getAccountInfo(
 //     connection,
 //     new PublicKey(tokenAccountPubkey)

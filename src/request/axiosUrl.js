@@ -8,13 +8,13 @@ const ArchiveType = sessionStorage.getItem('ArchiveType');
 console.log(ArchiveType);
 console.log();
 
-const ArchiveUrl = ArchiveType == 'Archive3' ? 'https://archive2.openverse.network/' : (!ArchiveType ? 'https://rpc.openverse.network/' : (ArchiveType == 'Betanet Archive 1' ? 'https://rpc.openverse.network/' : 'https://api.mainnet.openverse.network/'));
-// const ArchiveUrl = ArchiveType == 'Archive3' ? 'https://archive2.openverse.network/': 'https://api.mainnet.openverse.network/';
+const ArchiveUrl = ArchiveType == 'Archive3' ? import.meta.env.VITE_ARCHIVE_TWO_API_URL : (!ArchiveType ? import.meta.env.VITE_RPC_API_URL : (ArchiveType == 'Betanet Archive 1' ? import.meta.env.VITE_RPC_API_URL : import.meta.env.VITE_MAINNET_API_URL));
+// const ArchiveUrl = ArchiveType == 'Archive3' ? import.meta.env.VITE_ARCHIVE_TWO_API_URL: import.meta.env.VITE_MAINNET_API_URL;
 
 console.log(ArchiveUrl);
-// ( ArchiveType == 'Betanet Archive 1' ? 'https://rpc.openverse.network/' : 'https://api.mainnet.openverse.network/')
+// ( ArchiveType == 'Betanet Archive 1' ? import.meta.env.VITE_RPC_API_URL : import.meta.env.VITE_MAINNET_API_URL)
 const solanaApiUrl = isProductionDomain() ? ArchiveUrl : "https://api.devnet.openverse.network";
-// const solanaApiUrl = isProductionDomain() ? ArchiveUrl : "https://rpc.openverse.network/";
+// const solanaApiUrl = isProductionDomain() ? ArchiveUrl : import.meta.env.VITE_RPC_API_URL;
 
 
 export default solanaApiUrl;

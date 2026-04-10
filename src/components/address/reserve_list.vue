@@ -222,7 +222,6 @@ onMounted(async () => {
   for (let i = 0; i < data.length; i++) {
     data[i].metadata = decodeLockAccount(data[i].account.data);
   }
-  console.log(data);
   
   historyData.value = groupBySerialNumber(data);
   historyData.value = historyData.value.sort((a, b) => {

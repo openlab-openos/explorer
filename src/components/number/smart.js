@@ -120,7 +120,6 @@ export function smartFormatNumber(price) {
   const num = parseFloat(price);
 
   if (Number.isInteger(parseFloat(num))) {
-    console.log(num);
 
     return num.toFixed(0);
   }

@@ -97,9 +97,9 @@
 						position: relative;
 						
 						@if $enable-rtl {
-							padding-right: rem(42px);
+							padding-right: rem(26px);
 						} @else {
-							padding-left: rem(42px);
+							padding-left: rem(26px);
 						}
 					}
 				}

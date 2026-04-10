@@ -83,7 +83,6 @@ watchEffect(() => {
 const ActivityLogData = ref([]);
 ActivityLogData.value = appStore.Validators;
 
-// console.log(ActivityLogData.value);
 
 if(ActivityLogData.value.length == 0){
   router.push({
@@ -95,7 +94,6 @@ Vaildators.value[0].value = ActivityLogData.value.length;
 
 Vaildators.value[1].value = (appStore.part * 100).toFixed(2) + "%";
 Vaildators.value[2].value = appStore.stake + "%";
-console.log(ActivityLogData.value);
 
 Vaildators.value[3].value = ActivityLogData.value[0]?.version;
 

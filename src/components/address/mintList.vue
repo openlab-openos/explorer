@@ -117,7 +117,7 @@ const paginatedHistoryData = computed(() => {
 
 
 // 连接 Solana 网络
-const connection = new Connection("https://rpc.openverse.network/", "confirmed");
+const connection = new Connection(import.meta.env.VITE_RPC_API_URL, "confirmed");
 
 // 手动解析 StakingVault 账户数据
 function parseStakingVaultData(data) {

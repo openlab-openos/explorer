@@ -68,8 +68,8 @@
     "exchange": "Exchange",
     "CirculatingSupply": "Circulating Supply",
     "Bitcurrency": "Bitcurrency USD Market Cap",
-    "profileSummary":"Profile Summary",
-    "marketCap":"Market Cap",
+    "profileSummary": "Profile Summary",
+    "marketCap": "Market Cap",
     "navigation": {
         "title": "Navigation",
         "dashboard": "Dashboard",
@@ -83,7 +83,13 @@
         "tokens": "Assets",
         "TokenTracker": "Token Tracker",
         "faucet": "Faucet",
-        "blackhole": "Black Hole"
+        "blackhole": "Black Hole",
+        "bitcurrency": "Bitcurrency(VRC10)",
+        "privcurrency": "Privcurrency(VRC11)",
+        "bitsecurity": "Bitsecurity(VRC12)",
+        "bitcurrency10": "VRC10",
+        "privcurrency11": "VRC11",
+        "bitsecurity12": "VRC12"
     },
     "dashboard": {
         "title": "Dashboard",
@@ -357,13 +363,13 @@
         "30D": "30D",
         "btg_locked": "BTG Locked",
         "circulating_supply": "Circulating Supply",
-        "mc":"Market Cap",
+        "mc": "Market Cap",
         "token_found": "Token Found",
         "tvl": "TVL",
         "total_transfer": "Total Transfer",
         "total_holders": "Total Holders"
     },
-    "rurn":{
-        "title":"Rurn"
+    "rurn": {
+        "title": "Rurn"
     }
 }

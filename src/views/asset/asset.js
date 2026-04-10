@@ -19,8 +19,6 @@ export function tokenList(page,number) {
                 "Content-Type": "application/json"
             },
         }).then(res => {
-            console.log(res);
-            console.log(res.data.data);
             // return res.data.data;
             resolve(res.data);
 

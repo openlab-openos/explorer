@@ -465,7 +465,6 @@ const getTrafficData = (data) => {
   let countryArray = [];
   let chartArray = [];
   let chartName = [];
-  console.log(data);
 
   if (data) {
     let arrayData = uniqueArrayByProperty(data, "try");

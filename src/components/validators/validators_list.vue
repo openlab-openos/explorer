@@ -193,7 +193,6 @@ const getActivityLogData = async () => {
         }
       }
     }
-    console.log(list);
     let listCount = 0;
     for (let i in list) {
       for (let h in VoteAccounts_list.current) {

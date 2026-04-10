@@ -141,7 +141,6 @@ onMounted(async () => {
   historyData.value = await requestList({
     address: props.url,
   });
-  console.log(historyData.value);
 
   if (historyData.value) {
     totalItems.value = historyData.value.length;

@@ -254,7 +254,6 @@ const toFexedStake = (num) => {
     }
 }
 const come = (num) => {
-    console.log(num);
     
     let reg =
         num.toString().indexOf(".") > -1

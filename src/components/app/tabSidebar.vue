@@ -35,32 +35,36 @@ const props = defineProps<{
     type?: boolean;
   };
 }>();
-console.log("route", route);
+
 const newRouteText = ref();
 watch(
   () => route,
-  (newRoute, oldRoute) => {
-    console.log("当前路由:", newRoute);
+  (newRoute) => {
     newRouteText.value = newRoute.name;
-    isActiveBoolean(newRoute.name as string);
+    if (props.menu.children) {
+      isExpandedFunction.value = subIsActive(props.menu.children);
+    } else {
+      isExpandedFunction.value = false;
+    }
   },
   { deep: true },
 );
 
-function isActiveBoolean(linkUrl?: string) {
-  console.log("linkUrl", linkUrl);
-  for (let i in props.menu.children) {
-    if ((props.menu.children as { url?: string }[])[i].url === linkUrl) {
-      console.log(1111444);
-      isExpandedFunction.value = true;
+watch(
+  () => appStore.activeTab,
+  (newTab) => {
+    if (newTab) {
+      newRouteText.value = newTab;
+      if (props.menu.children) {
+        isExpandedFunction.value = subIsActive(props.menu.children);
+      }
     }
-  }
-}
+  },
+);
 
 function selectLanguage(indexValue: string) {
   i18n.global.locale = indexValue;
 }
-console.log("menu", props.menu);
 
 watchEffect(() => {
   selectLanguage(appStore.$state.language);
@@ -71,12 +75,10 @@ watch(
   () => {
     expandedMenus.value = new Set();
     nextTick(() => {
-      if (props.menu.children) {
-        console.log(4444);
-        console.log(subIsActive(props.menu.children));
-        console.log("pros.menu", props.menu);
-
-        isExpandedFunction.value = subIsActive(props.menu.children);
+      if (props.menu.url == route.name) {
+        isExpandedFunction.value = true;
+      } else {
+        isExpandedFunction.value = false;
       }
     });
   },
@@ -85,23 +87,21 @@ watch(
 
 // function subIsActive(urls: { url?: string }[]) {
 //   const currentRoute = route.name;
-//   console.log('urls',urls);
-//   console.log('currentRoute',currentRoute);
-
 //   return urls.some((item) => item.url && currentRoute.includes(item.url));
 // }
 
 function subIsActive(urls: { url?: string }[]) {
   const currentRoute = route.name;
-  console.log("urls", urls);
-  console.log("currentRoute", currentRoute);
+  const currentTab = appStore.activeTab;
+
   if (props.menu.url == currentRoute) {
     return true;
   } else {
-    // 修复：增加 currentRoute 的存在性检查
     return urls.some((item) => {
-      if (!item.url || !currentRoute) return false;
-      return currentRoute.includes(item.url);
+      if (!item.url) return false;
+      if (currentRoute && currentRoute.includes(item.url)) return true;
+      if (currentTab && currentTab === item.url) return true;
+      return false;
     });
   }
 }
@@ -115,21 +115,35 @@ function getText(text?: string): string {
   return text || "";
 }
 
+function handleSubmenuClick(
+  submenu: Record<string, unknown>,
+  parentMenu: Record<string, unknown>,
+) {
+  const url = submenu.url as string;
+  const tabType = parentMenu.tabType;
+  
+  if (url && !submenu.type) {
+    if (tabType) {
+      appStore.activeTab = url;
+    }
+  }
+}
+
 function toggleExpand(
   menuText: string,
   children?: Record<string, unknown>[],
   menu?: Record<string, unknown>,
 ) {
   isExpandedFunction.value = !isExpandedFunction.value;
-  // return;
 
   if (expandedMenus.value.has(menuText)) {
     expandedMenus.value.delete(menuText);
   } else {
     expandedMenus.value.add(menuText);
-    if (children && children.length > 0) {
+    if (children && children.length > 0 && menu?.tabType) {
       const firstChild = children[0] as { url?: string; type?: boolean };
       if (firstChild.url && !firstChild.type) {
+        appStore.activeTab = 'All';
         nextTick(() => {
           router.push({
             name: firstChild.url === "/" ? "dashboard" : menu.url,
@@ -156,18 +170,27 @@ function isExpanded(menuText: any): boolean {
       class="menu-link"
       @click="toggleExpand(menu.text, menu.children, menu)"
     >
-      <img
+      <!-- <img
         v-if="menu.img"
         :src="subIsActive(menu.children) ? menu.checkedImg : menu.img"
         width="20"
         alt=""
+      /> -->
+      <img
+        v-if="menu.img"
+        :src="isExpandedFunction ? menu.checkedImg : menu.img"
+        width="20"
+        alt=""
       />
       &nbsp;
-      <span
+      <!-- <span
         class="menu-text"
         :class="subIsActive(menu.children) ? 'text-theme' : ''"
         >{{ $t(menu.text) }}</span
-      >
+      > -->
+      <span class="menu-text" :class="isExpandedFunction ? 'text-theme' : ''">{{
+        $t(menu.text)
+      }}</span>
       <span class="menu-caret"><b class="caret"></b></span>
     </a>
     <div v-if="isExpandedFunction" class="menu-submenu">
@@ -175,39 +198,30 @@ function isExpanded(menuText: any): boolean {
       <template v-for="(submenu, index) in menu.children" :key="index">
         <div
           v-if="!(submenu as { type?: boolean }).type"
-          class="menu-item"
+          class="menu-item menu-item-parent"
           :class="{ active: isActive((submenu as { url?: string }).url) }"
+          @click="handleSubmenuClick(submenu, menu)"
         >
-          <router-link
-            :to="{
-              name:
-                (submenu as { url?: string }).url === '/'
-                  ? 'dashboard'
-                  : (submenu as { url?: string }).url,
-            }"
-            class="menu-link"
+          <img
+            v-if="(submenu as { img?: string }).img"
+            :src="
+              (submenu as { url?: string }).url == newRouteText
+                ? (submenu as { checkedImg?: string }).checkedImg
+                : (submenu as { img?: string }).img
+            "
+            width="20"
+            alt=""
+          />
+          &nbsp;
+          <span
+            class="menu-text"
+            :class="
+              (submenu as { url?: string }).url == newRouteText
+                ? 'text-theme'
+                : ''
+            "
+            >{{ $t(getText((submenu as { text?: string }).text)) }}</span
           >
-            <img
-              v-if="(submenu as { img?: string }).img"
-              :src="
-                (submenu as { url?: string }).url == newRouteText
-                  ? (submenu as { checkedImg?: string }).checkedImg
-                  : (submenu as { img?: string }).img
-              "
-              width="20"
-              alt=""
-            />
-            &nbsp;
-            <span
-              class="menu-text"
-              :class="
-                (submenu as { url?: string }).url == newRouteText
-                  ? 'text-theme'
-                  : ''
-              "
-              >{{ $t(getText((submenu as { text?: string }).text)) }}</span
-            >
-          </router-link>
         </div>
         <div v-else class="menu-item">
           <a
@@ -257,5 +271,9 @@ function isExpanded(menuText: any): boolean {
 <style scoped>
 .menu-text {
   font-size: 12px !important;
+}
+.menu-item-parent {
+  padding: 0.2rem 0;
+  cursor: pointer;
 }
 </style>

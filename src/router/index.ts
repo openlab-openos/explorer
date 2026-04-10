@@ -6,6 +6,9 @@ import {
 import TokenReputation from '@/views/reputation/tokenReputation.vue';
 
 import Tokens from '../views/asset/asset_list.vue';
+import Bitcurrency from '../views/asset/VRC/bitcurrency.vue';
+import Bitsecurity from '../views/asset/VRC/bitsecurity.vue';
+import Privcurrency from '../views/asset/VRC/privcurrency.vue';
 import BlackHole from '../views/blackhole/view.vue';
 import Blocks from '../views/blocks/Blocks.vue';
 import Dashboard from '../views/dashboard/dashboard.vue';
@@ -142,6 +145,21 @@ const router = createRouter({
       name: "blackhole",
       component: BlackHole,
     },
+    {
+      path: "/tokens/bitcurrency",
+      name: "Bitcurrency",
+      component: Bitcurrency,
+    },
+    {
+      path: "/tokens/privcurrency",
+      name: "Privcurrency",
+      component: Privcurrency,
+    },
+    {
+      path: "/tokens/bitsecurity",
+      name: "Bitsecurity",
+      component: Bitsecurity,
+    }
   ],
 });
 

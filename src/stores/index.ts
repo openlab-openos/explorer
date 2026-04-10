@@ -24,6 +24,7 @@ export const useAppStore = defineStore('app', {
         voteAccount: [],
         chain: '',
         chainType: 'Formal',
+        activeTab: 'first',
     }),
     getters: {
         rateData: (state) => {
@@ -159,6 +160,9 @@ export const useAppStore = defineStore('app', {
         },
         setchainType(data: any) {
             return this.chainType = data
+        },
+        setActiveTab(data: any) {
+            return this.activeTab = data
         }
     },
     persist: {
