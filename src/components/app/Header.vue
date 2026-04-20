@@ -99,14 +99,14 @@ const urlType = sessionStorage.getItem("urlType");
 if (UtlDevnetType) {
   if (ArchiveType) {
     if (ArchiveType == "Archive2") {
-      ScanName.value = "Betanet Archive 2";
+      ScanName.value = "Mainnet Archive 2";
     } else if (ArchiveType == "Archive3") {
-      ScanName.value = "Betanet Archive 3";
-    } else if (ArchiveType == "Betanet Archive 1") {
-      ScanName.value = "Betanet Archive 1";
+      ScanName.value = "Mainnet Archive 3";
+    } else if (ArchiveType == "Mainnet Archive 1") {
+      ScanName.value = "Mainnet Archive 1";
     }
   } else {
-    ScanName.value = "Betanet Archive 1";
+    ScanName.value = "Mainnet Archive 1";
   }
 } else {
   ScanName.value = "Devnet";
@@ -186,15 +186,15 @@ const selectData = ref(
   UtlDevnetTypes
     ? [
         {
-          name: "Betanet Archive 1",
+          name: "Mainnet Archive 1",
           url: import.meta.env.VIPT_MINT_URL,
           type: UtlDevnetType,
           requestType: "Formal",
-          ArchiveType: "Betanet Archive 1",
+          ArchiveType: "Mainnet Archive 1",
           requestUrl: import.meta.env.VITE_RPC_API_URL,
         },
         {
-          name: "Betanet Archive 2",
+          name: "Mainnet Archive 2",
           url: import.meta.env.VIPT_MINT_URL,
           type: UtlDevnetType,
           requestType: "Formal",
@@ -202,7 +202,7 @@ const selectData = ref(
           requestUrl: import.meta.env.VITE_MAINNET_API_URL,
         },
         {
-          name: "Betanet Archive 3",
+          name: "Mainnet Archive 3",
           url: import.meta.env.VIPT_MINT_URL,
           type: UtlDevnetType,
           requestType: "Formal",
@@ -219,15 +219,15 @@ const selectData = ref(
       ]
     : [
         {
-          name: "Betanet Archive 1",
+          name: "Mainnet Archive 1",
           url: import.meta.env.VIPT_TEXT_URL,
           type: UtlDevnetType,
           requestType: "Formal",
-          ArchiveType: "Betanet Archive 1",
+          ArchiveType: "Mainnet Archive 1",
           requestUrl: import.meta.env.VITE_RPC_API_URL,
         },
         {
-          name: "Betanet Archive 2",
+          name: "Mainnet Archive 2",
           url: import.meta.env.VIPT_TEXT_URL,
           type: UtlDevnetType,
           requestType: "Formal",
@@ -235,7 +235,7 @@ const selectData = ref(
           requestUrl: import.meta.env.VITE_MAINNET_API_URL,
         },
         {
-          name: "Betanet Archive 3",
+          name: "Mainnet Archive 3",
           url: import.meta.env.VIPT_TEXT_URL,
           type: UtlDevnetType,
           requestType: "Formal",
@@ -371,7 +371,7 @@ onMounted(() => {
     // @ts-ignore
     appStore.setChain(selectData.value[0].url);
     selectData.value[0].type = true;
-    nameText.value = "Openverse Betanet Archive 1.DEV";
+    nameText.value = "Openverse Mainnet Archive 1.DEV";
   }
 });
 </script>
@@ -523,7 +523,7 @@ onMounted(() => {
           class="menu-link scales"
           style="white-space: nowrap"
         >
-          <!-- {{ UtlDevnetType ? 'Betanet Archive 2' : 'Devnet' }} -->
+          <!-- {{ UtlDevnetType ? 'Mainnet Archive 2' : 'Devnet' }} -->
           {{ ScanName }}
           <!-- <img src="https://cdn.openverse.network/brands/openverse/icon_128.png" width="32" alt=""> -->
           <i class="bi bi-chevron-down" style="margin: 5px"></i>

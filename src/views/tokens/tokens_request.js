@@ -11,7 +11,7 @@ export const tokenList = async () => {
     // console.log(123);
     let arrayList = [];
 
-    // 并发执行所有Betanet Archive 1请求
+    // 并发执行所有Mainnet Archive 1请求
     const requests = tokenArray.map(async (token) => {
         let method = {
             jsonrpc: "2.0",
